@@ -1,0 +1,30 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "L'api c'est la vie ! Tout converge vers le gateway en http/https et en ws/wss.",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/abibao/api-gateway.git"
+  },
+  "keywords": [
+    "api",
+    "gateway",
+    "abibao"
+  ],
+  "author": "Team@Abibao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/abibao/api-gateway/issues"
+  },
+  "homepage": "https://gitlab.com/abibao/api-gateway#README",
+  "dependencies": {
+    "hapi": "10.1.0",
+    "socket.io": "1.3.7"
+  },
+  "devDependencies": {
+    "grunt": "0.4.5"
+  }
+}
