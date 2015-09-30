@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var CRUDUser = {
   db: process.env.ABIBAO_MONGODB__DATABASE_CONNECTION,
