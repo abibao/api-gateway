@@ -6,7 +6,7 @@
 sh git-commit master "Voici mon super commentaire..."
 ```
 
-A la place de "master" vous pouvez mettre une autre branche bien entendu.
+A la place de "master" on peut mettre une autre branche bien entendu.
 
 ### Que fait ce script
 
@@ -29,6 +29,8 @@ Avant de commit effectivement les modifications apportées au code, des tests pr
 
 Au moindre problème durant les test, un rapport d'erreurs sera affiché via la console et le commit sera annulé.
 
+Ces mêmes tests seront également refait au moment du déploiment par le CI.
+
 ### Descriptions
 
 - Rest API
@@ -36,13 +38,17 @@ Au moindre problème durant les test, un rapport d'erreurs sera affiché via la 
 
 ### Listes des variables système ABIBAO
 
-- ABIBAO_API_REST__EXPOSE_IP
-- ABIBAO_API_REST__EXPOSE_PORT
-- ABIBAO_MONGODB__DATABASE_CONNECTION
-- ABIBAO_MONGODB__USERS_COLLECTION
+- ABIBAO_API_REST_EXPOSE_IP
+- ABIBAO_API_REST_EXPOSE_PORT
 
 ### Versions
 
 - node (4.1.0)
 - npm (3.3.4)
+- node-gyp (3.0.3)
 - python (2.7.6)
+
+### GIT commands
+
+- git config --global user.name "myname"
+- git config --global user.email "email"

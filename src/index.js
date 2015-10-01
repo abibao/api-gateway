@@ -13,8 +13,8 @@ var server = new Hapi.Server({
 });
 
 server.connection({ 
-  host: process.env.ABIBAO_API_REST__EXPOSE_IP || '0.0.0.0',
-  port: process.env.ABIBAO_API_REST__EXPOSE_PORT || 8080,
+  host: process.env.ABIBAO_API_REST_EXPOSE_IP || '0.0.0.0',
+  port: process.env.ABIBAO_API_REST_EXPOSE_PORT || 8080,
   labels: ['api']
 });
 

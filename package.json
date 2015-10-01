@@ -22,8 +22,8 @@
   "homepage": "https://gitlab.com/abibao/api-gateway#README",
   "dependencies": {
     "hapi": "10.1.0",
-    "socket.io": "1.3.7",
-    "toothache": "1.1.2"
+    "hapi-swaggered": "2.4.0",
+    "socket.io": "1.3.7"
   },
   "devDependencies": {
     "grunt": "0.4.5",
