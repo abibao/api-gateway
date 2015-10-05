@@ -5,13 +5,10 @@ var Routes = require('./routes');
 
 // !-- FOR TESTS
 var options = {
-  host: process.env.ABIBAO_API_REST_EXPOSE_IP || '0.0.0.0',
+  host: process.env.ABIBAO_API_REST_EXPOSE_HOST || '0.0.0.0',
   port: process.env.ABIBAO_API_REST_EXPOSE_PORT || 8080,
   labels: ['api']
 };
-try {
-  options = JSON.parse(process.env.ABIBAO_API_REST_SERVER_OPTIONS);
-} catch(err){}
 // --!
 
 var server = new Hapi.Server({

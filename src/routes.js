@@ -10,7 +10,4 @@ exports.endpoints = [
   { method: 'GET', path: '/individuals/list', config: IndividualsController.list},
   // auth
   { method: 'GET', path: '/auth/me', config: AuthController.me}
-  /*
-  { method: 'POST', path: '/individuals/register', config: IndividualsController.register}
-  */
 ];

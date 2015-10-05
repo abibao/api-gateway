@@ -6,7 +6,10 @@ var Joi = require('joi');
 var Boom = require('boom');
 var JWT = require('jsonwebtoken');
 
-var MICROSERVICE_USER_INDIVIDUAL_SERVICE = 'http://abibao-gperreymond-1942760:57001';
+// service discovery localhost or tutum
+var MICROSERVICE_USER_INDIVIDUAL_HOSTNAME = process.env.ABIBAO_TUTUM_MICROSERVICE_USER_INDIVIDUAL_HOSTNAME || 'http://localhost';
+var MICROSERVICE_USER_INDIVIDUAL_PORT = process.env.ABIBAO_TUTUM_MICROSERVICE_USER_INDIVIDUAL_PORT || '27501';
+var MICROSERVICE_USER_INDIVIDUAL_SERVICE = MICROSERVICE_USER_INDIVIDUAL_HOSTNAME+':'+MICROSERVICE_USER_INDIVIDUAL_PORT;
 
 exports.alive = {
   auth: false,
@@ -61,7 +64,6 @@ exports.list = {
     });
   }
 };
-
 
 /**
 exports.register = {
