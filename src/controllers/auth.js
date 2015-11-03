@@ -1,7 +1,4 @@
-'use-strict';
-
-var Boom = require('boom');
-var JWT = require('jsonwebtoken');
+"use strict";
 
 exports.me = {
   auth: 'jwt',

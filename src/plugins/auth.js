@@ -15,7 +15,7 @@ var AuthProvision = function(server) {
     });
     
     server.auth.strategy('jwt', 'jwt', {
-      key: process.env.ABIBAO_API_REST_SERVER_AUTH_JWT_KEY,
+      key: process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY,
       validateFunc: require('../libs/auth_jwt_validate.js'),
       verifyOptions: { algorithms: [ 'HS256' ] },
     });

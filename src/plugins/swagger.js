@@ -1,7 +1,6 @@
-'use strict';
+"use strict";
 
 var HapiSwagger = require('hapi-swaggered');
-var HapiSwaggerUI = require('hapi-swaggered');
 
 var pkginfo = require( 'resolve-app-pkginfo' );
 var pkg = pkginfo.sync();
