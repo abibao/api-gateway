@@ -34,7 +34,7 @@ Ces mêmes tests seront également refait au moment du déploiment par le CI.
 ### Descriptions
 
 - L'api c'est la vie ! Tout converge vers le gateway.
-
+ 
 ### Listes des variables système ABIBAO
 
 - ABIBAO_API_GATEWAY_EXPOSE_IP
