@@ -31,7 +31,7 @@ module.exports.start = function(callback) {
     // listen io
     io.on("connection", ioHandler);
     // start hapi
-    var plugins = ['swagger', 'blipp', 'auth', 'good'];
+    var plugins = ['auth', 'swagger', 'blipp', 'good'];
     if (process.env.ABIBAO_NPM_TEST_ENABLE) plugins = ['auth', 'hapi-seneca'];
     var async = require('async');
     async.mapSeries(plugins, function(item, callback) {
@@ -41,7 +41,9 @@ module.exports.start = function(callback) {
       if (err) return callback(err);
       seneca.log.info('hapi plugins', results);
       server.route(Routes.endpoints);
-      callback();
+      server.start(function(err) {
+        callback(err);
+      });
     });
   });
 };
