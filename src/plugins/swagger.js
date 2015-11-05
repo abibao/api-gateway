@@ -5,7 +5,7 @@ var HapiSwagger = require('hapi-swaggered');
 var pkginfo = require( 'resolve-app-pkginfo' );
 var pkg = pkginfo.sync();
 
-var SwaggerProvision = function(server) {
+var SwaggerProvision = function(server, seneca) {
   
   // swagger
   
@@ -26,8 +26,8 @@ var SwaggerProvision = function(server) {
       options: options
     }], function (err) {
   	
-  	if (err) return console.log(err);
-    console.log('SwaggerProvision', 'registered');
+  	if (err) return seneca.log.error('swagger provision', err);
+    seneca.log.info('swagger provision', 'registered');
     
   });
   
@@ -49,8 +49,8 @@ var SwaggerProvision = function(server) {
       options: optionsui
   }], function (err) {
   	
-  	if (err) return console.log(err);
-    console.log('SwaggerUIProvision', 'registered');
+  	if (err) return seneca.log.error('swagger ui provision', err);
+    seneca.log.info('swagger ui provision', 'registered');
     
   });
   

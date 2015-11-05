@@ -31,15 +31,28 @@ module.exports = function(grunt) {
 				reporter: 'spec'
 			},
 			all: { src: ['test/*.js'] }
-		}
+		},
+		'dependency-check': {
+      files: ['src/**/*.js'],       // required grunt attribute, same as --entry 
+      options: {
+        missing: true,              // same as --missing 
+        unused: true,               // same as --unused 
+        excludeUnusedDev: true,     // same as --no-dev 
+        noDefaultEntries: true,     // same as --no-default-entries 
+        ignoreUnused: [],           // same as --ignore-module 
+        package: '.'                // package.json file or module folder path 
+      }
+    }
 	});
 	
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-simple-mocha');
+	grunt.loadNpmTasks('dependency-check');
 	
 	grunt.registerTask('test', [
 		'jshint',
-		'simplemocha'
+		'simplemocha',
+		'dependency-check'
 	]);
 	
 };

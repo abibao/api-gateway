@@ -14,7 +14,6 @@ WORKDIR /app
 
 # Install application's dependencies
 RUN npm install --production
-# RUN npm install newrelic
 
 # Expose port
 EXPOSE 80

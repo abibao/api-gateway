@@ -2,11 +2,11 @@
 
 var Blipp = require('blipp');
 
-var BlippProvision = function(server) {
+var BlippProvision = function(server, seneca) {
   server.register(Blipp, function(err) {
     
-    if (err) return console.log(err);
-    console.log('BlippProvision', 'registered');
+    if (err) return seneca.log.error('blipp provision', err);
+    seneca.log.info('blipp', 'registered provision');
     
   });
 };

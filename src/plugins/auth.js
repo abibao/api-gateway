@@ -3,12 +3,12 @@
 var Basic = require('hapi-auth-basic');
 var AuthJWT = require('hapi-auth-jwt2');
 
-var AuthProvision = function(server) {
+var AuthProvision = function(server, seneca) {
   
   server.register([ {register: Basic}, {register: AuthJWT} ], function (err) {
     
-    if (err) return console.log(err);
-    console.log('AuthProvision', 'registered');
+    if (err) return seneca.log.error('auth provision', err);
+    seneca.log.info('auth provision', 'registered');
     
     server.auth.strategy('basic', 'basic', {
       validateFunc: require('../libs/auth_basic_validate.js')

@@ -1,4 +1,4 @@
-'use-strict';
+"use strict";
 
 var IndividualsController = require('./controllers/individuals');
 var AuthController = require('./controllers/auth');

@@ -9,14 +9,14 @@ var options = {
   }] 
 };
 
-var GoodProvision = function(server) {
+var GoodProvision = function(server, seneca) {
   server.register({
     register: Good,
     options: options
   }, function (err) {
     
-    if (err) return console.log(err);
-    console.log('GoodProvision', 'registered');
+    if (err) return seneca.log.error('good provision', err);
+    seneca.log.info('good provision', 'registered');
     
   });
 };

@@ -2,7 +2,8 @@
 
 if (process.env.ABIBAO_NEWRELIC_ENABLE) require('newrelic');
 
-var server = require('./server');
-server.start(function() {
-  console.log('Server started ', server.info.uri);
+var service = require('./service');
+service.start(function(err) {
+  if (err) return service.seneca.log.error(err);
+  service.seneca.log.info('server started ', service.server.info.uri);
 });
