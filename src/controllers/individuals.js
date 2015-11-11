@@ -1,11 +1,8 @@
 "use strict";
 
-var http_request = require('request');
-
 var Joi = require('joi');
-
-// service discovery localhost or tutum
-var ABIBAO_TUTUM_MICROSERVICE_USER_INDIVIDUAL_URL = process.env.ABIBAO_TUTUM_MICROSERVICE_USER_INDIVIDUAL_URL || 'http://localhost:27501';
+var Boom = require('boom');
+var Individual = require('../models/individual');
 
 exports.alive = {
   auth: false,
@@ -13,11 +10,7 @@ exports.alive = {
   description: 'Tester si le microservice user-individuals est en vie ou pas.',
   notes: 'Tester si le microservice user-individuals est en vie ou pas.',
   handler: function(request, reply) {
-    http_request
-    .get( ABIBAO_TUTUM_MICROSERVICE_USER_INDIVIDUAL_URL+'/alive', function(error, response, body) {
-      if (error && error.code==='ECONNREFUSED') return reply({alive:false});
-      return reply(JSON.parse(body)).code(response.statusCode);
-    });
+    reply(request.payload);
   }
 };
 
@@ -36,55 +29,60 @@ exports.login = {
     }
   },
   handler: function(request, reply) {
-    http_request
-    .post(ABIBAO_TUTUM_MICROSERVICE_USER_INDIVIDUAL_URL+'/login', { form: request.payload }, function(error, response, body) {
-      if (error && error.code==='ECONNREFUSED') return reply({alive:false});
-      return reply(JSON.parse(body)).code(response.statusCode);
-    });
+    reply(request.payload);
   }
 };
 
 exports.list = {
-  auth: {
+  /*auth: {
     strategy: 'jwt',
     scope: ['administrator']
-  },
+  },*/
+  auth: false,
   tags: ['api', 'individuals'],
   description: 'Récupérer la liste de tous les utilisateurs de type "individual"',
   notes: 'Récupérer la liste de tous les utilisateurs de type "individual"',
   handler: function(request, reply) {
-    http_request
-    .post(ABIBAO_TUTUM_MICROSERVICE_USER_INDIVIDUAL_URL+'/list', { form: request.payload }, function(error, response, body) {
-      if (error && error.code==='ECONNREFUSED') return reply({alive:false});
-      return reply(JSON.parse(body)).code(response.statusCode);
+    var r = request.server.plugins['hapi-rethinkdb'].rethinkdb;
+    var connection = request.server.plugins['hapi-rethinkdb'].connection;
+    r.table('individuals').run(connection, function(err, cursor) {
+      if (err) throw err;
+      cursor.toArray(function(err, result) {
+        reply(Boom.badImplementation(err)); // 500 error
+        return reply(JSON.stringify(result, null, 2));
+        });
     });
   }
 };
 
-/**
 exports.register = {
   auth: false,
+  tags: ['api', 'individuals'],
+  description: 'S\'enregistrer en tant qu\'individu sur abibao',
+  notes: 'S\'enregistrer en tant qu\'individu sur abibao',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
   validate: {
     payload: {
-      email: Joi.string().email(),
-      password1: Joi.string().required(),
-      password2: Joi.string().required()
+      email: Joi.string().required().email(),
+      password1: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
+      password2: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
     }
   },
   handler: function(request, reply) {
+    var r = request.server.plugins['hapi-rethinkdb'].rethinkdb;
+    var connection = request.server.plugins['hapi-rethinkdb'].connection;
+
     // password == passwordConfirm
-    if (request.payload.password1!=request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
+    if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
     request.payload.password = request.payload.password1;
-    // save user
-    var user = new User(request.payload);
-    user.save(request.payload, function(err, individual) {
-      console.log(err, individual);
-      if (err) {
-        if (err.code==11000 || err.code==11001) return reply(Boom.forbidden('user already exists'));
-        reply(Boom.badImplementation(err)); // 500 error
-      }
-      reply(individual);
+    
+    var individual = new Individual(request.payload);
+    r.table('individuals').insert({email: individual.email}).run(connection, function(err, result) {
+      reply(Boom.badImplementation(err)); // 500 error
+      return reply(JSON.stringify(result, null, 2));
     });
+
   }
 };
-**/
