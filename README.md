@@ -47,7 +47,8 @@ Ces mêmes tests seront également refait au moment du déploiment par le CI.
 - ABIBAO_API_GATEWAY_SERVER_RETHINK_DB
 - ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY
 - ABIBAO_NEWRELIC_ENABLE
-- ABIBAO_NPM_TEST_ENABLE
+- ABIBAO_PRODUCTION
+- ABIBAO_TEST
 
 ### Versions
 

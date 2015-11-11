@@ -25,7 +25,7 @@ exports = module.exports = internals.Individual = function(data) {
     hashedPassword: Joi.string().required(),
     created: Joi.date().default(Date.now, 'time of creation').required()
   });
-  
+  console.log(self.schema);
 };
 
 internals.Individual.prototype.validate = function(callback) {

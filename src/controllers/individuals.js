@@ -2,17 +2,7 @@
 
 var Joi = require('joi');
 var Boom = require('boom');
-var Individual = require('../models/individual');
-
-exports.alive = {
-  auth: false,
-  tags: ['api', 'individuals'],
-  description: 'Tester si le microservice user-individuals est en vie ou pas.',
-  notes: 'Tester si le microservice user-individuals est en vie ou pas.',
-  handler: function(request, reply) {
-    reply(request.payload);
-  }
-};
+//var Individual = require('../models/individual');
 
 exports.login = {
   auth: false,
@@ -66,11 +56,21 @@ exports.register = {
   validate: {
     payload: {
       email: Joi.string().required().email(),
-      password1: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
-      password2: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
+      password1: Joi.string().required(),
+      password2: Joi.string().required()
     }
   },
   handler: function(request, reply) {
+    
+    // password == passwordConfirm
+    if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
+    request.payload.password = request.payload.password1;
+    
+    request.server.logger_slack.info('individualCreated', request.payload.email);
+    reply(request.payload);
+    
+  }
+    /**
     var r = request.server.plugins['hapi-rethinkdb'].rethinkdb;
     var connection = request.server.plugins['hapi-rethinkdb'].connection;
 
@@ -78,11 +78,9 @@ exports.register = {
     if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
     request.payload.password = request.payload.password1;
     
-    var individual = new Individual(request.payload);
-    r.table('individuals').insert({email: individual.email}).run(connection, function(err, result) {
+    r.table('individuals').insert({email: request.payload.email}).run(connection, function(err, result) {
       reply(Boom.badImplementation(err)); // 500 error
       return reply(JSON.stringify(result, null, 2));
-    });
+    });**/
 
-  }
 };

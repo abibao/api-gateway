@@ -4,7 +4,7 @@
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "test": "grunt test",
-    "start": "node src"
+    "start": "node src | bunyan"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "abibao"
   ],
   "author": "Team@Abibao",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://gitlab.com/abibao/api-gateway/issues"
   },
@@ -29,13 +29,13 @@
     "bcrypt": "0.8.5",
     "blipp": "2.2.1",
     "boom": "3.0.0",
+    "bunyan": "1.5.1",
+    "bunyan-slack": "0.0.10",
     "debug": "2.2.0",
-    "eventstore": "1.5.1",
-    "good": "6.3.0",
-    "good-console": "5.0.3",
     "hapi": "10.4.0",
     "hapi-auth-basic": "3.0.0",
     "hapi-auth-jwt2": "5.2.0",
+    "hapi-redis": "6.0.0",
     "hapi-rethinkdb": "2.0.1",
     "hapi-swaggered": "2.4.0",
     "hapi-swaggered-ui": "2.1.0",
@@ -44,8 +44,10 @@
     "lodash": "3.10.1",
     "mongodb": "2.0.48",
     "newrelic": "1.23.0",
+    "redis": "2.3.0",
     "resolve-app-pkginfo": "1.0.0",
     "rethinkdb": "2.1.1",
+    "viewmodel": "1.5.7",
     "vision": "3.0.0"
   },
   "devDependencies": {

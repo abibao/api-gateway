@@ -43,16 +43,20 @@ var SwaggerProvision = function(server, callback) {
       register: HapiSwagger,
       options: options
     }], function (err) {
-  	if (err) return console.log('swagger provision', err);
-    console.log('swagger provision', 'registered');
+      
+  	  if (err) return server.logger.fatal('swagger provision', err);
+      server.logger.info('swagger registered provision');
+    
     // register Swagger UI
     server.register([
     {
       register: require('hapi-swaggered-ui'),
       options: optionsui
     }], function (err) {
-    	if (err) return console.log('swagger ui provision', err);
-      console.log('swagger ui provision', 'registered');
+      
+    	if (err) return server.logger.fatal('swagger-ui provision', err);
+      server.logger.info('swagger-ui registered provision');
+      
       callback();
     });
   });

@@ -15,8 +15,8 @@ var RethinkProvision = function(server, callback) {
     options: options
   }, function (err) {
     
-    if (err) return console.log('rethink provision', err);
-    console.log('rethink provision', 'registered');
+    if (err) return server.logger.fatal('rethink provision', err);
+    server.logger.info('rethink registered provision');
     
     callback();
     
