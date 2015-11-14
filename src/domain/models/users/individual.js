@@ -46,7 +46,7 @@ internals.Individual.prototype.update = function(data, callback) {
       Bcrypt.hash(data.password, salt, function(err, hash) {
         if (err) return callback(err);
         // override the cleartext password with the hashed one
-        self.data.password = hash;
+        self.data.hashedPassword = hash;
         callback();
       });
     });

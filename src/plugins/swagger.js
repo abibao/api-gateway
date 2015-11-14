@@ -2,7 +2,7 @@
 
 var HapiSwagger = require('hapi-swaggered');
 
-var pkginfo = require( 'resolve-app-pkginfo' );
+var pkginfo = require('resolve-app-pkginfo');
 var pkg = pkginfo.sync();
 
 // swagger

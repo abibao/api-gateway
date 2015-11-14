@@ -2,7 +2,6 @@
 
 var Joi = require('joi');
 var Boom = require('boom');
-//var Individual = require('../models/individual');
 
 exports.login = {
   auth: false,
@@ -19,16 +18,21 @@ exports.login = {
     }
   },
   handler: function(request, reply) {
-    reply(request.payload);
+    try {
+      reply(request.payload);
+    } catch (e) {
+      var error = new Error(e);
+      request.server.logger.error(error);
+      return reply(Boom.wrap(error, 400));
+    }
   }
 };
 
 exports.list = {
-  /*auth: {
+  auth: {
     strategy: 'jwt',
     scope: ['administrator']
-  },*/
-  auth: false,
+  },
   tags: ['api', 'individuals'],
   description: 'Récupérer la liste de tous les utilisateurs de type "individual"',
   notes: 'Récupérer la liste de tous les utilisateurs de type "individual"',
@@ -61,26 +65,20 @@ exports.register = {
     }
   },
   handler: function(request, reply) {
-    
-    // password == passwordConfirm
-    if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
-    request.payload.password = request.payload.password1;
-    
-    request.server.logger_slack.info('individualCreated', request.payload.email);
-    reply(request.payload);
-    
+    try {
+      // testing password confirmation
+      if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
+      request.payload.password = request.payload.password1;
+      // execute command
+      request.server.domain.createIndividual(request.payload, function(err) {
+        if (err) throw new Error(err);
+        reply(request.payload);
+      });
+    } catch (e) {
+      var error = new Error(e);
+      request.server.logger.error(error);
+      return reply(Boom.wrap(error, 400));
+    }
   }
-    /**
-    var r = request.server.plugins['hapi-rethinkdb'].rethinkdb;
-    var connection = request.server.plugins['hapi-rethinkdb'].connection;
-
-    // password == passwordConfirm
-    if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
-    request.payload.password = request.payload.password1;
-    
-    r.table('individuals').insert({email: request.payload.email}).run(connection, function(err, result) {
-      reply(Boom.badImplementation(err)); // 500 error
-      return reply(JSON.stringify(result, null, 2));
-    });**/
 
 };
