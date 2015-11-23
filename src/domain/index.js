@@ -1,24 +1,39 @@
 "use strict";
 
+var options = {
+  host: 'store.abibao.com',
+  port: 28015,
+  db: 'test',
+  authKey: '8UR40M2nQ8leURX262xY0OokvfhQunG4'
+};
+var thinky = require('thinky')(options);
+
 module.exports = {
   
   // injected
   logger: null,
   logger_slack: null,
-  rethinkdb: null,
   io: null,
-  
-  // commands
-  createIndividual: require('./commands/users/createIndividual'),
-  postMessageOnSlack: require('./commands/users/postMessageOnSlack'),
-  
-  // events
-  individualCreated: require('./events/users/individualCreated'),
-  individualsListenChanged: require('./events/users/individualsListenChanged'),
-  
-  // queries
+  thinky: thinky,
+  ThinkyErrors: thinky.Errors,
   
   // models
-  individual: require('./models/users/individual'),
+  IndividualModel: require('./models/IndividualModel')(thinky),
+  
+  // commands
+  PostMessageOnSlackCommand: require('./commands/PostMessageOnSlackCommand'),
+  CreateIndividualCommand: require('./commands/CreateIndividualCommand'),
+  
+  // queries
+  CountIndividualsQuery: require('./queries/CountIndividualsQuery'),
+  ReadShortIndividualQuery: require('./queries/ReadShortIndividualQuery'),
+  ReadShortIndividualsListQuery: require('./queries/ReadShortIndividualsListQuery'),
+  
+  // events
+  CreateIndividualEvent: require('./events/CreateIndividualEvent'),
+  UpdateIndividualEvent: require('./events/UpdateIndividualEvent'),
+  
+  // listeners
+  IndividualsListenerChanged: require('./listeners/IndividualsListenerChanged'),
   
 };

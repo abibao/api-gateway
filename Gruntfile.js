@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     	},
 		},
 		jshint: {
-			files: ['src/**/*.js'],
+			files: [ 'src/plugins/**/*.js', 'src/controllers/**/*.js', 'src/domain/**/*.js' ],
 			options: {
 			  node: true,
 			  strict: true,

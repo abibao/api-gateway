@@ -1,55 +1,89 @@
 "use strict";
 
+var MD5 = require('md5');
 var chai = require('chai');
 var should = chai.should;
 var expect = chai.expect;
 
-var Individual = require('../src/models/individual');
+var options = {
+  host: 'store.abibao.com',
+  port: 28015,
+  db: 'test',
+  authKey: '8UR40M2nQ8leURX262xY0OokvfhQunG4'
+};
+var thinky = require('thinky')(options);
 
-var individual, data;
+var Individual = require('../src/domain/models/users/IndividualModel')(thinky);
 
 describe('individual schema', function () {
   it('should return errors on validation email', function (done) {
-    data = {
+    var individual = new Individual({
       email: 'email'
-    };
-    individual = new Individual(data);
-    individual.validate(function(err, value) {
-      expect(err).to.be.not.null;
-      done();
     });
+    try{
+      individual.validate();
+    } catch (e) {
+      expect(e.message).to.be.equal('Value for [email] must be a valid email.');
+      done();
+    }
   });
   it('should return error on validation password empty', function (done) {
-    data = {
+    var individual = new Individual({
       email: 'email@email.com'
-    };
-    individual = new Individual(data);
-    individual.validate(function(err, value) {
-      expect(err).to.be.not.null;
-      done();
     });
+    try{
+      individual.validate();
+    } catch (e) {
+      expect(e.message).to.be.equal('Value for [password] must be defined.');
+      done();
+    }
   });
   it('should return error on validation date empty', function (done) {
-    data = {
+    var individual = new Individual({
       email: 'email@email.com',
-      hashedPassword: 'hashedPassword'
-    };
-    individual = new Individual(data);
-    individual.validate(function(err, value) {
-      expect(err).to.be.not.null;
-      done();
+      password: 'password'
     });
+    try{
+      individual.validate();
+    } catch (e) {
+      expect(e.message).to.be.equal('Value for [createdAt] must be defined.');
+      done();
+    }
   });
   it('should return no error on validation ! perfect validation done !', function (done) {
-    data = {
+    var individual = new Individual({
       email: 'email@email.com',
-      hashedPassword: 'hashedPassword',
-      created: Date.now()
-    };
-    individual = new Individual(data);
-    individual.validate(function(err, value) {
-      expect(err).to.be.null;
-      done();
+      password: 'password',
+      createdAt: Date.now()
     });
+    try{
+      individual.validate();
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+  it('should return no error on saving ! done !', function (done) {
+    var individual = new Individual({
+      email: 'email@email.com',
+      password: 'password',
+      createdAt: Date.now()
+    });
+    Individual.get(MD5(individual.email)).run(function(err, doc) {
+      if (!doc) {
+        try {
+          individual.validate();
+          individual
+          .save(function(err, doc) {
+            done(err);
+          });
+        } catch (e) {
+          done(e);
+        }
+      } else {
+        done(new Error("Email already exist in database."));
+      }
+    });
+
   });
 });

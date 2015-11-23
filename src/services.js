@@ -50,11 +50,11 @@ module.exports.start_server = function(callback) {
     // routes
     if (!process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) {
       server.route({
-        path: '/public/{param*}',
+        path: '/dashboard/{param*}',
         method: 'GET',
         handler: {
           directory: {
-            path: require('path').resolve(__dirname, '../public'),
+            path: require('path').resolve(__dirname, '../dashboard'),
             listing: true
           }
         }

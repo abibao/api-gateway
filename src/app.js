@@ -27,9 +27,9 @@ Services.start_server(function(err) {
   domain.logger = server.logger;
   domain.logger_slack = server.logger_slack;
   domain.io = io;
-  domain.rethinkdb = server.plugins['hapi-rethinkdb'].connection;
-  // start listeners
-  domain.individualsListenChanged();
+  // domain.rethinkdb = server.plugins['hapi-rethinkdb'].connection;
+  // start domain listeners
+  domain.IndividualsListenerChanged();
   // affect domain to server
   server.domain = domain;
 });
