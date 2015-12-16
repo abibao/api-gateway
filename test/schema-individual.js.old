@@ -1,5 +1,27 @@
 "use strict";
 
+/*
+var async = require('async');
+var count = 2;
+async.whilst(
+  function () { return count < 25000; },
+  function (callback) {
+    count++;
+    var u = {
+      email:  count+'_'+request.payload.email,
+      password: request.payload.password1
+    };
+    request.server.domain.CreateIndividualCommand(u, function(err) {
+      callback(err);
+    });
+  },
+  function (err) {
+    return reply(request.payload);
+  }
+);
+*/
+
+
 var MD5 = require('md5');
 var chai = require('chai');
 var should = chai.should;

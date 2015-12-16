@@ -2,7 +2,8 @@
 
 var Joi = require('joi');
 var Boom = require('boom');
-// var async = require('async');
+var JWT = require('jsonwebtoken');
+var Bcrypt = require('bcrypt');
 
 exports.login = {
   auth: false,
@@ -18,9 +19,27 @@ exports.login = {
       password: Joi.string().required()
     }
   },
+  jsonp: 'callback',
   handler: function(request, reply) {
     try {
-      reply(request.payload);
+      // execute command
+      request.server.domain.FindShortIndividualByEmailQuery(request.payload.email, function(err, user) {
+        if (err) {
+          request.server.logger.error(err);
+          return reply(Boom.wrap(err, 400)); 
+        }
+        var candidatePassword = request.payload.password;
+        Bcrypt.compare(candidatePassword, user.password, function(err, isMatch) {
+          if (err) return reply(Boom.wrap(err, 400));
+          if (isMatch === false) return reply(Boom.unauthorized('invalid account'));
+          user.scope = 'individual';
+          delete user.password;
+          var token = JWT.sign(user, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY || 'JWT_KEY');
+          reply({token: token});
+        });
+      });
+      /*var token = JWT.sign({}, 'plop');
+      reply(token);*/
     } catch (e) {
       var error = new Error(e);
       request.server.logger.error(error);
@@ -44,46 +63,31 @@ exports.register = {
       password2: Joi.string().required()
     }
   },
+  jsonp: 'callback',
   handler: function(request, reply) {
     // testing password confirmation
     if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
     // execute command
+    request.payload.password = request.payload.password1;
     request.server.domain.CreateIndividualCommand(request.payload, function(err) {
       if (err) {
         return reply(Boom.wrap(err, 400));
       }
       return reply(request.payload);
     });
-    /*var count = 2;
-    async.whilst(
-      function () { return count < 25000; },
-      function (callback) {
-        count++;
-        var u = {
-          email:  count+'_'+request.payload.email,
-          password: request.payload.password1
-        };
-        request.server.domain.CreateIndividualCommand(u, function(err) {
-          callback(err);
-        });
-      },
-      function (err) {
-        return reply(request.payload);
-      }
-    );*/
   }
 
 };
 
 exports.count = {
-  /*auth: {
+  auth: {
     strategy: 'jwt',
     scope: ['administrator']
-  },*/
-  auth: false,
+  },
   tags: ['api', 'individuals'],
   description: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
   notes: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
+  jsonp: 'callback',
   handler: function(request, reply) {
     // execute command
     request.server.domain.CountIndividualsQuery(function(err, result) {
@@ -96,50 +100,21 @@ exports.count = {
   }
 };
 
-exports.readshort = {
-  /*auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },*/
-  auth: false,
-  tags: ['api', 'individuals'],
-  description: 'Récupérer la version courte d\'un utilisateur de type "individual"',
-  notes: 'Récupérer la version courte d\'un utilisateur de type "individual"',
-  validate: {
-    params: {
-      id: Joi.string().required()
-    }
-  },
-  handler: function(request, reply) {
-    // execute command
-    request.server.domain.ReadShortIndividualQuery(request.params.id, function(err, doc) {
-      if (err) {
-        request.server.logger.error(err);
-        return reply(Boom.wrap(err, 400));
-      }
-      reply(doc);
-    });
-  }
-};
-
 exports.readshortlist = {
-  /*auth: {
+  auth: {
     strategy: 'jwt',
     scope: ['administrator']
-  },*/
-  auth: false,
+  },
   tags: ['api', 'individuals'],
   description: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
   notes: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
   validate: {
-    payload: {
+    params: {
       startIndex: Joi.number().integer().min(1).required(),
       nbIndexes: Joi.number().integer().min(1).required()
     }
   },
+  jsonp: 'callback',
   handler: function(request, reply) {
     // execute command
     request.server.domain.ReadShortIndividualsListQuery(request.payload.startIndex, request.payload.nbIndexes, function(err, docs) {

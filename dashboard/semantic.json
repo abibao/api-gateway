@@ -1,0 +1,51 @@
+{
+  "id": 123456,
+  "name": "My New Survey",
+  "creator": "team@abibao.com",
+  "published": "true or false",
+  "status": "working, live or closed",
+  "form": [{
+    "id": 120394,
+    "title": "What is your name ?",
+    "idname": "text-response",
+    "required": "true or false",
+    "children": [{
+      "type": "string"
+    }]
+  }, 
+  {
+    "id": 123456,
+    "title": "What is your gender?",
+    "idname": "single-choice",
+    "required": "true or false",
+    "randomize": "true or false",
+    "children": [{
+      "type": "single",
+      "choices": [{
+        "label": "Male"
+        }, {
+        "label":  "Female"
+        }]
+      }]
+  },
+  {
+    "id": 1234567,
+    "title": "Which foods do you enjoy?",
+    "idname": "multiple-choice",
+    "required": "true or false",
+    "randomize": "true or false",
+    "children": [
+      {
+        "type": "multiple",
+        "choices": [
+          {
+            "label": "Indian Food"
+          },
+          {
+            "label":  "Chinese Food"
+          }
+        ]
+      }
+    ]
+}]
+}

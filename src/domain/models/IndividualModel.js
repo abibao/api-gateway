@@ -31,6 +31,13 @@ module.exports = function(thinky) {
     });
   });
   
+  /*Model.methods.comparePassword = function(candidatePassword, cb) {
+    Bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+      if (err) return cb(err);
+      cb(null, isMatch);
+    });
+  };*/ 
+  
   return Model;
   
 };

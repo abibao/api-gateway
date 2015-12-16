@@ -28,6 +28,7 @@ module.exports = {
   CountIndividualsQuery: require('./queries/CountIndividualsQuery'),
   ReadShortIndividualQuery: require('./queries/ReadShortIndividualQuery'),
   ReadShortIndividualsListQuery: require('./queries/ReadShortIndividualsListQuery'),
+  FindShortIndividualByEmailQuery: require('./queries/FindShortIndividualByEmailQuery'),
   
   // events
   CreateIndividualEvent: require('./events/CreateIndividualEvent'),
