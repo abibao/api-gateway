@@ -7,11 +7,10 @@ module.exports = function(thinky) {
   
   var type = thinky.type;
 
-  var Model = thinky.createModel("individuals", {
+  var Model = thinky.createModel("administrators", {
     email: type.string().email().required(),
     password: type.string().required(),
-    createdAt: type.date().required(),
-    verified: type.boolean().required()
+    createdAt: type.date().required()
   }); 
   
   Model.pre('save', function(next) {

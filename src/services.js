@@ -8,8 +8,8 @@ var Routes = require('./routes');
 var Sockets = require('./sockets');
 
 var options = {
-  host: process.env.ABIBAO_API_GATEWAY_EXPOSE_IP || process.env.IP,
-  port: process.env.ABIBAO_API_GATEWAY_EXPOSE_PORT || process.env.PORT,
+  host: process.env.ABIBAO_API_GATEWAY_EXPOSE_IP,
+  port: process.env.ABIBAO_API_GATEWAY_EXPOSE_PORT,
   labels: ['api']
 };
 
@@ -91,7 +91,7 @@ var logger_file = bunyan.createLogger({
     level: 'info',
     streams: [{
         type: "rotating-file",
-        path: process.env.ABIBAO_API_GATEWAY_LOGS_FILE || '/home/ubuntu/workspace/logs/api-gateway.log',
+        path: process.env.ABIBAO_API_GATEWAY_LOGS_FILE,
         period: "1d",   // daily rotation
         count: 3        // keep 3 back copies
     }]

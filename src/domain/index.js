@@ -1,10 +1,10 @@
 "use strict";
 
 var options = {
-  host: 'store.abibao.com',
-  port: 28015,
-  db: 'test',
-  authKey: '8UR40M2nQ8leURX262xY0OokvfhQunG4'
+  host: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST,
+  port: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT,
+  db: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_DB,
+  authKey: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY
 };
 var thinky = require('thinky')(options);
 
@@ -19,20 +19,24 @@ module.exports = {
   
   // models
   IndividualModel: require('./models/IndividualModel')(thinky),
+  AdministratorModel: require('./models/AdministratorModel')(thinky),
   
   // commands
   PostMessageOnSlackCommand: require('./commands/PostMessageOnSlackCommand'),
   CreateIndividualCommand: require('./commands/CreateIndividualCommand'),
+  SendIndividualEmailVerificationCommand: require('./commands/SendIndividualEmailVerificationCommand'),
   
   // queries
   CountIndividualsQuery: require('./queries/CountIndividualsQuery'),
   ReadShortIndividualQuery: require('./queries/ReadShortIndividualQuery'),
   ReadShortIndividualsListQuery: require('./queries/ReadShortIndividualsListQuery'),
   FindShortIndividualByEmailQuery: require('./queries/FindShortIndividualByEmailQuery'),
+  FindShortAdministratorByEmailQuery: require('./queries/FindShortAdministratorByEmailQuery'),
   
   // events
   CreateIndividualEvent: require('./events/CreateIndividualEvent'),
   UpdateIndividualEvent: require('./events/UpdateIndividualEvent'),
+  SendIndividualEmailVerificationEvent: require('./events/SendIndividualEmailVerificationEvent'),
   
   // listeners
   IndividualsListenerChanged: require('./listeners/IndividualsListenerChanged'),

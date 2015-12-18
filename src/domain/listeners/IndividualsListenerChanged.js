@@ -17,21 +17,16 @@ module.exports = function() {
           console.log(doc);
         }
         else if (doc.getOldValue() === null) {
+          console.log("A new document was inserted:");
           delete doc.password;
           self.CreateIndividualEvent(doc);
-          /*console.log("A new document was inserted:");
-          console.log(doc);*/
         }
         else {
+          console.log("A document was updated.");
           var old = doc.getOldValue();
           delete doc.password;
           delete old.password;
           self.UpdateIndividualEvent(doc, old);
-          /*console.log("A document was updated.");
-          console.log("Old value:");
-          console.log(doc.getOldValue());
-          console.log("New value:");
-          console.log(doc);*/
         }
       });
     }).error(function(error) {

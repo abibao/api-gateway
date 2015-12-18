@@ -1,6 +1,5 @@
 "use strict";
 
-var Joi = require('joi');
 var Boom = require('boom');
 
 exports.me = {
@@ -26,17 +25,20 @@ exports.surveyslist = {
   handler: function(request, reply) {
     try {
       var result = {
-        "total": 1,
+        "total": 2,
         "surveys": [{
           "id": 17461,
           "name": "First tour"
+        },{
+          "id": 18421,
+          "name": "second tour"
         }]
       };
       reply(result);
     } catch (e) {
       var error = new Error(e);
       request.server.logger.error(error);
-      return reply(Boom.wrap(error, 400));
+      return reply(Boom.badRequest(error));
     }
   }
 };

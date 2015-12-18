@@ -2,6 +2,13 @@
 
 var _ = require('lodash');
 
+// enable cloud9 configuration file.
+if (process.env.ABIBAO_API_GATEWAY_CLOUD9_ENABLE) {
+  var _ = require('lodash');
+  var jsonfile = require('jsonfile');
+  _.merge(process.env, jsonfile.readFileSync('cloud9.json'));
+}
+
 if (process.env.ABIBAO_API_GATEWAY_NEWRELIC_ENABLE) require('newrelic');
 
 // declare all services

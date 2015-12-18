@@ -4,14 +4,13 @@ var Joi = require('joi');
 var Boom = require('boom');
 
 exports.status = {
-  auth: false,
-  /*auth: {
+  auth: {
     strategy: 'jwt',
-    scope: ['administrator', 'individual']
-  },*/
+    scope: ['administrator']
+  },
   tags: ['api', 'surveys'],
-  description: 'Returns a JSON object with status either “live” or “closed”.',
-  notes: 'Returns a JSON object with status either “live” or “closed”.',
+  description: 'Returns a JSON object with status either “working”, “live” or “closed”.',
+  notes: 'Returns a JSON object with status either “working”, “live” or “closed”.',
   validate: {
     params: {
       id: Joi.string().required()
@@ -27,17 +26,16 @@ exports.status = {
     } catch (e) {
       var error = new Error(e);
       request.server.logger.error(error);
-      return reply(Boom.wrap(error, 400));
+      return reply(Boom.badRequest(error));
     }
   }
 };
 
 exports.create = {
-  auth: false,
-  /*auth: {
+  auth: {
     strategy: 'jwt',
     scope: ['administrator']
-  },*/
+  },
   tags: ['api', 'surveys'],
   description: 'Creates an empty survey with the parameter name.',
   notes: 'Creates an empty survey with the parameter name.',
@@ -63,7 +61,7 @@ exports.create = {
     } catch (e) {
       var error = new Error(e);
       request.server.logger.error(error);
-      return reply(Boom.wrap(error, 400));
+      return reply(Boom.badRequest(error));
     }
   }
 };
