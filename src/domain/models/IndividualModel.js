@@ -10,6 +10,7 @@ module.exports = function(thinky) {
   var Model = thinky.createModel("individuals", {
     email: type.string().email().required(),
     password: type.string().required(),
+    salt: type.string(),
     createdAt: type.date().required(),
     verified: type.boolean().required()
   }); 
@@ -17,11 +18,13 @@ module.exports = function(thinky) {
   Model.pre('save', function(next) {
     var user = this;
     user.id = MD5(user.email);
+    if (user.salt) return next();
     // only hash the password if it has been modified (or is new)
     //if (!user.isSaved()) return next();
     // generate a salt
     Bcrypt.genSalt(10, function(err, salt) {
       if (err) return next(err);
+      user.salt = salt;
       // hash the password along with our new salt
       Bcrypt.hash(user.password, salt, function(err, hash) {
         if (err) return next(err);

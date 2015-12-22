@@ -17,12 +17,10 @@ module.exports = function() {
           console.log(doc);
         }
         else if (doc.getOldValue() === null) {
-          console.log("A new document was inserted:");
           delete doc.password;
           self.CreateIndividualEvent(doc);
         }
         else {
-          console.log("A document was updated.");
           var old = doc.getOldValue();
           delete doc.password;
           delete old.password;

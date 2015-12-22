@@ -1,5 +1,6 @@
 "use strict";
 
+var JWT = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 
 // create reusable transporter object using SMTP transport
@@ -17,12 +18,14 @@ module.exports = function(email, callback) {
   self.action = 'Command';
   self.name = 'SendIndividualEmailVerificationCommand';
   
+  var token = JWT.sign(email, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+  
   var mailOptions = {
     from: process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_NAME+' <'+process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_EMAIL+'>',
     to: email,
     subject: '[abibao.com] - vérification de votre email',
-    text: 'http://www.abibao.com',
-    html: '<a href="http://abibao.com/accounts/verify">Cliquez ici pour vérification de votre email.</a>'
+    text: process.env.ABIBAO_DASHBOARD_URI+'/accounts/verify/'+token,
+    html: '<a href="'+process.env.ABIBAO_WWW_URI+'/accounts/verify/'+token+'">Cliquez ici pour vérification de votre email.</a>'
   };
   
   transporter.sendMail(mailOptions, function(error, info) {

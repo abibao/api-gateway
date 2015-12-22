@@ -55,7 +55,32 @@ exports.verifyEmail = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    reply(request.params.token);
+    try {
+      var email = JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+      request.server.domain.FindShortIndividualByEmailQuery(email, function(err, user) {
+        if (err) {
+          request.server.logger.error(err);
+          return reply(Boom.badRequest(err));
+        }
+        // already verified
+        if (user.verified===true) {
+          request.server.logger.error('Email already verified.');
+          return reply(Boom.badRequest(new Error('Email already verified.')));
+        }
+        user.verified = true;
+        request.server.domain.UpdateIndividualCommand(user, function(err, user) {
+          if (err) {
+            request.server.logger.error(err);
+            return reply(Boom.badRequest(err));
+          }
+          reply({verified:true});
+        });
+      });
+    } catch (e) {
+      var error = new Error(e);
+      request.server.logger.error(error);
+      return reply(Boom.badRequest(error));
+    }
   }
 };
 
@@ -80,6 +105,11 @@ exports.resendVerificationEmail = {
         if (err) {
           request.server.logger.error(err);
           return reply(Boom.badRequest(err));
+        }
+        // already verified
+        if (user.verified===true) {
+          request.server.logger.error('Email already verified.');
+          return reply(Boom.badRequest(new Error('Email already verified.')));
         }
         // execute command : send email
         request.server.domain.SendIndividualEmailVerificationCommand(user.email, function(err) {

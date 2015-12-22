@@ -39,7 +39,6 @@ module.exports = function(data, callback) {
         }
         // run another command (only in production)
         if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', 'event individualCreated'+' < '+doc.email+' >'); 
-        delete doc.password;
         callback(null, individual);
       });
     }).error(function(error) {

@@ -10,6 +10,7 @@ module.exports = function(thinky) {
   var Model = thinky.createModel("administrators", {
     email: type.string().email().required(),
     password: type.string().required(),
+    salt: type.string(),
     createdAt: type.date().required()
   }); 
   

@@ -24,6 +24,7 @@ module.exports = {
   // commands
   PostMessageOnSlackCommand: require('./commands/PostMessageOnSlackCommand'),
   CreateIndividualCommand: require('./commands/CreateIndividualCommand'),
+  UpdateIndividualCommand: require('./commands/UpdateIndividualCommand'),
   SendIndividualEmailVerificationCommand: require('./commands/SendIndividualEmailVerificationCommand'),
   
   // queries

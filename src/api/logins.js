@@ -72,7 +72,12 @@ exports.login_individual = {
         var candidatePassword = request.payload.password;
         Bcrypt.compare(candidatePassword, user.password, function(err, isMatch) {
           if (err) return reply(Boom.badRequest(err));
-          if (isMatch === false) return reply(Boom.unauthorized('invalid account'));
+          if (isMatch===false) return reply(Boom.unauthorized('invalid account'));
+          // email not verified
+          if (user.verified===false) {
+            request.server.logger.error('Email not verified.');
+            return reply(Boom.badRequest(new Error('Email not verified.')));
+          }
           user.scope = 'individual';
           delete user.password;
           var token = JWT.sign(user, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
