@@ -1,6 +1,9 @@
 "use strict";
 
+var Joi = require('joi');
 var Boom = require('boom');
+var JWT = require('jsonwebtoken');
+var MD5 = require('md5');
 
 exports.me = {
   auth: 'jwt',
@@ -9,7 +12,32 @@ exports.me = {
   notes: 'Returns currently authenticated user.',
   jsonp: 'callback',
   handler: function(request, reply) {
-    reply(request.auth.credentials);
+    var authenticated_user = request.auth.credentials;
+    reply(authenticated_user);
+  }
+};
+
+exports.me_update = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['individual']
+  },
+  tags: ['api', 'auth'],
+  description: 'Update currently authenticated user.',
+  notes: 'Update currently authenticated user.',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    payload: {
+      birthday: Joi.date(),
+      sex: Joi.number().integer().min(0).max(1)
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    var authenticated_user = request.auth.credentials;
+    reply({user:authenticated_user,update:true});
   }
 };
 
@@ -18,7 +46,7 @@ exports.surveyslist = {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', 'surveys'],
+  tags: ['api', 'auth'],
   description: 'Returns surveys that are accessible to the currently authenticated user.',
   notes: 'Returns surveys that are accessible to the currently authenticated user.',
   jsonp: 'callback',

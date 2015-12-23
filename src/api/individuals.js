@@ -3,6 +3,7 @@
 var Joi = require('joi');
 var Boom = require('boom');
 var JWT = require('jsonwebtoken');
+var MD5 = require('md5');
 
 exports.register = {
   auth: false,
@@ -43,6 +44,32 @@ exports.register = {
   }
 };
 
+exports.update = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', 'individuals'],
+  description: 'Mise à jour d\'un individu sur abibao',
+  notes: 'Mise à jour d\'un individu sur abibao',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {
+      birthday: Joi.date(),
+      sex: Joi.number().integer().min(0).max(1)
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    reply({update:true});
+  }
+};
+
 exports.verifyEmail = {
   auth: false,
   tags: ['api', 'individuals'],
@@ -57,7 +84,8 @@ exports.verifyEmail = {
   handler: function(request, reply) {
     try {
       var email = JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
-      request.server.domain.FindShortIndividualByEmailQuery(email, function(err, user) {
+      var id = MD5(email);
+      request.server.domain.ReadShortIndividualQuery(id, function(err, user) {
         if (err) {
           request.server.logger.error(err);
           return reply(Boom.badRequest(err));
@@ -101,7 +129,9 @@ exports.resendVerificationEmail = {
   handler: function(request, reply) {
     try {
       // execute command : find user or not in database ?
-      request.server.domain.FindShortIndividualByEmailQuery(request.payload.email, function(err, user) {
+      var email = request.payload.email;
+      var id = MD5(email);
+      request.server.domain.ReadShortIndividualQuery(id, function(err, user) {
         if (err) {
           request.server.logger.error(err);
           return reply(Boom.badRequest(err));

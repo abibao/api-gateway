@@ -4,6 +4,7 @@ var Joi = require('joi');
 var Boom = require('boom');
 var JWT = require('jsonwebtoken');
 var Bcrypt = require('bcrypt');
+var MD5 = require('md5');
 
 exports.login_administrator = {
   auth: false,
@@ -22,18 +23,26 @@ exports.login_administrator = {
   jsonp: 'callback',
   handler: function(request, reply) {
     try {
+      // prepare 
+      var email = request.payload.email;
+      var params = {
+        id: MD5(email),
+        email: email
+      };
       // execute command
-      request.server.domain.FindShortAdministratorByEmailQuery(request.payload.email, function(err, user) {
+      request.server.domain.FindShortAdministratorsQuery(params, function(err, users) {
         if (err) {
           request.server.logger.error(err);
           return reply(Boom.badRequest(err));
         }
+        var user = users[0];
         var candidatePassword = request.payload.password;
         Bcrypt.compare(candidatePassword, user.password, function(err, isMatch) {
           if (err) return reply(Boom.badRequest(err));
           if (isMatch === false) return reply(Boom.unauthorized('invalid account'));
           user.scope = 'administrator';
           delete user.password;
+          delete user.salt;
           var token = JWT.sign(user, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
           reply({token: token});
         });
@@ -63,12 +72,19 @@ exports.login_individual = {
   jsonp: 'callback',
   handler: function(request, reply) {
     try {
+      // prepare 
+      var email = request.payload.email;
+      var params = {
+        id: MD5(email),
+        email: email
+      };
       // execute command
-      request.server.domain.FindShortIndividualByEmailQuery(request.payload.email, function(err, user) {
+      request.server.domain.FindShortIndividualsQuery(params, function(err, users) {
         if (err) {
           request.server.logger.error(err);
           return reply(Boom.badRequest(err));
         }
+        var user = users[0];
         var candidatePassword = request.payload.password;
         Bcrypt.compare(candidatePassword, user.password, function(err, isMatch) {
           if (err) return reply(Boom.badRequest(err));
@@ -80,6 +96,7 @@ exports.login_individual = {
           }
           user.scope = 'individual';
           delete user.password;
+          delete user.salt;
           var token = JWT.sign(user, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
           reply({token: token});
         });

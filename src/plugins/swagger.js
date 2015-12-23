@@ -7,6 +7,8 @@ var pkg = pkginfo.sync();
 
 // swagger
 var options = {
+  stripPrefix: '/api/v1',
+  supportedMethods: ['get', 'post', 'delete', 'patch'],
   info: {
     version: pkg.version,
     title: pkg.name,

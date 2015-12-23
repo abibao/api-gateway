@@ -31,8 +31,8 @@ module.exports = {
   CountIndividualsQuery: require('./queries/CountIndividualsQuery'),
   ReadShortIndividualQuery: require('./queries/ReadShortIndividualQuery'),
   ReadShortIndividualsListQuery: require('./queries/ReadShortIndividualsListQuery'),
-  FindShortIndividualByEmailQuery: require('./queries/FindShortIndividualByEmailQuery'),
-  FindShortAdministratorByEmailQuery: require('./queries/FindShortAdministratorByEmailQuery'),
+  FindShortIndividualsQuery: require('./queries/FindShortIndividualsQuery'),
+  FindShortAdministratorsQuery: require('./queries/FindShortAdministratorsQuery'),
   
   // events
   CreateIndividualEvent: require('./events/CreateIndividualEvent'),
