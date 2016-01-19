@@ -15,16 +15,10 @@ RUN npm update -g npm
 RUN npm install -g bower
 
 # Add the current working folder as a mapped folder at /app
-# COPY ./newrelic.js /app/newrelic.js
-COPY ./cloud9.json /app/cloud9.json
-COPY ./package.json /app/package.json
-COPY ./src /app
-
-# Set the current working directory to the new mapped folder.
+COPY . /app
 WORKDIR /app
-
-# Install application's dependencies
 RUN npm install --production
+RUN bower install
 
 # Set the current working directory to the new mapped folder.
 WORKDIR /app
@@ -33,4 +27,4 @@ WORKDIR /app
 EXPOSE 80
 
 # Running
-CMD node .
+CMD npm start
