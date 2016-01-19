@@ -7,11 +7,14 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 # Ignore APT warnings about not having a TTY
 ENV DEBIAN_FRONTEND noninteractive
 
-# Update hack for install bower with docker
-RUN echo '{ "allow_root": true }' > /root/.bowerrc
+# Install apt-get
+RUN apt-get update \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
 
 # Install global npm
 RUN npm update -g npm
+RUN npm install -g node-gyp
 
 # Create app directory
 RUN mkdir -p /usr/src/app
@@ -22,7 +25,7 @@ COPY package.json /usr/src/app/
 RUN npm install
 
 # Bundle app source
-COPY . /usr/src/app
+COPY ./src /usr/src/app
  
 # Expose port
 EXPOSE 80
