@@ -1,5 +1,10 @@
 "use strict";
 
+var async = require('async');
+var path = require('path');
+var dir = require('node-dir');
+var Promise = require("bluebird");
+
 var options = {
   host: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST,
   port: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT,
@@ -16,30 +21,24 @@ module.exports = {
   io: null,
   thinky: thinky,
   ThinkyErrors: thinky.Errors,
-  
-  // models
-  IndividualModel: require('./models/IndividualModel')(thinky),
-  AdministratorModel: require('./models/AdministratorModel')(thinky),
-  
-  // commands
-  PostMessageOnSlackCommand: require('./commands/PostMessageOnSlackCommand'),
-  CreateIndividualCommand: require('./commands/CreateIndividualCommand'),
-  UpdateIndividualCommand: require('./commands/UpdateIndividualCommand'),
-  SendIndividualEmailVerificationCommand: require('./commands/SendIndividualEmailVerificationCommand'),
-  
-  // queries
-  CountIndividualsQuery: require('./queries/CountIndividualsQuery'),
-  ReadShortIndividualQuery: require('./queries/ReadShortIndividualQuery'),
-  ReadShortIndividualsListQuery: require('./queries/ReadShortIndividualsListQuery'),
-  FindShortIndividualsQuery: require('./queries/FindShortIndividualsQuery'),
-  FindShortAdministratorsQuery: require('./queries/FindShortAdministratorsQuery'),
-  
-  // events
-  CreateIndividualEvent: require('./events/CreateIndividualEvent'),
-  UpdateIndividualEvent: require('./events/UpdateIndividualEvent'),
-  SendIndividualEmailVerificationEvent: require('./events/SendIndividualEmailVerificationEvent'),
-  
-  // listeners
-  IndividualsListenerChanged: require('./listeners/IndividualsListenerChanged'),
+
+  injector: function(type, callback) {
+    var self = this;
+    dir.files(path.resolve(__dirname, type), function(err, files) {
+      if (err) return callback(err, null);
+      async.mapSeries(files, function(item, next) {
+        var name = path.basename(item, '.js');
+        self.logger.info('['+name+'] has just being injected');
+        if (type==='models') {
+          self[name] = require('./'+type+'/'+name)(self.thinky);
+        } else {
+          self[name] = Promise.promisify(require('./'+type+'/'+name));
+        }
+        next(null, true);
+      }, function(error, results) {
+        callback(error, results);
+      });
+    });
+  }
   
 };

@@ -1,10 +1,10 @@
 "use strict";
 
-var AuthController = require('./api/auth');
-var LoginsController = require('./api/logins');
-var IndividualsController = require('./api/individuals');
-var SurveysController = require('./api/surveys');
-var TestsController = require('./api/tests');
+var AuthController = require('./controllers/auth');
+var LoginsController = require('./controllers/logins');
+var IndividualsController = require('./controllers/individuals');
+var SurveysController = require('./controllers/surveys');
+var TestsController = require('./controllers/tests');
 
 exports.endpoints = [
   
