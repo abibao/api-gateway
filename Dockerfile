@@ -12,13 +12,11 @@ RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
 # Install global npm
 RUN npm update -g npm
-RUN npm install -g bower
 
 # Add the current working folder as a mapped folder at /app
 COPY ./src /app/src
 WORKDIR /app
 RUN npm install --production
-RUN bower install
 
 # Set the current working directory to the new mapped folder.
 WORKDIR /app
