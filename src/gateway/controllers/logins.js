@@ -3,7 +3,6 @@
 var Joi = require('joi');
 var Boom = require('boom');
 var JWT = require('jsonwebtoken');
-var Bcrypt = require('bcrypt');
 var MD5 = require('md5');
 
 exports.login_administrator = {
@@ -22,7 +21,7 @@ exports.login_administrator = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    try {
+    /*try {
       // prepare 
       var email = request.payload.email;
       var params = {
@@ -51,7 +50,7 @@ exports.login_administrator = {
       var error = new Error(e);
       request.server.logger.error(error);
       return reply(Boom.badRequest(error));
-    }
+    }*/
   }
 };
 
@@ -71,7 +70,7 @@ exports.login_individual = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    try {
+    /*try {
       // prepare 
       var email = request.payload.email;
       var params = {
@@ -105,6 +104,6 @@ exports.login_individual = {
       var error = new Error(e);
       request.server.logger.error(error);
       return reply(Boom.badRequest(error));
-    }
+    }*/
   }
 };

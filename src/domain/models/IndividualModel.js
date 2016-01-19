@@ -1,47 +1,48 @@
 "use strict";
 
-var Bcrypt = require('bcrypt');
-var MD5 = require('md5');
+var crypto = require('crypto');
 
 module.exports = function(thinky) {
   
   var type = thinky.type;
-
-  var Model = thinky.createModel("individuals", {
+  var r = thinky.r;
+  
+  var IndividualModel = thinky.createModel("individuals", {
+    // fields
     email: type.string().email().required(),
-    password: type.string().required(),
+    scope: type.string().default('individual'),
+    // calculated
+    hashedPassword: type.string(),
     salt: type.string(),
-    createdAt: type.date().required(),
-    verified: type.boolean().required()
+    // automatic
+    createdAt: type.date().required().default(r.now()),
+    modifiedAt: type.date().required().default(r.now())
   }); 
   
-  Model.pre('save', function(next) {
+  IndividualModel.pre('save', function(next) {
     var user = this;
-    user.id = MD5(user.email);
+    // salt exists ?
     if (user.salt) return next();
-    // only hash the password if it has been modified (or is new)
-    //if (!user.isSaved()) return next();
-    // generate a salt
-    Bcrypt.genSalt(10, function(err, salt) {
-      if (err) return next(err);
-      user.salt = salt;
-      // hash the password along with our new salt
-      Bcrypt.hash(user.password, salt, function(err, hash) {
-        if (err) return next(err);
-        // override the cleartext password with the hashed one
-        user.password = hash;
-        next();
-      });
-    });
+    user.salt = this.makeSalt();
+    user.hashedPassword = user.encryptPassword(user.password);
+    delete user.password;
+    next();
   });
   
-  /*Model.methods.comparePassword = function(candidatePassword, cb) {
-    Bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-      if (err) return cb(err);
-      cb(null, isMatch);
-    });
-  };*/ 
+  IndividualModel.define("authenticate", function(plainText) {
+    return this.encryptPassword(plainText) === this.hashedPassword;
+  });
   
-  return Model;
+  IndividualModel.define("makeSalt", function() {
+    return crypto.randomBytes(16).toString('base64');
+  });
+  
+  IndividualModel.define("encryptPassword", function(password) {
+    if (!password || !this.salt) return '';
+    var salt = new Buffer(this.salt, 'base64');
+    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+  });
+  
+  return IndividualModel;
   
 };
