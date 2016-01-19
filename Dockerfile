@@ -13,17 +13,19 @@ RUN echo '{ "allow_root": true }' > /root/.bowerrc
 # Install global npm
 RUN npm update -g npm
 
-# Add the current working folder as a mapped folder at /app
-COPY ./src /app
-COPY ./package.json /app/package.json
-WORKDIR /app
-RUN npm install --production
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-# Set the current working directory to the new mapped folder.
-WORKDIR /app
+# Install app dependencies
+COPY package.json /usr/src/app/
+RUN npm install
+
+# Bundle app source
+COPY . /usr/src/app
  
 # Expose port
 EXPOSE 80
 
 # Running
-CMD .
+CMD [ "npm", "start" ]
