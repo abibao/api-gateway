@@ -14,7 +14,8 @@ RUN echo '{ "allow_root": true }' > /root/.bowerrc
 RUN npm update -g npm
 
 # Add the current working folder as a mapped folder at /app
-COPY ./src /app/src
+COPY ./src /app
+COPY ./package.json /app/package.json
 WORKDIR /app
 RUN npm install --production
 
@@ -25,4 +26,4 @@ WORKDIR /app
 EXPOSE 80
 
 # Running
-CMD npm start
+CMD .
