@@ -10,8 +10,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # Update hack for install bower with docker
 RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
+# Install global npm
+RUN npm update -g npm
+RUN npm install -g bower
+
 # Add the current working folder as a mapped folder at /app
 # COPY ./newrelic.js /app/newrelic.js
+COPY ./cloud9.json /app/cloud9.json
 COPY ./package.json /app/package.json
 COPY ./src /app
 
@@ -28,4 +33,4 @@ WORKDIR /app
 EXPOSE 80
 
 # Running
-CMD npm start
+CMD node .
