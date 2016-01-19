@@ -15,7 +15,7 @@ RUN npm update -g npm
 RUN npm install -g bower
 
 # Add the current working folder as a mapped folder at /app
-COPY . /app
+COPY ./src /app/src
 WORKDIR /app
 RUN npm install --production
 RUN bower install
