@@ -21,7 +21,7 @@ module.exports = {
   io: null,
   thinky: thinky,
   ThinkyErrors: thinky.Errors,
-
+  
   injector: function(type, callback) {
     var self = this;
     dir.files(path.resolve(__dirname, type), function(err, files) {

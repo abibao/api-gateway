@@ -1,52 +1,39 @@
 "use strict";
 
-var MD5 = require('md5');
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
+
+var CURRENT_ACTION = 'Command';
+var CURRENT_NAME = 'CreateIndividualCommand';
 
 module.exports = function(data, callback) {
- 
+
   var self = this;
-  self.action = 'Command';
-  self.name = 'CreateIndividualCommand';
-  
-  delete data.password1;
-  delete data.password2;
-  data.createdAt = Date.now();
-  var individual = new self.IndividualModel(data);
   
   try {
-    // test if email is already registered
-    self.IndividualModel.get(MD5(data.email)).run()
-    .then(function(doc) {
-      if (doc) {}
-      self.logger.error(self.action, self.name, 'Email already exist in database.');
-      return callback(new Error('Email already exist in database.'), null);
-    }).catch(self.ThinkyErrors.DocumentNotFound, function(err) {
-      if (err) {}
-      // validate schema
-      try {
-        individual.validate();
-      }
-      catch(err) {
-        self.logger.error(self.action, self.name, err);
-        return callback(err, null);
-      }
-      // save the data
-      individual
-      .save(function(err, doc) {
-        if (err) {
-          self.logger.error(self.action, self.name, err);
-          return callback(err, null);
-        }
-        // run another command (only in production)
-        if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', 'event individualCreated'+' < '+doc.email+' >'); 
-        callback(null, individual);
+    
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    
+    data.id = new ObjectId().toString();
+    data.createdAt = Date.now();
+    data.modifiedAt = data.createdAt;
+    var user = new self.IndividualModel(data);
+    
+    self.IndividualEmailAlreadyExistsQuery(user.email).then(function() {
+      return self.ValidateDataCommand(user).then(function() {
+        return self.SaveDataCommand(user).then(function(user_saved) {
+          if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', 'event individualCreated'+' < '+user_saved.email+' >'); 
+          return self.SendIndividualEmailVerificationCommand(user_saved.email).then(function() {
+            callback(null, user_saved);
+          });
+        });
       });
-    }).error(function(error) {
-      self.logger.error(self.action, self.name, error);
+    })
+    .catch(function(error) {
       callback(error, null);
     });
+
   } catch (e) {
-    self.logger.error(self.action, self.name, e);
     callback(e, null);
   }
   

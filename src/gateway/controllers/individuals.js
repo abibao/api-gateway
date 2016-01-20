@@ -7,7 +7,7 @@ var MD5 = require('md5');
 
 exports.register = {
   auth: false,
-  tags: ['api', 'individuals'],
+  tags: ['api'],
   description: 'S\'enregistrer en tant qu\'individu sur abibao',
   notes: 'S\'enregistrer en tant qu\'individu sur abibao',
   payload: {
@@ -22,25 +22,19 @@ exports.register = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    // testing password confirmation
+    // password confirmation
     if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
-    // execute command : create individual
     request.payload.password = request.payload.password1;
-    request.payload.verified = false;
-    request.server.domain.CreateIndividualCommand(request.payload, function(err, user) {
-      if (err) {
-        request.server.logger.error(err);
-        return reply(Boom.badRequest(err));
-      }
-      // execute command : send email
-      request.server.domain.SendIndividualEmailVerificationCommand(user.email, function(err) {
-        if (err) {
-          request.server.logger.error(err);
-          return reply(Boom.badRequest(err));
-        }
-        reply({registered:true});
-      });
+    delete request.payload.password1;
+    delete request.payload.password2;
+    // execute command
+    request.server.domain.CreateIndividualCommand(request.payload).then(function(user) {
+      reply(user);
+    }).catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
     });
+  
   }
 };
 

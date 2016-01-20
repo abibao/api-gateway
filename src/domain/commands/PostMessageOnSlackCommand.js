@@ -1,10 +1,19 @@
 "use strict";
 
+var CURRENT_ACTION = 'Command';
+var CURRENT_NAME = 'PostMessageOnSlackCommand';
+
 module.exports = function(type, message) {
   
   var self = this;
   
-  // post a message on Slack #apigateway
-  self.logger_slack[type](message);
-  
+  try {
+    
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    
+    self.logger_slack[type](message);
+    
+  } catch (e) {
+    
+  }
 };

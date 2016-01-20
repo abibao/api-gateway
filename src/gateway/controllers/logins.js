@@ -1,13 +1,12 @@
 "use strict";
 
-var Joi = require('joi');
 var Boom = require('boom');
-var JWT = require('jsonwebtoken');
-var MD5 = require('md5');
+var Joi = require('joi');
+var jwt = require('jsonwebtoken');
 
 exports.login_administrator = {
   auth: false,
-  tags: ['api', 'administrators'],
+  tags: ['api'],
   description: 'Se connecter en tant qu\'administrateur sur abibao',
   notes: 'Se connecter en tant qu\'administrateur sur abibao',
   payload: {
@@ -21,42 +20,27 @@ exports.login_administrator = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    /*try {
-      // prepare 
-      var email = request.payload.email;
-      var params = {
-        id: MD5(email),
-        email: email
-      };
-      // execute command
-      request.server.domain.FindShortAdministratorsQuery(params, function(err, users) {
-        if (err) {
-          request.server.logger.error(err);
-          return reply(Boom.badRequest(err));
-        }
-        var user = users[0];
-        var candidatePassword = request.payload.password;
-        Bcrypt.compare(candidatePassword, user.password, function(err, isMatch) {
-          if (err) return reply(Boom.badRequest(err));
-          if (isMatch === false) return reply(Boom.unauthorized('invalid account'));
-          user.scope = 'administrator';
-          delete user.password;
-          delete user.salt;
-          var token = JWT.sign(user, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
-          reply({token: token});
-        });
-      });
-    } catch (e) {
-      var error = new Error(e);
+    request.server.domain.FindAdministratorsQuery({email:request.payload.email}).then(function(users) {
+      if (users.length===0) return reply(Boom.badRequest('User not found'));
+      if (users.length>1) return reply(Boom.badRequest('Too many emails, contact an administrator'));
+      var user = users[0];
+      if (user.authenticate(request.payload.password)) {
+        var signToken = jwt.sign({ id: user.id, scope: user.scope }, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, { expiresIn: 60*60*24 });
+  		  reply({token: signToken});
+      } else {
+        reply(Boom.unauthorized('User not authenticate'));
+      }
+    })
+    .catch(function(error) {
       request.server.logger.error(error);
-      return reply(Boom.badRequest(error));
-    }*/
+      reply(Boom.badRequest(error));
+    });
   }
 };
 
 exports.login_individual = {
   auth: false,
-  tags: ['api', 'individuals'],
+  tags: ['api'],
   description: 'Se connecter en tant qu\'individu sur abibao',
   notes: 'Se connecter en tant qu\'individu sur abibao',
   payload: {
@@ -70,40 +54,20 @@ exports.login_individual = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    /*try {
-      // prepare 
-      var email = request.payload.email;
-      var params = {
-        id: MD5(email),
-        email: email
-      };
-      // execute command
-      request.server.domain.FindShortIndividualsQuery(params, function(err, users) {
-        if (err) {
-          request.server.logger.error(err);
-          return reply(Boom.badRequest(err));
-        }
-        var user = users[0];
-        var candidatePassword = request.payload.password;
-        Bcrypt.compare(candidatePassword, user.password, function(err, isMatch) {
-          if (err) return reply(Boom.badRequest(err));
-          if (isMatch===false) return reply(Boom.unauthorized('invalid account'));
-          // email not verified
-          if (user.verified===false) {
-            request.server.logger.error('Email not verified.');
-            return reply(Boom.badRequest(new Error('Email not verified.')));
-          }
-          user.scope = 'individual';
-          delete user.password;
-          delete user.salt;
-          var token = JWT.sign(user, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
-          reply({token: token});
-        });
-      });
-    } catch (e) {
-      var error = new Error(e);
+    request.server.domain.FindIndividualsQuery({email:request.payload.email}).then(function(users) {
+      if (users.length===0) return reply(Boom.badRequest('User not found'));
+      if (users.length>1) return reply(Boom.badRequest('Too many emails, contact an administrator'));
+      var user = users[0];
+      if (user.authenticate(request.payload.password)) {
+        var signToken = jwt.sign({ id: user.id, scope: user.scope }, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, { expiresIn: 60*60*24 });
+  		  reply({token: signToken});
+      } else {
+        reply(Boom.unauthorized('User not authenticate'));
+      }
+    })
+    .catch(function(error) {
       request.server.logger.error(error);
-      return reply(Boom.badRequest(error));
-    }*/
+      reply(Boom.badRequest(error));
+    });
   }
 };
