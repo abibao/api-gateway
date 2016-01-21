@@ -11,6 +11,7 @@ module.exports = function(thinky) {
     // fields
     email: type.string().email().required(),
     scope: type.string().default('individual'),
+    verified: type.boolean().default(false),
     // calculated
     hashedPassword: type.string(),
     salt: type.string(),

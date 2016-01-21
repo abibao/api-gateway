@@ -13,7 +13,8 @@ module.exports = function(filter, callback) {
     
     self.IndividualModel.filter(filter).run().then(function(results) {
       callback(null, results);
-    }).error(function(error) {
+    })
+    .error(function(error) {
       callback(error, null);
     });
     

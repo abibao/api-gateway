@@ -76,33 +76,18 @@ exports.verifyEmail = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    try {
-      var email = JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
-      var id = MD5(email);
-      request.server.domain.ReadShortIndividualQuery(id, function(err, user) {
-        if (err) {
-          request.server.logger.error(err);
-          return reply(Boom.badRequest(err));
-        }
-        // already verified
-        if (user.verified===true) {
-          request.server.logger.error('Email already verified.');
-          return reply(Boom.badRequest(new Error('Email already verified.')));
-        }
-        user.verified = true;
-        request.server.domain.UpdateIndividualCommand(user, function(err, user) {
-          if (err) {
-            request.server.logger.error(err);
-            return reply(Boom.badRequest(err));
-          }
-          reply({verified:true});
-        });
+    var email = JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, function(err, decoded) {
+      if (err) {
+        request.server.logger.error(err);
+        return reply(Boom.badRequest(err));
+      }
+      request.server.domain.VerifyIndividualEmailCommand(email).then(function(user) {
+        reply(user);
+      }).catch(function(error) {
+        request.server.logger.error(error);
+        reply(Boom.badRequest(error));
       });
-    } catch (e) {
-      var error = new Error(e);
-      request.server.logger.error(error);
-      return reply(Boom.badRequest(error));
-    }
+    });
   }
 };
 

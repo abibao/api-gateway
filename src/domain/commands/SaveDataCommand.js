@@ -11,10 +11,11 @@ module.exports = function(data, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
 
-    data.save(function(err, saved) {
-      if (err) return callback(err, null);
-      self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'data saved', saved);
-      callback(null, saved);
+    data.save().then(function(user_saved) {
+      callback(null, user_saved);
+    })
+    .error(function(error) {
+      callback(error, null);
     });
     
   } catch (e) {
