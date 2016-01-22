@@ -7,9 +7,9 @@ var MD5 = require('md5');
 
 exports.me = {
   auth: 'jwt',
-  tags: ['api', 'auth'],
-  description: 'Returns currently authenticated user.',
-  notes: 'Returns currently authenticated user.',
+  tags: ['api', '1.2) individual', '1.3) administrator'],
+  description: 'Retourne l\'utilisateur actuellement connecté',
+  notes: 'Retourne l\'utilisateur actuellement connecté',
   jsonp: 'callback',
   handler: function(request, reply) {
     var authenticated_user = request.auth.credentials;
@@ -17,14 +17,14 @@ exports.me = {
   }
 };
 
-exports.me_update = {
+exports.update = {
   auth: {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', 'auth'],
-  description: 'Update currently authenticated user.',
-  notes: 'Update currently authenticated user.',
+  tags: ['api', '1.2) individual', '1.3) administrator'],
+  description: 'Modifie l\'utilisateur actuellement connecté',
+  notes: 'Modifie l\'utilisateur actuellement connecté',
   payload: {
     allow: 'application/x-www-form-urlencoded',
   },
@@ -41,14 +41,14 @@ exports.me_update = {
   }
 };
 
-exports.surveyslist = {
+exports.surveys_list = {
   auth: {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', 'auth'],
-  description: 'Returns surveys that are accessible to the currently authenticated user.',
-  notes: 'Returns surveys that are accessible to the currently authenticated user.',
+  tags: ['api', '1.2) individual'],
+  description: 'Récupère la liste des sondages de l\'utilisateur actuellement connecté',
+  notes: 'Récupère la liste des sondages de l\'utilisateur actuellement connecté',
   jsonp: 'callback',
   handler: function(request, reply) {
     try {

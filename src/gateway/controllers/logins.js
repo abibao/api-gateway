@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 
 exports.login_administrator = {
   auth: false,
-  tags: ['api'],
+  tags: ['api', '1.1) not authentified'],
   description: 'Se connecter en tant qu\'administrateur sur abibao',
   notes: 'Se connecter en tant qu\'administrateur sur abibao',
   payload: {
@@ -40,7 +40,7 @@ exports.login_administrator = {
 
 exports.login_individual = {
   auth: false,
-  tags: ['api'],
+  tags: ['api', '1.1) not authentified'],
   description: 'Se connecter en tant qu\'individu sur abibao',
   notes: 'Se connecter en tant qu\'individu sur abibao',
   payload: {

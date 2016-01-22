@@ -2,7 +2,7 @@
 
 exports.get = {
   auth: false,
-  tags: ['api',],
+  tags: ['api', 'development'],
   jsonp: 'callback',
   handler: function(request, reply) {
     reply({test:true});
@@ -11,7 +11,7 @@ exports.get = {
 
 exports.delete = {
   auth: false,
-  tags: ['api'],
+  tags: ['api', 'development'],
   jsonp: 'callback',
   handler: function(request, reply) {
     reply({test:true});
@@ -20,7 +20,7 @@ exports.delete = {
 
 exports.post = {
   auth: false,
-  tags: ['api'],
+  tags: ['api', 'development'],
   jsonp: 'callback',
   handler: function(request, reply) {
     reply({payload: request.payload});
@@ -29,7 +29,7 @@ exports.post = {
 
 exports.patch = {
   auth: false,
-  tags: ['api', 'test'],
+  tags: ['api', 'development'],
   jsonp: 'callback',
   handler: function(request, reply) {
     reply({payload: request.payload});

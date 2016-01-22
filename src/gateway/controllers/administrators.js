@@ -6,8 +6,11 @@ var JWT = require('jsonwebtoken');
 var MD5 = require('md5');
 
 exports.register = {
-  auth: false,
-  tags: ['noauth'],
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', '1.3) administrator'],
   description: 'S\'enregistrer en tant qu\'administrateur sur abibao',
   notes: 'S\'enregistrer en tant qu\'administrateur sur abibao',
   payload: {

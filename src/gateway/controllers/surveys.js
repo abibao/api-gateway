@@ -8,7 +8,7 @@ exports.status = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', 'surveys'],
+  tags: ['surveys'],
   description: 'Returns a JSON object with status either “working”, “live” or “closed”.',
   notes: 'Returns a JSON object with status either “working”, “live” or “closed”.',
   validate: {
@@ -36,7 +36,7 @@ exports.create = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', 'surveys'],
+  tags: ['surveys'],
   description: 'Creates an empty survey with the parameter name.',
   notes: 'Creates an empty survey with the parameter name.',
   payload: {

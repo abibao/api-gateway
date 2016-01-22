@@ -7,7 +7,7 @@ var MD5 = require('md5');
 
 exports.register = {
   auth: false,
-  tags: ['api'],
+  tags: ['api', '1.1) not authentified'],
   description: 'S\'enregistrer en tant qu\'individu sur abibao',
   notes: 'S\'enregistrer en tant qu\'individu sur abibao',
   payload: {
@@ -41,7 +41,7 @@ exports.register = {
 
 exports.verify_email = {
   auth: false,
-  tags: ['api', 'individuals'],
+  tags: ['api', '1.1) not authentified'],
   description: 'Valider le compte d\'un utilisateur de type "individual"',
   notes: 'Valider le compte d\'un utilisateur de type "individual"',
   validate: {
@@ -68,22 +68,17 @@ exports.verify_email = {
 };
 
 exports.resend_verification_email = {
-  auth: false,
-  tags: ['api', 'individuals'],
-  description: 'Renvoyer un email de validation de compte utilisateur de type "individual"',
+  auth: {
+    strategy: 'jwt',
+    scope: ['individual']
+  },
+  tags: ['api', '1.2) individual'],
+  description: 'Renvoyer un email de validation de compte de type "individual"',
   notes: 'Renvoyer un email de validation de compte utilisateur de type "individual"',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
-  validate: {
-    payload: {
-      email: Joi.string().required().email()
-    }
-  },
   jsonp: 'callback',
   handler: function(request, reply) {
-    var email = request.payload.email;
-    request.server.domain.SendAgainIndividualEmailVerificationCommand(email).then(function(result) {
+    var authenticated_user = request.auth.credentials;
+    request.server.domain.SendAgainIndividualEmailVerificationCommand(authenticated_user.id).then(function(result) {
       reply(result);
     })
     .catch(function(error) {
@@ -98,7 +93,7 @@ exports.count = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', 'individuals'],
+  tags: ['api', '1.3) administrator'],
   description: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
   notes: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
   jsonp: 'callback',

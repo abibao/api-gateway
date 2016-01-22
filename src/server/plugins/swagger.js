@@ -15,7 +15,13 @@ var options = {
     title: pkg.name,
     description: pkg.description
   },
-  cors: true
+  cors: true,
+  tagging: {
+    mode : 'tags'
+  },
+  tags: {
+    'administrators': 'Example administrator description'
+  },
 };
   
 // swaggerui
@@ -57,7 +63,9 @@ var SwaggerProvision = function(server, callback) {
     {
       register: require('hapi-swaggered-ui'),
       options: optionsui
-    }], function (err) {
+    }], {
+      select: 'api'
+    }, function (err) {
       
     	if (err) return server.logger.fatal('swagger-ui provision', err);
       server.logger.info('swagger-ui registered provision');

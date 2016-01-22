@@ -10,7 +10,8 @@ var BunyanSlack = require('bunyan-slack');
 
 var options = {
   host: process.env.ABIBAO_API_GATEWAY_EXPOSE_IP,
-  port: process.env.ABIBAO_API_GATEWAY_EXPOSE_PORT
+  port: process.env.ABIBAO_API_GATEWAY_EXPOSE_PORT,
+  labels: ['api', 'administrator']
 };
 
 var server = new Hapi.Server({

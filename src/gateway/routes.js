@@ -12,39 +12,28 @@ exports.endpoints = [
   /** NO AUTH **/
   
   // tests
-  { method: 'GET', path: '/api/v1/tests', config: TestsController.get},
-  { method: 'DELETE', path: '/api/v1/tests', config: TestsController.delete},
-  { method: 'POST', path: '/api/v1/tests', config: TestsController.post},
-  { method: 'PATCH', path: '/api/v1/tests', config: TestsController.patch},
+  { method: 'GET', path: '/api/v1/tests', config: TestsController.get}, // DONE
+  { method: 'DELETE', path: '/api/v1/tests', config: TestsController.delete}, // DONE
+  { method: 'POST', path: '/api/v1/tests', config: TestsController.post}, // DONE
+  { method: 'PATCH', path: '/api/v1/tests', config: TestsController.patch}, // DONE
   
   // individuals
   { method: 'POST', path: '/api/v1/individuals/login', config: LoginsController.login_individual}, // DONE
   { method: 'POST', path: '/api/v1/individuals/register', config: IndividualsController.register}, // DONE
-  { method: 'POST', path: '/api/v1/individuals/verify/email/resend', config: IndividualsController.resend_verification_email}, // DONE
   { method: 'GET', path: '/api/v1/individuals/verify/email/{token}', config: IndividualsController.verify_email}, // DONE
-  { method: 'POST', path: '/api/v1/individuals/count', config: IndividualsController.count}, // DONE
+  { method: 'GET', path: '/api/v1/individuals/count', config: IndividualsController.count}, // DONE
+  //{ method: 'GET', path: '/api/v1/individuals/shortlist/{startIndex}/{nbIndexes}', config: IndividualsController.readshortlist},
+  //{ method: 'PATCH', path: '/api/v1/individuals/{id}/update', config: IndividualsController.update},
   
   // administrators
   { method: 'POST', path: '/api/v1/administrators/login', config: LoginsController.login_administrator}, // DONE
-  /*{ method: 'POST', path: '/api/v1/administrators/register', config: AdministratorsController.register}, // DONE*/
-  
-  /** AUTH ALL **/
+  { method: 'POST', path: '/api/v1/administrators/register', config: AdministratorsController.register}, // DONE
   
   // auth
   { method: 'GET', path: '/api/v1/auth/me', config: AuthController.me},
-  
-  /** AUTH INDIVIDUAL **/
-  
-  // auth
-  //{ method: 'GET', path: '/api/v1/auth/surveys', config: AuthController.surveyslist},
-  //{ method: 'PATCH', path: '/api/v1/auth/me/update', config: AuthController.me_update},
-  
-  /** AUTH ADMINISTRATOR **/
-  
-  // individuals
-  //{ method: 'GET', path: '/api/v1/individuals/count', config: IndividualsController.count},
-  //{ method: 'GET', path: '/api/v1/individuals/shortlist/{startIndex}/{nbIndexes}', config: IndividualsController.readshortlist},
-  //{ method: 'PATCH', path: '/api/v1/individuals/{id}/update', config: IndividualsController.update},
+  { method: 'POST', path: '/api/v1/auth/verify/email/resend', config: IndividualsController.resend_verification_email}, // DONE
+  { method: 'GET', path: '/api/v1/auth/surveys', config: AuthController.surveys_list},
+  //{ method: 'PATCH', path: '/api/v1/auth/update', config: AuthController.update},
   
   // surveys
   //{ method: 'POST', path: '/api/v1/surveys/create', config: SurveysController.create},
