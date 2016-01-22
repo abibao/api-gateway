@@ -3,6 +3,7 @@
 var AuthController = require('./controllers/auth');
 var LoginsController = require('./controllers/logins');
 var IndividualsController = require('./controllers/individuals');
+var AdministratorsController = require('./controllers/administrators');
 var SurveysController = require('./controllers/surveys');
 var TestsController = require('./controllers/tests');
 
@@ -19,16 +20,18 @@ exports.endpoints = [
   // individuals
   { method: 'POST', path: '/api/v1/individuals/login', config: LoginsController.login_individual}, // DONE
   { method: 'POST', path: '/api/v1/individuals/register', config: IndividualsController.register}, // DONE
-  //{ method: 'POST', path: '/api/v1/individuals/verify/email/resend', config: IndividualsController.resendVerificationEmail},
-  { method: 'GET', path: '/api/v1/individuals/verify/email/{token}', config: IndividualsController.verifyEmail},
+  { method: 'POST', path: '/api/v1/individuals/verify/email/resend', config: IndividualsController.resend_verification_email}, // DONE
+  { method: 'GET', path: '/api/v1/individuals/verify/email/{token}', config: IndividualsController.verify_email}, // DONE
+  { method: 'POST', path: '/api/v1/individuals/count', config: IndividualsController.count}, // DONE
   
   // administrators
   { method: 'POST', path: '/api/v1/administrators/login', config: LoginsController.login_administrator}, // DONE
+  /*{ method: 'POST', path: '/api/v1/administrators/register', config: AdministratorsController.register}, // DONE*/
   
   /** AUTH ALL **/
   
   // auth
-  //{ method: 'GET', path: '/api/v1/auth/me', config: AuthController.me},
+  { method: 'GET', path: '/api/v1/auth/me', config: AuthController.me},
   
   /** AUTH INDIVIDUAL **/
   

@@ -4,6 +4,7 @@ var HapiSwagger = require('hapi-swaggered');
 
 var pkginfo = require('resolve-app-pkginfo');
 var pkg = pkginfo.sync();
+var path = require('path');
 
 // swagger
 var options = {
@@ -19,8 +20,9 @@ var options = {
   
 // swaggerui
 var optionsui = {
-  title: 'API GATEWAY',
+  title: '[snapbook] api gateway',
   path: '/docs',
+  templates: path.join(__dirname, './swagger-templates'),
   authorization: {
     field: 'Authorization',
     scope: 'header',
@@ -29,6 +31,7 @@ var optionsui = {
 };
 
 var SwaggerProvision = function(server, callback) {
+
   // route
   server.route({
     path: '/',

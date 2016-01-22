@@ -24,7 +24,6 @@ module.exports = function(startIndex, nbIndexes, callback) {
     });
     
   } catch (e) {
-    self.logger.error(self.action, self.name, e);
     callback(e, null);
   }
 

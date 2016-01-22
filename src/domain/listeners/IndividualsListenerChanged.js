@@ -1,16 +1,20 @@
 "use strict";
 
-module.exports = function() {
+var CURRENT_ACTION = 'Event';
+var CURRENT_NAME = 'IndividualsListenerChanged';
+
+module.exports = function(callback) {
   
   var self = this;
-  self.action = 'Event';
-  self.name = 'IndividualsListenerChanged';
   
   try {
+    
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    
     self.IndividualModel.changes().then(function(feed) {
       feed.each(function(error, doc) {
         if (error) {
-          self.logger.error(self.action, self.name, error);
+          return callback(error, null);
         }
         if (doc.isSaved() === false) {
           console.log("The following document was deleted:");
@@ -18,18 +22,24 @@ module.exports = function() {
         }
         else if (doc.getOldValue() === null) {
           delete doc.password;
-          self.CreateIndividualEvent(doc);
+          return self.CreateIndividualEvent(doc).then(function() {
+            return callback(null, true);
+          });
         }
         else {
           var old = doc.getOldValue();
           delete doc.password;
           delete old.password;
-          self.UpdateIndividualEvent(doc, old);
+          return self.UpdateIndividualEvent(doc, old).then(function() {
+            return callback(null, true);
+          });
         }
       });
-    }).error(function(error) {
+    })
+    .error(function(error) {
       self.logger.error(self.action, self.name, error);
     });
+    
   } catch (e) {
     self.logger.error(self.action, self.name, e);
   }

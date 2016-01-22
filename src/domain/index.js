@@ -24,11 +24,12 @@ module.exports = {
   
   injector: function(type, callback) {
     var self = this;
+    self.logger.info('['+type+']');
     dir.files(path.resolve(__dirname, type), function(err, files) {
       if (err) return callback(err, null);
       async.mapSeries(files, function(item, next) {
         var name = path.basename(item, '.js');
-        self.logger.info('['+name+'] has just being injected');
+        self.logger.info('>>> ['+name+'] has just being injected');
         if (type==='models') {
           self[name] = require('./'+type+'/'+name)(self.thinky);
         } else {

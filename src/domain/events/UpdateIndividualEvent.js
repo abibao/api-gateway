@@ -1,20 +1,21 @@
 "use strict";
 
-module.exports = function(data, old) {
+var CURRENT_ACTION = 'Event';
+var CURRENT_NAME = 'UpdateIndividualEvent';
+
+module.exports = function(data, old, callback) {
 
   var self = this;
-  self.action = 'Event';
-  self.name = 'UpdateIndividualEvent';
   
-  // log the email as debug
-  self.logger.debug(self.action, self.name, {
-    data: data, 
-    old: old
-  });
-  // emit the event with socket.io
-  self.io.sockets.emit('IndividualUpdated', {
-    data: data, 
-    old: old
-  });
+  try {
+    
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    
+    self.io.sockets.emit(self.io.EVENT_INDIVIDUAL_UPDATED, {data:data,old:old});
+    callback(null, true);
+    
+  } catch (e) {
+    callback(e, null);
+  }
 
 };

@@ -1,24 +1,24 @@
 "use strict";
 
+var CURRENT_ACTION = 'Query';
+var CURRENT_NAME = 'CountIndividualsQuery';
+
 module.exports = function(callback) {
   
-  try {
-    
-    var self = this;
-    self.action = 'Query';
-    self.name = 'CountIndividualsQuery';
+  var self = this;
 
-    self.IndividualModel.count().execute()
-    .then(function(total) {
-      self.logger.info(self.action, self.name, 'total:', total);
+  try {
+
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    
+    self.IndividualModel.count().execute().then(function(total) {
       callback(null, {count: total});
-    }).error(function(error) {
-      self.logger.error(self.action, self.name, error);
+    })
+    .error(function(error) {
       callback(error, null);
     });
     
   } catch (e) {
-    self.logger.error(self.action, self.name, e);
     callback(e, null);
   }
   

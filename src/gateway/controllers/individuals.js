@@ -30,7 +30,8 @@ exports.register = {
     // execute command
     request.server.domain.CreateIndividualCommand(request.payload).then(function(user) {
       reply(user);
-    }).catch(function(error) {
+    })
+    .catch(function(error) {
       request.server.logger.error(error);
       reply(Boom.badRequest(error));
     });
@@ -38,7 +39,107 @@ exports.register = {
   }
 };
 
-exports.update = {
+exports.verify_email = {
+  auth: false,
+  tags: ['api', 'individuals'],
+  description: 'Valider le compte d\'un utilisateur de type "individual"',
+  notes: 'Valider le compte d\'un utilisateur de type "individual"',
+  validate: {
+    params: {
+      token: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    var email = JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, function(err, decoded) {
+      if (err) {
+        request.server.logger.error(err);
+        return reply(Boom.badRequest(err));
+      }
+      request.server.domain.VerifyIndividualEmailCommand(email).then(function(result) {
+        reply(result);
+      })
+      .catch(function(error) {
+        request.server.logger.error(error);
+        reply(Boom.badRequest(error));
+      });
+    });
+  }
+};
+
+exports.resend_verification_email = {
+  auth: false,
+  tags: ['api', 'individuals'],
+  description: 'Renvoyer un email de validation de compte utilisateur de type "individual"',
+  notes: 'Renvoyer un email de validation de compte utilisateur de type "individual"',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    payload: {
+      email: Joi.string().required().email()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    var email = request.payload.email;
+    request.server.domain.SendAgainIndividualEmailVerificationCommand(email).then(function(result) {
+      reply(result);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+exports.count = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', 'individuals'],
+  description: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
+  notes: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.CountIndividualsQuery().then(function(result) {
+      reply(result);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+/*exports.read_short_list = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', 'individuals'],
+  description: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
+  notes: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
+  validate: {
+    params: {
+      startIndex: Joi.number().integer().min(1).required(),
+      nbIndexes: Joi.number().integer().min(1).required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.ReadShortIndividualsListQuery(request.params.startIndex, request.params.nbIndexes, function(err, docs) {
+      if (err) {
+        request.server.logger.error(err);
+        return reply(Boom.badRequest(err));
+      }
+      reply(docs);
+    });
+  }
+};*/
+
+/*exports.update = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -62,126 +163,5 @@ exports.update = {
   handler: function(request, reply) {
     reply({update:true});
   }
-};
-
-exports.verifyEmail = {
-  auth: false,
-  tags: ['api', 'individuals'],
-  description: 'Valider le compte d\'un utilisateur de type "individual"',
-  notes: 'Valider le compte d\'un utilisateur de type "individual"',
-  validate: {
-    params: {
-      token: Joi.string().required()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    var email = JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, function(err, decoded) {
-      if (err) {
-        request.server.logger.error(err);
-        return reply(Boom.badRequest(err));
-      }
-      request.server.domain.VerifyIndividualEmailCommand(email).then(function(user) {
-        reply(user);
-      }).catch(function(error) {
-        request.server.logger.error(error);
-        reply(Boom.badRequest(error));
-      });
-    });
-  }
-};
-
-exports.resendVerificationEmail = {
-  auth: false,
-  tags: ['api', 'individuals'],
-  description: 'Renvoyer un email de validation de compte utilisateur de type "individual"',
-  notes: 'Renvoyer un email de validation de compte utilisateur de type "individual"',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
-  validate: {
-    payload: {
-      email: Joi.string().required().email()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    try {
-      // execute command : find user or not in database ?
-      var email = request.payload.email;
-      var id = MD5(email);
-      request.server.domain.ReadShortIndividualQuery(id, function(err, user) {
-        if (err) {
-          request.server.logger.error(err);
-          return reply(Boom.badRequest(err));
-        }
-        // already verified
-        if (user.verified===true) {
-          request.server.logger.error('Email already verified.');
-          return reply(Boom.badRequest(new Error('Email already verified.')));
-        }
-        // execute command : send email
-        request.server.domain.SendIndividualEmailVerificationCommand(user.email, function(err) {
-          if (err) {
-            request.server.logger.error(err);
-            return reply(Boom.badRequest(err));
-          }
-          reply({sent:true});
-        });
-      });
-    } catch (e) {
-      var error = new Error(e);
-      request.server.logger.error(error);
-      return reply(Boom.badRequest(error));
-    }
-  }
-};
-
-exports.count = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', 'individuals'],
-  description: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
-  notes: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    // execute command
-    request.server.domain.CountIndividualsQuery(function(err, result) {
-      if (err) {
-        request.server.logger.error(err);
-        return reply(Boom.badRequest(err));
-      }
-      reply(result);
-    });
-  }
-};
-
-exports.readshortlist = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', 'individuals'],
-  description: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
-  notes: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
-  validate: {
-    params: {
-      startIndex: Joi.number().integer().min(1).required(),
-      nbIndexes: Joi.number().integer().min(1).required()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    // execute command
-    request.server.domain.ReadShortIndividualsListQuery(request.params.startIndex, request.params.nbIndexes, function(err, docs) {
-      if (err) {
-        request.server.logger.error(err);
-        return reply(Boom.badRequest(err));
-      }
-      reply(docs);
-    });
-  }
-};
+};*/
 
