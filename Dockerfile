@@ -19,9 +19,13 @@ RUN echo '{ "allow_root": true }' > /root/.bowerrc
 RUN npm update -g npm
 RUN npm install -g node-gyp
 RUN npm install -g bower
+
+# Add the current working folder as a mapped folder at /app
+COPY ./src /app
+WORKDIR /app
  
 # Expose port
 EXPOSE 80
 
 # Running
-CMD ["node", ".", "|", "bunyan"]
+CMD ["ls", "-l"]
