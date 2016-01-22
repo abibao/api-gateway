@@ -22,7 +22,7 @@ RUN npm install -g node-gyp
 RUN npm install -g bower
 
 # Add the current working folder as a mapped folder at /app
-ADD ./src/package.json /app/package.json
+ADD ./package.json /app/package.json
 COPY ./src /app
 WORKDIR /app
 RUN npm install
@@ -34,4 +34,4 @@ WORKDIR /app
 EXPOSE 80
 
 # Running
-CMD npm start
+CMD ["node", ".", "|", "bunyan"]
