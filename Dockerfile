@@ -21,15 +21,17 @@ RUN npm update -g npm
 RUN npm install -g node-gyp
 RUN npm install -g bower
 
-# Download and install node_modules
-# /tmp to avoid docker caching problems
-ADD package.json /tmp/package.json
-RUN cd /tmp && npm install
-RUN mkdir -p /usr/src/app && cp -a /tmp/node_modules /usr/src/app
+# Add the current working folder as a mapped folder at /app
+ADD ./src/package.json /app/package.json
+COPY ./src /app
+WORKDIR /app
+RUN npm install
 
-# Bundle app source
-COPY ./src /usr/src/app
-WORKDIR /usr/src/app
+# Set the current working directory to the new mapped folder.
+WORKDIR /app
+ 
+# Expose port
+EXPOSE 80
 
-EXPOSE 8080
-CMD [ "npm", "start" ]
+# Running
+CMD npm start
