@@ -28,4 +28,4 @@ WORKDIR /app
 EXPOSE 80
 
 # Running
-CMD ["ls", "-l"]
+CMD ["ls"]
