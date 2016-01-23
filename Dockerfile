@@ -22,6 +22,7 @@ RUN npm install -g bower
 
 # Add the current working folder as a mapped folder at /app
 COPY ./src /app
+COPY ./package.json /app/package.json
 WORKDIR /app
  
 # Expose port
