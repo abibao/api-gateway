@@ -22,7 +22,7 @@
   },
   "homepage": "https://gitlab.com/abibao/api-gateway#README",
   "engines": {
-    "node": ">=4.1.0"
+    "node": ">=4.2.0"
   },
   "dependencies": {
     "async": "1.5.2",

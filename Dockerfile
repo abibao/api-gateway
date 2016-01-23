@@ -16,6 +16,7 @@ RUN apt-get update \
 RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
 # Install global npm
+RUN npm cache clean
 RUN npm update -g npm
 RUN npm install -g node-gyp
 RUN npm install -g bower
@@ -25,6 +26,10 @@ COPY ./src /app
 COPY ./package.json /app/package.json
 WORKDIR /app
 RUN npm --version
+RUN bower --version
+RUN npm cache clean
+RUN npm install
+RUN npm cache clean
 
 # Expose port
 EXPOSE 80
