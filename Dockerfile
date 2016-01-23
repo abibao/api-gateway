@@ -24,9 +24,10 @@ RUN npm install -g bower
 COPY ./src /app
 COPY ./package.json /app/package.json
 WORKDIR /app
- 
+RUN npm install
+
 # Expose port
 EXPOSE 80
 
 # Running
-CMD ["ls"]
+CMD ["npm", "start"]
