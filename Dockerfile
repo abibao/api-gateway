@@ -24,7 +24,7 @@ RUN npm install -g bower
 COPY ./src /app
 COPY ./package.json /app/package.json
 WORKDIR /app
-RUN npm install
+RUN npm --version
 
 # Expose port
 EXPOSE 80
