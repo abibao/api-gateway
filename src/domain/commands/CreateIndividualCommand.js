@@ -17,14 +17,14 @@ module.exports = function(data, callback) {
     data.id = new ObjectId().toString();
     data.createdAt = Date.now();
     data.modifiedAt = data.createdAt;
-    var user = new self.IndividualModel(data);
+    var individual = new self.IndividualModel(data);
     
-    self.IndividualEmailAlreadyExistsQuery(user.email).then(function() {
-      return self.ValidateDataCommand(user).then(function() {
-        return self.SaveDataCommand(user).then(function(user_saved) {
-          if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', 'event individualCreated'+' < '+user_saved.email+' >'); 
-          return self.SendIndividualEmailVerificationCommand(user_saved.email).then(function() {
-            callback(null, user_saved);
+    self.IndividualEmailAlreadyExistsQuery(individual.email).then(function() {
+      return self.ValidateDataCommand(individual).then(function() {
+        return self.SaveDataCommand(individual).then(function(created) {
+          if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', CURRENT_NAME+' < '+created.email+' >'); 
+          return self.SendIndividualEmailVerificationCommand(created.email).then(function() {
+            callback(null, created);
           });
         });
       });

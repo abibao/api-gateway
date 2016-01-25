@@ -20,12 +20,13 @@ module.exports = function(thinky) {
   }); 
   
   AdministratorModel.pre('save', function(next) {
-    var user = this;
+    var data = this;
+    data.modifiedAt = r.now();
     // salt exists ?
-    if (user.salt) return next();
-    user.salt = this.makeSalt();
-    user.hashedPassword = user.encryptPassword(user.password);
-    delete user.password;
+    if (data.salt) return next();
+    data.salt = this.makeSalt();
+    data.hashedPassword = data.encryptPassword(data.password);
+    delete data.password;
     next();
   });
   

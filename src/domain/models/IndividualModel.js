@@ -12,6 +12,8 @@ module.exports = function(thinky) {
     email: type.string().email().required(),
     scope: type.string().default('individual'),
     verified: type.boolean().default(false),
+    // linked
+    entity: type.string(),
     // calculated
     hashedPassword: type.string(),
     salt: type.string(),
@@ -21,12 +23,13 @@ module.exports = function(thinky) {
   }); 
   
   IndividualModel.pre('save', function(next) {
-    var user = this;
+    var data = this;
+    data.modifiedAt = r.now();
     // salt exists ?
-    if (user.salt) return next();
-    user.salt = this.makeSalt();
-    user.hashedPassword = user.encryptPassword(user.password);
-    delete user.password;
+    if (data.salt) return next();
+    data.salt = this.makeSalt();
+    data.hashedPassword = data.encryptPassword(data.password);
+    delete data.password;
     next();
   });
   

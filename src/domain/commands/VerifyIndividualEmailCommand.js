@@ -10,10 +10,11 @@ module.exports = function(email, callback) {
   try {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
-
+    
+    if (email===undefined) return callback('Email is undefined.', null);
     self.FindIndividualsQuery({email:email}).then(function(results) {
       if (results.length===0) return callback('Email not found in database.', null);
-      if (results.length>1) return callback('Email already exists in database.', null);
+      if (results.length>2) return callback('Too many emails in database.', null);
       var user = results[0];
       // already verified ?
       if (user.verified===true) {

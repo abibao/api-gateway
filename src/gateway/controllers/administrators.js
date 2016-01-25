@@ -11,8 +11,8 @@ exports.register = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'S\'enregistrer en tant qu\'administrateur sur abibao',
-  notes: 'S\'enregistrer en tant qu\'administrateur sur abibao',
+  description: 'Ajoute un administrateur sur abibao',
+  notes: 'Ajoute un administrateur sur abibao',
   payload: {
     allow: 'application/x-www-form-urlencoded',
   },

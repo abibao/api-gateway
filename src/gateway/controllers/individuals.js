@@ -8,8 +8,8 @@ var MD5 = require('md5');
 exports.register = {
   auth: false,
   tags: ['api', '1.1) not authentified'],
-  description: 'S\'enregistrer en tant qu\'individu sur abibao',
-  notes: 'S\'enregistrer en tant qu\'individu sur abibao',
+  description: 'Ajoute un individu sur abibao',
+  notes: 'Ajoute un individu sur abibao',
   payload: {
     allow: 'application/x-www-form-urlencoded',
   },
@@ -42,8 +42,8 @@ exports.register = {
 exports.verify_email = {
   auth: false,
   tags: ['api', '1.1) not authentified'],
-  description: 'Valider le compte d\'un utilisateur de type "individual"',
-  notes: 'Valider le compte d\'un utilisateur de type "individual"',
+  description: 'Valide le compte d\'un utilisateur de type "individual"',
+  notes: 'Valide le compte d\'un utilisateur de type "individual"',
   validate: {
     params: {
       token: Joi.string().required()
@@ -73,8 +73,8 @@ exports.resend_verification_email = {
     scope: ['individual']
   },
   tags: ['api', '1.2) individual'],
-  description: 'Renvoyer un email de validation de compte de type "individual"',
-  notes: 'Renvoyer un email de validation de compte utilisateur de type "individual"',
+  description: 'Renvoie un email de validation de compte de type "individual"',
+  notes: 'Renvoie un email de validation de compte utilisateur de type "individual"',
   jsonp: 'callback',
   handler: function(request, reply) {
     var authenticated_user = request.auth.credentials;
@@ -94,8 +94,8 @@ exports.count = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
-  notes: 'Récupérer le nombre total d\'utilisateurs de type "individual"',
+  description: 'Récupère le nombre total d\'utilisateurs de type "individual"',
+  notes: 'Récupère le nombre total d\'utilisateurs de type "individual"',
   jsonp: 'callback',
   handler: function(request, reply) {
     request.server.domain.CountIndividualsQuery().then(function(result) {
