@@ -1,12 +1,9 @@
 "use strict";
 
-var mongoose = require('mongoose');
-var ObjectId = mongoose.Types.ObjectId;
-
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'CreateSurveyCommand';
+var CURRENT_NAME = 'UpdateSurveyConstantCommand';
 
-module.exports = function(data, callback) {
+module.exports = function(params, callback) {
 
   var self = this;
   
@@ -14,12 +11,9 @@ module.exports = function(data, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
-    data.id = new ObjectId().toString();
-    data.createdAt = Date.now();
-    data.modifiedAt = data.createdAt;
-    var survey = new self.SurveyModel(data);
-    
-    self.ReadDataQuery(self.EntityModel, data.entity).then(function() {
+    self.ReadDataQuery(self.SurveyModel, params.id).then(function(survey) {
+      if ( survey.constants===undefined ) survey.constants = {};
+      survey.constants[params.label] = params.description;
       return self.ValidateDataCommand(survey).then(function() {
         return self.SaveDataCommand(survey).then(function(created) {
           callback(null, created);

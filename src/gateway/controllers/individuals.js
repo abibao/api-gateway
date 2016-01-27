@@ -51,12 +51,12 @@ exports.verify_email = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    var email = JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, function(err, decoded) {
+    JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, function(err, decoded) {
       if (err) {
         request.server.logger.error(err);
         return reply(Boom.badRequest(err));
       }
-      request.server.domain.VerifyIndividualEmailCommand(email).then(function(result) {
+      request.server.domain.VerifyIndividualEmailCommand(decoded).then(function(result) {
         reply(result);
       })
       .catch(function(error) {
@@ -107,56 +107,4 @@ exports.count = {
     });
   }
 };
-
-/*exports.read_short_list = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', 'individuals'],
-  description: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
-  notes: 'Récupérer la version courte d\'une liste d\'utilisateurs de type "individual"',
-  validate: {
-    params: {
-      startIndex: Joi.number().integer().min(1).required(),
-      nbIndexes: Joi.number().integer().min(1).required()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    request.server.domain.ReadShortIndividualsListQuery(request.params.startIndex, request.params.nbIndexes, function(err, docs) {
-      if (err) {
-        request.server.logger.error(err);
-        return reply(Boom.badRequest(err));
-      }
-      reply(docs);
-    });
-  }
-};*/
-
-/*exports.update = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', 'individuals'],
-  description: 'Mise à jour d\'un individu sur abibao',
-  notes: 'Mise à jour d\'un individu sur abibao',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
-  validate: {
-    params: {
-      id: Joi.string().required()
-    },
-    payload: {
-      birthday: Joi.date(),
-      sex: Joi.number().integer().min(0).max(1)
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    reply({update:true});
-  }
-};*/
 

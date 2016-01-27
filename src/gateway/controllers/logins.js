@@ -54,7 +54,7 @@ exports.login_individual = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.FindIndividualsQuery({email:request.payload.email}).then(function(users) {
+    request.server.domain.FindDataQuery(request.server.domain.IndividualModel, {email:request.payload.email}).then(function(users) {
       if (users.length===0) return reply(Boom.badRequest('User not found'));
       if (users.length>1) return reply(Boom.badRequest('Too many emails, contact an administrator'));
       var user = users[0];

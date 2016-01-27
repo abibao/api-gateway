@@ -11,7 +11,7 @@ module.exports = function(params, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
-    self.GetSurveyQuery(params.id).then(function(survey) {
+    self.ReadDataQuery(self.SurveyModel, params.id).then(function(survey) {
       if ( survey.constants===undefined ) survey.constants = {};
       survey.constants[params.label] = params.description;
       return self.ValidateDataCommand(survey).then(function() {

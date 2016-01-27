@@ -47,7 +47,7 @@ exports.read = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.GetEntityQuery(request.params.id).then(function(entity) {
+    request.server.domain.ReadDataQuery(request.server.domain.EntityModel, request.params.id).then(function(entity) {
       reply(entity);
     })
     .catch(function(error) {
@@ -67,7 +67,7 @@ exports.list = {
   notes: 'Retourne toutes les entités',
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.FindEntitiesQuery({}).then(function(entities) {
+    request.server.domain.FindDataQuery(request.server.domain.EntityModel, {}).then(function(entities) {
       reply(entities);
     })
     .catch(function(error) {

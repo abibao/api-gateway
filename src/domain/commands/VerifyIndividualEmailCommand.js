@@ -9,10 +9,10 @@ module.exports = function(email, callback) {
   
   try {
     
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute', email);
     
     if (email===undefined) return callback('Email is undefined.', null);
-    self.FindIndividualsQuery({email:email}).then(function(results) {
+    self.FindDataQuery(self.IndividualModel, {email:email}).then(function(results) {
       if (results.length===0) return callback('Email not found in database.', null);
       if (results.length>2) return callback('Too many emails in database.', null);
       var user = results[0];

@@ -3,7 +3,7 @@
 var CURRENT_ACTION = 'Command';
 var CURRENT_NAME = 'SendAgainIndividualEmailVerificationCommand';
 
-module.exports = function(data, callback) {
+module.exports = function(id, callback) {
 
   var self = this;
   
@@ -11,10 +11,10 @@ module.exports = function(data, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
 
-    return self.GetIndividualQuery(data).then(function(user) {
-      if (user.verified===true) return callback('Email already verified.', null);
-      return self.SendIndividualEmailVerificationCommand(user.email).then(function() {
-        callback(null, {email:user.email, resend:true});
+    return self.ReadDataQuery(self.IndividualModel, id).then(function(individual) {
+      if (individual.verified===true) return callback('Email already verified.', null);
+      return self.SendIndividualEmailVerificationCommand(individual.email).then(function() {
+        callback(null, {email:individual.email, resend:true});
       });
     })
     .catch(function(error) {

@@ -31,18 +31,20 @@ exports.endpoints = [
   // auth
   { method: 'GET', path: '/api/v1/auth/me', config: AuthController.me},
   { method: 'POST', path: '/api/v1/auth/verify/email/resend', config: IndividualsController.resend_verification_email},
-  { method: 'GET', path: '/api/v1/auth/surveys', config: AuthController.surveys_list},
+  { method: 'GET', path: '/api/v1/auth/surveys', config: AuthController.list_surveys},
   
   // entities
   { method: 'GET', path: '/api/v1/entities', config: EntitiesController.list},
   { method: 'GET', path: '/api/v1/entities/{id}', config: EntitiesController.read},
+  { method: 'GET', path: '/api/v1/entities/{id}/surveys', config: SurveysController.list_entity},
   { method: 'POST', path: '/api/v1/entities/create', config: EntitiesController.create},
   
   // surveys
   { method: 'GET', path: '/api/v1/surveys/{id}', config: SurveysController.read},
   { method: 'POST', path: '/api/v1/surveys/create', config: SurveysController.create},
-  { method: 'POST', path: '/api/v1/surveys/{id}/constants/create', config: SurveysController.crup_constant},
-  { method: 'PATCH', path: '/api/v1/surveys/{id}/constants/update', config: SurveysController.crup_constant},
+  { method: 'POST', path: '/api/v1/surveys/{id}/constants/create', config: SurveysController.create_constant},
+  { method: 'PATCH', path: '/api/v1/surveys/{id}/constants/update', config: SurveysController.update_constant},
+  { method: 'DELETE', path: '/api/v1/surveys/{id}/constants/delete', config: SurveysController.delete_constant},
   { method: 'POST', path: '/api/v1/surveys/{id}/item/create', config: SurveysController.create_item},
    
 ];

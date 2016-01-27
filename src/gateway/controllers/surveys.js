@@ -33,7 +33,72 @@ exports.create = {
   }
 };
 
-exports.crup_constant = {
+exports.delete_constant = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', '1.3) administrator'],
+  description: 'Supprime une constante à un sondage donné',
+  notes: 'Supprime une constante à un sondage donné',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {
+      label: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.payload.id = request.params.id;
+    request.server.domain.DeleteSurveyConstantCommand(request.payload).then(function(survey) {
+      reply(survey);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+exports.update_constant = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', '1.3) administrator'],
+  description: 'Modifie une constante à un sondage donné',
+  notes: 'Modifie une constante à un sondage donné',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {
+      label: Joi.string().required(),
+      description: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.payload.id = request.params.id;
+    request.server.domain.UpdateSurveyConstantCommand(request.payload).then(function(survey) {
+      reply(survey);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+exports.create_constant = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -119,6 +184,31 @@ exports.read = {
   handler: function(request, reply) {
     request.server.domain.GetSurveyPopulateQuery(request.params.id).then(function(survey) {
       reply(survey);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+exports.list_entity = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', '1.3) administrator'],
+  description: 'Retourne la liste des sondages d\'une entité donnée',
+  notes: 'Retourne la liste des sondages d\'une entité donnée',
+  validate: {
+    params: {
+      id: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.FindDataQuery(request.server.domain.SurveyModel, {entity: request.params.id, individual:undefined}).then(function(surveys) {
+      reply(surveys);
     })
     .catch(function(error) {
       request.server.logger.error(error);

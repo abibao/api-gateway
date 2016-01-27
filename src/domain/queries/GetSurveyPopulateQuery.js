@@ -11,10 +11,10 @@ module.exports = function(id, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
-    self.GetSurveyQuery(id).then(function(survey) {
-      return self.GetEntityQuery(survey.entity).then(function(entity) {
+    self.ReadDataQuery(self.SurveyModel, id).then(function(survey) {
+      return self.ReadDataQuery(self.EntityModel, survey.entity).then(function(entity) {
         survey.entity = entity;
-        return self.FindSurveysItemsQuery({survey:id}).then(function(items) {
+        return self.FindDataQuery(self.SurveyItemModel, {survey:id}).then(function(items) {
           survey.items = items;
           callback(null, survey);
         });

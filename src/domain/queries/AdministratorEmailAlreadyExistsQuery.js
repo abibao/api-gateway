@@ -11,7 +11,7 @@ module.exports = function(email, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
-    self.FindAdministratorsQuery({email:email}, function(err, results) {
+    self.FindDataQuery(self.AdministratorModel, {email:email}, function(err, results) {
       if (err) return callback(err, null);
       if (results.length>0) return callback('Email already exists in database.', null);
       callback(null, true);

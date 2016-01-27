@@ -20,7 +20,7 @@ module.exports = function(data, callback) {
     data.component = JSON.parse(data.component);
     var survey_item = new self.SurveyItemModel(data);
     
-    self.GetSurveyQuery(data.survey).then(function(survey) {
+    self.ReadDataQuery(self.SurveyModel, data.survey).then(function(survey) {
       return self.ValidateDataCommand(survey_item).then(function() {
         return self.SaveDataCommand(survey_item).then(function() {
           if ( survey.items===undefined ) survey.items = [];

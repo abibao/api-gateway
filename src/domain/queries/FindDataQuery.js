@@ -1,17 +1,17 @@
 "use strict";
 
 var CURRENT_ACTION = 'Query';
-var CURRENT_NAME = 'FindIndividualsQuery';
+var CURRENT_NAME = 'FindDataQuery';
 
-module.exports = function(filter, callback) {
+module.exports = function(model, filter, callback) {
   
   var self = this;
   
   try {
     
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, model, 'execute', model);
     
-    self.IndividualModel.filter(filter).run().then(function(results) {
+    model.filter(filter).run().then(function(results) {
       callback(null, results);
     })
     .error(function(error) {
