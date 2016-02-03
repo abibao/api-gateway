@@ -7,6 +7,8 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 # Ignore APT warnings about not having a TTY
 ENV DEBIAN_FRONTEND noninteractive
 
+# RUN mkdir -p /src && cp -a /tmp/node_modules /src
+
 # Update hack for install bower with docker
 RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
@@ -14,16 +16,11 @@ RUN echo '{ "allow_root": true }' > /root/.bowerrc
 RUN ["npm", "update", "-g", "npm"]
 RUN ["npm", "install", "-g", "bower", "node-gyp"]
 
-# Add the current working folder as a mapped folder at /app
-COPY ./src /app
-COPY ./package.json /app/package.json
-WORKDIR /app
-RUN ["npm", "npm", "--version"]
-RUN ["npm", "bower", "--version"]
-RUN ["npm", "install"]
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
 
 # Expose port
 EXPOSE 80
 
 # Running
-CMD ["npm", "start"]
+CMD ["npm", "--version"]
