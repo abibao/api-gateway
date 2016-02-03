@@ -1,26 +1,29 @@
-# Pull base image from stock node image.
-FROM node:4.2.4
-
-# Maintainer
+FROM node:4.2.6
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
-# Ignore APT warnings about not having a TTY
+# ignore APT warnings about not having a TTY
 ENV DEBIAN_FRONTEND noninteractive
 
-# Update hack for install bower with docker
+# install ubuntu dependencies
+RUN apt-get update
+
+# update hack for install bower with docker
 RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
-# Install global npm
+# install global npm dependencies
 RUN npm update -g npm
 RUN npm install -g bower node-gyp
 
-# Usage for node_modules
+# use changes to package.json to force Docker not to use the cache
+# when we change our application's nodejs dependencies:
 ADD package.json /tmp/package.json
 RUN cd /tmp && npm install
 RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
 
-# Expose port
-EXPOSE 80
+# from here we load our application's code in, therefore the previous docker
+# "layer" thats been cached will be used if possible
+WORKDIR /opt/app
+ADD . /opt/app
 
-# Running
-CMD ["npm", "--version"]
+EXPOSE 80
+CMD ["npm", "start"]
