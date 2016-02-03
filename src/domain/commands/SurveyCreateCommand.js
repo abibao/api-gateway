@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'CreateSurveyCommand';
+var CURRENT_NAME = 'SurveyCreateCommand';
 
 module.exports = function(data, callback) {
 
@@ -19,11 +19,9 @@ module.exports = function(data, callback) {
     data.modifiedAt = data.createdAt;
     var survey = new self.SurveyModel(data);
     
-    self.ReadDataQuery(self.EntityModel, data.entity).then(function() {
-      return self.ValidateDataCommand(survey).then(function() {
-        return self.SaveDataCommand(survey).then(function(created) {
-          callback(null, created);
-        });
+    self.SystemValidateDataCommand(survey).then(function() {
+      return self.SystemSaveDataCommand(survey).then(function(created) {
+        callback(null, created);
       });
     })
     .catch(function(error) {

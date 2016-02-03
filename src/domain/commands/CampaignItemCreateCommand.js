@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'CreateSurveyItemCommand';
+var CURRENT_NAME = 'CampaignItemCreateCommand';
 
 module.exports = function(data, callback) {
 
@@ -18,16 +18,16 @@ module.exports = function(data, callback) {
     data.createdAt = Date.now();
     data.modifiedAt = data.createdAt;
     data.component = JSON.parse(data.component);
-    var survey_item = new self.SurveyItemModel(data);
+    var campaign_item = new self.CampaignItemModel(data);
     
-    self.ReadDataQuery(self.SurveyModel, data.survey).then(function(survey) {
-      return self.ValidateDataCommand(survey_item).then(function() {
-        return self.SaveDataCommand(survey_item).then(function() {
-          if ( survey.items===undefined ) survey.items = [];
-          survey.items.push(data.id);
-          return self.ValidateDataCommand(survey).then(function() {
-            return self.SaveDataCommand(survey).then(function() {
-              callback(null, survey_item);
+    self.SystemReadDataQuery(self.CampaignModel, data.campaign).then(function(campaign) {
+      return self.SystemValidateDataCommand(campaign_item).then(function() {
+        return self.SystemSaveDataCommand(campaign_item).then(function() {
+          if ( campaign.items===undefined ) campaign.items = [];
+          campaign.items.push(data.id);
+          return self.SystemValidateDataCommand(campaign).then(function() {
+            return self.SystemSaveDataCommand(campaign).then(function() {
+              callback(null, campaign_item);
             });
           });
         });

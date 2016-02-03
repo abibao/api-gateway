@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'SaveDataCommand';
+var CURRENT_NAME = 'SystemValidateDataCommand';
 
 module.exports = function(data, callback) {
 
@@ -10,14 +10,14 @@ module.exports = function(data, callback) {
   try {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
-
-    data.save().then(function(user_saved) {
-      callback(null, user_saved);
-    })
-    .error(function(error) {
-      callback(error, null);
-    });
-    
+  
+    try {
+      data.validate();
+      callback(null, true);
+    } catch(err) {
+      callback(err, null);
+    }
+  
   } catch (e) {
     callback(e, null);
   }

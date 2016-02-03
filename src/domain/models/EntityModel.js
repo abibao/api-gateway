@@ -9,7 +9,10 @@ module.exports = function(thinky) {
     // fields
     name: type.string().required(),
     contact: type.string().email().required(),
-    type: type.string().required().default('association'),
+    type: type.string().required(),
+    icon: type.string().default('images/icons/default.png'),
+    avatar: type.string().default('images/avatars/default.png'),
+    picture: type.string().default('images/pictures/default.png'),
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())

@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Query';
-var CURRENT_NAME = 'ReadDataQuery';
+var CURRENT_NAME = 'SystemReadDataQuery';
 
 module.exports = function(model, id, callback) {
   
@@ -15,7 +15,7 @@ module.exports = function(model, id, callback) {
       callback(null, item);
     }).catch(self.ThinkyErrors.DocumentNotFound, function(err) {
       callback(err, null);
-    }).error(function(error) {
+    }).catch(function(error) {
       callback(error, null);
     });
     

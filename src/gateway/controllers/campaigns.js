@@ -3,36 +3,6 @@
 var Joi = require('joi');
 var Boom = require('boom');
 
-exports.create = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', '1.3) administrator'],
-  description: 'Ajoute un sondage, affectée à une entité donnée',
-  notes: 'Ajoute un sondage, affectée à une entité donnée',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
-  validate: {
-    payload: {
-      name: Joi.string().required(),
-      description: Joi.string(),
-      entity: Joi.string().required()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    request.server.domain.CreateSurveyCommand(request.payload).then(function(survey) {
-      reply(survey);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};
-
 exports.delete_constant = {
   auth: {
     strategy: 'jwt',
@@ -55,8 +25,8 @@ exports.delete_constant = {
   jsonp: 'callback',
   handler: function(request, reply) {
     request.payload.id = request.params.id;
-    request.server.domain.DeleteSurveyConstantCommand(request.payload).then(function(survey) {
-      reply(survey);
+    request.server.domain.CampaignDeleteConstantCommand(request.payload).then(function(campaign) {
+      reply(campaign);
     })
     .catch(function(error) {
       request.server.logger.error(error);
@@ -88,8 +58,8 @@ exports.update_constant = {
   jsonp: 'callback',
   handler: function(request, reply) {
     request.payload.id = request.params.id;
-    request.server.domain.UpdateSurveyConstantCommand(request.payload).then(function(survey) {
-      reply(survey);
+    request.server.domain.CampaignUpdateConstantCommand(request.payload).then(function(campaign) {
+      reply(campaign);
     })
     .catch(function(error) {
       request.server.logger.error(error);
@@ -121,8 +91,8 @@ exports.create_constant = {
   jsonp: 'callback',
   handler: function(request, reply) {
     request.payload.id = request.params.id;
-    request.server.domain.CreateSurveyConstantCommand(request.payload).then(function(survey) {
-      reply(survey);
+    request.server.domain.CampaignCreateConstantCommand(request.payload).then(function(campaign) {
+      reply(campaign);
     })
     .catch(function(error) {
       request.server.logger.error(error);
@@ -156,9 +126,9 @@ exports.create_item = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.survey = request.params.id;
-    request.server.domain.CreateSurveyItemCommand(request.payload).then(function(survey) {
-      reply(survey);
+    request.payload.campaign = request.params.id;
+    request.server.domain.CampaignItemCreateCommand(request.payload).then(function(campaign) {
+      reply(campaign);
     })
     .catch(function(error) {
       request.server.logger.error(error);
@@ -182,33 +152,8 @@ exports.read = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.GetSurveyPopulateQuery(request.params.id).then(function(survey) {
-      reply(survey);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};
-
-exports.list_entity = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', '1.3) administrator'],
-  description: 'Retourne la liste des sondages d\'une entité donnée',
-  notes: 'Retourne la liste des sondages d\'une entité donnée',
-  validate: {
-    params: {
-      id: Joi.string().required()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    request.server.domain.FindDataQuery(request.server.domain.SurveyModel, {entity: request.params.id, individual:undefined}).then(function(surveys) {
-      reply(surveys);
+    request.server.domain.CampaignReadPopulateQuery(request.params.id).then(function(campaign) {
+      reply(campaign);
     })
     .catch(function(error) {
       request.server.logger.error(error);

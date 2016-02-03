@@ -6,14 +6,15 @@ module.exports = function(thinky) {
   var r = thinky.r;
   
   var SurveyModel = thinky.createModel("surveys", {
-    // fields
-    name: type.string().required(),
-    description: type.string(),
-    constants: type.object(),
     // linked
-    entity: type.string().required(),
-    individual: type.string(),
-    items: type.array(),
+    campaign: type.string().required(),
+    company: type.string().required(), // entité de type "entreprise" qui fournit le sondage
+    charity: type.string().required(), // "entity" de type "assocation" à qui profite le sondage
+    individual: type.string().required(), // "user" de type "individual" à qui est affecté le sondage
+    // 
+    answers: type.object(),
+    complete: type.boolean().default(false),
+    completeAt: type.date(),
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())

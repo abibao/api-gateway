@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'SendIndividualEmailVerificationEvent';
+var CURRENT_NAME = 'IndividualSendEmailVerificationEvent';
 
 module.exports = function(email, callback) {
 

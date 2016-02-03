@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "async": "1.5.2",
+    "base64-url": "1.2.1",
     "blipp": "2.3.0",
     "bluebird": "3.1.1",
     "boom": "3.1.1",
@@ -40,6 +41,7 @@
     "hapi-swaggered": "2.5.0",
     "hapi-swaggered-ui": "2.2.0",
     "inert": "3.2.0",
+    "iron": "3.0.1",
     "joi": "7.2.1",
     "jsonfile": "2.2.3",
     "jsonwebtoken": "5.5.4",

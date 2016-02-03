@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'CreateEntityCommand';
+var CURRENT_NAME = 'EntityCreateCommand';
 
 module.exports = function(data, callback) {
 
@@ -19,8 +19,8 @@ module.exports = function(data, callback) {
     data.modifiedAt = data.createdAt;
     var entity = new self.EntityModel(data);
     
-    self.ValidateDataCommand(entity).then(function() {
-      return self.SaveDataCommand(entity).then(function(created) {
+    self.SystemValidateDataCommand(entity).then(function() {
+      return self.SystemSaveDataCommand(entity).then(function(created) {
         callback(null, created);
       });
     })

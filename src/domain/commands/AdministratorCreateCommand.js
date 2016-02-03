@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'CreateIndividualCommand';
+var CURRENT_NAME = 'AdministratorCreateCommand';
 
 module.exports = function(data, callback) {
 
@@ -17,15 +17,13 @@ module.exports = function(data, callback) {
     data.id = new ObjectId().toString();
     data.createdAt = Date.now();
     data.modifiedAt = data.createdAt;
-    var individual = new self.IndividualModel(data);
+    var administrator = new self.AdministratorModel(data);
     
-    self.IndividualEmailAlreadyExistsQuery(individual.email).then(function() {
-      return self.ValidateDataCommand(individual).then(function() {
-        return self.SaveDataCommand(individual).then(function(created) {
+    self.AdministratorEmailAlreadyExistsQuery(administrator.email).then(function() {
+      return self.SystemValidateDataCommand(administrator).then(function() {
+        return self.SystemSaveDataCommand(administrator).then(function(created) {
           if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', CURRENT_NAME+' < '+created.email+' >'); 
-          return self.SendIndividualEmailVerificationCommand(created.email).then(function() {
-            callback(null, created);
-          });
+          callback(null, created);
         });
       });
     })

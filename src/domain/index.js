@@ -21,6 +21,15 @@ module.exports = {
   io: null,
   thinky: thinky,
   ThinkyErrors: thinky.Errors,
+  r: thinky.r,
+  
+  ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
+  ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION: 'email_verification',
+  ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH: 'campaign_publish',
+  ABIBAO_CONST_ENTITY_TYPE_CHARITY: 'chatiry',
+  ABIBAO_CONST_ENTITY_TYPE_COMPANY: 'company',
+  ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR: 'administrator',
+  ABIBAO_CONST_USER_SCOPE_INDIVIDUAL: 'individual',
   
   injector: function(type, callback) {
     var self = this;

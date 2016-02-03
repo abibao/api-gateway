@@ -2,7 +2,6 @@
 
 var Joi = require('joi');
 var Boom = require('boom');
-var JWT = require('jsonwebtoken');
 var MD5 = require('md5');
 
 exports.register = {
@@ -28,7 +27,7 @@ exports.register = {
     delete request.payload.password1;
     delete request.payload.password2;
     // execute command
-    request.server.domain.CreateIndividualCommand(request.payload).then(function(user) {
+    request.server.domain.IndividualCreateCommand(request.payload).then(function(user) {
       reply(user);
     })
     .catch(function(error) {
@@ -39,11 +38,54 @@ exports.register = {
   }
 };
 
-exports.verify_email = {
+exports.login = {
   auth: false,
   tags: ['api', '1.1) not authentified'],
-  description: 'Valide le compte d\'un utilisateur de type "individual"',
-  notes: 'Valide le compte d\'un utilisateur de type "individual"',
+  description: 'Authentifie un individu sur abibao',
+  notes: 'Authentifie un individu sur abibao',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    payload: {
+      email: Joi.string().email().required(),
+      password: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.SystemFindDataQuery(request.server.domain.IndividualModel, {email:request.payload.email}).then(function(users) {
+      if (users.length===0) return reply(Boom.badRequest('User not found'));
+      if (users.length>1) return reply(Boom.badRequest('Too many emails, contact an administrator'));
+      var user = users[0];
+      if (user.authenticate(request.payload.password)) {
+        // all done then reply token
+        request.server.domain.IndividualCreateAuthTokenCommand(user).then(function(token) {
+          reply({token:token});
+        })
+        .catch(function(error) {
+          request.server.logger.error(error);
+          reply(Boom.badRequest(error));
+        });
+      } else {
+        reply(Boom.unauthorized('User not authenticate'));
+      }
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+exports.verify_email = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['individual']
+  },
+  tags: ['api', '1.2) individual'],
+  description: 'Valide le compte d\'un utilisateur',
+  notes: 'Valide le compte d\'un utilisateur',
   validate: {
     params: {
       token: Joi.string().required()
@@ -51,34 +93,62 @@ exports.verify_email = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    JWT.verify(request.params.token, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, function(err, decoded) {
-      if (err) {
-        request.server.logger.error(err);
-        return reply(Boom.badRequest(err));
-      }
-      request.server.domain.VerifyIndividualEmailCommand(decoded).then(function(result) {
-        reply(result);
-      })
-      .catch(function(error) {
-        request.server.logger.error(error);
-        reply(Boom.badRequest(error));
-      });
+    request.server.domain.IndividualVerifyEmailCommand(request.params.token).then(function(result) {
+      reply(result);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
     });
   }
 };
 
-exports.resend_verification_email = {
+exports.assign_campaign = {
+  auth: false,
+  tags: ['api', '1.1) not authentified'],
+  description: 'Ajoute un sondage à un utilisateur donnée',
+  notes: 'Ajoute un sondage à un utilisateur donnée',
+  validate: {
+    params: {
+      token: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.IndividualAssignCampaignCommand(request.params.token).then(function(result) {
+      reply(result);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+exports.survey_answer = {
   auth: {
     strategy: 'jwt',
     scope: ['individual']
   },
   tags: ['api', '1.2) individual'],
-  description: 'Renvoie un email de validation de compte de type "individual"',
-  notes: 'Renvoie un email de validation de compte utilisateur de type "individual"',
+  description: 'Répond à une question d\'un sondage donné',
+  notes: 'Répond à une question d\'un sondage donné',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {
+      label: Joi.string().required(),
+      answer: Joi.string().required()
+    }
+  },
   jsonp: 'callback',
   handler: function(request, reply) {
-    var authenticated_user = request.auth.credentials;
-    request.server.domain.SendAgainIndividualEmailVerificationCommand(authenticated_user.id).then(function(result) {
+    request.payload.survey = request.params.id;
+    request.server.domain.IndividualSurveyAnswerCommand(request.auth.credentials, request.payload).then(function(result) {
       reply(result);
     })
     .catch(function(error) {
@@ -98,7 +168,7 @@ exports.count = {
   notes: 'Récupère le nombre total d\'utilisateurs de type "individual"',
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.CountIndividualsQuery().then(function(result) {
+    request.server.domain.IndividualsCountQuery().then(function(result) {
       reply(result);
     })
     .catch(function(error) {

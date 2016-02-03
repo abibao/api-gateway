@@ -22,7 +22,7 @@ module.exports = function(callback) {
         }
         else if (doc.getOldValue() === null) {
           delete doc.password;
-          return self.CreateIndividualEvent(doc).then(function() {
+          return self.IndividualCreateEvent(doc).then(function() {
             return callback(null, true);
           });
         }
@@ -30,13 +30,13 @@ module.exports = function(callback) {
           var old = doc.getOldValue();
           delete doc.password;
           delete old.password;
-          return self.UpdateIndividualEvent(doc, old).then(function() {
+          return self.IndividualUpdateEvent(doc, old).then(function() {
             return callback(null, true);
           });
         }
       });
     })
-    .error(function(error) {
+    .catch(function(error) {
       self.logger.error(self.action, self.name, error);
     });
     

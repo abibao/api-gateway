@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'PostMessageOnSlackCommand';
+var CURRENT_NAME = 'SlackPostMessageCommand';
 
 module.exports = function(type, message) {
   

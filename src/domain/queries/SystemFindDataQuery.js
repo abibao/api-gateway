@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Query';
-var CURRENT_NAME = 'FindDataQuery';
+var CURRENT_NAME = 'SystemFindDataQuery';
 
 module.exports = function(model, filter, callback) {
   
@@ -14,7 +14,7 @@ module.exports = function(model, filter, callback) {
     model.filter(filter).run().then(function(results) {
       callback(null, results);
     })
-    .error(function(error) {
+    .catch(function(error) {
       callback(error, null);
     });
     

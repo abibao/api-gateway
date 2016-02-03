@@ -36,21 +36,13 @@ module.exports.start_domain = function(callback) {
   domain.logger.info('--------------------------------------------------------------');
   domain.logger.info('DOMAIN BOOTSTRAP');
   domain.logger.info('--------------------------------------------------------------');
-  domain.injector('models', function(error, result) {
-    if (error) return domain.logger.error(error);
-    domain.injector('queries', function(error, result) {
-      if (error) return domain.logger.error(error);
-      domain.injector('commands', function(error, result) {
-        if (error) return domain.logger.error(error);
-        domain.injector('events', function(error, result) {
-          if (error) return domain.logger.error(error);
-          domain.injector('listeners', function(error, result) {
-            if (error) return domain.logger.error(error);
-            callback();
-          });
-        });
-      });
+  var plugins = ['models', 'queries', 'commands', 'events', 'listeners'];
+  async.mapSeries(plugins, function(item, next) {
+    domain.injector(item, function(error, result) {
+      next(error, result);
     });
+  }, function(err, results) {
+    callback(err);
   });
 };
 

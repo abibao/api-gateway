@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'CreateAdministratorCommand';
+var CURRENT_NAME = 'CampaignCreateCommand';
 
 module.exports = function(data, callback) {
 
@@ -17,12 +17,12 @@ module.exports = function(data, callback) {
     data.id = new ObjectId().toString();
     data.createdAt = Date.now();
     data.modifiedAt = data.createdAt;
-    var administrator = new self.AdministratorModel(data);
+    var campaign = new self.CampaignModel(data);
     
-    self.AdministratorEmailAlreadyExistsQuery(administrator.email).then(function() {
-      return self.ValidateDataCommand(administrator).then(function() {
-        return self.SaveDataCommand(administrator).then(function(created) {
-          if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', CURRENT_NAME+' < '+created.email+' >'); 
+    self.SystemReadDataQuery(self.EntityModel, data.company).then(function(entity) {
+      if ( entity.type!==self.ABIBAO_CONST_ENTITY_TYPE_COMPANY) return callback('This entity has a bad type.', null);
+      return self.SystemValidateDataCommand(campaign).then(function() {
+        return self.SystemSaveDataCommand(campaign).then(function(created) {
           callback(null, created);
         });
       });
