@@ -1,4 +1,4 @@
-FROM node:4.2.6
+FROM node:4.2.4
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
 # ignore APT warnings about not having a TTY
@@ -11,8 +11,8 @@ RUN apt-get update
 RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
 # install global npm dependencies
-# RUN npm update -g npm
-# RUN npm install -g bower node-gyp
+RUN npm update -g npm
+RUN npm install -g bower node-gyp
 
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:
