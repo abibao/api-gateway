@@ -60,6 +60,7 @@ module.exports.start_server = function(callback) {
     if (err) return callback(err);
     server.logger.info('[HapiPlugins]', results);
     server.route(Routes.endpoints);
+    // server.route( Routes.Lcrud() );
     // start
     server.start(function(err) {
       callback(err);

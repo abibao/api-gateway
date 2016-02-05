@@ -30,9 +30,20 @@ module.exports = function(sealed, callback) {
         individual: unsealed.individual
       };
       self.SystemFindDataQuery(self.SurveyModel, data).then(function(surveys) {
-        if ( surveys.length>0 ) return callback('Survey already assigned', null);
-        return self.SurveyCreateCommand(data).then(function(survey) {
-          callback(null, survey);
+        return self.IndividualCreateAuthTokenCommand({id:data.individual,scope:'individual'}).then(function(token) {
+          if ( surveys.length===0 ) {
+            self.SurveyCreateCommand(data).then(function(survey) {
+              survey.token = token;
+              callback(null, survey);
+            })
+            .catch(function(error) {
+              callback(error, null);
+            });
+          } else {
+            var survey = surveys[0];
+            survey.token = token;
+            callback(null, survey);
+          }
         });
       })
       .catch(function(error) {

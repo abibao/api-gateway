@@ -22,7 +22,6 @@ module.exports = function(data, callback) {
     self.IndividualEmailAlreadyExistsQuery(individual.email).then(function() {
       return self.SystemValidateDataCommand(individual).then(function() {
         return self.SystemSaveDataCommand(individual).then(function(created) {
-          if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', CURRENT_NAME+' < '+created.email+' >'); 
           return self.IndividualSendEmailVerificationCommand(created.email).then(function() {
             callback(null, created);
           });

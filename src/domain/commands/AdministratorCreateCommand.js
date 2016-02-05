@@ -22,7 +22,6 @@ module.exports = function(data, callback) {
     self.AdministratorEmailAlreadyExistsQuery(administrator.email).then(function() {
       return self.SystemValidateDataCommand(administrator).then(function() {
         return self.SystemSaveDataCommand(administrator).then(function(created) {
-          if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) self.postMessageOnSlack('info', CURRENT_NAME+' < '+created.email+' >'); 
           callback(null, created);
         });
       });

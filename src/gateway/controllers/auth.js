@@ -2,14 +2,17 @@
 
 var Boom = require('boom');
 
-exports.me = {
-  auth: 'jwt',
-  tags: ['api', '1.2) individual', '1.3) administrator'],
-  description: 'Retourne l\'utilisateur actuellement connecté',
-  notes: 'Retourne l\'utilisateur actuellement connecté', 
+exports.global_informations = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['individual']
+  },
+  tags: ['api', '1.2) individual'],
+  description: 'Retourne des informations rapides sur l\'utilisateur actuellement connecté', 
+  notes: 'Retourne des informations rapides sur l\'utilisateur actuellement connecté', 
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.AuthentificationReadMeQuery(request.auth.credentials).then(function(user) {
+    request.server.domain.AuthentificationGlobalInformationsQuery(request.auth.credentials).then(function(user) {
       reply(user);
     })
     .catch(function(error) {

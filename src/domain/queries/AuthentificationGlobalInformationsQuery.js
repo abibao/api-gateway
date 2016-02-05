@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Query';
-var CURRENT_NAME = 'AuthentificationReadMeQuery';
+var CURRENT_NAME = 'AuthentificationGlobalInformationsQuery';
  
 module.exports = function(credentials, callback) {
   

@@ -34,6 +34,44 @@ exports.create = {
   }
 };
 
+exports.update = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', '1.3) administrator'],
+  description: 'Modifie une entité au sein de Abibao',
+  notes: 'Modifie une entité au sein de Abibao',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {
+      name: Joi.string(),
+      type: Joi.string().valid(['charity', 'company']),
+      contact: Joi.string().email(),
+      description: Joi.string(),
+      picture: Joi.string(),
+      avatar: Joi.string(),
+      icon: Joi.string()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.payload.id = request.params.id;
+    request.server.domain.EntityUpdateCommand(request.payload).then(function(entity) {
+      reply(entity);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
 exports.read = {
   auth: {
     strategy: 'jwt',
@@ -79,7 +117,7 @@ exports.list = {
   }
 };
 
-exports.create_campaign = {
+exports.campaigns_create = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -111,7 +149,7 @@ exports.create_campaign = {
   }
 };
 
-exports.publish_campaign = {
+exports.campaigns_publish = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -146,7 +184,7 @@ exports.publish_campaign = {
   }
 };
 
-exports.list_campaigns = {
+exports.campaigns_list = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']

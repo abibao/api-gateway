@@ -32,7 +32,9 @@ Services.start_domain(function(err) {
       if (item!=='') server.logger.info(item.trim());
     });
     server.logger.info('--------------------------------------------------------------');
-    // start the sockets
+    // start listeners
+    domain.EntitiesListenerChanged();
+    // start sockets
     Services.start_io();
     // finals injections
     domain.io = io;

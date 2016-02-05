@@ -103,7 +103,7 @@ exports.verify_email = {
   }
 };
 
-exports.assign_campaign = {
+exports.campaigns_assign = {
   auth: false,
   tags: ['api', '1.1) not authentified'],
   description: 'Ajoute un sondage à un utilisateur donnée',
@@ -125,7 +125,7 @@ exports.assign_campaign = {
   }
 };
 
-exports.survey_answer = {
+exports.surveys_answer = {
   auth: {
     strategy: 'jwt',
     scope: ['individual']

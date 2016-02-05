@@ -26,7 +26,7 @@ var options = {
   
 // swaggerui
 var optionsui = {
-  title: '[snapbook] api gateway',
+  title: '[abibao] api gateway',
   path: '/docs',
   templates: path.join(__dirname, './swagger-templates'),
   authorization: {

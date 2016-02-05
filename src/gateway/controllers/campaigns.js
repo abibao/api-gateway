@@ -3,7 +3,7 @@
 var Joi = require('joi');
 var Boom = require('boom');
 
-exports.delete_constant = {
+exports.constants_delete = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -35,7 +35,7 @@ exports.delete_constant = {
   }
 };
 
-exports.update_constant = {
+exports.constants_update = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -68,7 +68,7 @@ exports.update_constant = {
   }
 };
 
-exports.create_constant = {
+exports.constants_create = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -101,7 +101,7 @@ exports.create_constant = {
   }
 };
 
-exports.create_item = {
+exports.items_create = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
