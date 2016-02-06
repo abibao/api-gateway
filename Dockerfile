@@ -2,12 +2,12 @@ FROM mhart/alpine-node:5.5
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
-RUN mkdir -p /usr/src/app && \
-  rm -rf /usr/src/app/node_modules
+VOLUME /root/.npm
+
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app/
-COPY README.md /usr/src/app/
 ADD src /usr/src/app
 
 # If you have native dependencies, you'll need extra tools
