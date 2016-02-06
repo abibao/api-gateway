@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "test": "grunt test",
