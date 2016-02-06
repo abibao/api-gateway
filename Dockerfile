@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:4
+FROM mhart/alpine-node:5.5
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
@@ -14,7 +14,7 @@ ADD src /usr/src/app
 RUN apk add --update make gcc g++ python
 
 # If you need npm, don't use a base tag
-# RUN npm install --production
+RUN npm install --production
 
 # If you had native dependencies you can now remove build tools
 RUN apk del make gcc g++ python && \
