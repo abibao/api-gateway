@@ -2,8 +2,7 @@ FROM ubuntu:trusty
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
-RUN sudo apt-get install -y vim tmux ncdu htop wget \
-  && sudo apt-get install -y curl \
+RUN sudo apt-get install -y vim tmux wget curl \
   && curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash - \
   && sudo apt-get install -y nodejs \
   && npm update -g npm
