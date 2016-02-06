@@ -1,4 +1,4 @@
-FROM ubuntu:14.4
+FROM ubuntu:14.04
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
