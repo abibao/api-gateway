@@ -2,7 +2,8 @@ FROM mhart/alpine-node:4
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app && \
+  rm -rf /usr/src/app/node_modules
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app/
