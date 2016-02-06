@@ -5,7 +5,7 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 RUN sudo apt-get install -y vim tmux wget curl \
   && curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash - \
   && sudo apt-get install -y nodejs \
-  && npm update -g npm
+  && npm update -g npm \
   && npm install -g grunt-cli
 
 RUN mkdir -p /usr/src/app
