@@ -1,9 +1,8 @@
-FROM ubuntu:trusty
+FROM ubuntu:14.4
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
-RUN sudo apt-get install curl libcurl3 libcurl3-dev \
-  && curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash - \
+RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash - \
   && sudo apt-get install -y nodejs \
   && sudo npm install -g grunt-cli
 
