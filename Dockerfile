@@ -1,4 +1,4 @@
-FROM node:4.2.4
+FROM node:4.2.2
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
 # ignore APT warnings about not having a TTY
