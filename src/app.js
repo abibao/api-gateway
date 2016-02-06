@@ -34,6 +34,7 @@ Services.start_domain(function(err) {
     server.logger.info('--------------------------------------------------------------');
     // start listeners
     domain.EntitiesListenerChanged();
+    domain.SurveysListenerChanged();
     // start sockets
     Services.start_io();
     // finals injections

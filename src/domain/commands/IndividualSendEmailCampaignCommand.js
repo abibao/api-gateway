@@ -39,7 +39,6 @@ module.exports = function(params, callback) {
       transporter.sendMail(mailOptions, function(error, info) {
         if (error) return callback(error, null);
         if (!info) return callback('no informations found', null);
-        // self.IndividualSendEmailVerificationEvent(params.email);
         callback(null, true);
       });
     });

@@ -1,14 +1,10 @@
 "use strict";
 
-var async = require('async');
-var fs = require('fs');
-
 var AuthController = require('./controllers/auth');
 var IndividualsController = require('./controllers/individuals');
 var AdministratorsController = require('./controllers/administrators');
 var CampaignsController = require('./controllers/campaigns');
 var EntitiesController = require('./controllers/entities');
-var SurveysController = require('./controllers/surveys');
 
 exports.endpoints = [
 

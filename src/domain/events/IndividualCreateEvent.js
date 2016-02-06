@@ -12,7 +12,7 @@ module.exports = function(data, callback) {
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
     self.io.sockets.emit(self.io.EVENT_INDIVIDUAL_CREATED, data);
-    self.postMessageOnSlack('info', CURRENT_NAME+' < '+data.email+' > has been created'); 
+    self.SlackPostMessageCommand('info', CURRENT_NAME+' < '+data.email+' > has been created'); 
     
     callback(null, true);
     

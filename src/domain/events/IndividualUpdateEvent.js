@@ -3,7 +3,7 @@
 var CURRENT_ACTION = 'Event';
 var CURRENT_NAME = 'IndividualUpdateEvent';
 
-module.exports = function(data, old, callback) {
+module.exports = function(data, old) {
 
   var self = this;
   
@@ -11,13 +11,15 @@ module.exports = function(data, old, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
-    self.io.sockets.emit(self.io.EVENT_INDIVIDUAL_CREATED, data);
-    self.postMessageOnSlack('info', CURRENT_NAME+' < '+data.email+' > has been updated'); 
-    
-    callback(null, true);
-    
+    var io_data = {
+      data: data,
+      old: old
+    };
+    self.io.sockets.emit(self.io.EVENT_INDIVIDUAL_CREATED, io_data);
+    self.SlackPostMessageCommand('info', CURRENT_NAME+' < '+data.email+' > has been updated'); 
+
   } catch (e) {
-    callback(e, null);
+   
   }
 
 };

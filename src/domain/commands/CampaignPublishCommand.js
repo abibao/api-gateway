@@ -14,7 +14,7 @@ module.exports = function(params, callback) {
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
     self.SystemReadDataQuery(self.CampaignModel, params.campaign).then(function(campaign) {
-      if ( campaign.publish===true ) return callback('campaign already published', null);
+      // if ( campaign.publish===true ) return callback('campaign already published', null);
       if ( campaign.company!==params.entity ) return callback('Entity not allowed', null);
       campaign.publish = true;
       return self.SystemUpdateDataCommand(self.CampaignModel, campaign).then(function() {
@@ -30,13 +30,8 @@ module.exports = function(params, callback) {
             if ( individual.charity===undefined ) {
               next();
             } else {
-              self.IndividualSendEmailCampaignCommand(data).then(function() {
-                next();
-              })
-              .catch(function(error) {
-                self.logger.error(CURRENT_ACTION, CURRENT_NAME, error);
-                next();
-              });
+              self.IndividualSendEmailCampaignEvent(data);
+              next();
             }
           }, function(err, results){
             if (err) {

@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'EntityUpdateEvent';
+var CURRENT_NAME = 'SurveyUpdateEvent';
 
 module.exports = function(data, old) {
 
@@ -15,11 +15,11 @@ module.exports = function(data, old) {
       data: data,
       old: old
     };
-    self.io.sockets.emit(self.io.EVENT_ENTITY_UPDATED, io_data);
-    self.SlackPostMessageCommand('info', CURRENT_NAME+' < '+data.id+' > has been updated'); 
+    self.io.sockets.emit(self.io.EVENT_SURVEY_UPDATED, io_data);
+    self.SlackPostMessageCommand('info', CURRENT_NAME+' < '+data.id+' > has been created'); 
     
   } catch (e) {
-  
+
   }
 
 };

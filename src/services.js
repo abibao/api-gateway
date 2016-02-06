@@ -1,12 +1,11 @@
 "use strict";
 
 var Hapi = require('hapi');
-var Routes = require('./gateway/routes');
+var Routes = require('./server/gateway/routes');
 var Sockets = require('./io/sockets');
 
 var async = require('async');
 var bunyan = require('bunyan');
-var BunyanSlack = require('bunyan-slack');
 
 var options = {
   host: process.env.ABIBAO_API_GATEWAY_EXPOSE_IP,
@@ -22,6 +21,7 @@ var server = new Hapi.Server({
     }
   }
 });
+
 server.connection(options);
 var io = require("socket.io")(server.listener);
 var domain = require('./domain');
@@ -60,7 +60,6 @@ module.exports.start_server = function(callback) {
     if (err) return callback(err);
     server.logger.info('[HapiPlugins]', results);
     server.route(Routes.endpoints);
-    // server.route( Routes.Lcrud() );
     // start
     server.start(function(err) {
       callback(err);
@@ -96,16 +95,4 @@ var logger_file = bunyan.createLogger({
     period: "1d",   // daily rotation
     count: 3        // keep 3 back copies
   }]
-});
-
-// logger to post on slack
-var logger_slack = bunyan.createLogger({
-  name: "slack-gateway",
-  level: 'info',
-  stream: new BunyanSlack({
-      webhook_url: "https://hooks.slack.com/services/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",
-      icon_url: "https://secure.gravatar.com/avatar/3947e5c81a09471ff5d1213862ad5ea3.jpg",
-      channel: "#gateway",
-      username: "AbibaoLogger",
-    })
 });
