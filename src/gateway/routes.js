@@ -17,7 +17,6 @@ exports.endpoints = [
   { method: 'POST', path: '/api/v1/individuals/register', config: IndividualsController.register },
   { method: 'POST', path: '/api/v1/individuals/verify/email/{token}', config: IndividualsController.verify_email },
   { method: 'POST', path: '/api/v1/individuals/campaigns/assign/{token}', config: IndividualsController.campaigns_assign },
-  { method: 'POST', path: '/api/v1/individuals/surveys/{id}/answers', config: IndividualsController.surveys_answer },
   { method: 'GET', path: '/api/v1/individuals/count', config: IndividualsController.count },
   
   // administrators
@@ -27,6 +26,8 @@ exports.endpoints = [
   // auth
   { method: 'GET', path: '/api/v1/auth/global/informations', config: AuthController.global_informations },
   { method: 'POST', path: '/api/v1/auth/resend/verification/email', config: AuthController.resend_verification_email },
+  { method: 'POST', path: '/api/v1/auth/surveys/{id}/answers', config: AuthController.surveys_answers },
+  { method: 'GET', path: '/api/v1/auth/surveys/{id}', config: AuthController.surveys_read },
   
   // entities
   { method: 'GET', path: '/api/v1/entities', config: EntitiesController.list },
@@ -45,6 +46,5 @@ exports.endpoints = [
   { method: 'POST', path: '/api/v1/campaigns/{id}/items', config: CampaignsController.items_create },
   
   // surveys
-  { method: 'GET', path: '/api/v1/surveys/{id}', config: SurveysController.read },
   
 ];

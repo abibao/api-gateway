@@ -79,11 +79,8 @@ exports.login = {
 };
 
 exports.verify_email = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['individual']
-  },
-  tags: ['api', '1.2) individual'],
+  auth: false,
+  tags: ['api', '1.1) not authentified'],
   description: 'Valide le compte d\'un utilisateur',
   notes: 'Valide le compte d\'un utilisateur',
   validate: {
@@ -116,39 +113,6 @@ exports.campaigns_assign = {
   jsonp: 'callback',
   handler: function(request, reply) {
     request.server.domain.IndividualAssignCampaignCommand(request.params.token).then(function(result) {
-      reply(result);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};
-
-exports.surveys_answer = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['individual']
-  },
-  tags: ['api', '1.2) individual'],
-  description: 'Répond à une question d\'un sondage donné',
-  notes: 'Répond à une question d\'un sondage donné',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
-  validate: {
-    params: {
-      id: Joi.string().required()
-    },
-    payload: {
-      label: Joi.string().required(),
-      answer: Joi.string().required()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    request.payload.survey = request.params.id;
-    request.server.domain.IndividualSurveyAnswerCommand(request.auth.credentials, request.payload).then(function(result) {
       reply(result);
     })
     .catch(function(error) {

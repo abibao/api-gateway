@@ -21,15 +21,10 @@ module.exports = function(data, callback) {
     var campaign_item = new self.CampaignItemModel(data);
     
     self.SystemReadDataQuery(self.CampaignModel, data.campaign).then(function(campaign) {
+      campaign_item.campaign = campaign.id;
       return self.SystemValidateDataCommand(campaign_item).then(function() {
         return self.SystemSaveDataCommand(campaign_item).then(function() {
-          if ( campaign.items===undefined ) campaign.items = [];
-          campaign.items.push(data.id);
-          return self.SystemValidateDataCommand(campaign).then(function() {
-            return self.SystemSaveDataCommand(campaign).then(function() {
-              callback(null, campaign_item);
-            });
-          });
+          callback(null, campaign_item);
         });
       });
     })

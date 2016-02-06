@@ -1,6 +1,65 @@
 "use strict";
 
 var Boom = require('boom');
+var Joi = require('joi');
+
+exports.surveys_answers = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['individual']
+  },
+  tags: ['api', '1.2) individual'],
+  description: 'Répond à une question d\'un sondage donné',
+  notes: 'Répond à une question d\'un sondage donné',
+  payload: {
+    allow: 'application/x-www-form-urlencoded',
+  },
+  validate: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {
+      label: Joi.string().required(),
+      answer: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.payload.survey = request.params.id;
+    request.server.domain.IndividualSurveyAnswerCommand(request.auth.credentials, request.payload).then(function(result) {
+      reply(result);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+exports.surveys_read = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['individual']
+  },
+  tags: ['api', '1.2) individual'],
+  description: 'Retourne les données d\'un sondage', 
+  notes: 'Retourne les données d\'un sondage',
+  validate: {
+    params: {
+      id: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.SurveyReadPopulateControlIndividualQuery(request.auth.credentials, request.params).then(function(survey) {
+      reply(survey);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
 
 exports.global_informations = {
   auth: {

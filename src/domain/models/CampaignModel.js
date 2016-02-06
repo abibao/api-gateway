@@ -14,7 +14,6 @@ module.exports = function(thinky) {
     constants: type.object(),
     // linked
     company: type.string().required(), // entité de type "entreprise" qui fournit le sondage
-    items: type.array(),
     // automatic
     publish: type.boolean().default(false),
     createdAt: type.date().required().default(r.now()),
