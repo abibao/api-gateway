@@ -1,4 +1,2 @@
-FROM node:argon-onbuild
-MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
-
+FROM node:4-onbuild
 EXPOSE 80
