@@ -4,7 +4,10 @@
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "test": "grunt test",
-    "start": "node . | bunyan"
+    "start": "node . | bunyan",
+    "domain-create-all": "sudo sh ./bin/domain-create-all.sh",
+    "domain-create-command": "sudo sh ./bin/domain-create-command.sh",
+    "domain-create-query": "sudo sh ./bin/domain-create-query.sh"
   },
   "repository": {
     "type": "git",
@@ -59,9 +62,14 @@
   "devDependencies": {
     "chai": "3.5.0",
     "chai-http": "2.0.1",
+    "cli-color": "1.1.0",
+    "commander": "2.9.0",
     "dependency-check": "2.5.1",
+    "ejs": "2.4.1",
+    "js-object-pretty-print": "0.2.0",
     "grunt": "0.4.5",
     "grunt-contrib-jshint": "0.12.0",
-    "grunt-simple-mocha": "0.4.1"
+    "grunt-simple-mocha": "0.4.1",
+    "mustache": "2.2.1"
   }
 }

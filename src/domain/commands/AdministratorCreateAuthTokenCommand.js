@@ -2,7 +2,7 @@
 
 var JWT = require('jsonwebtoken');
 
-var CURRENT_ACTION = 'Query';
+var CURRENT_ACTION = 'Command';
 var CURRENT_NAME = 'AdministratorCreateAuthTokenCommand';
 
 module.exports = function(data, callback) {

@@ -8,7 +8,7 @@ var path = require('path');
 
 // swagger
 var options = {
-  stripPrefix: '/api/v1',
+  stripPrefix: '/v1',
   supportedMethods: ['get', 'post', 'delete', 'patch'],
   info: {
     version: pkg.version,

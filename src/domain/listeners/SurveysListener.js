@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'EntitiesListenerChanged';
+var CURRENT_ACTION = 'Listener';
+var CURRENT_NAME = 'SurveysListenerChanged';
 
 module.exports = function() {
   
@@ -11,19 +11,17 @@ module.exports = function() {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
-    self.EntityModel.changes().then(function(feed) {
+    self.SurveyModel.changes().then(function(feed) {
       feed.each(function(error, doc) {
         if (error) return self.logger.error(self.action, self.name, error);
         if (doc.isSaved() === false) {
           console.log(":The following document was deleted:");
           console.log(doc);
-        }
-        else if (doc.getOldValue() === null) {
-          return self.EntityCreateEvent(doc);
-        }
-        else {
+        } else if (doc.getOldValue() === null) {
+          self.SurveyCreateEvent(doc);
+        } else {
           var old = doc.getOldValue();
-          return self.EntityUpdateEvent(doc, old);
+          self.SurveyUpdateEvent(doc, old);
         }
       });
     })

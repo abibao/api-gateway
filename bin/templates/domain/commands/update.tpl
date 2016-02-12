@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'SystemSaveDataCommand';
+var CURRENT_NAME = '{{JS_COMMAND_NAME}}';
 
 module.exports = function(data, callback) {
 
@@ -10,16 +10,16 @@ module.exports = function(data, callback) {
   try {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
-
-    data.save().then(function(saved) {
-      callback(null, saved);
+    
+    self.SystemUpdateDataCommand(self.{{JS_MODEL_NAME}}, data).then(function(updated) {
+      callback(null, updated);
     })
     .catch(function(error) {
       callback(error, null);
     });
-    
+
   } catch (e) {
     callback(e, null);
   }
-  
+
 };

@@ -1,72 +1,41 @@
 # API-GATEWAY
 
-### Comment effectuer un commit
+### Description
 
-```bash
-sh git-commit master "Voici mon super commentaire..."
-```
+L'api c'est la vie ! Tout converge vers le gateway.
 
-A la place de "master" on peut mettre une autre branche bien entendu.
+### Scripts NPM 
 
-### Que fait ce script
+Scripts | Descriptions
+------------ | -------------
+```npm test``` | Débute les tests TDD, BDD, etc.
+```npm start``` | Lance l'application node avec Bunyan.
+```npm run domain-create-all``` | Crée le model, le listener, les 3 events, les 2 queries et les 2 commands du Lcrud
+```npm run domain-create-command``` | ...
+```npm run domain-create-query``` | ...
 
-```bash
-#!/bin/bash
-
-# run tests
-npm test
-
-# if tests are not 100% ok, then no need to commit...
-if [ $? -eq 0 ]
-  then
-    git add -i
-    git commit -m "$2"
-    git push origin $1
-fi
-```
-
-Avant de commit effectivement les modifications apportées au code, des tests pré-définis vont être executés.
-
-Au moindre problème durant les test, un rapport d'erreurs sera affiché via la console et le commit sera annulé.
-
-Ces mêmes tests seront également refait au moment du déploiment par le CI.
-
-### Descriptions
-
-- L'api c'est la vie ! Tout converge vers le gateway.
- 
 ### Listes des variables système ABIBAO
 
-- ABIBAO_API_GATEWAY_EXPOSE_IP
-- ABIBAO_API_GATEWAY_EXPOSE_PORT
-- ABIBAO_API_GATEWAY_LOGS_FILE
-- ABIBAO_API_GATEWAY_SERVER_AUTH_BASIC_USERNAME
-- ABIBAO_API_GATEWAY_SERVER_AUTH_BASIC_PASSWORD
-- ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY
-- ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST
-- ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT
-- ABIBAO_API_GATEWAY_SERVER_RETHINK_DB
-- ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY
-- ABIBAO_API_GATEWAY_SERVER_MAILER_USERNAME
-- ABIBAO_API_GATEWAY_SERVER_MAILER_PASSWORD
-- ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_NAME
-- ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_EMAIL
-- ABIBAO_API_GATEWAY_NEWRELIC_ENABLE
-- ABIBAO_API_GATEWAY_CLOUD9_ENABLE
-- ABIBAO_API_GATEWAY_PRODUCTION_ENABLE
+Noms | Descriptions
+------------ | -------------
+ABIBAO_API_GATEWAY_EXPOSE_IP | ...
+ABIBAO_API_GATEWAY_EXPOSE_PORT | ...
+ABIBAO_API_GATEWAY_LOGS_FILE | ...
+ABIBAO_API_GATEWAY_SERVER_AUTH_BASIC_USERNAME | ...
+ABIBAO_API_GATEWAY_SERVER_AUTH_BASIC_PASSWORD | ...
+ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY | ...
+ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST | ...
+ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT | ...
+ABIBAO_API_GATEWAY_SERVER_RETHINK_DB | ...
+ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY | ...
+ABIBAO_API_GATEWAY_SERVER_MAILER_USERNAME | ...
+ABIBAO_API_GATEWAY_SERVER_MAILER_PASSWORD | ...
+ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_NAME | ...
+ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_EMAIL | ...
+ABIBAO_API_GATEWAY_NEWRELIC_ENABLE | Utilise newrelic
+ABIBAO_API_GATEWAY_CLOUD9_ENABLE | Utilise le fichier cloud9.json conmme configuration
+ABIBAO_API_GATEWAY_PRODUCTION_ENABLE | Utilise un environnement de production
 
 ### Packages quality
 
 ...
-
-### Versions
-
-- node (4.1.2)
-- npm (3.3.5)
-- node-gyp (3.0.3)
-- python (2.7.6)
-
-### GIT commands
-
-- git config --global user.name "myname"
-- git config --global user.email "email"

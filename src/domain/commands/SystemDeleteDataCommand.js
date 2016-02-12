@@ -1,9 +1,9 @@
 "use strict";
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'SystemSaveDataCommand';
+var CURRENT_NAME = 'SystemDeleteDataCommand';
 
-module.exports = function(data, callback) {
+module.exports = function(model, data, callback) {
 
   var self = this;
   
@@ -11,8 +11,10 @@ module.exports = function(data, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
 
-    data.save().then(function(saved) {
-      callback(null, saved);
+    self.SystemReadDataQuery(model, data.id).then(function(data) {
+      return data.delete().then(function() {
+        callback();
+      });
     })
     .catch(function(error) {
       callback(error, null);

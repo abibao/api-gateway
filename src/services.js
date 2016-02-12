@@ -4,6 +4,7 @@ var Hapi = require('hapi');
 var Routes = require('./server/gateway/routes');
 var Sockets = require('./io/sockets');
 
+var _ = require('lodash');
 var async = require('async');
 var bunyan = require('bunyan');
 
@@ -62,7 +63,15 @@ module.exports.start_server = function(callback) {
     server.route(Routes.endpoints);
     // start
     server.start(function(err) {
-      callback(err);
+      if (err) return callback(err);
+      server.logger.info('--------------------------------------------------------------');
+      server.logger.info('GATEWAY BOOTSTRAP');
+      server.logger.info('--------------------------------------------------------------');
+      _.forEach(server.plugins.blipp.text().split('\n'), function(item) {
+        if (item!=='') server.logger.info(item.trim());
+      });
+      server.logger.info('--------------------------------------------------------------');
+      callback();
     });
   });
 };
