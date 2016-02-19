@@ -1,6 +1,8 @@
 "use strict";
 
 var crypto = require('crypto');
+var Cryptr = require("cryptr"),
+cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
 
 module.exports = function(thinky) {
   
@@ -8,6 +10,10 @@ module.exports = function(thinky) {
   var r = thinky.r;
   
   var AdministratorModel = thinky.createModel("administrators", {
+    // virtuals
+    urn: type.virtual().default(function() {
+      return (this.id) ? 'urn:abibao:database:administrators:'+cryptr.encrypt(this.id) : null;
+    }),
     // fields
     email: type.string().email().required(),
     scope: type.string().default('administrator'),

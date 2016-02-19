@@ -3,7 +3,10 @@
 var async = require('async');
 var path = require('path');
 var dir = require('node-dir');
-var Promise = require("bluebird");
+
+var _ = require('lodash');
+var Cryptr = require("cryptr");
+var cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
 
 var options = {
   host: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST,
@@ -21,6 +24,7 @@ module.exports = {
   io: null,
   thinky: thinky,
   ThinkyErrors: thinky.Errors,
+  Query: thinky.Query,
   r: thinky.r,
   
   ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
@@ -31,24 +35,38 @@ module.exports = {
   ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR: 'administrator',
   ABIBAO_CONST_USER_SCOPE_INDIVIDUAL: 'individual',
   
+  getIDfromURN: function(urn) {
+    return cryptr.decrypt(_.last(_.split(urn, ':')));
+  },
+  
   injector: function(type, callback) {
     var self = this;
     self.logger.info('['+type+']');
-    dir.files(path.resolve(__dirname, type), function(err, files) {
-      if (err) return callback(err, null);
-      async.mapSeries(files, function(item, next) {
-        var name = path.basename(item, '.js');
-        self.logger.info('>>> ['+name+'] has just being injected');
-        if (type==='models') {
-          self[name] = require('./'+type+'/'+name)(self.thinky);
-        } else {
-          self[name] = Promise.promisify(require('./'+type+'/'+name));
-        }
-        next(null, true);
-      }, function(error, results) {
-        callback(error, results);
+    // custom
+    dir.readFiles(path.resolve(__dirname, type), 
+      {
+        recursive: false,
+        match: /.js/
+      },
+      function(err, content, next) {
+        if (err) return callback(err, null);
+        next();
+      },
+      function(err, files) {
+        if (err) return callback(err, null);
+        async.mapSeries(files, function(item, next) {
+          var name = path.basename(item, '.js');
+          self.logger.info('>>> ['+name+'] has just being injected');
+          if (type==='models') {
+            self[name] = require('./'+type+'/'+name)(self.thinky);
+          } else {
+            self[name] = require('./'+type+'/'+name); // Promise.promisify()
+          }
+          next(null, true);
+        }, function(error, results) {
+          callback(error, results);
+        });
       });
-    });
   }
   
 };

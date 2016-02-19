@@ -16,7 +16,7 @@ exports.constants_delete = {
   },
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     },
     payload: {
       label: Joi.string().required()
@@ -24,7 +24,7 @@ exports.constants_delete = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.id = request.params.id;
+    request.payload.urn = request.params.urn;
     request.server.domain.CampaignDeleteConstantCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
@@ -48,7 +48,7 @@ exports.constants_update = {
   },
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     },
     payload: {
       label: Joi.string().required(),
@@ -57,7 +57,7 @@ exports.constants_update = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.id = request.params.id;
+    request.payload.urn = request.params.urn;
     request.server.domain.CampaignUpdateConstantCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
@@ -81,7 +81,7 @@ exports.constants_create = {
   },
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     },
     payload: {
       label: Joi.string().required(),
@@ -90,7 +90,7 @@ exports.constants_create = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.id = request.params.id;
+    request.payload.urn = request.params.urn;
     request.server.domain.CampaignCreateConstantCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
@@ -114,7 +114,7 @@ exports.items_create = {
   },
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     },
     payload: {
       optional: Joi.boolean().required().default(false),
@@ -126,7 +126,7 @@ exports.items_create = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.campaign = request.params.id;
+    request.payload.campaign = request.params.urn;
     request.server.domain.CampaignItemCreateCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
@@ -147,12 +147,12 @@ exports.read = {
   notes: 'Retourne un sondage donné',
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     }
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.CampaignReadPopulateQuery(request.params.id).then(function(campaign) {
+    request.server.domain.CampaignReadPopulateQuery(request.params.urn).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {

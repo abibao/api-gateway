@@ -1,0 +1,179 @@
+"use strict";
+
+var chai = require('chai');
+var expect = chai.expect;
+var rp = require('request-promise');
+
+var uri = 'http://gperreymond-abibao.c9.io';
+var token;
+var urn_entity;
+
+describe('entities', function() {
+  
+  it('should return an error "401 Unauthorized"', function(done) {
+    var options = {
+      method: 'GET',
+      uri: uri+'/v1/entities',
+    };
+    rp(options)
+    .then(function(body) {
+      done('error');
+    })
+    .catch(function(err) {
+      expect(err.statusCode).to.be.eq(401);
+      done();
+    });
+  });
+  it('should return an administrator token', function(done) {
+    var options = {
+      method: 'POST',
+      uri: uri+'/v1/administrators/login',
+      json: true,
+      form: {
+        email: 'gilles@abibao.com',
+        password: 'azer1234'
+      }
+    };
+    rp(options)
+    .then(function(body) {
+      token = body.token;
+      expect(body).to.have.property('token');
+      done();
+    })
+    .catch(function(err) {
+      done(err);
+    });
+
+  });
+  it('should return entities.list', function(done) {
+    var options = {
+      method: 'GET',
+      uri: uri+'/v1/entities',
+      headers: {
+        'Authorization': token
+      },
+      json: true
+    };
+    rp(options)
+    .then(function(body) {
+      expect(body).to.be.a('array');
+      expect(body[0]).to.have.property('urn').not.null;
+      expect(body[0]).to.not.have.property('id');
+      done();
+    })
+    .catch(function(err) {
+      done(err);
+    });
+  }); 
+  it('should return entities.create', function(done) {
+    var options = {
+      method: 'POST',
+      uri: uri+'/v1/entities',
+      headers: {
+        'Authorization': token
+      },
+      form: {
+        name: 'NPM TEST',
+        contact: 'npm.test@abibao.com',
+        type: 'company'
+      },
+      json: true
+    };
+    rp(options)
+    .then(function(body) {
+      expect(body).to.have.property('urn').not.null;
+      expect(body).to.not.have.property('id');
+      urn_entity = body.urn;
+      done();
+    })
+    .catch(function(err) {
+      done(err);
+    });
+  });
+  it('should return entities.update', function(done) {
+    var options = {
+      method: 'PATCH',
+      uri: uri+'/v1/entities/'+urn_entity,
+      headers: {
+        'Authorization': token
+      },
+      form: {
+        description: 'NPM TEST DESCRIPTION',
+      },
+      json: true
+    };
+    rp(options)
+    .then(function(body) {
+      expect(body).to.have.property('urn').not.null;
+      expect(body).to.not.have.property('id');
+      done();
+    })
+    .catch(function(err) {
+      done(err);
+    });
+  });
+  it('should return entities.read', function(done) {
+    var options = {
+      method: 'GET',
+      uri: uri+'/v1/entities/'+urn_entity,
+      headers: {
+        'Authorization': token
+      },
+      json: true
+    };
+    rp(options)
+    .then(function(body) {
+      expect(body.description).equal('NPM TEST DESCRIPTION');
+      expect(body).to.have.property('urn').not.null;
+      expect(body).to.not.have.property('id');
+      done();
+    })
+    .catch(function(err) {
+      done(err);
+    });
+  });
+  it('should return entities.campaigns_create', function(done) {
+    var options = {
+      method: 'POST',
+      uri: uri+'/v1/entities/'+urn_entity+'/campaigns',
+      headers: {
+        'Authorization': token
+      },
+      form: {
+        name: 'NPM TEST',
+        price: 3.25,
+        currency: 'EUR',
+      },
+      json: true
+    };
+    rp(options)
+    .then(function(body) {
+      expect(body).to.have.property('urn').not.null;
+      expect(body).to.not.have.property('id');
+      done();
+    })
+    .catch(function(err) {
+      done(err);
+    });
+  });
+  it('should return entities.campaigns_list', function(done) {
+    var options = {
+      method: 'GET',
+      uri: uri+'/v1/entities/'+urn_entity+'/campaigns',
+      headers: {
+        'Authorization': token
+      },
+      json: true
+    };
+    rp(options)
+    .then(function(body) {
+      expect(body[0]).to.have.property('urn').not.null;
+      expect(body[0]).to.not.have.property('id');
+      done();
+    })
+    .catch(function(err) {
+      done(err);
+    });
+  });
+    
+});

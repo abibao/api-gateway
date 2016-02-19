@@ -9,7 +9,7 @@ module.exports = function() {
   
   try {
     
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
     
     self.{{JS_MODEL_NAME}}.changes().then(function(feed) {
       feed.each(function(error, doc) {

@@ -2,7 +2,6 @@
 
 var Hapi = require('hapi');
 var Routes = require('./server/gateway/routes');
-var Sockets = require('./io/sockets');
 
 var _ = require('lodash');
 var async = require('async');
@@ -27,9 +26,37 @@ server.connection(options);
 var io = require("socket.io")(server.listener);
 var domain = require('./domain');
 
-module.exports.start_io = function() {
-  io.logger = server.logger;
-  io.on("connection", Sockets.connectionHandler);
+var Boom = require('boom');
+
+module.exports.start_io = function(domain) {
+  io.on("connection", function(socket) {
+    
+    // SocketConnectedEvent
+    domain.logger.info('Socket connected with id='+socket.id);
+    
+    // AdministratorLoginWithCredentialsCommand
+    socket.on('urn:socket:get:/v1/administrators/login', function(payload) {
+      domain.logger.info('socket GET /v1/administrators/login', socket.id);
+      domain.AdministratorLoginWithCredentialsCommand(payload).then(function(credentials) {
+        socket.emit('response:socket:get:/v1/administrators/login', credentials);
+      })
+      .catch(function(error) {
+        socket.emit('response:socket:get:/v1/administrators/login', Boom.badRequest(error).output.payload);
+      });
+    });
+    
+    // SystemFindDataQuery >> EntityModel
+    socket.on('urn:socket:get://v1/entities', function(payload) {
+      domain.logger.info('socket GET /v1/entities', socket.id);
+      domain.SystemFindDataQuery(domain.EntityModel, {}).then(function(entities) {
+        socket.emit('response:socket:get:/v1/entities', entities);
+      })
+      .catch(function(error) {
+        socket.emit('response:socket:get:/v1/entities', Boom.badRequest(error).output.payload);
+      });
+    });
+    
+  });
 };
 
 module.exports.start_domain = function(callback) {
@@ -37,7 +64,7 @@ module.exports.start_domain = function(callback) {
   domain.logger.info('--------------------------------------------------------------');
   domain.logger.info('DOMAIN BOOTSTRAP');
   domain.logger.info('--------------------------------------------------------------');
-  var plugins = ['models', 'queries', 'commands', 'events', 'listeners'];
+  var plugins = ['models', 'queries/system', 'commands/system', 'events/system', 'listeners/system', 'queries', 'commands', 'events', 'listeners'];
   async.mapSeries(plugins, function(item, next) {
     domain.injector(item, function(error, result) {
       next(error, result);

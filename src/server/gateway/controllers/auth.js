@@ -16,7 +16,7 @@ exports.surveys_answers = {
   },
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     },
     payload: {
       label: Joi.string().required(),
@@ -25,7 +25,7 @@ exports.surveys_answers = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.survey = request.params.id;
+    request.payload.survey = request.params.urn;
     request.server.domain.IndividualSurveyAnswerCommand(request.auth.credentials, request.payload).then(function(result) {
       reply(result);
     })
@@ -46,7 +46,7 @@ exports.surveys_read = {
   notes: 'Retourne les données d\'un sondage',
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     }
   },
   jsonp: 'callback',

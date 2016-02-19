@@ -9,10 +9,7 @@ module.exports = function(current, old) {
   
   try {
     
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
-    
-    self.io.sockets.emit(self.io.{{JS_IO_EVENT_NAME}}, {data:current,old:old});
-    self.SystemLogCreateCommand({action:CURRENT_ACTION, name:CURRENT_NAME, data:{current:current,old:old}}); 
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
 
   } catch (e) {
     

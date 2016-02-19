@@ -11,7 +11,7 @@ module.exports = function(params, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
     
-    self.SystemReadDataQuery(self.CampaignModel, params.id).then(function(campaign) {
+    self.SystemReadDataQuery(self.CampaignModel, params.urn).then(function(campaign) {
       if ( campaign.constants===undefined ) campaign.constants = {};
       campaign.constants[params.label] = params.description;
       return self.SystemValidateDataCommand(campaign).then(function() {

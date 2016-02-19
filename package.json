@@ -36,6 +36,7 @@
     "bunyan": "1.5.1",
     "bunyan-slack": "0.0.10",
     "crypto": "0.0.3",
+    "cryptr": "1.0.0",
     "good": "6.4.0",
     "good-bunyan": "0.1.2",
     "hapi": "13.0.0",
@@ -70,6 +71,7 @@
     "grunt": "0.4.5",
     "grunt-contrib-jshint": "0.12.0",
     "grunt-simple-mocha": "0.4.1",
-    "mustache": "2.2.1"
+    "mustache": "2.2.1",
+    "request-promise": "2.0.0"
   }
 }

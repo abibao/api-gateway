@@ -5,6 +5,10 @@ var Boom = require('boom');
 var JWT = require('jsonwebtoken');
 var MD5 = require('md5');
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.register = {
   auth: {
     strategy: 'jwt',
@@ -25,13 +29,7 @@ exports.register = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    // password confirmation
-    if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
-    request.payload.password = request.payload.password1;
-    delete request.payload.password1;
-    delete request.payload.password2;
-    // execute command
-    request.server.domain.AdministratorCreateCommand(request.payload).then(function(user) {
+    request.server.domain.AdministratorRegisterCommand(request.payload).then(function(user) {
       reply(user);
     })
     .catch(function(error) {
@@ -58,22 +56,9 @@ exports.login = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.SystemFindDataQuery(request.server.domain.AdministratorModel, {email:request.payload.email}).then(function(users) {
-      if (users.length===0) return reply(Boom.badRequest('User not found'));
-      if (users.length>1) return reply(Boom.badRequest('Too many emails, contact an administrator'));
-      var user = users[0];
-      if (user.authenticate(request.payload.password)) {
-        // all done then reply token
-        request.server.domain.AdministratorCreateAuthTokenCommand(user).then(function(token) {
-          reply({token:token});
-        })
-        .catch(function(error) {
-          request.server.logger.error(error);
-          reply(Boom.badRequest(error));
-        });
-      } else {
-        reply(Boom.unauthorized('User not authenticate'));
-      }
+    request.server.domain.AdministratorLoginWithCredentialsCommand(request.payload)
+    .then(function(credentials) {
+      reply(credentials);
     })
     .catch(function(error) {
       request.server.logger.error(error);

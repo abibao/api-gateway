@@ -1,11 +1,18 @@
 "use strict";
 
+var Cryptr = require("cryptr"),
+cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+
 module.exports = function(thinky) {
   
   var type = thinky.type;
   var r = thinky.r;
   
   var SurveyModel = thinky.createModel("surveys", {
+    // virtuals
+    urn: type.virtual().default(function() {
+      return ( this.id===undefined)  ? null : 'urn:abibao:survey:'+cryptr.encrypt(this.id);
+    }),
     // linked
     campaign: type.string().required(),
     company: type.string().required(), // entité de type "entreprise" qui fournit le sondage

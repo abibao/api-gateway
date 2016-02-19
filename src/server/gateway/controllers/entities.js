@@ -47,7 +47,7 @@ exports.update = {
   },
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     },
     payload: {
       name: Joi.string(),
@@ -61,7 +61,7 @@ exports.update = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.id = request.params.id;
+    request.payload.urn = request.params.urn;
     request.server.domain.EntityUpdateCommand(request.payload).then(function(entity) {
       reply(entity);
     })
@@ -82,12 +82,12 @@ exports.read = {
   notes: 'Retourne une entité donnée',
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     }
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.SystemReadDataQuery(request.server.domain.EntityModel, request.params.id).then(function(entity) {
+    request.server.domain.EntityReadQuery(request.params.urn).then(function(entity) {
       reply(entity);
     })
     .catch(function(error) {
@@ -107,7 +107,7 @@ exports.list = {
   notes: 'Retourne toutes les entités',
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.SystemFindDataQuery(request.server.domain.EntityModel, {}).then(function(entities) {
+    request.server.domain.EntityFilterQuery({}).then(function(entities) {
       reply(entities);
     })
     .catch(function(error) {
@@ -129,9 +129,11 @@ exports.campaigns_create = {
     allow: 'application/x-www-form-urlencoded',
   },
   validate: {
+    params: {
+      urn: Joi.string().required(),
+    },
     payload: {
       name: Joi.string().required(),
-      company: Joi.string().required(),
       price: Joi.number().min(0).required(),
       currency: Joi.string().valid(['EUR']).required(),
       description: Joi.string()
@@ -139,6 +141,7 @@ exports.campaigns_create = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
+    request.payload.company = request.params.urn;
     request.server.domain.CampaignCreateCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
@@ -162,7 +165,7 @@ exports.campaigns_publish = {
   },
   validate: {
     params: {
-      id: Joi.string().required(),
+      urn: Joi.string().required(),
     },
     payload: {
       campaign: Joi.string().required(),
@@ -173,7 +176,7 @@ exports.campaigns_publish = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.payload.entity = request.params.id;
+    request.payload.entity = request.params.urn;
     request.server.domain.CampaignPublishCommand(request.payload).then(function(result) {
       reply(result);
     })
@@ -194,12 +197,12 @@ exports.campaigns_list = {
   notes: 'Retourne la liste des campagnes d\'une entité donnée',
   validate: {
     params: {
-      id: Joi.string().required()
+      urn: Joi.string().required()
     }
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.EntityListCampaignsQuery(request.params.id).then(function(campaigns) {
+    request.server.domain.EntityListCampaignsQuery(request.params.urn).then(function(campaigns) {
       reply(campaigns);
     })
     .catch(function(error) {

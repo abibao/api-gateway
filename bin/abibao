@@ -8,7 +8,7 @@ var program = require('commander');
 
 // declare project libraries
 var packagejson = require('./../package.json'),
-    commands_create = require('./commands/create'),
+    taskCreateDomain = require('./commands/create-domain'),
     notice = require('./console').notice,
     warning = require('./console').warning;
 
@@ -30,9 +30,8 @@ warning('Description: ', packagejson.description);
 
 program
   .command('create')
-  .arguments('<table> <collection> <model>')
   .description('create a complete set of Fcrud materials\n')
-  .action(commands_create);
+  .action(taskCreateDomain);
 
 // You want my help or not! Too late!
 program.parse(process.argv);

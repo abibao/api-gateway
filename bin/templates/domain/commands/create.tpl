@@ -1,34 +1,40 @@
 "use strict";
 
+var Promise = require("bluebird");
+
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
 var CURRENT_ACTION = 'Command';
 var CURRENT_NAME = '{{JS_COMMAND_NAME}}';
 
-module.exports = function(data, callback) {
+module.exports = function(payload) {
 
   var self = this;
+  var time_start = new Date();
+  var time_end;
   
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
-    
-    data.id = new ObjectId().toString();
-    // ... insert here your own default values
-    var model = new self.{{JS_MODEL_NAME}}(data);
-    
-    self.SystemValidateDataCommand(model).then(function() {
-      return self.SystemSaveDataCommand(model).then(function(created) {
-        callback(null, created);
+  return new Promise(function(resolve, reject) {
+    try {
+      var model = new self.{{JS_MODEL_NAME}}(payload);
+      model.id = new ObjectId().toString();
+      model.createdAt = Date.now();
+      model.save().then(function(created) {
+        delete created.id;
+        time_end = new Date();
+        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+        resolve(created);
+      })
+      .catch(function(error) {
+        time_end = new Date();
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, 'local', '('+(time_end-time_start)+'ms)');
+        reject(error);
       });
-    })
-    .catch(function(error) {
-      callback(error, null);
-    });
-
-  } catch (e) {
-    callback(e, null);
-  }
-
+    } catch (e) {
+      time_end = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, 'glogal', '('+(time_end-time_start)+'ms)');
+      reject(e);
+    }
+  });
+  
 };

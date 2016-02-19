@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>Abibao · Welcome to the administration website</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta name="author" content="Gilles Perreymond">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" rel="stylesheet">
+  </head>
+  <body class="grey lighten-3">
+    
+    <navbar> </navbar>
+    
+    <div class="container">
+      <homepage> </homepage>
+      <login> </login>
+      <error404> </error404>
+    </div>
+    
+    <!-- scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.3.15/riot+compiler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/async/1.5.2/async.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    
+    <!-- page tags -->
+    <script src="components/homepage.tag" type="riot/tag"></script>
+    <script src="components/login.tag" type="riot/tag"></script>
+    
+    <!-- our app config -->
+    <script src="facade.js"></script>
+    <script src="app.js"></script>
+    
+  </body>
+</html>
