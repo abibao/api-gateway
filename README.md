@@ -10,9 +10,6 @@ Scripts | Descriptions
 ------------ | -------------
 ```npm test``` | Débute les tests TDD, BDD, etc.
 ```npm start``` | Lance l'application node avec Bunyan.
-```npm run domain-create-all``` | Crée le model, le listener, les 3 events, les 2 queries et les 2 commands du Lcrud
-```npm run domain-create-command``` | ...
-```npm run domain-create-query``` | ...
 
 ### Listes des variables système ABIBAO
 
@@ -37,6 +34,6 @@ ABIBAO_API_GATEWAY_CLOUD9_ENABLE | Utilise le fichier cloud9.json conmme configu
 ABIBAO_API_GATEWAY_PRODUCTION_ENABLE | Utilise un environnement de production
 
 ### Packages quality
-
+urn:abibao:entity:e1d763aa34b8aaca062624ffbd14cc2c4329268aeaae1850292a4ab6ca1de68e
 [![Dependency Status](https://david-dm.org/abibao/api-gateway.svg?style=flat-square)](https://david-dm.org/abibao/api-gateway)
-[![devDependency Status](https://david-dm.org/abibao/dev-status.svg?style=flat-square)](https://david-dm.org/abibao/#info=devDependencies)
+[![devDependency Status](https://david-dm.org/abibao/api-gateway/dev-status.svg?style=flat-square)](https://david-dm.org/abibao/api-gateway#info=devDependencies)

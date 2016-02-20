@@ -133,41 +133,6 @@ exports.list = {
   }
 };
 
-exports.campaigns_create = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', '1.3) administrator'],
-  description: 'Ajoute une campagne, affectée à une entité donnée',
-  notes: 'Ajoute une campagne, affectée à une entité donnée',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
-  validate: {
-    params: {
-      urn: Joi.string().required(),
-    },
-    payload: {
-      name: Joi.string().required(),
-      price: Joi.number().min(0).required(),
-      currency: Joi.string().valid(['EUR']).required(),
-      description: Joi.string()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    request.payload.company = request.params.urn;
-    request.server.domain.CampaignCreateCommand(request.payload).then(function(campaign) {
-      reply(campaign);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};
-
 exports.campaigns_publish = {
   auth: {
     strategy: 'jwt',

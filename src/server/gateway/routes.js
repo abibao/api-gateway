@@ -34,12 +34,12 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/entities', config: EntitiesController.create }, // done
   { method: 'GET', path: '/v1/entities/{urn}', config: EntitiesController.read }, // done
   { method: 'PATCH', path: '/v1/entities/{urn}', config: EntitiesController.update }, // done
-  { method: 'POST', path: '/v1/entities/{urn}/campaigns', config: EntitiesController.campaigns_create },
   { method: 'POST', path: '/v1/entities/{urn}/campaigns/publish', config: EntitiesController.campaigns_publish },
   { method: 'GET', path: '/v1/entities/{urn}/campaigns', config: EntitiesController.campaigns_list },
   
   // campaigns
   { method: 'GET', path: '/v1/campaigns', config: CampaignsController.list }, // done
+  { method: 'POST', path: '/v1/campaigns', config: CampaignsController.create }, // done
   { method: 'GET', path: '/v1/campaigns/{urn}', config: CampaignsController.read }, // done
   { method: 'POST', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_create },
   { method: 'PATCH', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_update },
