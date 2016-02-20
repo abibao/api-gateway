@@ -137,14 +137,42 @@ exports.items_create = {
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
+exports.list = {
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
+  tags: ['api', '1.3) administrator'],
+  description: 'Retourne toutes les campagnes',
+  notes: 'Retourne toutes les campagnes',
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.CampaignFilterQuery({}).then(function(campaigns) {
+      reply(campaigns);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};
+
+/**
+ * promise : progress
+ * tests : false
+ **/
 exports.read = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'Retourne un sondage donné',
-  notes: 'Retourne un sondage donné',
+  description: 'Retourne une campagne donnée',
+  notes: 'Retourne une campagne donnée',
   validate: {
     params: {
       urn: Joi.string().required()

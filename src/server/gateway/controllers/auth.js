@@ -81,7 +81,7 @@ exports.global_informations = {
   }
 };
 
-exports.resend_verification_email = {
+/**exports.resend_verification_email = {
   auth: {
     strategy: 'jwt',
     scope: ['individual']
@@ -99,4 +99,4 @@ exports.resend_verification_email = {
       reply(Boom.badRequest(error));
     });
   }
-};
+};**/

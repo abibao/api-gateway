@@ -39,6 +39,10 @@ module.exports = {
     return cryptr.decrypt(_.last(_.split(urn, ':')));
   },
   
+  getURNfromID: function(id, model) {
+    return 'urn:abibao:'+model+':'+cryptr.encrypt(id);
+  },
+  
   injector: function(type, callback) {
     var self = this;
     self.logger.info('['+type+']');

@@ -3,6 +3,10 @@
 var Joi = require('joi');
 var Boom = require('boom');
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.create = {
   auth: {
     strategy: 'jwt',
@@ -34,6 +38,10 @@ exports.create = {
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.update = {
   auth: {
     strategy: 'jwt',
@@ -72,6 +80,10 @@ exports.update = {
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.read = {
   auth: {
     strategy: 'jwt',
@@ -97,6 +109,10 @@ exports.read = {
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.list = {
   auth: {
     strategy: 'jwt',

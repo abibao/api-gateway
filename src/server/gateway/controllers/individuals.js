@@ -4,11 +4,15 @@ var Joi = require('joi');
 var Boom = require('boom');
 var MD5 = require('md5');
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.register = {
   auth: false,
   tags: ['api', '1.1) not authentified'],
-  description: 'Ajoute un individu sur abibao',
-  notes: 'Ajoute un individu sur abibao',
+  description: 'Ajoute un individual sur abibao',
+  notes: 'Ajoute un individual sur abibao',
   payload: {
     allow: 'application/x-www-form-urlencoded',
   },
@@ -21,23 +25,20 @@ exports.register = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    // password confirmation
-    if (request.payload.password1!==request.payload.password2) return reply(Boom.badRequest('invalid password confimation'));
-    request.payload.password = request.payload.password1;
-    delete request.payload.password1;
-    delete request.payload.password2;
-    // execute command
-    request.server.domain.IndividualCreateCommand(request.payload).then(function(user) {
-      reply(user);
+    request.server.domain.IndividualRegisterCommand(request.payload).then(function(individual) {
+      reply(individual);
     })
     .catch(function(error) {
       request.server.logger.error(error);
       reply(Boom.badRequest(error));
     });
-  
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.login = {
   auth: false,
   tags: ['api', '1.1) not authentified'],
@@ -54,44 +55,9 @@ exports.login = {
   },
   jsonp: 'callback',
   handler: function(request, reply) {
-    request.server.domain.SystemFindDataQuery(request.server.domain.IndividualModel, {email:request.payload.email}).then(function(users) {
-      if (users.length===0) return reply(Boom.badRequest('User not found'));
-      if (users.length>1) return reply(Boom.badRequest('Too many emails, contact an administrator'));
-      var user = users[0];
-      if (user.authenticate(request.payload.password)) {
-        // all done then reply token
-        request.server.domain.IndividualCreateAuthTokenCommand(user).then(function(token) {
-          reply({token:token});
-        })
-        .catch(function(error) {
-          request.server.logger.error(error);
-          reply(Boom.badRequest(error));
-        });
-      } else {
-        reply(Boom.unauthorized('User not authenticate'));
-      }
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};
-
-exports.verify_email = {
-  auth: false,
-  tags: ['api', '1.1) not authentified'],
-  description: 'Valide le compte d\'un utilisateur',
-  notes: 'Valide le compte d\'un utilisateur',
-  validate: {
-    params: {
-      token: Joi.string().required()
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    request.server.domain.IndividualVerifyEmailCommand(request.params.token).then(function(result) {
-      reply(result);
+    request.server.domain.IndividualLoginWithCredentialsCommand(request.payload)
+    .then(function(credentials) {
+      reply(credentials);
     })
     .catch(function(error) {
       request.server.logger.error(error);
@@ -141,4 +107,26 @@ exports.count = {
     });
   }
 };
+
+/**exports.verify_email = {
+  auth: false,
+  tags: ['api', '1.1) not authentified'],
+  description: 'Valide le compte d\'un utilisateur',
+  notes: 'Valide le compte d\'un utilisateur',
+  validate: {
+    params: {
+      token: Joi.string().required()
+    }
+  },
+  jsonp: 'callback',
+  handler: function(request, reply) {
+    request.server.domain.IndividualVerifyEmailCommand(request.params.token).then(function(result) {
+      reply(result);
+    })
+    .catch(function(error) {
+      request.server.logger.error(error);
+      reply(Boom.badRequest(error));
+    });
+  }
+};**/
 

@@ -23,12 +23,12 @@ module.exports = function(urn) {
         var token = JWT.sign(credentials, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, { expiresIn: 60*60*24 });
         time_end = new Date();
         self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
-        resolve({token:token});
+        resolve(token);
       })
       .catch(function(error) {
         time_end = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
-          reject(error);
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+        reject(error);
       });
     } catch (e) {
       time_end = new Date();

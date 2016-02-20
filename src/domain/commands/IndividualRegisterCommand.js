@@ -3,7 +3,7 @@
 var Promise = require("bluebird");
 
 var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'AdministratorRegisterCommand';
+var CURRENT_NAME = 'IndividualRegisterCommand';
 
 module.exports = function(payload) {
 
@@ -19,13 +19,13 @@ module.exports = function(payload) {
       delete payload.password1;
       delete payload.password2;
       // email already exists ?
-      self.AdministratorFilterQuery({email: payload.email}).then(function(administrators) {
-        if (administrators.length>0) throw Error('Email already exists in database');
-        // create administrator
-        self.AdministratorCreateCommand(payload).then(function(administrator) {
+      self.IndividualFilterQuery({email: payload.email}).then(function(individuals) {
+        if (individuals.length>0) throw Error('Email already exists in database');
+        // create individual
+        self.IndividualCreateCommand(payload).then(function(individual) {
           time_end = new Date();
           self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
-          resolve(administrator);
+          resolve(individual);
         });
       })
       .catch(function(error) {

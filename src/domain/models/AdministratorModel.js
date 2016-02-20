@@ -12,7 +12,7 @@ module.exports = function(thinky) {
   var AdministratorModel = thinky.createModel("administrators", {
     // virtuals
     urn: type.virtual().default(function() {
-      return (this.id) ? 'urn:abibao:database:administrators:'+cryptr.encrypt(this.id) : null;
+      return (this.id) ? 'urn:abibao:database:administrator:'+cryptr.encrypt(this.id) : null;
     }),
     // fields
     email: type.string().email().required(),

@@ -23,12 +23,12 @@ module.exports = function(filters) {
         resolve(models);
       }).catch(function(error) {
         time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, 'local', '('+(time_end-time_start)+'ms)');
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
         reject(error);
       });
     } catch (e) {
       time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, 'glogal', '('+(time_end-time_start)+'ms)');
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
       reject(e);
     }
   });
