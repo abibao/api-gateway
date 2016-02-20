@@ -15,6 +15,7 @@ module.exports = function(urn, callback) {
     try {
       self.EntityModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         delete model.id;
+        delete model.company;
         time_end = new Date();
         self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
         resolve(model);

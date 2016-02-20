@@ -16,6 +16,7 @@ module.exports = function(payload) {
       self.AdministratorModel.get( self.getIDfromURN(payload.urn) ).run().then(function(model) {
         return model.merge(payload).save().then(function(updated) {
           delete updated.id;
+          delete updated.company;
           time_end = new Date();
           self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
           resolve(updated);

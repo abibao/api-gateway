@@ -13,6 +13,9 @@ module.exports = function(thinky) {
     urn: type.virtual().default(function() {
       return ( this.id===undefined)  ? null : 'urn:abibao:campaign:'+cryptr.encrypt(this.id);
     }),
+    urnCompany: type.virtual().default(function() {
+      return ( this.id===undefined)  ? null : 'urn:abibao:entity:'+cryptr.encrypt(this.company);
+    }),
     // fields
     name: type.string().required(),
     description: type.string(),

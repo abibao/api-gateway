@@ -21,6 +21,7 @@ module.exports = function(payload) {
       model.createdAt = Date.now();
       model.save().then(function(created) {
         delete created.id;
+        delete created.company;
         time_end = new Date();
         self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
         resolve(created);

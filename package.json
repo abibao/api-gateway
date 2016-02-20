@@ -4,10 +4,7 @@
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "test": "grunt test",
-    "start": "node . | bunyan",
-    "domain-create-all": "sudo sh ./bin/domain-create-all.sh",
-    "domain-create-command": "sudo sh ./bin/domain-create-command.sh",
-    "domain-create-query": "sudo sh ./bin/domain-create-query.sh"
+    "start": "node . | bunyan"
   },
   "repository": {
     "type": "git",

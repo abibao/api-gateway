@@ -17,6 +17,7 @@ module.exports = function(filters) {
       self.SurveyModel.filter(filters).run().then(function(models) {
         _.map(models, function(model) {
           delete model.id;
+          delete model.company;
         });
         time_end = new Date();
         self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
