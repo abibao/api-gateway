@@ -38,4 +38,5 @@ ABIBAO_API_GATEWAY_PRODUCTION_ENABLE | Utilise un environnement de production
 
 ### Packages quality
 
-...
+[![Dependency Status](https://david-dm.org/abibao/api-gateway.svg?style=flat-square)](https://david-dm.org/abibao/api-gateway)
+[![devDependency Status](https://david-dm.org/abibao/dev-status.svg?style=flat-square)](https://david-dm.org/abibao/#info=devDependencies)

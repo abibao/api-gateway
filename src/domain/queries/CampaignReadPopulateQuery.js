@@ -1,6 +1,7 @@
 "use strict";
 
 var Promise = require("bluebird");
+var _ = require('lodash');
 
 var CURRENT_ACTION = 'Query';
 var CURRENT_NAME = 'CampaignReadPopulateQuery';
@@ -13,21 +14,30 @@ module.exports = function(urn) {
   
   return new Promise(function(resolve, reject) {
     try {
-       self.r.table('campaigns').get( self.getIDfromURN(urn) ).without('id').merge(function(campaign) {
-        return {
-          urn: urn,
-          company: self.getURNfromID(campaign('company'), 'entity'),
-          items: self.r.table('campaigns_items').filter({'campaign':self.getIDfromURN(urn)}).coerceTo('array').merge(function(item) {
-            return {
-              urn: self.getURNfromID(item('id'), 'campaign:item'),
-            };
+      self.CampaignReadQuery(urn).then(function(campaign) {
+        self.EntityReadQuery(campaign.urnCompany).then(function(entity) {
+          delete campaign.urnCompany;
+          campaign.company = entity;
+          self.CampaignItemFilterQuery({campaign:self.getIDfromURN(urn)}).then(function(items) {
+            _.map(items, function(item) {
+              delete item.campaign;
+            });
+            campaign.items = items;
+            time_end = new Date();
+            self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+            resolve(campaign);
           })
-        };
-      })
-      .then(function(campaign) {
-        time_end = new Date();
-        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
-        resolve(campaign);
+          .catch(function(error) {
+            time_end = new Date();
+            self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+            reject(error);
+          });
+        })
+        .catch(function(error) {
+          time_end = new Date();
+          self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+          reject(error);
+        });
       })
       .catch(function(error) {
         time_end = new Date();

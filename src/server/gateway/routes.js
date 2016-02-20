@@ -11,7 +11,8 @@ var EntitiesController = require('./controllers/entities');
 
 exports.endpoints = [
   
-  { method: 'GET', path: '/dashboard/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname,'../../..','www/dashboard')) } } },
+  // www - dashboard
+  { method: 'GET', path: '/dashboard/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname,'../..','www/dashboard')) } } },
   
   // individuals
   { method: 'POST', path: '/v1/individuals/login', config: IndividualsController.login }, // done
@@ -39,7 +40,7 @@ exports.endpoints = [
   
   // campaigns
   { method: 'GET', path: '/v1/campaigns', config: CampaignsController.list }, // done
-  { method: 'GET', path: '/v1/campaigns/{urn}', config: CampaignsController.read },
+  { method: 'GET', path: '/v1/campaigns/{urn}', config: CampaignsController.read }, // done
   { method: 'POST', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_create },
   { method: 'PATCH', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_update },
   { method: 'DELETE', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_delete },

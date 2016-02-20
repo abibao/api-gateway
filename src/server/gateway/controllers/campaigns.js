@@ -162,7 +162,7 @@ exports.list = {
 };
 
 /**
- * promise : progress
+ * promise : done
  * tests : false
  **/
 exports.read = {
