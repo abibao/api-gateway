@@ -33,8 +33,8 @@ module.exports = function(data) {
           from: process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_NAME+' <'+process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_EMAIL+'>',
           to: data.email,
           subject: '[abibao.com] - un sondage est disponible',
-          text: process.env.ABIBAO_DASHBOARD_URI+'/surveys/assign/'+sealed,
-          html: '<a href="'+process.env.ABIBAO_WWW_URI+'/surveys/assign/'+sealed+'">Cliquez ici pour commencer le sondage.</a>'
+          text: process.env.ABIBAO_WWW_SURVEYS_URI+'/assign/'+sealed,
+          html: '<a href="'+process.env.ABIBAO_WWW_SURVEYS_URI+'/assign/'+sealed+'">Cliquez ici pour commencer le sondage.</a>'
         };
         transporter.sendMail(mailOptions, function(error, info) {
           if (error) return reject(error);

@@ -31,6 +31,7 @@
     "bluebird": "3.2.1",
     "boom": "3.1.2",
     "bunyan": "1.5.1",
+    "bunyan-logstash": "^0.3.4",
     "bunyan-slack": "0.0.10",
     "crypto": "0.0.3",
     "cryptr": "1.0.0",

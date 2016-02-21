@@ -36,7 +36,7 @@ module.exports.start_io = function(domain) {
     
     // AdministratorLoginWithCredentialsCommand
     socket.on('urn:socket:get:/v1/administrators/login', function(payload) {
-      domain.logger.info('socket GET /v1/administrators/login', socket.id);
+      domain.logger.info('socket get /v1/administrators/login', socket.id);
       domain.AdministratorLoginWithCredentialsCommand(payload).then(function(credentials) {
         socket.emit('response:socket:get:/v1/administrators/login', credentials);
       })
@@ -46,8 +46,8 @@ module.exports.start_io = function(domain) {
     });
     
     // SystemFindDataQuery >> EntityModel
-    socket.on('urn:socket:get://v1/entities', function(payload) {
-      domain.logger.info('socket GET /v1/entities', socket.id);
+    socket.on('urn:socket:get:/v1/entities', function(payload) {
+      domain.logger.info('socket get /v1/entities', socket.id);
       domain.SystemFindDataQuery(domain.EntityModel, {}).then(function(entities) {
         socket.emit('response:socket:get:/v1/entities', entities);
       })
@@ -76,6 +76,7 @@ module.exports.start_domain = function(callback) {
 
 module.exports.start_server = function(callback) {
   (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) ? server.logger = logger_file : server.logger = logger_console;
+  //server.logger = logger_logstash;
   server.logger.info('--------------------------------------------------------------');
   server.logger.info('SERVER BOOTSTRAP');
   server.logger.info('--------------------------------------------------------------');
@@ -115,6 +116,17 @@ module.exports.domain = function() {
   return domain;
 };
 
+// logger to logstash
+/*var logger_logstash = bunyan.createLogger({
+  streams: [{
+    type: "raw",
+    stream: require('bunyan-logstash').createStream({
+      host: '94.23.215.61',
+      port: 5000
+    })
+  }]
+});*/
+
 // logger to console (deve mode)
 var logger_console = bunyan.createLogger({
   name: "api-gateway",
@@ -124,7 +136,7 @@ var logger_console = bunyan.createLogger({
 // logger to console (production mode)
 var logger_file = bunyan.createLogger({
   name: "api-gateway",
-  level: 'info',
+  level: 'debug',
   streams: [{
     type: "rotating-file",
     path: process.env.ABIBAO_API_GATEWAY_LOGS_FILE,
