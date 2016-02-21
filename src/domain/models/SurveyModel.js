@@ -13,6 +13,18 @@ module.exports = function(thinky) {
     urn: type.virtual().default(function() {
       return ( this.id===undefined)  ? null : 'urn:abibao:survey:'+cryptr.encrypt(this.id);
     }),
+    urnCampaign: type.virtual().default(function() {
+      return ( this.id===undefined)  ? null : 'urn:abibao:campaign:'+cryptr.encrypt(this.campaign);
+    }),
+    urnCompany: type.virtual().default(function() {
+      return ( this.id===undefined)  ? null : 'urn:abibao:entity:'+cryptr.encrypt(this.company);
+    }),
+    urnCharity: type.virtual().default(function() {
+      return ( this.id===undefined)  ? null : 'urn:abibao:entity:'+cryptr.encrypt(this.charity);
+    }),
+    urnIndividual: type.virtual().default(function() {
+      return ( this.id===undefined)  ? null : 'urn:abibao:individual:'+cryptr.encrypt(this.individual);
+    }),
     // linked
     campaign: type.string().required(),
     company: type.string().required(), // entité de type "entreprise" qui fournit le sondage

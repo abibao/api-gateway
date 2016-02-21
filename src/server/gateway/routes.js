@@ -17,15 +17,14 @@ exports.endpoints = [
   // individuals
   { method: 'POST', path: '/v1/individuals/login', config: IndividualsController.login }, // done
   { method: 'POST', path: '/v1/individuals/register', config: IndividualsController.register }, // done
-  { method: 'POST', path: '/v1/individuals/campaigns/assign/{token}', config: IndividualsController.campaigns_assign },
-  { method: 'GET', path: '/v1/individuals/count', config: IndividualsController.count },
+  { method: 'POST', path: '/v1/individual/campaign/assign/{token}', config: IndividualsController.campaign_assign }, // done
   
   // administrators
   { method: 'POST', path: '/v1/administrators/login', config: AdministratorsController.login }, // done
   { method: 'POST', path: '/v1/administrators/register', config: AdministratorsController.register }, // done
   
   // auth
-  { method: 'GET', path: '/v1/auth/global/informations', config: AuthController.global_informations },
+  { method: 'GET', path: '/v1/auth/global/informations', config: AuthController.global_informations }, // done
   { method: 'POST', path: '/v1/auth/surveys/{urn}/answers', config: AuthController.surveys_answers },
   { method: 'GET', path: '/v1/auth/surveys/{urn}', config: AuthController.surveys_read },
   
@@ -34,13 +33,13 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/entities', config: EntitiesController.create }, // done
   { method: 'GET', path: '/v1/entities/{urn}', config: EntitiesController.read }, // done
   { method: 'PATCH', path: '/v1/entities/{urn}', config: EntitiesController.update }, // done
-  { method: 'POST', path: '/v1/entities/{urn}/campaigns/publish', config: EntitiesController.campaigns_publish },
   { method: 'GET', path: '/v1/entities/{urn}/campaigns', config: EntitiesController.campaigns_list },
   
   // campaigns
   { method: 'GET', path: '/v1/campaigns', config: CampaignsController.list }, // done
   { method: 'POST', path: '/v1/campaigns', config: CampaignsController.create }, // done
   { method: 'GET', path: '/v1/campaigns/{urn}', config: CampaignsController.read }, // done
+  { method: 'POST', path: '/v1/campaigns/{urn}/publish', config: CampaignsController.publish },
   { method: 'POST', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_create },
   { method: 'PATCH', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_update },
   { method: 'DELETE', path: '/v1/campaigns/{urn}/constants', config: CampaignsController.constants_delete },
@@ -48,5 +47,6 @@ exports.endpoints = [
   
 ];
 
-//{ method: 'POST', path: '/v1/auth/resend/verification/email', config: AuthController.resend_verification_email },
-//{ method: 'POST', path: '/v1/individuals/verify/email/{token}', config: IndividualsController.verify_email },
+// { method: 'POST', path: '/v1/auth/resend/verification/email', config: AuthController.resend_verification_email },
+// { method: 'POST', path: '/v1/individuals/verify/email/{token}', config: IndividualsController.verify_email },
+// { method: 'GET', path: '/v1/individuals/count', config: IndividualsController.count },

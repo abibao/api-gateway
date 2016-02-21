@@ -61,6 +61,10 @@ exports.surveys_read = {
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.global_informations = {
   auth: {
     strategy: 'jwt',

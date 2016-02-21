@@ -133,41 +133,6 @@ exports.list = {
   }
 };
 
-exports.campaigns_publish = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
-  tags: ['api', '1.3) administrator'],
-  description: 'Publie une campagne pour un filtre de individuals donné',
-  notes: 'Publie une campagne pour un filtre de individuals donné',
-  payload: {
-    allow: 'application/x-www-form-urlencoded',
-  },
-  validate: {
-    params: {
-      urn: Joi.string().required(),
-    },
-    payload: {
-      campaign: Joi.string().required(),
-      maximum: Joi.number().integer().min(0).required(),
-      filter: Joi.string().required(),
-      finishedAt: Joi.date().format('DD/MM/YYYY'),
-    }
-  },
-  jsonp: 'callback',
-  handler: function(request, reply) {
-    request.payload.entity = request.params.urn;
-    request.server.domain.CampaignPublishCommand(request.payload).then(function(result) {
-      reply(result);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};
-
 exports.campaigns_list = {
   auth: {
     strategy: 'jwt',

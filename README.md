@@ -34,6 +34,6 @@ ABIBAO_API_GATEWAY_CLOUD9_ENABLE | Utilise le fichier cloud9.json conmme configu
 ABIBAO_API_GATEWAY_PRODUCTION_ENABLE | Utilise un environnement de production
 
 ### Packages quality
-urn:abibao:entity:e1d763aa34b8aaca062624ffbd14cc2c4329268aeaae1850292a4ab6ca1de68e
+
 [![Dependency Status](https://david-dm.org/abibao/api-gateway.svg?style=flat-square)](https://david-dm.org/abibao/api-gateway)
 [![devDependency Status](https://david-dm.org/abibao/api-gateway/dev-status.svg?style=flat-square)](https://david-dm.org/abibao/api-gateway#info=devDependencies)

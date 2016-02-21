@@ -66,7 +66,11 @@ exports.login = {
   }
 };
 
-exports.campaigns_assign = {
+/**
+ * promise : done
+ * tests : false
+ **/
+exports.campaign_assign = {
   auth: false,
   tags: ['api', '1.1) not authentified'],
   description: 'Ajoute un sondage à un utilisateur donnée',
@@ -88,7 +92,7 @@ exports.campaigns_assign = {
   }
 };
 
-exports.count = {
+/**exports.count = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -106,7 +110,7 @@ exports.count = {
       reply(Boom.badRequest(error));
     });
   }
-};
+};**/
 
 /**exports.verify_email = {
   auth: false,

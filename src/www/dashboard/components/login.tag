@@ -44,10 +44,10 @@
     
     submitHandler(e) {
       var payload = { email:self.email.value, password:self.password.value };
-      socket.emit('GET /v1/administrators/login', payload); 
+      socket.emit('urn:socket:get:/v1/administrators/login', payload); 
     }
     
-    socket.on('response GET /v1/administrators/login', function(data) {
+    socket.on('response:socket:get:/v1/administrators/login', function(data) {
       if ( data.error ) {
         return;
       }

@@ -40,7 +40,7 @@ module.exports = {
   },
   
   getURNfromID: function(id, model) {
-    return 'urn:abibao:'+model+':'+cryptr.encrypt(id);
+    return 'urn:abibao:database:'+model+':'+cryptr.encrypt(id);
   },
   
   injector: function(type, callback) {

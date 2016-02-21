@@ -16,35 +16,39 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports = function(params, callback) {
+module.exports = function(data) {
  
   var self = this;
+  var time_start = new Date();
+  var time_end;
   
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute', params.email);
-    
-    var unsealed = params;
-    unsealed.action = self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH;
-    Iron.seal(unsealed, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, Iron.defaults, function (err, sealed) {
-      if (err) return callback(err, null);
-      sealed = Base64.encode(sealed);
-      var mailOptions =  {
-        from: process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_NAME+' <'+process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_EMAIL+'>',
-        to: params.email,
-        subject: '[abibao.com] - un sondage est disponible',
-        text: process.env.ABIBAO_DASHBOARD_URI+'/surveys/assign/'+sealed,
-        html: '<a href="'+process.env.ABIBAO_WWW_URI+'/surveys/assign/'+sealed+'">Cliquez ici pour commencer le sondage.</a>'
-      };
-      transporter.sendMail(mailOptions, function(error, info) {
-        if (error) return callback(error, null);
-        if (!info) return callback('no informations found', null);
-        callback(null, true);
+  return new Promise(function(resolve, reject) {
+    try {
+      var unsealed = data;
+      unsealed.action = self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH;
+      Iron.seal(unsealed, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, Iron.defaults, function (err, sealed) {
+        if (err) return reject(err);
+        sealed = Base64.encode(sealed);
+        var mailOptions =  {
+          from: process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_NAME+' <'+process.env.ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_EMAIL+'>',
+          to: data.email,
+          subject: '[abibao.com] - un sondage est disponible',
+          text: process.env.ABIBAO_DASHBOARD_URI+'/surveys/assign/'+sealed,
+          html: '<a href="'+process.env.ABIBAO_WWW_URI+'/surveys/assign/'+sealed+'">Cliquez ici pour commencer le sondage.</a>'
+        };
+        transporter.sendMail(mailOptions, function(error, info) {
+          if (error) return reject(error);
+          if (!info) return reject('no informations found');
+          time_end = new Date();
+          self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+          resolve();
+        });
       });
-    });
-  
-  } catch (e) {
-    callback(e, null);
-  }
-  
+    } catch (e) {
+      time_end = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+      reject(e);
+    }
+  });
+
 };
