@@ -1,16 +1,12 @@
 "use strict";
 
-var _ = require('lodash');
-
-// enable cloud9 configuration file.
-if (process.env.ABIBAO_API_GATEWAY_CLOUD9_ENABLE) {
-  var jsonfile = require('jsonfile');
-  _.merge(process.env, jsonfile.readFileSync('cloud9.json'));
+if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) {
+  // production
+  require('newrelic');
+} else {
+  // development
+  require('dotenv').config({silent:false});
 }
-
-// enable newrelic
-if (process.env.ABIBAO_API_GATEWAY_NEWRELIC_ENABLE) require('newrelic');
-
 // declare services
 var Services = require('./services');
 
