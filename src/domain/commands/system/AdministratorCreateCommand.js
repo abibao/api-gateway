@@ -1,6 +1,7 @@
 "use strict";
 
 var Promise = require("bluebird");
+var uuid = require('node-uuid');
 
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
@@ -11,29 +12,24 @@ var CURRENT_NAME = 'AdministratorCreateCommand';
 module.exports = function(payload) {
 
   var self = this;
-  var time_start = new Date();
-  var time_end;
   
   return new Promise(function(resolve, reject) {
     try {
+      var quid = uuid.v1();
+      self.debug.query('');
       var model = new self.AdministratorModel(payload);
       model.id = new ObjectId().toString();
       model.createdAt = Date.now();
       model.save().then(function(created) {
         delete created.id;
         delete created.company;
-        time_end = new Date();
-        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+        self.debug.query(CURRENT_NAME, quid);
         resolve(created);
       })
       .catch(function(error) {
-        time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
         reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
       reject(e);
     }
   });
