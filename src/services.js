@@ -1,7 +1,7 @@
 "use strict";
 
 var Hapi = require('hapi');
-var Routes = require('./server/gateway/routes');
+var Routes = require('./server/routes');
 
 var _ = require('lodash');
 var async = require('async');
@@ -117,11 +117,11 @@ module.exports.domain = function() {
 };
 
 // logger to logstash
-/*var logger_logstash = bunyan.createLogger({
+/*var logger_console = bunyan.createLogger({
   streams: [{
     type: "raw",
     stream: require('bunyan-logstash').createStream({
-      host: '94.23.215.61',
+      host: '127.0.0.1',
       port: 5000
     })
   }]

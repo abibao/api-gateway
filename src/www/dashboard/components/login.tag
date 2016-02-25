@@ -1,4 +1,4 @@
-<login if={ facade.currentState===Facade.STATE_LOGIN }> 
+<login if={ facade.getCurrentState()===Facade.STATE_LOGIN }> 
   
   <div class="row"> </div>
   
@@ -7,8 +7,8 @@
       <div class="card grey lighten-5 z-depth-1">
         <div class="card-content blue-grey-text text-darken-2">
           <h4>Authentification</h4>
-          <input id="email" autocomplete="off" class="fit-parent form" type="email" placeholder="Votre email">
-          <input id="password" autocomplete="off" class="fit-parent form" type="password" placeholder="Votre mot de passe">
+          <input id="email" value="gilles@abibao.com" autocomplete="off" class="fit-parent form" type="email" placeholder="Votre email">
+          <input id="password" value="azer1234" autocomplete="off" class="fit-parent form" type="password" placeholder="Votre mot de passe">
           <div class="row"> </div>
           <p><a class="waves-effect waves-light btn blue-grey darken-2" onclick={ submitHandler }>Connexion</a></p>
           <div class="row"> </div>
@@ -22,9 +22,7 @@
     
     var self = this;
     self.name = 'login';
-    
-    self.authentified = false;
-    
+
     self.on('mount', function() {
       console.log(self.name, 'mount');
       facade.tags[self.name] = self;
@@ -33,13 +31,7 @@
     
     self.on('update', function() {
       console.log(self.name, 'update');
-    });
-    
-    self.on('ready', function() {
-      console.log(self.name, 'ready');
-      self.Authentification = Cookies.get('Authentification');
-      self.authentified = self.Authentification!==undefined;
-      if ( self.authentified ) riot.route('/homepage');
+      if ( facade.authentified() ) riot.route('/homepage');
     });
     
     submitHandler(e) {
@@ -55,7 +47,7 @@
         return;
       }
       Cookies.set('Authentification', data.token);
-      self.trigger('ready');
+      riot.update();
     });
     
   </script>

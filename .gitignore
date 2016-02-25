@@ -1,7 +1,5 @@
-# Configuration Cloud9
-cloud9.json
-
-# Logs
+.env
+Logs
 logs
 *.log
 npm-debug.log*

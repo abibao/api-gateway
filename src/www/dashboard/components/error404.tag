@@ -1,4 +1,4 @@
-<error404 if={ facade.currentState===Facade.STATE_404_ERROR }>
+<error404 if={ facade.getCurrentState()===Facade.STATE_404_ERROR }>
 
   <h1>ERREUR 404</h1>
   
@@ -15,10 +15,6 @@
     
     self.on('update', function() {
       console.log(self.name, 'update');
-    });
-    
-    self.on('ready', function() {
-      console.log(self.name, 'ready');
     });
     
   </script>

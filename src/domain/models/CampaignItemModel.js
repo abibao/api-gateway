@@ -18,8 +18,7 @@ module.exports = function(thinky) {
     title: type.string().required(),
     description: type.string(),
     component: type.object().required(),
-    data: type.any(),
-    label: type.string().required(),
+    answer: type.object().required(),
     // linked
     campaign: type.string().required(),
     // automatic

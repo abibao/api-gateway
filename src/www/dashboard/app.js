@@ -1,8 +1,9 @@
-var socket = io('http://api.abibao.com');
+var socket = io('http://gperreymond-abibao.c9.io');
 
 var tags = [
+  'homepage/index.tag',
+  'homepage/components/dg-entities.tag',
   'components/navbar.tag',  
-  'components/homepage.tag',
   'components/login.tag',
   'components/error404.tag'
 ];
