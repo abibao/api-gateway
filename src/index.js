@@ -15,10 +15,8 @@ var server = Services.server();
 var domain = Services.domain();
 var io = Services.io();
 
-// start the domain
 Services.start_domain(function(err) {
   if (err) return server.logger.fatal(err);
-  // start the server
   Services.start_server(function(err) {
     if (err) return server.logger.fatal(err);
     // start listeners

@@ -60,10 +60,10 @@ module.exports.start_io = function(domain) {
 };
 
 module.exports.start_domain = function(callback) {
-  (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) ? domain.logger = logger_file : domain.logger = logger_console;
-  domain.logger.info('--------------------------------------------------------------');
-  domain.logger.info('DOMAIN BOOTSTRAP');
-  domain.logger.info('--------------------------------------------------------------');
+  domain.logger = logger_console;
+  domain.debug = {
+    query: require('debug')('abibao:domain:query')
+  };
   var plugins = ['models', 'queries/system', 'commands/system', 'events/system', 'listeners/system', 'queries', 'commands', 'events', 'listeners'];
   async.mapSeries(plugins, function(item, next) {
     domain.injector(item, function(error, result) {
@@ -75,11 +75,8 @@ module.exports.start_domain = function(callback) {
 };
 
 module.exports.start_server = function(callback) {
-  (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) ? server.logger = logger_file : server.logger = logger_console;
-  //server.logger = logger_logstash;
-  server.logger.info('--------------------------------------------------------------');
-  server.logger.info('SERVER BOOTSTRAP');
-  server.logger.info('--------------------------------------------------------------');
+  server.logger = logger_console;
+  var debug = require('debug')('abibao:server:initializer');
   var plugins = ['good', 'auth', 'swagger', 'blipp'];
   async.mapSeries(plugins, function(item, next) {
     require('./server/plugins/'+item)(server, function() {
@@ -87,18 +84,15 @@ module.exports.start_server = function(callback) {
     });
   }, function(err, results) {
     if (err) return callback(err);
-    server.logger.info('[HapiPlugins]', results);
+    debug('[HapiPlugins]', results);
     server.route(Routes.endpoints);
     // start
     server.start(function(err) {
       if (err) return callback(err);
-      server.logger.info('--------------------------------------------------------------');
-      server.logger.info('GATEWAY BOOTSTRAP');
-      server.logger.info('--------------------------------------------------------------');
+      var debug = require('debug')('abibao:gateway:initializer');
       _.forEach(server.plugins.blipp.text().split('\n'), function(item) {
-        if (item!=='') server.logger.info(item.trim());
+        if (item!=='') debug(item.trim());
       });
-      server.logger.info('--------------------------------------------------------------');
       callback();
     });
   });
@@ -134,7 +128,7 @@ var logger_console = bunyan.createLogger({
 });
 
 // logger to console (production mode)
-var logger_file = bunyan.createLogger({
+/* var logger_file = bunyan.createLogger({
   name: "api-gateway",
   level: 'debug',
   streams: [{
@@ -143,4 +137,4 @@ var logger_file = bunyan.createLogger({
     period: "1d",   // daily rotation
     count: 3        // keep 3 back copies
   }]
-});
+}); */

@@ -2,6 +2,7 @@
 
 var Promise = require("bluebird");
 var _ = require('lodash');
+var uuid = require('node-uuid');
 
 var CURRENT_ACTION = 'Query';
 var CURRENT_NAME = 'AuthentificationGlobalInformationsQuery';
@@ -9,10 +10,10 @@ var CURRENT_NAME = 'AuthentificationGlobalInformationsQuery';
 module.exports = function(credentials) {
   
   var self = this;
-  var time_start = new Date();
-  var time_end;
   
   return new Promise(function(resolve, reject) {
+    var quid = uuid.v1();
+    self.debug.query('');
     try {
       if ( credentials.action===undefined ) return reject('Action is undefined');
       if ( credentials.action!==self.ABIBAO_CONST_TOKEN_AUTH_ME ) return reject('Action is unauthorized');
@@ -69,8 +70,6 @@ module.exports = function(credentials) {
               image: 'images/news/default.png',
               description: '<p>Phasellus molestie, orci nec aliquam fermentum, nisl leo ultrices velit, sed suscipit risus augue ut nisi.</p> Ut vestibulum, erat eget pharetra finibus, risus urna viverra nunc, eu euismod turpis sem ac turpis. In laoreet ullamcorper vehicula. Phasellus nunc tortor, commodo nec iaculis non, consequat vitae neque. Aliquam nec erat elementum, dictum magna non, suscipit dolor. Donec sodales aliquam lectus non ultricies. Nulla nec luctus nulla, eget viverra purus. Phasellus volutpat erat a lectus viverra aliquam. ',
             });
-            time_end = new Date();
-            self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
             // individidual: set URN
             individual.urn = credentials.urn;
             // charities_history: calculate URN
@@ -89,28 +88,23 @@ module.exports = function(credentials) {
               item.urn = self.getURNfromID(item.urn, 'survey');
             });
             // end of command
+            self.debug.query(CURRENT_NAME, quid);
             return resolve(individual);
           })
           .catch(function(error) {
-            time_end = new Date();
-            self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+            self.logger.error(CURRENT_NAME);
             return reject(error);
           });
           break;
         case self.ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR:
-          time_end = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+          self.logger.error(CURRENT_NAME);
           return reject('Scope administrator is unauthorized');
-          break;
         default:
-          time_end = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+          self.logger.error(CURRENT_NAME);
           return reject('Scope is unauthorized');
-          break;
       }
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+      self.logger.error(CURRENT_NAME);
       reject(e);
     }
   });

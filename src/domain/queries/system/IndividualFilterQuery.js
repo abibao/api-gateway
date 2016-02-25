@@ -2,6 +2,7 @@
 
 var Promise = require("bluebird");
 var _ = require('lodash');
+var uuid = require('node-uuid');
 
 var CURRENT_ACTION = 'Query';
 var CURRENT_NAME = 'IndividualFilterQuery';
@@ -9,27 +10,22 @@ var CURRENT_NAME = 'IndividualFilterQuery';
 module.exports = function(filters) {
   
   var self = this;
-  var time_start = new Date();
-  var time_end;
   
   return new Promise(function(resolve, reject) {
     try {
+      var quid = uuid.v1();
+      self.debug.query('');
       self.IndividualModel.filter(filters).run().then(function(models) {
         _.map(models, function(model) {
           delete model.id;
           delete model.company;
         });
-        time_end = new Date();
-        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+        self.debug.query(CURRENT_NAME, quid);
         resolve(models);
       }).catch(function(error) {
-        time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
         reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
       reject(e);
     }
   });

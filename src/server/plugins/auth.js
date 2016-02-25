@@ -7,8 +7,8 @@ var AuthProvision = function(server, callback) {
 
   server.register([ {register: Basic}, {register: AuthJWT} ], function (err) {
     
-    if (err) return server.logger.fatal('auth provision', err);
-    server.logger.info('auth registered provision');
+    if (err) return callback(err);
+    // server.logger.info('auth registered provision');
     
     server.auth.strategy('basic', 'basic', {
       validateFunc: require('./libs/auth_basic_validate.js')

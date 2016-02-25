@@ -4,7 +4,7 @@
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "test": "grunt test",
-    "start": "node . | bunyan"
+    "start": "DEBUG=abibao:* node . | bunyan"
   },
   "repository": {
     "type": "git",

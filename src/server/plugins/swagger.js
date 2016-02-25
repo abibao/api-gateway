@@ -55,8 +55,8 @@ var SwaggerProvision = function(server, callback) {
       options: options
     }], function (err) {
       
-  	  if (err) return server.logger.fatal('swagger provision', err);
-      server.logger.info('swagger registered provision');
+	  if (err) return callback(err);
+    // server.logger.info('swagger registered provision');
     
     // register Swagger UI
     server.register([
@@ -67,8 +67,8 @@ var SwaggerProvision = function(server, callback) {
       select: 'api'
     }, function (err) {
       
-    	if (err) return server.logger.fatal('swagger-ui provision', err);
-      server.logger.info('swagger-ui registered provision');
+    	if (err) return callback(err);
+      // server.logger.info('swagger-ui registered provision');
       
       callback();
     });

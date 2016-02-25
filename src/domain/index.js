@@ -1,5 +1,6 @@
 "use strict";
 
+var debug = require('debug')('abibao:domain:initializer');
 var async = require('async');
 var path = require('path');
 var dir = require('node-dir');
@@ -45,7 +46,7 @@ module.exports = {
   
   injector: function(type, callback) {
     var self = this;
-    self.logger.info('['+type+']');
+    debug('['+type+']');
     // custom
     dir.readFiles(path.resolve(__dirname, type), 
       {
@@ -60,7 +61,7 @@ module.exports = {
         if (err) return callback(err, null);
         async.mapSeries(files, function(item, next) {
           var name = path.basename(item, '.js');
-          self.logger.info('>>> ['+name+'] has just being injected');
+          debug('>>> ['+name+'] has just being injected');
           if (type==='models') {
             self[name] = require('./'+type+'/'+name)(self.thinky);
           } else {

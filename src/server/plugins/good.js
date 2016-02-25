@@ -27,8 +27,8 @@ var GoodProvision = function(server, callback) {
     options: options
   }, function (err) {
     
-    if (err) return server.logger.fatal('good provision', err);
-    server.logger.info('good registered provision');
+    if (err) return callback(err);
+    // server.logger.info('good registered provision');
     
     callback();
     
