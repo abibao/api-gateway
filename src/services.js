@@ -62,6 +62,8 @@ module.exports.start_io = function(domain) {
 module.exports.start_domain = function(callback) {
   domain.logger = logger_console;
   domain.debug = {
+    event: require('debug')('abibao:domain:event'),
+    command: require('debug')('abibao:domain:command'),
     query: require('debug')('abibao:domain:query')
   };
   var plugins = ['models', 'queries/system', 'commands/system', 'events/system', 'listeners/system', 'queries', 'commands', 'events', 'listeners'];
@@ -112,10 +114,12 @@ module.exports.domain = function() {
 
 // logger to logstash
 /*var logger_console = bunyan.createLogger({
+  name: "abibao-gateway",
+  level: 'debug',
   streams: [{
     type: "raw",
     stream: require('bunyan-logstash').createStream({
-      host: '127.0.0.1',
+      host: '94.23.215.61',
       port: 5000
     })
   }]

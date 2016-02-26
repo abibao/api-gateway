@@ -20,7 +20,8 @@ Services.start_domain(function(err) {
   Services.start_server(function(err) {
     if (err) return server.logger.fatal(err);
     // start listeners
-    // domain.EntitiesListener();
+    domain.AdministratorsListenerChanged();
+    domain.EntitiesListenerChanged();
     // start sockets
     Services.start_io(domain);
     // finals injections

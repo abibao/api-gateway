@@ -16,14 +16,14 @@ module.exports = function(payload) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.debug.query('');
+      self.debug.command('');
       var model = new self.{{JS_MODEL_NAME}}(payload);
       model.id = new ObjectId().toString();
       model.createdAt = Date.now();
       model.save().then(function(created) {
         delete created.id;
         delete created.company;
-        self.debug.query(CURRENT_NAME, quid);
+        self.debug.command(CURRENT_NAME, quid);
         resolve(created);
       })
       .catch(function(error) {

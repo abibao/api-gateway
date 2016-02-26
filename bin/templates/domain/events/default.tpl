@@ -7,12 +7,6 @@ module.exports = function(data) {
 
   var self = this;
   
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
-
-  } catch (e) {
-    
-  }
+  self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
 
 };

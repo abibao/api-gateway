@@ -6,13 +6,7 @@ var CURRENT_NAME = '{{JS_EVENT_NAME}}';
 module.exports = function(current, old) {
 
   var self = this;
-  
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
 
-  } catch (e) {
-    
-  }
+  self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
 
 };
