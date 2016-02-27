@@ -7,8 +7,12 @@ var crypto = require("crypto");
 var Cryptr = require("cryptr"),
 cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
 
-function schema(type, r) {
-  return {
+module.exports = function(thinky) {
+  
+  var type = thinky.type;
+  var r = thinky.r;
+  
+  var AdministratorModel = thinky.createModel("administrators", {
     // virtuals
     urn: type.virtual().default(function() {
       return (this.id) ? "urn:abibao:database:administrator:"+cryptr.encrypt(this.id) : null;
@@ -22,16 +26,11 @@ function schema(type, r) {
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())
-  };
-}
-
-module.exports = function(thinky) {
-
-  var AdministratorModel = thinky.createModel("administrators", schema(thinky.type, thinky.r)); 
+  });
   
   AdministratorModel.pre("save", function(next) {
     var data = this;
-    data.modifiedAt = thinky.r.now();
+    data.modifiedAt = r.now();
     // salt exists ?
     if (data.salt) return next();
     data.salt = this.makeSalt();
