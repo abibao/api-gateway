@@ -1,8 +1,8 @@
 "use strict";
 
 var Promise = require("bluebird");
+var uuid = require("node-uuid");
 
-var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "AdministratorLoginWithCredentialsCommand";
 
 module.exports = function(payload) {
@@ -11,6 +11,7 @@ module.exports = function(payload) {
   
   return new Promise(function(resolve, reject) {
     try {
+      var quid = uuid.v1();
       self.administratorFilterQuery({email:payload.email}).then(function(administrators) {
         if (administrators.length===0) throw Error("User not found");
         if (administrators.length>1) throw Error("Too many emails, contact an administrator");
@@ -18,7 +19,7 @@ module.exports = function(payload) {
         if (administrator.authenticate(payload.password)) {
           // all done then reply token
           self.administratorCreateAuthTokenCommand(administrator.urn).then(function(token) {
-            //self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+            self.debug.command(CURRENT_NAME, quid);
             resolve({token:token});
           })
           .catch(function(error) {

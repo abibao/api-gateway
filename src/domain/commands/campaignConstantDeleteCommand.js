@@ -1,31 +1,32 @@
 "use strict";
 
-var CURRENT_ACTION = "Command";
+var uuid = require("node-uuid");
+
 var CURRENT_NAME = "CampaignConstantDeleteCommand";
 
-module.exports = function(params, callback) {
+module.exports = function(params) {
 
   var self = this;
   
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
-    
-    self.SystemReadDataQuery(self.CampaignModel, params.urn).then(function(campaign) {
-      if ( campaign.constants===undefined ) campaign.constants = {};
-      delete campaign.constants[params.label];
-      return self.SystemValidateDataCommand(campaign).then(function() {
-        return self.SystemSaveDataCommand(campaign).then(function(created) {
-          callback(null, created);
+  return new Promise(function(resolve, reject) {
+    try {
+      var quid = uuid.v1();
+      self.SystemReadDataQuery(self.CampaignModel, params.urn).then(function(campaign) {
+        if ( campaign.constants===undefined ) campaign.constants = {};
+        delete campaign.constants[params.label];
+        return self.SystemValidateDataCommand(campaign).then(function() {
+          return self.SystemSaveDataCommand(campaign).then(function(created) {
+            self.debug.command(CURRENT_NAME, quid);
+            resolve(created);
+          });
         });
+      })
+      .catch(function(error) {
+        reject(error);
       });
-    })
-    .catch(function(error) {
-      callback(error, null);
-    });
-
-  } catch (e) {
-    callback(e, null);
-  }
+    } catch (e) {
+      reject(e);
+    }
+  });
   
 };
