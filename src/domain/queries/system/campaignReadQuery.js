@@ -11,7 +11,6 @@ module.exports = function(urn, callback) {
   
   return new Promise(function(resolve, reject) {
     var quid = uuid.v1();
-    self.debug.query("");
     try {
       self.CampaignModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         delete model.id;

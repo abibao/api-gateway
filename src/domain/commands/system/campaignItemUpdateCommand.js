@@ -1,34 +1,29 @@
 "use strict";
 
 var Promise = require("bluebird");
+var uuid = require("node-uuid");
 
-var CURRENT_ACTION = 'Command';
-var CURRENT_NAME = 'CampaignItemUpdateCommand';
+var CURRENT_NAME = "CampaignItemUpdateCommand";
 
 module.exports = function(payload) {
 
   var self = this;
-  var time_start = new Date();
-  var time_end;
   
   return new Promise(function(resolve, reject) {
     try {
+      var quid = uuid.v1();
       self.CampaignItemModel.get( self.getIDfromURN(payload.urn) ).run().then(function(model) {
         return model.merge(payload).save().then(function(updated) {
           delete updated.id;
           delete updated.company;
-          time_end = new Date();
-          self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+          self.debug.command(CURRENT_NAME, quid);
           resolve(updated);
         });
       })
       .catch(function(error) {
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
         reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
       reject(e);
     }
   });

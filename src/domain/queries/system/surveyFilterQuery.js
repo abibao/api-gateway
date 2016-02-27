@@ -4,7 +4,6 @@ var Promise = require("bluebird");
 var _ = require("lodash");
 var uuid = require("node-uuid");
 
-var CURRENT_ACTION = "Query";
 var CURRENT_NAME = "SurveyFilterQuery";
 
 module.exports = function(filters) {
@@ -14,7 +13,6 @@ module.exports = function(filters) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.debug.query("");
       self.SurveyModel.filter(filters).run().then(function(models) {
         _.map(models, function(model) {
           delete model.id;

@@ -1,6 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = "Listener";
+var uuid = require("node-uuid");
+
 var CURRENT_NAME = "SurveysListenerChanged";
 
 module.exports = function() {
@@ -9,7 +10,8 @@ module.exports = function() {
   
   try {
     
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
+    var quid = uuid.v1();
+    self.debug.query(CURRENT_NAME, quid);
     
     self.SurveyModel.changes().then(function(feed) {
       feed.each(function(error, doc) {

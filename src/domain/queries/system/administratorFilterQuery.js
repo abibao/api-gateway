@@ -13,7 +13,6 @@ module.exports = function(filters) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.debug.query("");
       self.AdministratorModel.filter(filters).run().then(function(models) {
         _.map(models, function(model) {
           delete model.id;

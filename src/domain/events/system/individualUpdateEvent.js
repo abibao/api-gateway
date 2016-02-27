@@ -1,12 +1,14 @@
 "use strict";
 
-var CURRENT_ACTION = "Event";
+var uuid = require("node-uuid");
+
 var CURRENT_NAME = "IndividualUpdateEvent";
 
 module.exports = function(data) {
 
   var self = this;
   
-  self.logger.debug(CURRENT_ACTION, CURRENT_NAME);
+  var quid = uuid.v1();
+  self.debug.query(CURRENT_NAME, quid, data);
 
 };
