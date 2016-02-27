@@ -11,19 +11,19 @@ module.exports = function(thinky) {
   var SurveyModel = thinky.createModel("surveys", {
     // virtuals
     urn: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:survey:'+cryptr.encrypt(this.id);
+      return ( this.id===undefined)  ? null : "urn:abibao:survey:"+cryptr.encrypt(this.id);
     }),
     urnCampaign: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:campaign:'+cryptr.encrypt(this.campaign);
+      return ( this.id===undefined)  ? null : "urn:abibao:campaign:"+cryptr.encrypt(this.campaign);
     }),
     urnCompany: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:entity:'+cryptr.encrypt(this.company);
+      return ( this.id===undefined)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.company);
     }),
     urnCharity: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:entity:'+cryptr.encrypt(this.charity);
+      return ( this.id===undefined)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.charity);
     }),
     urnIndividual: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:individual:'+cryptr.encrypt(this.individual);
+      return ( this.id===undefined)  ? null : "urn:abibao:individual:"+cryptr.encrypt(this.individual);
     }),
     // linked
     campaign: type.string().required(),
@@ -39,7 +39,7 @@ module.exports = function(thinky) {
     modifiedAt: type.date().required().default(r.now())
   }); 
   
-  SurveyModel.pre('save', function(next) {
+  SurveyModel.pre("save", function(next) {
     var data = this;
     data.modifiedAt = r.now();
     next();

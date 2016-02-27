@@ -1,6 +1,6 @@
 "use strict";
 
-var crypto = require('crypto');
+var crypto = require("crypto");
 var Cryptr = require("cryptr"),
 cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
 
@@ -12,11 +12,11 @@ module.exports = function(thinky) {
   var AdministratorModel = thinky.createModel("administrators", {
     // virtuals
     urn: type.virtual().default(function() {
-      return (this.id) ? 'urn:abibao:database:administrator:'+cryptr.encrypt(this.id) : null;
+      return (this.id) ? "urn:abibao:database:administrator:"+cryptr.encrypt(this.id) : null;
     }),
     // fields
     email: type.string().email().required(),
-    scope: type.string().default('administrator'),
+    scope: type.string().default("administrator"),
     // calculated
     hashedPassword: type.string(),
     salt: type.string(),
@@ -25,7 +25,7 @@ module.exports = function(thinky) {
     modifiedAt: type.date().required().default(r.now())
   }); 
   
-  AdministratorModel.pre('save', function(next) {
+  AdministratorModel.pre("save", function(next) {
     var data = this;
     data.modifiedAt = r.now();
     // salt exists ?
@@ -41,13 +41,13 @@ module.exports = function(thinky) {
   });
   
   AdministratorModel.define("makeSalt", function() {
-    return crypto.randomBytes(16).toString('base64');
+    return crypto.randomBytes(16).toString("base64");
   });
   
   AdministratorModel.define("encryptPassword", function(password) {
-    if (!password || !this.salt) return '';
-    var salt = new Buffer(this.salt, 'base64');
-    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+    if (!password || !this.salt) return "";
+    var salt = new Buffer(this.salt, "base64");
+    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString("base64");
   });
   
   return AdministratorModel;

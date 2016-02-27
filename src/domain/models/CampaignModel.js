@@ -11,16 +11,16 @@ module.exports = function(thinky) {
   var CampaignModel = thinky.createModel("campaigns", {
     // virtuals
     urn: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:campaign:'+cryptr.encrypt(this.id);
+      return ( this.id===undefined)  ? null : "urn:abibao:campaign:"+cryptr.encrypt(this.id);
     }),
     urnCompany: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:entity:'+cryptr.encrypt(this.company);
+      return ( this.id===undefined)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.company);
     }),
     // fields
     name: type.string().required(),
     description: type.string(),
     price: type.number().min(0).required(),
-    currency: type.string().enum(['EUR']).required(), // ISO 4217 : https://fr.wikipedia.org/wiki/ISO_4217
+    currency: type.string().enum(["EUR"]).required(), // ISO 4217 : https://fr.wikipedia.org/wiki/ISO_4217
     constants: type.object(),
     // linked
     company: type.string().required(), // entité de type "company" qui fournit le sondage
@@ -30,7 +30,7 @@ module.exports = function(thinky) {
     modifiedAt: type.date().required().default(r.now())
   }); 
   
-  CampaignModel.pre('save', function(next) {
+  CampaignModel.pre("save", function(next) {
     var data = this;
     data.modifiedAt = r.now();
     next();

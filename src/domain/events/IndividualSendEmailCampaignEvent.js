@@ -2,8 +2,8 @@
 
 var Promise = require("bluebird");
 
-var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'IndividualSendEmailCampaignEvent';
+var CURRENT_ACTION = "Event";
+var CURRENT_NAME = "IndividualSendEmailCampaignEvent";
 
 module.exports = function(data) {
   
@@ -15,17 +15,17 @@ module.exports = function(data) {
     try {
       self.IndividualSendEmailCampaignCommand(data).then(function() {
         time_end = new Date();
-        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
         resolve();
       })
       .catch(function(error) {
         time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
         reject(error);
       });
     } catch (e) {
       time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, '('+(time_end-time_start)+'ms)');
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
       reject(e);
     }
   });

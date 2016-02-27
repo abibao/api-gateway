@@ -34,7 +34,7 @@
                     }
 
                     {{#if authorization.defaultValue}}
-                        $('#input_apiKey').val("{{authorization.defaultValue}}");
+                        $("#input_apiKey").val("{{authorization.defaultValue}}");
                         addApiKeyAuthorization();
                     {{/if}}
 
@@ -42,7 +42,7 @@
                       window.SwaggerTranslator.translate();
                     }
 
-                    $('pre code').each(function(i, e) {
+                    $("pre code").each(function(i, e) {
                         hljs.highlightBlock(e)
                     });
                 },
@@ -59,25 +59,25 @@
 
             {{#if authorization}}
                 var addApiKeyAuthorization = function() {
-                    var key = $('#input_apiKey:first').val();
+                    var key = $("#input_apiKey:first").val();
 
                     if (key && key.trim() != "") {
-                        var field = '{{authorization.field}}';
-                        var scope = '{{authorization.scope}}';
-                        key = {{#if authorization.valuePrefix}}'{{authorization.valuePrefix}}' + {{/if}} key;
+                        var field = "{{authorization.field}}";
+                        var scope = "{{authorization.scope}}";
+                        key = {{#if authorization.valuePrefix}}"{{authorization.valuePrefix}}" + {{/if}} key;
                         window.swaggerUi.api.clientAuthorizations.add("api_key", new SwaggerClient.ApiKeyAuthorization(field, key, scope));
                     } else {
                         window.swaggerUi.api.clientAuthorizations.remove("api_key");
                     }
                 };
 
-                $('#input_apiKey').change(addApiKeyAuthorization);
+                $("#input_apiKey").change(addApiKeyAuthorization);
             {{/if}}
 
             window.swaggerUi.load();
 
             function log() {
-                if ('console' in window) {
+                if ("console" in window) {
                     console.log.apply(console, arguments);
                 }
             }

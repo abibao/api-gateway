@@ -1,6 +1,6 @@
 "use strict";
 
-var Blipp = require('blipp');
+var Blipp = require("blipp");
 
 var options = {
   showAuth: false,
@@ -14,7 +14,7 @@ var BlippProvision = function(server, callback) {
   }, function (err) {
     
     if (err) return callback(err);
-    // server.logger.info('blipp registered provision');
+    // server.logger.info("blipp registered provision");
     
     callback();
     

@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Query';
-var CURRENT_NAME = 'IndividualsCountQuery';
+var CURRENT_ACTION = "Query";
+var CURRENT_NAME = "IndividualsCountQuery";
 
 module.exports = function(callback) {
   
@@ -9,7 +9,7 @@ module.exports = function(callback) {
 
   try {
 
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
     
     self.IndividualModel.count().execute().then(function(total) {
       callback(null, {count: total});

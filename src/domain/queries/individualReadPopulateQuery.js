@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Query';
-var CURRENT_NAME = 'IndividualReadPopulateQuery';
+var CURRENT_ACTION = "Query";
+var CURRENT_NAME = "IndividualReadPopulateQuery";
  
 module.exports = function(id, callback) {
   
@@ -9,7 +9,7 @@ module.exports = function(id, callback) {
   
   try {
     
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute');
+    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
     
     self.SystemReadDataQuery(self.IndividualModel, id).then(function(individual) {
       return self.SystemFindDataQuery(self.SurveyModel, {individual:id}).then(function(surveys) {

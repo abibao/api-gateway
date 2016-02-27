@@ -11,7 +11,7 @@ module.exports = function(thinky) {
   var CampaignItemModel = thinky.createModel("campaigns_items", {
     // virtuals
     urn: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : 'urn:abibao:campaign:item:'+cryptr.encrypt(this.id);
+      return ( this.id===undefined)  ? null : "urn:abibao:campaign:item:"+cryptr.encrypt(this.id);
     }),
     // fields
     optional: type.boolean().required().default(false),
@@ -26,7 +26,7 @@ module.exports = function(thinky) {
     modifiedAt: type.date().required().default(r.now())
   }); 
   
-  CampaignItemModel.pre('save', function(next) {
+  CampaignItemModel.pre("save", function(next) {
     var data = this;
     data.modifiedAt = r.now();
     next();
