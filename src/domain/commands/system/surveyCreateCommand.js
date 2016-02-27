@@ -7,7 +7,7 @@ var mongoose = require("mongoose");
 var ObjectId = mongoose.Types.ObjectId;
 
 var CURRENT_ACTION = "Command";
-var CURRENT_NAME = "{{JS_COMMAND_NAME}}";
+var CURRENT_NAME = "SurveyCreateCommand";
 
 module.exports = function(payload) {
 
@@ -17,7 +17,7 @@ module.exports = function(payload) {
     try {
       var quid = uuid.v1();
       self.debug.command("");
-      var model = new self.{{JS_MODEL_NAME}}(payload);
+      var model = new self.SurveyModel(payload);
       model.id = new ObjectId().toString();
       model.createdAt = Date.now();
       model.save().then(function(created) {

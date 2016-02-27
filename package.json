@@ -3,6 +3,7 @@
   "version": "1.4.5",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
+    "auto-generate": "./bin/abibao generate",
     "test": "grunt test",
     "start": "DEBUG=abibao:* node . | bunyan"
   },
@@ -31,7 +32,7 @@
     "bluebird": "3.3.1",
     "boom": "3.1.2",
     "bunyan": "1.7.0",
-    "bunyan-logstash": "0.3.4",
+    "bunyan-lumberjack": "1.0.4",
     "bunyan-slack": "0.0.10",
     "crumb": "6.0.0",
     "crypto": "0.0.3",

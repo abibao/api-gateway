@@ -3,9 +3,11 @@
 var Hapi = require('hapi');
 var Routes = require('./server/routes');
 
+var fs = require('fs');
 var _ = require('lodash');
 var async = require('async');
 var bunyan = require('bunyan');
+var bunyanLumberjackStream = require('bunyan-lumberjack');
 
 var options = {
   host: process.env.ABIBAO_API_GATEWAY_EXPOSE_IP,
@@ -112,17 +114,27 @@ module.exports.domain = function() {
   return domain;
 };
 
-// logger to logstash
-/*var logger_console = bunyan.createLogger({
-  name: "abibao-gateway",
-  level: 'debug',
-  streams: [{
-    type: "raw",
-    stream: require('bunyan-logstash').createStream({
-      host: '94.23.215.61',
-      port: 5000
-    })
-  }]
+/*var outStream = bunyanLumberjackStream({
+  tlsOptions: {
+    host: '94.23.215.61',
+    port: 5000,
+    ca: [fs.readFileSync('/etc/logstash/ssl/lumberjack.crt', {encoding: 'utf-8'})]
+  }
+});
+
+outStream.on('connect', function() {
+    console.log("CONNECTED!");
+});
+outStream.on('dropped', function(count) {
+    console.log("ERROR: Dropped " + count + " messages!");
+});
+outStream.on('disconnect', function(err) {
+    console.log("WARN : Disconnected", err);
+});
+
+var logger_console = bunyan.createLogger({
+    name: "abibao-api-gateway",
+    streams: [{level: 'info', type: 'raw', stream: outStream}]
 });*/
 
 // logger to console (deve mode)

@@ -4,7 +4,7 @@ var Promise = require("bluebird");
 var uuid = require("node-uuid");
 
 var CURRENT_ACTION = "Command";
-var CURRENT_NAME = "{{JS_COMMAND_NAME}}";
+var CURRENT_NAME = "IndividualDeleteCommand";
 
 module.exports = function(urn) {
 
@@ -14,7 +14,7 @@ module.exports = function(urn) {
     try {
       var quid = uuid.v1();
       self.debug.command("");
-      self.{{JS_MODEL_NAME}}.get( self.getIDfromURN(urn) ).run().then(function(model) {
+      self.IndividualModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         return model.delete().then(function() {
           self.debug.command(CURRENT_NAME, quid);
           resolve({deleted:true});
