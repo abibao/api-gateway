@@ -5,6 +5,7 @@
 
 // declare external libraries
 var clc = require("cli-color");
+var _ = require("lodash");
 
 // declare project libraries
 // ...
@@ -15,13 +16,13 @@ var error = clc.red.bold,
     notice = clc.blue.bold;
 
 module.exports = {
-  error: function(message, options) {
-    ( options===undefined) ? console.log(error(message)) : console.log(error(message)+options);
+  error(message, options) {
+    ( _.isUndefined(options) ) ? console.log(error(message)) : console.log(error(message)+options);
   },
-  warning: function(message, options) {
-    ( options===undefined ) ? console.log(warning(message)) : console.log(warning(message)+options);
+  warning(message, options) {
+    ( _.isUndefined(options) ) ? console.log(warning(message)) : console.log(warning(message)+options);
   },
-  notice: function(message, options) {
-    ( options===undefined ) ? console.log(notice(message)) : console.log(notice(message)+options);
+  notice(message, options) {
+    ( _.isUndefined(options) ) ? console.log(notice(message)) : console.log(notice(message)+options);
   }
 };

@@ -4,6 +4,9 @@ var Promise = require("bluebird");
 var Iron = require("iron");
 var Base64 = require("base64-url");
 
+var nconf = require("nconf");
+nconf.argv().env();
+
 var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "IndividualAssignCampaignCommand";
 
@@ -16,7 +19,7 @@ module.exports = function(sealed) {
   return new Promise(function(resolve, reject) {
     try {
       sealed = Base64.decode(sealed);
-      Iron.unseal(sealed, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, Iron.defaults, function (err, unsealed) {
+      Iron.unseal(sealed, nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"), Iron.defaults, function (err, unsealed) {
         // control
         if (err) return reject(err);
         if (unsealed.individual===undefined) return reject("Individual is undefined.");

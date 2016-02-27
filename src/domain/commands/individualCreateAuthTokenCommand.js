@@ -3,6 +3,9 @@
 var Promise = require("bluebird");
 var JWT = require("jsonwebtoken");
 
+var nconf = require("nconf");
+nconf.argv().env();
+
 var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "IndividualCreateAuthTokenCommand";
 
@@ -20,7 +23,7 @@ module.exports = function(urn) {
           urn: individual.urn, 
           scope: individual.scope
         };
-        var token = JWT.sign(credentials, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, { expiresIn: 60*60*24 });
+        var token = JWT.sign(credentials, nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"), { expiresIn: 60*60*24 });
         timeEnd = new Date();
         self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         resolve(token);
