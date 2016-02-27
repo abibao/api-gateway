@@ -5,7 +5,7 @@ var uuid = require("node-uuid");
 
 var CURRENT_NAME = "AdministratorReadQuery";
 
-module.exports = function(urn, callback) {
+module.exports = function(urn) {
   
   var self = this;
   

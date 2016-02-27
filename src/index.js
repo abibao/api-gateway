@@ -18,15 +18,15 @@ var server = Services.server();
 var domain = Services.domain();
 var io = Services.io();
 
-Services.start_domain(function(err) {
+Services.startDomain(function(err) {
   if (err) return server.logger.fatal(err);
-  Services.start_server(function(err) {
+  Services.startServer(function(err) {
     if (err) return server.logger.fatal(err);
     // start listeners
     domain.administratorsListenerChanged();
     domain.entitiesListenerChanged();
     // start sockets
-    Services.start_io(domain);
+    Services.startIO(domain);
     // finals injections
     server.domain = domain;
     io.domain = domain;

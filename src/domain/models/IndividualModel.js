@@ -1,3 +1,4 @@
+/* jshint onevar: false */
 "use strict";
 
 var _ = require("lodash");
@@ -52,7 +53,9 @@ module.exports = function(thinky) {
   });
   
   IndividualModel.define("encryptPassword", function(password) {
-    if (!password || !this.salt) return "";
+    if (!password || !this.salt) {
+      return "";
+    }
     var salt = new Buffer(this.salt, "base64");
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString("base64");
   });
