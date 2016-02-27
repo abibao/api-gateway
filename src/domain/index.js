@@ -1,11 +1,11 @@
 "use strict";
 
-var debug = require('debug')('abibao:domain:initializer');
-var async = require('async');
-var path = require('path');
-var dir = require('node-dir');
+var debug = require("debug")("abibao:domain:initializer");
+var async = require("async");
+var path = require("path");
+var dir = require("node-dir");
 
-var _ = require('lodash');
+var _ = require("lodash");
 var Cryptr = require("cryptr");
 var cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
 
@@ -15,7 +15,7 @@ var options = {
   db: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_DB,
   authKey: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY
 };
-var thinky = require('thinky')(options);
+var thinky = require("thinky")(options);
 
 module.exports = {
   
@@ -28,25 +28,25 @@ module.exports = {
   Query: thinky.Query,
   r: thinky.r,
   
-  ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
-  ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION: 'email_verification',
-  ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH: 'campaign_publish',
-  ABIBAO_CONST_ENTITY_TYPE_CHARITY: 'charity',
-  ABIBAO_CONST_ENTITY_TYPE_COMPANY: 'company',
-  ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR: 'administrator',
-  ABIBAO_CONST_USER_SCOPE_INDIVIDUAL: 'individual',
+  ABIBAO_CONST_TOKEN_AUTH_ME: "auth_me",
+  ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION: "email_verification",
+  ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH: "campaign_publish",
+  ABIBAO_CONST_ENTITY_TYPE_CHARITY: "charity",
+  ABIBAO_CONST_ENTITY_TYPE_COMPANY: "company",
+  ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR: "administrator",
+  ABIBAO_CONST_USER_SCOPE_INDIVIDUAL: "individual",
   
   getIDfromURN: function(urn) {
-    return cryptr.decrypt(_.last(_.split(urn, ':')));
+    return cryptr.decrypt(_.last(_.split(urn, ":")));
   },
   
   getURNfromID: function(id, model) {
-    return 'urn:abibao:database:'+model+':'+cryptr.encrypt(id);
+    return "urn:abibao:database:"+model+":"+cryptr.encrypt(id);
   },
   
   injector: function(type, callback) {
     var self = this;
-    debug('['+type+']');
+    debug("["+type+"]");
     // custom
     dir.readFiles(path.resolve(__dirname, type), 
       {
@@ -60,12 +60,12 @@ module.exports = {
       function(err, files) {
         if (err) return callback(err, null);
         async.mapSeries(files, function(item, next) {
-          var name = path.basename(item, '.js');
-          debug('>>> ['+name+'] has just being injected');
-          if (type==='models') {
-            self[name] = require('./'+type+'/'+name)(self.thinky);
+          var name = path.basename(item, ".js");
+          debug(">>> ["+name+"] has just being injected");
+          if (type==="models") {
+            self[name] = require("./"+type+"/"+name)(self.thinky);
           } else {
-            self[name] = require('./'+type+'/'+name); // Promise.promisify()
+            self[name] = require("./"+type+"/"+name);
           }
           next(null, true);
         }, function(error, results) {
