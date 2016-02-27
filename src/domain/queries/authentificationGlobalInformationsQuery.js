@@ -4,7 +4,6 @@ var Promise = require("bluebird");
 var _ = require("lodash");
 var uuid = require("node-uuid");
 
-var CURRENT_ACTION = "Query";
 var CURRENT_NAME = "AuthentificationGlobalInformationsQuery";
  
 module.exports = function(credentials) {
