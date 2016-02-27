@@ -10,13 +10,13 @@ nconf.argv().env();
 
 var _ = require("lodash");
 var Cryptr = require("cryptr");
-var cryptr = new Cryptr(nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'));
+var cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
 
 var options = {
-  host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
-  port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
-  db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
-  authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY')
+  host: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST"),
+  port: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT"),
+  db: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_DB"),
+  authKey: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY")
 };
 var thinky = require("thinky")(options);
 
@@ -24,7 +24,6 @@ module.exports = {
   
   // injected
   logger: null,
-  logger_slack: null,
   io: null,
   thinky: thinky,
   ThinkyErrors: thinky.Errors,
@@ -39,15 +38,15 @@ module.exports = {
   ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR: "administrator",
   ABIBAO_CONST_USER_SCOPE_INDIVIDUAL: "individual",
   
-  getIDfromURN: function(urn) {
+  getIDfromURN(urn) {
     return cryptr.decrypt(_.last(_.split(urn, ":")));
   },
   
-  getURNfromID: function(id, model) {
+  getURNfromID(id, model) {
     return "urn:abibao:database:"+model+":"+cryptr.encrypt(id);
   },
   
-  injector: function(type, callback) {
+  injector(type, callback) {
     var self = this;
     debug("["+type+"]");
     // custom
@@ -57,11 +56,15 @@ module.exports = {
         match: /.js/
       },
       function(err, content, next) {
-        if (err) return callback(err, null);
+        if (err) {
+          return callback(err, null);
+        }
         next();
       },
       function(err, files) {
-        if (err) return callback(err, null);
+        if (err) { 
+          return callback(err, null); 
+        }
         async.mapSeries(files, function(item, next) {
           var name = path.basename(item, ".js");
           debug(">>> ["+name+"] has just being injected");
