@@ -1,19 +1,19 @@
-/* jshint onevar: false */
 "use strict";
 
-var nconf = require("nconf");
+var nconf = require("nconf"),
+    crypto = require("crypto"),
+    Cryptr = require("cryptr");
+    
+var cryptr, type, r, AdministratorModel;
 nconf.argv().env();
-
-var crypto = require("crypto");
-var Cryptr = require("cryptr"),
-cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
 
 module.exports = function(thinky) {
   
-  var type = thinky.type;
-  var r = thinky.r;
+  type = thinky.type;
+  r = thinky.r;
+  cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
   
-  var AdministratorModel = thinky.createModel("administrators", {
+  AdministratorModel = thinky.createModel("administrators", {
     // virtuals
     urn: type.virtual().default(function() {
       return (this.id) ? "urn:abibao:database:administrator:"+cryptr.encrypt(this.id) : null;

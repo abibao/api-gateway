@@ -1,4 +1,3 @@
-/* jshint onevar: false */
 "use strict";
 
 var _ = require("lodash");
