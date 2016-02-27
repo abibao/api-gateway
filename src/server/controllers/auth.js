@@ -3,6 +3,10 @@
 var Boom = require("boom");
 var Joi = require("joi");
 
+/**
+ * promise : progress
+ * tests : false
+ **/
 exports.surveys_answers = {
   auth: {
     strategy: "jwt",
@@ -26,7 +30,7 @@ exports.surveys_answers = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.survey = request.params.urn;
-    request.server.domain.IndividualSurveyAnswerCommand(request.auth.credentials, request.payload).then(function(result) {
+    request.server.domain.individualSurveyAnswerCommand(request.auth.credentials, request.payload).then(function(result) {
       reply(result);
     })
     .catch(function(error) {

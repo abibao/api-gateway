@@ -9,8 +9,8 @@ var CURRENT_NAME = "IndividualCreateAuthTokenCommand";
 module.exports = function(urn) {
   
   var self = this;
-  var time_start = new Date();
-  var time_end;
+  var timeStart = new Date();
+  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
@@ -21,18 +21,18 @@ module.exports = function(urn) {
           scope: individual.scope
         };
         var token = JWT.sign(credentials, process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY, { expiresIn: 60*60*24 });
-        time_end = new Date();
-        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+        timeEnd = new Date();
+        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         resolve(token);
       })
       .catch(function(error) {
-        time_end = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+        timeEnd = new Date();
+          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
           reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+      timeEnd = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

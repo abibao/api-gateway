@@ -8,24 +8,24 @@ var CURRENT_NAME = "IndividualSendEmailCampaignEvent";
 module.exports = function(data) {
   
   var self = this;
-  var time_start = new Date();
-  var time_end;
+  var timeStart = new Date();
+  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
       self.IndividualSendEmailCampaignCommand(data).then(function() {
-        time_end = new Date();
-        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+        timeEnd = new Date();
+        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         resolve();
       })
       .catch(function(error) {
-        time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+        timeEnd = new Date();
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+      timeEnd = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

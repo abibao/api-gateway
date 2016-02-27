@@ -9,8 +9,8 @@ var CURRENT_NAME = "CampaignPublishCommand";
 module.exports = function(payload, callback) {
   
   var self = this;
-  var time_start = new Date();
-  var time_end;
+  var timeStart = new Date();
+  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
@@ -35,21 +35,21 @@ module.exports = function(payload, callback) {
                 next();
               }
             }, function(err, results) {
-              time_end = new Date();
-              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+              timeEnd = new Date();
+              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
               resolve(updated);
             });
           });
         });
       })
       .catch(function(error) {
-        time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+        timeEnd = new Date();
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+      timeEnd = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

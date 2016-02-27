@@ -8,8 +8,8 @@ var CURRENT_NAME = "IndividualLoginWithCredentialsCommand";
 module.exports = function(payload) {
 
   var self = this;
-  var time_start = new Date();
-  var time_end;
+  var timeStart = new Date();
+  var timeEnd;
 
   return new Promise(function(resolve, reject) {
     try {
@@ -20,29 +20,29 @@ module.exports = function(payload) {
         if (individual.authenticate(payload.password)) {
           // all done then reply token
           self.individualCreateAuthTokenCommand(individual.urn).then(function(token) {
-            time_end = new Date();
-            self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+            timeEnd = new Date();
+            self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
             resolve({token:token});
           })
           .catch(function(error) {
-            time_end = new Date();
-            self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+            timeEnd = new Date();
+            self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
             reject(error);
           });
         } else {
-          time_end = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+          timeEnd = new Date();
+          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
           reject("User not authenticate");
         }
       })
       .catch(function(error) {
-        time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+        timeEnd = new Date();
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+      timeEnd = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

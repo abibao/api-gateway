@@ -10,8 +10,8 @@ var CURRENT_NAME = "IndividualAssignCampaignCommand";
 module.exports = function(sealed) {
 
   var self = this;
-  var time_start = new Date();
-  var time_end;
+  var timeStart = new Date();
+  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
@@ -39,8 +39,8 @@ module.exports = function(sealed) {
                 delete survey.company;
                 delete survey.charity;
                 delete survey.individual;
-                time_end = new Date();
-                self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+                timeEnd = new Date();
+                self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
                 resolve(survey);
               });
             });
@@ -52,21 +52,21 @@ module.exports = function(sealed) {
               delete survey.company;
               delete survey.charity;
               delete survey.individual;
-              time_end = new Date();
-              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+              timeEnd = new Date();
+              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
               resolve(survey);
             });
           }
         })
         .catch(function(error) {
-          time_end = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+          timeEnd = new Date();
+          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
           reject(error);
         });
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+      timeEnd = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

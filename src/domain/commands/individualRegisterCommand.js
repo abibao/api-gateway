@@ -8,8 +8,8 @@ var CURRENT_NAME = "IndividualRegisterCommand";
 module.exports = function(payload) {
 
   var self = this;
-  var time_start = new Date();
-  var time_end;
+  var timeStart = new Date();
+  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
@@ -23,19 +23,19 @@ module.exports = function(payload) {
         if (individuals.length>0) throw Error("Email already exists in database");
         // create individual
         self.individualCreateCommand(payload).then(function(individual) {
-          time_end = new Date();
-          self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+          timeEnd = new Date();
+          self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
           resolve(individual);
         });
       })
       .catch(function(error) {
-        time_end = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+        timeEnd = new Date();
+        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         reject(error);
       });
     } catch (e) {
-      time_end = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(time_end-time_start)+"ms)");
+      timeEnd = new Date();
+      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });
