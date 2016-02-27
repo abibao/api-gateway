@@ -17,11 +17,11 @@ module.exports = function() {
       feed.each(function(error, doc) {
         if (error) return self.logger.error(self.action, self.name, error);
         if (doc.isSaved() === false) {
-          self.SurveyDeleteEvent(doc);
+          self.surveyDeleteEvent(doc);
         } else if (doc.getOldValue() === null) {
-          self.SurveyCreateEvent(doc);
+          self.surveyCreateEvent(doc);
         } else {
-          self.SurveyUpdateEvent(doc, doc.getOldValue());
+          self.surveyUpdateEvent(doc, doc.getOldValue());
         }
       });
     });

@@ -35,7 +35,7 @@ module.exports = function(model, collection) {
     }),
     mustachePromise(normalize(resolve(__dirname,"../templates/listeners/default.tpl")), normalize(resolve(__dirname,"../../src/domain/listeners/system")), _.camelCase(collection+"ListenerChanged")+".js", { 
       JS_MODEL_NAME: model+"Model",
-      JS_EVENT_NAME: model,
+      JS_EVENT_NAME: _.camelCase(model),
       JS_LISTENER_NAME: collection+"ListenerChanged"
     }),
     mustachePromise(normalize(resolve(__dirname,"../templates/events/default.tpl")), normalize(resolve(__dirname,"../../src/domain/events/system")), _.camelCase(model+"CreateEvent")+".js", { 

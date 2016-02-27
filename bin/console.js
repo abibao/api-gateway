@@ -4,7 +4,7 @@
 // ...
 
 // declare external libraries
-var clc = require('cli-color');
+var clc = require("cli-color");
 
 // declare project libraries
 // ...
