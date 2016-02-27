@@ -13,8 +13,8 @@ var nconf = require("nconf");
 nconf.argv().env();
 
 var options = {
-  host: nconf.ABIBAO_API_GATEWAY_EXPOSE_IP,
-  port: nconf.ABIBAO_API_GATEWAY_EXPOSE_PORT,
+  host: nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
+  port: nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
   labels: ["api", "administrator"]
 };
 
@@ -152,7 +152,7 @@ var logger_console = bunyan.createLogger({
   level: "debug",
   streams: [{
     type: "rotating-file",
-    path: nconf.ABIBAO_API_GATEWAY_LOGS_FILE,
+    path: nconf.get('ABIBAO_API_GATEWAY_LOGS_FILE'),
     period: "1d",   // daily rotation
     count: 3        // keep 3 back copies
   }]

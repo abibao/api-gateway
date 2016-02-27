@@ -5,7 +5,7 @@ nconf.argv().env();
 
 var crypto = require("crypto");
 var Cryptr = require("cryptr"),
-cryptr = new Cryptr(nconf.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+cryptr = new Cryptr(nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'));
 
 module.exports = function(thinky) {
   

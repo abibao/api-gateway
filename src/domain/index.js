@@ -10,13 +10,13 @@ nconf.argv().env();
 
 var _ = require("lodash");
 var Cryptr = require("cryptr");
-var cryptr = new Cryptr(nconf.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+var cryptr = new Cryptr(nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'));
 
 var options = {
-  host: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST,
-  port: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT,
-  db: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_DB,
-  authKey: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY
+  host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
+  port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
+  db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+  authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY')
 };
 var thinky = require("thinky")(options);
 

@@ -35,5 +35,6 @@ ABIBAO_API_GATEWAY_PRODUCTION_ENABLE | Utilise un environnement de production
 
 ### Packages quality
 
+[![Codacy branch](https://img.shields.io/codacy/61e9f27af1c24bc2b9fbc78e9df6dfe0/master.svg?style=flat-square)](https://www.codacy.com/app/team_abibao/api-gateway)
 [![Dependency Status](https://david-dm.org/abibao/api-gateway.svg?style=flat-square)](https://david-dm.org/abibao/api-gateway)
 [![devDependency Status](https://david-dm.org/abibao/api-gateway/dev-status.svg?style=flat-square)](https://david-dm.org/abibao/api-gateway#info=devDependencies)
