@@ -9,6 +9,12 @@ var async = require("async");
 var bunyan = require("bunyan");
 // var bunyanLumberjackStream = require("bunyan-lumberjack");
 
+// logger :: Console
+var loggerConsole = bunyan.createLogger({
+  name: "api-gateway",
+  level: "debug"
+});
+
 var nconf = require("nconf");
 nconf.argv().env();
 
@@ -33,7 +39,7 @@ var domain = require("./domain");
 
 var Boom = require("boom");
 
-module.exports.start_io = function(domain) {
+module.exports.startIO = function(domain) {
   io.on("connection", function(socket) {
     
     // SocketConnectedEvent
@@ -51,9 +57,9 @@ module.exports.start_io = function(domain) {
     });
     
     // SystemFindDataQuery >> EntityModel
-    socket.on("urn:socket:get:/v1/entities", function(payload) {
+    socket.on("urn:socket:get:/v1/entities", function() {
       domain.logger.info("socket get /v1/entities", socket.id);
-      domain.SystemFindDataQuery(domain.EntityModel, {}).then(function(entities) {
+      domain.systemFindDataQuery(domain.EntityModel, {}).then(function(entities) {
         socket.emit("response:socket:get:/v1/entities", entities);
       })
       .catch(function(error) {
@@ -64,8 +70,8 @@ module.exports.start_io = function(domain) {
   });
 };
 
-module.exports.start_domain = function(callback) {
-  domain.logger = logger_console;
+module.exports.startDomain = function(callback) {
+  domain.logger = loggerConsole;
   domain.debug = {
     event: require("debug")("abibao:domain:event"),
     command: require("debug")("abibao:domain:command"),
@@ -76,13 +82,13 @@ module.exports.start_domain = function(callback) {
     domain.injector(item, function(error, result) {
       next(error, result);
     });
-  }, function(err, results) {
+  }, function(err) {
     callback(err);
   });
 };
 
-module.exports.start_server = function(callback) {
-  server.logger = logger_console;
+module.exports.startServer = function(callback) {
+  server.logger = loggerConsole;
   var debug = require("debug")("abibao:server:initializer");
   var plugins = ["good", "auth", "swagger", "blipp"];
   async.mapSeries(plugins, function(item, next) {
@@ -90,15 +96,21 @@ module.exports.start_server = function(callback) {
       next(null, item);
     });
   }, function(err, results) {
-    if (err) return callback(err);
+    if (err) {
+      return callback(err);
+    }
     debug("[HapiPlugins]", results);
     server.route(Routes.endpoints);
     // start
     server.start(function(err) {
-      if (err) return callback(err);
+      if (err) {
+        return callback(err);
+      }
       var debug = require("debug")("abibao:gateway:initializer");
       _.forEach(server.plugins.blipp.text().split("\n"), function(item) {
-        if (item!=="") debug(item.trim());
+        if (item!=="") {
+          debug(item.trim());
+        }
       });
       callback();
     });
@@ -135,16 +147,10 @@ outStream.on("disconnect", function(err) {
     console.log("WARN : Disconnected", err);
 });
 
-var logger_console = bunyan.createLogger({
+var loggerConsole = bunyan.createLogger({
     name: "abibao-api-gateway",
     streams: [{level: "info", type: "raw", stream: outStream}]
 });*/
-
-// logger to console (deve mode)
-var logger_console = bunyan.createLogger({
-  name: "api-gateway",
-  level: "debug"
-});
 
 // logger to console (production mode)
 /* var logger_file = bunyan.createLogger({
