@@ -1,5 +1,6 @@
 "use strict";
 
+var _ = require("lodash");
 var nconf = require("nconf");
 nconf.argv().env();
 
@@ -15,7 +16,7 @@ module.exports = function(thinky) {
   var IndividualModel = thinky.createModel("individuals", {
     // virtuals
     urn: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:individual:"+cryptr.encrypt(this.id);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:individual:"+cryptr.encrypt(this.id);
     }),
     // fields
     email: type.string().email().required(),

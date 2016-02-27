@@ -1,5 +1,6 @@
 "use strict";
 
+var _ = require("lodash");
 var nconf = require("nconf");
 nconf.argv().env();
 
@@ -14,10 +15,10 @@ module.exports = function(thinky) {
   var CampaignModel = thinky.createModel("campaigns", {
     // virtuals
     urn: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:campaign:"+cryptr.encrypt(this.id);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:campaign:"+cryptr.encrypt(this.id);
     }),
     urnCompany: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.company);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.company);
     }),
     // fields
     name: type.string().required(),

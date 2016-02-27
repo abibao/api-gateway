@@ -1,5 +1,6 @@
 "use strict";
 
+var _ = require("lodash");
 var nconf = require("nconf");
 nconf.argv().env();
 
@@ -14,19 +15,19 @@ module.exports = function(thinky) {
   var SurveyModel = thinky.createModel("surveys", {
     // virtuals
     urn: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:survey:"+cryptr.encrypt(this.id);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:survey:"+cryptr.encrypt(this.id);
     }),
     urnCampaign: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:campaign:"+cryptr.encrypt(this.campaign);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:campaign:"+cryptr.encrypt(this.campaign);
     }),
     urnCompany: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.company);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.company);
     }),
     urnCharity: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.charity);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.charity);
     }),
     urnIndividual: type.virtual().default(function() {
-      return ( this.id===undefined)  ? null : "urn:abibao:individual:"+cryptr.encrypt(this.individual);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:individual:"+cryptr.encrypt(this.individual);
     }),
     // linked
     campaign: type.string().required(),

@@ -9,7 +9,7 @@ function Facade() {
   
   self.authentified = function() {
     var ca = Cookies.get('Authentification');
-    return ca!==undefined;
+    return _.isUndefined(ca)===false;
   };
   
   self._currentState = Facade.STATE_HOMEPAGE;
