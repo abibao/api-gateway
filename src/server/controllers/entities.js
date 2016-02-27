@@ -1,7 +1,7 @@
 "use strict";
 
-var Joi = require('joi');
-var Boom = require('boom');
+var Joi = require("joi");
+var Boom = require("boom");
 
 /**
  * promise : done
@@ -9,24 +9,24 @@ var Boom = require('boom');
  **/
 exports.create = {
   auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
+    strategy: "jwt",
+    scope: ["administrator"]
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Ajoute une entité au sein de Abibao',
-  notes: 'Ajoute une entité au sein de Abibao',
+  tags: ["api", "1.3) administrator"],
+  description: "Ajoute une entité au sein de Abibao",
+  notes: "Ajoute une entité au sein de Abibao",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: "application/x-www-form-urlencoded",
   },
   validate: {
     payload: {
       name: Joi.string().required(),
-      type: Joi.string().valid(['charity', 'company']).required(),
+      type: Joi.string().valid(["charity", "company"]).required(),
       contact: Joi.string().email().required(),
       description: Joi.string()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.EntityCreateCommand(request.payload).then(function(entity) {
       reply(entity);
@@ -44,14 +44,14 @@ exports.create = {
  **/
 exports.update = {
   auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
+    strategy: "jwt",
+    scope: ["administrator"]
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Modifie une entité au sein de Abibao',
-  notes: 'Modifie une entité au sein de Abibao',
+  tags: ["api", "1.3) administrator"],
+  description: "Modifie une entité au sein de Abibao",
+  notes: "Modifie une entité au sein de Abibao",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: "application/x-www-form-urlencoded",
   },
   validate: {
     params: {
@@ -59,7 +59,7 @@ exports.update = {
     },
     payload: {
       name: Joi.string(),
-      type: Joi.string().valid(['charity', 'company']),
+      type: Joi.string().valid(["charity", "company"]),
       contact: Joi.string().email(),
       description: Joi.string(),
       picture: Joi.string(),
@@ -67,7 +67,7 @@ exports.update = {
       icon: Joi.string()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
     request.server.domain.EntityUpdateCommand(request.payload).then(function(entity) {
@@ -86,18 +86,18 @@ exports.update = {
  **/
 exports.read = {
   auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
+    strategy: "jwt",
+    scope: ["administrator"]
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Retourne une entité donnée',
-  notes: 'Retourne une entité donnée',
+  tags: ["api", "1.3) administrator"],
+  description: "Retourne une entité donnée",
+  notes: "Retourne une entité donnée",
   validate: {
     params: {
       urn: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.EntityReadQuery(request.params.urn).then(function(entity) {
       reply(entity);
@@ -115,13 +115,13 @@ exports.read = {
  **/
 exports.list = {
   auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
+    strategy: "jwt",
+    scope: ["administrator"]
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Retourne toutes les entités',
-  notes: 'Retourne toutes les entités',
-  jsonp: 'callback',
+  tags: ["api", "1.3) administrator"],
+  description: "Retourne toutes les entités",
+  notes: "Retourne toutes les entités",
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.EntityFilterQuery({}).then(function(entities) {
       reply(entities);
@@ -135,18 +135,18 @@ exports.list = {
 
 exports.campaigns_list = {
   auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
+    strategy: "jwt",
+    scope: ["administrator"]
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Retourne la liste des campagnes d\'une entité donnée',
-  notes: 'Retourne la liste des campagnes d\'une entité donnée',
+  tags: ["api", "1.3) administrator"],
+  description: "Retourne la liste des campagnes d\"une entité donnée",
+  notes: "Retourne la liste des campagnes d\"une entité donnée",
   validate: {
     params: {
       urn: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.EntityListCampaignsQuery(request.params.urn).then(function(campaigns) {
       reply(campaigns);

@@ -1,18 +1,18 @@
 "use strict";
 
-var Boom = require('boom');
-var Joi = require('joi');
+var Boom = require("boom");
+var Joi = require("joi");
 
 exports.surveys_answers = {
   auth: {
-    strategy: 'jwt',
-    scope: ['individual']
+    strategy: "jwt",
+    scope: ["individual"]
   },
-  tags: ['api', '1.2) individual'],
-  description: 'Répond à une question d\'un sondage donné',
-  notes: 'Répond à une question d\'un sondage donné',
+  tags: ["api", "1.2) individual"],
+  description: "Répond à une question d\"un sondage donné",
+  notes: "Répond à une question d\"un sondage donné",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: "application/x-www-form-urlencoded",
   },
   validate: {
     params: {
@@ -23,7 +23,7 @@ exports.surveys_answers = {
       answer: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.payload.survey = request.params.urn;
     request.server.domain.IndividualSurveyAnswerCommand(request.auth.credentials, request.payload).then(function(result) {
@@ -38,18 +38,18 @@ exports.surveys_answers = {
 
 exports.surveys_read = {
   auth: {
-    strategy: 'jwt',
-    scope: ['individual']
+    strategy: "jwt",
+    scope: ["individual"]
   },
-  tags: ['api', '1.2) individual'],
-  description: 'Retourne les données d\'un sondage', 
-  notes: 'Retourne les données d\'un sondage',
+  tags: ["api", "1.2) individual"],
+  description: "Retourne les données d\"un sondage", 
+  notes: "Retourne les données d\"un sondage",
   validate: {
     params: {
       urn: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.SurveyReadPopulateControlIndividualQuery(request.auth.credentials, request.params).then(function(survey) {
       reply(survey);
@@ -67,13 +67,13 @@ exports.surveys_read = {
  **/
 exports.global_informations = {
   auth: {
-    strategy: 'jwt',
-    scope: ['individual']
+    strategy: "jwt",
+    scope: ["individual"]
   },
-  tags: ['api', '1.2) individual'],
-  description: 'Retourne des informations rapides sur l\'utilisateur actuellement connecté', 
-  notes: 'Retourne des informations rapides sur l\'utilisateur actuellement connecté', 
-  jsonp: 'callback',
+  tags: ["api", "1.2) individual"],
+  description: "Retourne des informations rapides sur l\"utilisateur actuellement connecté", 
+  notes: "Retourne des informations rapides sur l\"utilisateur actuellement connecté", 
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.AuthentificationGlobalInformationsQuery(request.auth.credentials).then(function(user) {
       reply(user);
@@ -87,13 +87,13 @@ exports.global_informations = {
 
 /**exports.resend_verification_email = {
   auth: {
-    strategy: 'jwt',
-    scope: ['individual']
+    strategy: "jwt",
+    scope: ["individual"]
   },
-  tags: ['api', '1.2) individual'],
-  description: 'Renvoie un email de validation de compte',
-  notes: 'Renvoie un email de validation de compte',
-  jsonp: 'callback',
+  tags: ["api", "1.2) individual"],
+  description: "Renvoie un email de validation de compte",
+  notes: "Renvoie un email de validation de compte",
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.IndividualSendAgainEmailVerificationCommand(request.auth.credentials).then(function(result) {
       reply(result);

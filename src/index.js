@@ -2,13 +2,13 @@
 
 if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) {
   // production
-  require('newrelic');
+  require("newrelic");
 } else {
   // development
-  require('dotenv').config({silent:false});
+  require("dotenv").config({silent:false});
 }
 // declare services
-var Services = require('./services');
+var Services = require("./services");
 
 // manage instances
 var server = Services.server();

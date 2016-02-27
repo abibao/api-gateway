@@ -1,8 +1,8 @@
 "use strict";
 
-var Joi = require('joi');
-var Boom = require('boom');
-var MD5 = require('md5');
+var Joi = require("joi");
+var Boom = require("boom");
+var MD5 = require("md5");
 
 /**
  * promise : done
@@ -10,11 +10,11 @@ var MD5 = require('md5');
  **/
 exports.register = {
   auth: false,
-  tags: ['api', '1.1) not authentified'],
-  description: 'Ajoute un individual sur abibao',
-  notes: 'Ajoute un individual sur abibao',
+  tags: ["api", "1.1) not authentified"],
+  description: "Ajoute un individual sur abibao",
+  notes: "Ajoute un individual sur abibao",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: "application/x-www-form-urlencoded",
   },
   validate: {
     payload: {
@@ -23,7 +23,7 @@ exports.register = {
       password2: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.IndividualRegisterCommand(request.payload).then(function(individual) {
       reply(individual);
@@ -41,11 +41,11 @@ exports.register = {
  **/
 exports.login = {
   auth: false,
-  tags: ['api', '1.1) not authentified'],
-  description: 'Authentifie un individu sur abibao',
-  notes: 'Authentifie un individu sur abibao',
+  tags: ["api", "1.1) not authentified"],
+  description: "Authentifie un individu sur abibao",
+  notes: "Authentifie un individu sur abibao",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: "application/x-www-form-urlencoded",
   },
   validate: {
     payload: {
@@ -53,7 +53,7 @@ exports.login = {
       password: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.IndividualLoginWithCredentialsCommand(request.payload)
     .then(function(credentials) {
@@ -72,15 +72,15 @@ exports.login = {
  **/
 exports.campaign_assign = {
   auth: false,
-  tags: ['api', '1.1) not authentified'],
-  description: 'Ajoute un sondage à un utilisateur donnée',
-  notes: 'Ajoute un sondage à un utilisateur donnée',
+  tags: ["api", "1.1) not authentified"],
+  description: "Ajoute un sondage à un utilisateur donnée",
+  notes: "Ajoute un sondage à un utilisateur donnée",
   validate: {
     params: {
       token: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.IndividualAssignCampaignCommand(request.params.token).then(function(result) {
       reply(result);
@@ -94,13 +94,13 @@ exports.campaign_assign = {
 
 /**exports.count = {
   auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
+    strategy: "jwt",
+    scope: ["administrator"]
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Récupère le nombre total d\'utilisateurs de type "individual"',
-  notes: 'Récupère le nombre total d\'utilisateurs de type "individual"',
-  jsonp: 'callback',
+  tags: ["api", "1.3) administrator"],
+  description: "Récupère le nombre total d\"utilisateurs de type "individual"",
+  notes: "Récupère le nombre total d\"utilisateurs de type "individual"",
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.IndividualsCountQuery().then(function(result) {
       reply(result);
@@ -114,15 +114,15 @@ exports.campaign_assign = {
 
 /**exports.verify_email = {
   auth: false,
-  tags: ['api', '1.1) not authentified'],
-  description: 'Valide le compte d\'un utilisateur',
-  notes: 'Valide le compte d\'un utilisateur',
+  tags: ["api", "1.1) not authentified"],
+  description: "Valide le compte d\"un utilisateur",
+  notes: "Valide le compte d\"un utilisateur",
   validate: {
     params: {
       token: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.IndividualVerifyEmailCommand(request.params.token).then(function(result) {
       reply(result);

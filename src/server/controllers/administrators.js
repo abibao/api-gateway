@@ -1,8 +1,8 @@
 "use strict";
 
-var Joi = require('joi');
-var Boom = require('boom');
-var MD5 = require('md5');
+var Joi = require("joi");
+var Boom = require("boom");
+var MD5 = require("md5");
 
 /**
  * promise : done
@@ -10,14 +10,14 @@ var MD5 = require('md5');
  **/
 exports.register = {
   auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
+    strategy: "jwt",
+    scope: ["administrator"]
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Ajoute un administrator sur abibao',
-  notes: 'Ajoute un administrator sur abibao',
+  tags: ["api", "1.3) administrator"],
+  description: "Ajoute un administrator sur abibao",
+  notes: "Ajoute un administrator sur abibao",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: "application/x-www-form-urlencoded",
   },
   validate: {
     payload: {
@@ -26,7 +26,7 @@ exports.register = {
       password2: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.AdministratorRegisterCommand(request.payload).then(function(administrator) {
       reply(administrator);
@@ -44,11 +44,11 @@ exports.register = {
  **/
 exports.login = {
   auth: false,
-  tags: ['api', '1.1) not authentified'],
-  description: 'Authentifie un administrateur sur abibao',
-  notes: 'Authentifie un administrateur sur abibao',
+  tags: ["api", "1.1) not authentified"],
+  description: "Authentifie un administrateur sur abibao",
+  notes: "Authentifie un administrateur sur abibao",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: "application/x-www-form-urlencoded",
   },
   validate: {
     payload: {
@@ -56,7 +56,7 @@ exports.login = {
       password: Joi.string().required()
     }
   },
-  jsonp: 'callback',
+  jsonp: "callback",
   handler: function(request, reply) {
     request.server.domain.AdministratorLoginWithCredentialsCommand(request.payload)
     .then(function(credentials) {
