@@ -3,6 +3,9 @@
 var Basic = require("hapi-auth-basic");
 var AuthJWT = require("hapi-auth-jwt2");
 
+var nconf = require("nconf");
+nconf.argv().env();
+
 var AuthProvision = function(server, callback) {
 
   server.register([ {register: Basic}, {register: AuthJWT} ], function (err) {
@@ -15,7 +18,7 @@ var AuthProvision = function(server, callback) {
     });
     
     server.auth.strategy("jwt", "jwt", {
-      key: process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY || "JWT_KEY",
+      key: nconf.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY || "JWT_KEY",
       validateFunc: require("./libs/auth_jwt_validate.js"),
       verifyOptions: { algorithms: [ "HS256" ] },
     });

@@ -5,15 +5,18 @@ var async = require("async");
 var path = require("path");
 var dir = require("node-dir");
 
+var nconf = require("nconf");
+nconf.argv().env();
+
 var _ = require("lodash");
 var Cryptr = require("cryptr");
-var cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+var cryptr = new Cryptr(nconf.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
 
 var options = {
-  host: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST,
-  port: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT,
-  db: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_DB,
-  authKey: process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY
+  host: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST,
+  port: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT,
+  db: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_DB,
+  authKey: nconf.ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY
 };
 var thinky = require("thinky")(options);
 

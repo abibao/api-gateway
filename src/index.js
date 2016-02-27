@@ -1,6 +1,9 @@
 "use strict";
 
-if (process.env.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) {
+var nconf = require("nconf");
+nconf.argv().env();
+
+if (nconf.ABIBAO_API_GATEWAY_PRODUCTION_ENABLE) {
   // production
   require("newrelic");
 } else {

@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto-generate": "./bin/abibao generate",
@@ -54,6 +54,7 @@
     "lodash": "4.5.1",
     "md5": "2.0.0",
     "mongoose": "4.4.5",
+    "nconf": "0.8.4",
     "newrelic": "1.25.4",
     "node-dir": "0.1.11",
     "nodemailer": "2.2.1",

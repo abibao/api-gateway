@@ -1,7 +1,10 @@
 "use strict";
 
+var nconf = require("nconf");
+nconf.argv().env();
+
 var Cryptr = require("cryptr"),
-cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+cryptr = new Cryptr(nconf.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
 
 module.exports = function(thinky) {
   

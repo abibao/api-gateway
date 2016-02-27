@@ -1,8 +1,11 @@
 "use strict";
 
+var nconf = require("nconf");
+nconf.argv().env();
+
 var _ = require("lodash");
 var Cryptr = require("cryptr"),
-cryptr = new Cryptr(process.env.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
+cryptr = new Cryptr(nconf.ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY);
 
 var CURRENT_ACTION = "Query";
 var CURRENT_NAME = "EntityListCampaignsQuery";
