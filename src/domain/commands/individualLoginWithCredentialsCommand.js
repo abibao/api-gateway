@@ -14,8 +14,12 @@ module.exports = function(payload) {
   return new Promise(function(resolve, reject) {
     try {
       self.individualFilterQuery({email:payload.email}).then(function(individuals) {
-        if (individuals.length===0) throw Error("User not found");
-        if (individuals.length>1) throw Error("Too many emails, contact an individual");
+        if (individuals.length===0) {
+          return reject( new Error("User not found") );
+        }
+        if (individuals.length>1) {
+          return reject( new Error("Too many emails, contact an individual") );
+        }
         var individual = individuals[0];
         if (individual.authenticate(payload.password)) {
           // all done then reply token

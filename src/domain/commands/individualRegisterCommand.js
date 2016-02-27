@@ -14,13 +14,17 @@ module.exports = function(payload) {
   return new Promise(function(resolve, reject) {
     try {
       // password confirmation
-      if (payload.password1!==payload.password2) throw Error("invalid password confimation");
+      if (payload.password1!==payload.password2) {
+        return reject( new Error("invalid password confimation") );
+      }
       payload.password = payload.password1;
       delete payload.password1;
       delete payload.password2;
       // email already exists ?
       self.individualFilterQuery({email: payload.email}).then(function(individuals) {
-        if (individuals.length>0) throw Error("Email already exists in database");
+        if (individuals.length>0) {
+          return reject( new Error("Email already exists in database") );
+        }
         // create individual
         self.individualCreateCommand(payload).then(function(individual) {
           timeEnd = new Date();

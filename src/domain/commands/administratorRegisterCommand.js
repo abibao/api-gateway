@@ -13,13 +13,17 @@ module.exports = function(payload) {
     try {
       var quid = uuid.v1();
       // password confirmation
-      if (payload.password1!==payload.password2) throw Error("invalid password confimation");
+      if (payload.password1!==payload.password2) {
+        return reject( new Error("invalid password confimation") );
+      }
       payload.password = payload.password1;
       delete payload.password1;
       delete payload.password2;
       // email already exists ?
       self.administratorFilterQuery({email: payload.email}).then(function(administrators) {
-        if (administrators.length>0) throw Error("Email already exists in database");
+        if (administrators.length>0) {
+          return reject( new Error("Email already exists in database") );
+        }
         // create administrator
         self.administratorCreateCommand(payload).then(function(administrator) {
           self.debug.command(CURRENT_NAME, quid);

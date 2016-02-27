@@ -36,7 +36,9 @@ module.exports = function(thinky) {
     var data = this;
     data.modifiedAt = r.now();
     // salt exists ?
-    if (data.salt) return next();
+    if (data.salt) {
+      return next();
+    }
     data.salt = this.makeSalt();
     data.hashedPassword = data.encryptPassword(data.password);
     delete data.password;

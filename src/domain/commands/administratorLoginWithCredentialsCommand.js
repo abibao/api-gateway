@@ -13,8 +13,12 @@ module.exports = function(payload) {
     try {
       var quid = uuid.v1();
       self.administratorFilterQuery({email:payload.email}).then(function(administrators) {
-        if (administrators.length===0) throw Error("User not found");
-        if (administrators.length>1) throw Error("Too many emails, contact an administrator");
+        if (administrators.length===0) {
+          return reject( new Error("User not found") );
+        }
+        if (administrators.length>1) {
+          return reject( new Error("Too many emails, contact an administrator") );
+        }
         var administrator = administrators[0];
         if (administrator.authenticate(payload.password)) {
           // all done then reply token
