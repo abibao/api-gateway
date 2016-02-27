@@ -1,19 +1,14 @@
 "use strict";
 
-var nconf = require("nconf"),
-    crypto = require("crypto"),
-    Cryptr = require("cryptr");
-    
-var cryptr, type, r, AdministratorModel;
+var nconf = require("nconf");
 nconf.argv().env();
 
-module.exports = function(thinky) {
-  
-  type = thinky.type;
-  r = thinky.r;
-  cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
-  
-  AdministratorModel = thinky.createModel("administrators", {
+var crypto = require("crypto");
+var Cryptr = require("cryptr"),
+cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
+
+function schema(type, r) {
+  return {
     // virtuals
     urn: type.virtual().default(function() {
       return (this.id) ? "urn:abibao:database:administrator:"+cryptr.encrypt(this.id) : null;
@@ -27,11 +22,16 @@ module.exports = function(thinky) {
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())
-  }); 
+  };
+}
+
+module.exports = function(thinky) {
+
+  var AdministratorModel = thinky.createModel("administrators", schema(thinky.type, thinky.r)); 
   
   AdministratorModel.pre("save", function(next) {
     var data = this;
-    data.modifiedAt = r.now();
+    data.modifiedAt = thinky.r.now();
     // salt exists ?
     if (data.salt) return next();
     data.salt = this.makeSalt();
