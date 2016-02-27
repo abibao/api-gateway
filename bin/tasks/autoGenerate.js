@@ -4,11 +4,7 @@
 var Promise = require("bluebird");
 
 // declare internal libraries
-var path = require("path"),
-    async = require("async"),
-    _ = require("lodash"),
-    normalize = path.normalize,
-    resolve = path.resolve;
+var async = require("async");
 
 // declare external libraries
 // ...
@@ -16,8 +12,7 @@ var path = require("path"),
 // declare project libraries
 var error = require("./../console").error,
     notice = require("./../console").notice,
-    warning = require("./../console").warning,
-    mustachePromise = require("./mustache");
+    warning = require("./../console").warning;
 
 var errorPromised = function(e) {
   error(e);
@@ -33,7 +28,7 @@ module.exports = function(table, collection, model) {
     warning("START sequence");
     warning("***********************************************************************");
     
-    var sequence_items = [
+    var sequenceItems = [
       {
         table: "entities",
         collection: "Entities",
@@ -66,60 +61,23 @@ module.exports = function(table, collection, model) {
       }
     ];
     
-    async.mapSeries(sequence_items, function(item, next) {
+    async.mapSeries(sequenceItems, function(item, next) {
       
-      table = item.table;
-      collection = item.collection;
-      model = item.model;
+      var table = item.table;
+      var collection = item.collection;
+      var model = item.model;
       
       notice("[x] table ", table);
       notice("[x] collection ", collection);
       notice("[x] model ", model);
       warning("***********************************************************************");
       
-      var sequence = [
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/commands/create.tpl")), normalize(resolve(__dirname,"../../src/domain/commands/system")), _.camelCase(model+"CreateCommand")+".js", { 
-          JS_MODEL_NAME: model+"Model",
-          JS_COMMAND_NAME: model+"CreateCommand"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/commands/update.tpl")), normalize(resolve(__dirname,"../../src/domain/commands/system")), _.camelCase(model+"UpdateCommand")+".js", { 
-          JS_MODEL_NAME: model+"Model",
-          JS_COMMAND_NAME: model+"UpdateCommand"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/queries/read.tpl")), normalize(resolve(__dirname,"../../src/domain/queries/system")), _.camelCase(model+"ReadQuery")+".js", { 
-          JS_MODEL_NAME: model+"Model",
-          JS_QUERY_NAME: model+"ReadQuery"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/queries/filter.tpl")), normalize(resolve(__dirname,"../../src/domain/queries/system")), _.camelCase(model+"FilterQuery")+".js", { 
-          JS_MODEL_NAME: model+"Model",
-          JS_QUERY_NAME: model+"FilterQuery"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/commands/delete.tpl")), normalize(resolve(__dirname,"../../src/domain/commands/system")), _.camelCase(model+"DeleteCommand")+".js", { 
-          JS_MODEL_NAME: model+"Model",
-          JS_COMMAND_NAME: model+"DeleteCommand"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/listeners/default.tpl")), normalize(resolve(__dirname,"../../src/domain/listeners/system")), _.camelCase(collection+"ListenerChanged")+".js", { 
-          JS_MODEL_NAME: model+"Model",
-          JS_EVENT_NAME: model,
-          JS_LISTENER_NAME: collection+"ListenerChanged"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/events/default.tpl")), normalize(resolve(__dirname,"../../src/domain/events/system")), _.camelCase(model+"CreateEvent")+".js", { 
-          JS_EVENT_NAME: model+"CreateEvent",
-          JS_IO_EVENT_NAME: "EVENT_"+model.toUpperCase()+"_CREATED"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/events/default.tpl")), normalize(resolve(__dirname,"../../src/domain/events/system")), _.camelCase(model+"UpdateEvent")+".js", { 
-          JS_EVENT_NAME: model+"UpdateEvent",
-          JS_IO_EVENT_NAME: "EVENT_"+model.toUpperCase()+"_UPDATE"
-        }),
-        mustachePromise(normalize(resolve(__dirname,"../templates/domain/events/delete.tpl")), normalize(resolve(__dirname,"../../src/domain/events/system")), _.camelCase(model+"DeleteEvent")+".js", { 
-          JS_EVENT_NAME: model+"DeleteEvent",
-          JS_IO_EVENT_NAME: "EVENT_"+model.toUpperCase()+"_DELETED"
-        })
-      ];
+      var Sequence = require("./../templates/sequence");
+      var sequence = new Sequence(model, collection);
       Promise.all(sequence).catch(errorPromised);
       next();
       
-    }, function(error, result) {
+    }, function(error) {
       warning("END sequence");
       warning("***********************************************************************");
     });
