@@ -3,29 +3,31 @@
 var Promise = require("bluebird");
 var Iron = require("iron");
 var Base64 = require("base64-url");
+var uuid = require("node-uuid");
+var _ = require("lodash");
 
 var nconf = require("nconf");
 nconf.argv().env();
 
-var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "IndividualAssignCampaignCommand";
 
 module.exports = function(sealed) {
 
   var self = this;
-  var timeStart = new Date();
-  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
+      var quid = uuid.v1();
       sealed = Base64.decode(sealed);
       Iron.unseal(sealed, nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"), Iron.defaults, function (err, unsealed) {
         // control
-        if (err) return reject(err);
-        if (unsealed.individual===undefined) return reject("Individual is undefined.");
-        if (unsealed.campaign===undefined) return reject("Campaign is undefined.");
-        if (unsealed.action===undefined) return reject("Action is undefined.");
-        if (unsealed.action!==self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH) return reject("Action is unauthorized.");
+        if (err) {
+          return reject(err);
+        }
+        if ( _.isUndefined(unsealed.individual) ) { return reject( new Error("Individual is undefined.") ) }
+        if ( _.isUndefined(unsealed.campaign) ) { return reject( new Error("Campaign is undefined.") ) }
+        if ( _.isUndefined(unsealed.action) ) { return reject( new Error("Action is undefined.") ) }
+        if (unsealed.action!==self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH) { return reject( new Error("Action is unauthorized.") ) }
         var data = {
           campaign: unsealed.campaign,
           company: unsealed.company, 
@@ -42,8 +44,7 @@ module.exports = function(sealed) {
                 delete survey.company;
                 delete survey.charity;
                 delete survey.individual;
-                timeEnd = new Date();
-                self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
+                self.debug.command(CURRENT_NAME, quid);
                 resolve(survey);
               });
             });
@@ -55,21 +56,16 @@ module.exports = function(sealed) {
               delete survey.company;
               delete survey.charity;
               delete survey.individual;
-              timeEnd = new Date();
-              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
+              self.debug.command(CURRENT_NAME, quid);
               resolve(survey);
             });
           }
         })
         .catch(function(error) {
-          timeEnd = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
           reject(error);
         });
       });
     } catch (e) {
-      timeEnd = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

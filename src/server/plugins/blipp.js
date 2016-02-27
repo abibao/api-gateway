@@ -13,7 +13,7 @@ var BlippProvision = function(server, callback) {
     options: options
   }, function (err) {
     
-    if (err) return callback(err);
+    if (err) { return callback(err) }
     // server.logger.info("blipp registered provision");
     
     callback();

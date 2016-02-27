@@ -15,7 +15,9 @@ module.exports = function() {
     
     self.SurveyModel.changes().then(function(feed) {
       feed.each(function(error, doc) {
-        if (error) return self.logger.error(self.action, self.name, error);
+        if (error) {
+          return error;
+        }
         if (doc.isSaved() === false) {
           self.surveyDeleteEvent(doc);
         } else if (doc.getOldValue() === null) {

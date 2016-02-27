@@ -10,7 +10,7 @@ var AuthProvision = function(server, callback) {
 
   server.register([ {register: Basic}, {register: AuthJWT} ], function (err) {
     
-    if (err) return callback(err);
+    if (err) { return callback(err) }
     // server.logger.info("auth registered provision");
     
     server.auth.strategy("basic", "basic", {

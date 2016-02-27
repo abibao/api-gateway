@@ -15,7 +15,9 @@ module.exports = function() {
     
     self.AdministratorModel.changes().then(function(feed) {
       feed.each(function(error, doc) {
-        if (error) return self.logger.error(self.action, self.name, error);
+        if (error) {
+          return error;
+        }
         if (doc.isSaved() === false) {
           self.administratorDeleteEvent(doc);
         } else if (doc.getOldValue() === null) {

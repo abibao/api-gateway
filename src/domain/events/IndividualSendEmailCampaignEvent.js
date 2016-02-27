@@ -13,7 +13,7 @@ module.exports = function(data) {
     try {
       var quid = uuid.v1();
       self.individualSendEmailCampaignCommand(data).then(function() {
-        self.debug.command(CURRENT_NAME, quid);
+        self.debug.event(CURRENT_NAME, quid);
         resolve();
       })
       .catch(function(error) {

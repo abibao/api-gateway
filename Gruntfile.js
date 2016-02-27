@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 		env: {
 			tests_suite: {
 				IP: "localhost",
-      	PORT: 3000
+				PORT: 3000
     	}
 		},
 		jshint: {

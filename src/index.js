@@ -1,5 +1,8 @@
 "use strict";
 
+var debug = require("debug")("abibao:initializers");
+debug("start");
+
 var nconf = require("nconf");
 nconf.argv().env();
 
@@ -19,9 +22,9 @@ var domain = Services.domain();
 var io = Services.io();
 
 Services.startDomain(function(err) {
-  if (err) return server.logger.fatal(err);
+  if (err) { return debug(err) }
   Services.startServer(function(err) {
-    if (err) return server.logger.fatal(err);
+    if (err) { return debug(err) }
     // start listeners
     domain.administratorsListenerChanged();
     domain.entitiesListenerChanged();
@@ -30,5 +33,6 @@ Services.startDomain(function(err) {
     // finals injections
     server.domain = domain;
     io.domain = domain;
+    debug("end");
   });
 });

@@ -26,7 +26,7 @@ var GoodProvision = function(server, callback) {
     register: Good,
     options: options
   }, function (err) {
-    if (err) return callback(err);
+    if (err) { return callback(err) }
     // server.logger.info("good registered provision");
     
     callback();
