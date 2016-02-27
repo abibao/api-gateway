@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'SurveyDeleteEvent';
+var CURRENT_ACTION = "Event";
+var CURRENT_NAME = "SurveyDeleteEvent";
 
 module.exports = function(current, old) {
 

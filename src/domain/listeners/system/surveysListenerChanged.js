@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Listener';
-var CURRENT_NAME = 'SurveysListenerChanged';
+var CURRENT_ACTION = "Listener";
+var CURRENT_NAME = "SurveysListenerChanged";
 
 module.exports = function() {
   

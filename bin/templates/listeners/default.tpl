@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Listener';
-var CURRENT_NAME = '{{JS_LISTENER_NAME}}';
+var CURRENT_ACTION = "Listener";
+var CURRENT_NAME = "{{JS_LISTENER_NAME}}";
 
 module.exports = function() {
   

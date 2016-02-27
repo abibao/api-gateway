@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = '{{JS_EVENT_NAME}}';
+var CURRENT_ACTION = "Event";
+var CURRENT_NAME = "{{JS_EVENT_NAME}}";
 
 module.exports = function(current, old) {
 

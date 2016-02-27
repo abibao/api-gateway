@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Listener';
-var CURRENT_NAME = 'CampaignsItemsListenerChanged';
+var CURRENT_ACTION = "Listener";
+var CURRENT_NAME = "CampaignsItemsListenerChanged";
 
 module.exports = function() {
   

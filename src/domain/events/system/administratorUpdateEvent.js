@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'AdministratorUpdateEvent';
+var CURRENT_ACTION = "Event";
+var CURRENT_NAME = "AdministratorUpdateEvent";
 
 module.exports = function(data) {
 

@@ -1,9 +1,9 @@
 "use strict";
 
 var Promise = require("bluebird");
-var uuid = require('node-uuid');
+var uuid = require("node-uuid");
 
-var CURRENT_NAME = 'SurveyReadQuery';
+var CURRENT_NAME = "SurveyReadQuery";
 
 module.exports = function(urn, callback) {
   
@@ -11,7 +11,7 @@ module.exports = function(urn, callback) {
   
   return new Promise(function(resolve, reject) {
     var quid = uuid.v1();
-    self.debug.query('');
+    self.debug.query("");
     try {
       self.SurveyModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         delete model.id;

@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'EntityDeleteEvent';
+var CURRENT_ACTION = "Event";
+var CURRENT_NAME = "EntityDeleteEvent";
 
 module.exports = function(current, old) {
 

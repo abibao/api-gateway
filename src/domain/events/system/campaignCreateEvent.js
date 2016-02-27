@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Event';
-var CURRENT_NAME = 'CampaignCreateEvent';
+var CURRENT_ACTION = "Event";
+var CURRENT_NAME = "CampaignCreateEvent";
 
 module.exports = function(data) {
 

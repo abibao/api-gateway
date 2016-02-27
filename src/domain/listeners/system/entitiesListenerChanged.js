@@ -1,7 +1,7 @@
 "use strict";
 
-var CURRENT_ACTION = 'Listener';
-var CURRENT_NAME = 'EntitiesListenerChanged';
+var CURRENT_ACTION = "Listener";
+var CURRENT_NAME = "EntitiesListenerChanged";
 
 module.exports = function() {
   

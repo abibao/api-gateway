@@ -1,11 +1,11 @@
 "use strict";
 
 var Promise = require("bluebird");
-var _ = require('lodash');
-var uuid = require('node-uuid');
+var _ = require("lodash");
+var uuid = require("node-uuid");
 
-var CURRENT_ACTION = 'Query';
-var CURRENT_NAME = 'EntityFilterQuery';
+var CURRENT_ACTION = "Query";
+var CURRENT_NAME = "EntityFilterQuery";
 
 module.exports = function(filters) {
   
@@ -14,7 +14,7 @@ module.exports = function(filters) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.debug.query('');
+      self.debug.query("");
       self.EntityModel.filter(filters).run().then(function(models) {
         _.map(models, function(model) {
           delete model.id;
