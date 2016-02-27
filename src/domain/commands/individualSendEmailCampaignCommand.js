@@ -40,7 +40,7 @@ module.exports = function(data) {
         };
         transporter.sendMail(mailOptions, function(error, info) {
           if (error) { return reject(error) }
-          if (!info) { return reject( new Error("no informations found") ) }
+          if (!info) { return reject( new Error("no informations found") ); }
           self.debug.command(CURRENT_NAME, quid);
           resolve();
         });

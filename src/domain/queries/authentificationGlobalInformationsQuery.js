@@ -14,7 +14,7 @@ module.exports = function(credentials) {
     var quid = uuid.v1();
     self.debug.query("");
     try {
-      if ( _.isUndefined(credentials.action) ) return reject("Action is undefined");
+      if ( _.isUndefined(credentials.action) ) { return reject("Action is undefined"); }
       if ( credentials.action!==self.ABIBAO_CONST_TOKEN_AUTH_ME ) return reject("Action is unauthorized");
       switch (credentials.scope) {
         case self.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL:

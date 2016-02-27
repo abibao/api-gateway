@@ -15,7 +15,7 @@ module.exports = function(urn) {
       var quid = uuid.v1();
       self.debug.query("");
       self.campaignReadQuery(urn).then(function(campaign) {
-        self.EntityReadQuery(campaign.urnCompany).then(function(entity) {
+        self.entityReadQuery(campaign.urnCompany).then(function(entity) {
           delete campaign.urnCompany;
           campaign.company = entity;
           self.campaignItemFilterQuery({campaign:self.getIDfromURN(urn)}).then(function(items) {

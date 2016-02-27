@@ -1,5 +1,7 @@
 "use strict";
 
+var _ = require("lodash");
+
 var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "CampaignDeleteConstantCommand";
 
@@ -12,7 +14,7 @@ module.exports = function(params, callback) {
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
     
     self.SystemReadDataQuery(self.CampaignModel, params.urn).then(function(campaign) {
-      if ( campaign.constants===undefined ) campaign.constants = {};
+      if ( _.isUndefined(campaign.constants) ) { campaign.constants = {}; }
       campaign.constants[params.label] = undefined;
       return self.SystemValidateDataCommand(campaign).then(function() {
         return self.SystemSaveDataCommand(campaign).then(function(created) {

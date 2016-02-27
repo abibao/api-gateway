@@ -28,7 +28,7 @@ exports.create = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.EntityCreateCommand(request.payload).then(function(entity) {
+    request.server.domain.entityCreateCommand(request.payload).then(function(entity) {
       reply(entity);
     })
     .catch(function(error) {
@@ -70,7 +70,7 @@ exports.update = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.EntityUpdateCommand(request.payload).then(function(entity) {
+    request.server.domain.entityUpdateCommand(request.payload).then(function(entity) {
       reply(entity);
     })
     .catch(function(error) {
@@ -99,7 +99,7 @@ exports.read = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.EntityReadQuery(request.params.urn).then(function(entity) {
+    request.server.domain.entityReadQuery(request.params.urn).then(function(entity) {
       reply(entity);
     })
     .catch(function(error) {
@@ -123,7 +123,7 @@ exports.list = {
   notes: "Retourne toutes les entités",
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.EntityFilterQuery({}).then(function(entities) {
+    request.server.domain.entityFilterQuery({}).then(function(entities) {
       reply(entities);
     })
     .catch(function(error) {
@@ -148,7 +148,7 @@ exports.campaigns_list = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.EntityListCampaignsQuery(request.params.urn).then(function(campaigns) {
+    request.server.domain.entityListCampaignsQuery(request.params.urn).then(function(campaigns) {
       reply(campaigns);
     })
     .catch(function(error) {

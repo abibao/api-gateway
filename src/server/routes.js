@@ -40,10 +40,10 @@ exports.endpoints = [
   { method: "POST", path: "/v1/campaigns", config: CampaignsController.create }, // done
   { method: "GET", path: "/v1/campaigns/{urn}", config: CampaignsController.read }, // done
   { method: "POST", path: "/v1/campaigns/{urn}/publish", config: CampaignsController.publish },
-  { method: "POST", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constants_create },
-  { method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constants_update },
-  { method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constants_delete },
-  { method: "POST", path: "/v1/campaigns/{urn}/items", config: CampaignsController.items_create },
+  { method: "POST", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constantsCreate },
+  { method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constantsUpdate },
+  { method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constantsDelete },
+  { method: "POST", path: "/v1/campaigns/{urn}/items", config: CampaignsController.itemsCreate },
   
 ];
 

@@ -25,11 +25,11 @@ module.exports = function(credentials, payload, callback) {
         return self.SystemFindDataQuery(self.CampaignItemModel, {campaign:survey.campaign}).then(function(items) {
           waterfall.items = items;
           // controls
-          if ( waterfall.individual.charity!==waterfall.survey.charity ) return callback("Charity control failed", null);
-          if ( waterfall.individual.id!==waterfall.survey.individual ) return callback("Individual control failed", null);
-          if ( _.find(waterfall.items, {"label":payload.label })===undefined ) return callback("Campaign control failed", null);
+          if ( waterfall.individual.charity!==waterfall.survey.charity ) { return callback("Charity control failed", null); }
+          if ( waterfall.individual.id!==waterfall.survey.individual ) { return callback("Individual control failed", null); }
+          if ( _.isUndefined(_.find(waterfall.items, {"label":payload.label })) ) { return callback("Campaign control failed", null); }
           // add answer
-          if ( waterfall.survey.answers===undefined ) waterfall.survey.answers = {};
+          if ( _.isUndefined(waterfall.survey.answers) ) { waterfall.survey.answers = {}; }
           waterfall.survey.answers[payload.label] = payload.answer;
           waterfall.survey.complete = _.keys(waterfall.survey.answers).length===waterfall.items.length;
           return self.SystemUpdateDataCommand(self.SurveyModel, waterfall.survey).then(function(saved) {
