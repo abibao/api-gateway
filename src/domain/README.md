@@ -1,6 +1,6 @@
 ## Entité
 Une __Entité__ est une personne morale ou physique non rattachée à __Abibao__.
-Cette personne possède de l'argent et veux des réponses à ses questionnaires.
+Cette personne possède de l"argent et veux des réponses à ses questionnaires.
 
 - Présent seulement en v2 du projet.
 
@@ -19,7 +19,7 @@ Cette personne possède des __Individus__ et veux des __Dons__.
 
 ### Un Individu peut mettre à jour son Profil avec :
 
-- Une date d'anniversaire
+- Une date d"anniversaire
 - Un genre (M ou F)
 - Une catégorie socio-professionnelle
 

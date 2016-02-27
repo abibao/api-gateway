@@ -57,14 +57,14 @@
   <script>
     
     var self = this;
-    self.name = 'dg-entities';
+    self.name = "dg-entities";
 
-    self.on('mount', function() {
-      console.log(self.name, 'mount');
+    self.on("mount", function() {
+      console.log(self.name, "mount");
     });
     
-    self.on('update', function() {
-      console.log(self.name, 'update');
+    self.on("update", function() {
+      console.log(self.name, "update");
     });
     
   </script>

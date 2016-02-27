@@ -28,7 +28,7 @@ exports.register = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.AdministratorRegisterCommand(request.payload).then(function(administrator) {
+    request.server.domain.administratorRegisterCommand(request.payload).then(function(administrator) {
       reply(administrator);
     })
     .catch(function(error) {
@@ -58,7 +58,7 @@ exports.login = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.AdministratorLoginWithCredentialsCommand(request.payload)
+    request.server.domain.administratorLoginWithCredentialsCommand(request.payload)
     .then(function(credentials) {
       reply(credentials);
     })

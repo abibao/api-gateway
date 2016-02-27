@@ -51,7 +51,7 @@
   <script>
     
     var self = this;
-    self.name = 'homepage';
+    self.name = "homepage";
     
     self.loaded = false;
     
@@ -60,23 +60,23 @@
     };
     riot.observable(self.data);
     
-    self.on('mount', function() {
-      console.log(self.name, 'mount');
+    self.on("mount", function() {
+      console.log(self.name, "mount");
       facade.tags[self.name] = self;
       if ( _.keys(facade.tags).length===Facade.Tags ) facade.start();
     });
     
-    self.on('update', function() {
-      console.log(self.name, 'update');
+    self.on("update", function() {
+      console.log(self.name, "update");
     });
     
     //if ( facade.authentified() ) {
-      //self.indicator = phonon.indicator('Veuillez patienter...', false);
+      //self.indicator = phonon.indicator("Veuillez patienter...", false);
       //var payload = { Authentification: self.Authentification };
-      //socket.emit('GET /v1/entities', payload); 
+      //socket.emit("GET /v1/entities", payload); 
     //}
 
-    /*socket.on('response GET /v1/entities', function(data) {
+    /*socket.on("response GET /v1/entities", function(data) {
       console.log(data);
       self.entities = data;
       self.loaded = true;
@@ -87,7 +87,7 @@
     /**/
     
     loginHandler(e) {
-      riot.route('login');
+      riot.route("login");
     }
     
     /*selectEntitiesHanlder(e) {

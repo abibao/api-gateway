@@ -18,7 +18,7 @@ var AuthProvision = function(server, callback) {
     });
     
     server.auth.strategy("jwt", "jwt", {
-      key: nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY || "JWT_KEY"'),
+      key: nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY") || "JWT_KEY",
       validateFunc: require("./libs/auth_jwt_validate.js"),
       verifyOptions: { algorithms: [ "HS256" ] },
     });

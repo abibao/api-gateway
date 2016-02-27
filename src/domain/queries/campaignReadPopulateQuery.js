@@ -14,11 +14,11 @@ module.exports = function(urn) {
     try {
       var quid = uuid.v1();
       self.debug.query("");
-      self.CampaignReadQuery(urn).then(function(campaign) {
+      self.campaignReadQuery(urn).then(function(campaign) {
         self.EntityReadQuery(campaign.urnCompany).then(function(entity) {
           delete campaign.urnCompany;
           campaign.company = entity;
-          self.CampaignItemFilterQuery({campaign:self.getIDfromURN(urn)}).then(function(items) {
+          self.campaignItemFilterQuery({campaign:self.getIDfromURN(urn)}).then(function(items) {
             _.map(items, function(item) {
               delete item.campaign;
             });

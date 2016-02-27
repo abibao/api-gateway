@@ -58,7 +58,7 @@ module.exports = {
       function(err, content, next) {
         if (err) {
           return callback(err, null);
-        }
+        }  
         next();
       },
       function(err, files) {

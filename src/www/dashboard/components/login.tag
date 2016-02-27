@@ -12,7 +12,7 @@
           <div class="row"> </div>
           <p><a class="waves-effect waves-light btn blue-grey darken-2" onclick={ submitHandler }>Connexion</a></p>
           <div class="row"> </div>
-          <p>Munissez-vous des informations fournies par l'équipe administrative de ABIBAO. Pour toutes questions concernant votre compte, veuillez contacter <a href="mailto:administrateur@abibao.com">administrateur@abibao.com</a>.</p>
+          <p>Munissez-vous des informations fournies par l"équipe administrative de ABIBAO. Pour toutes questions concernant votre compte, veuillez contacter <a href="mailto:administrateur@abibao.com">administrateur@abibao.com</a>.</p>
         </div>
       </div>
     </div>
@@ -21,32 +21,32 @@
   <script>
     
     var self = this;
-    self.name = 'login';
+    self.name = "login";
 
-    self.on('mount', function() {
-      console.log(self.name, 'mount');
+    self.on("mount", function() {
+      console.log(self.name, "mount");
       facade.tags[self.name] = self;
       if ( _.keys(facade.tags).length===Facade.Tags ) facade.start();
     });
     
-    self.on('update', function() {
-      console.log(self.name, 'update');
-      if ( facade.authentified() ) riot.route('/homepage');
+    self.on("update", function() {
+      console.log(self.name, "update");
+      if ( facade.authentified() ) riot.route("/homepage");
     });
     
     submitHandler(e) {
       var payload = { email:self.email.value, password:self.password.value };
-      socket.emit('urn:socket:get:/v1/administrators/login', payload); 
+      socket.emit("urn:socket:get:/v1/administrators/login", payload); 
     }
     
-    socket.on('response:socket:get:/v1/administrators/login', function(data) {
+    socket.on("response:socket:get:/v1/administrators/login", function(data) {
       if ( data.error ) {
         return;
       }
       if ( !data.token ) {
         return;
       }
-      Cookies.set('Authentification', data.token);
+      Cookies.set("Authentification", data.token);
       riot.update();
     });
     

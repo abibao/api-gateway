@@ -3,7 +3,7 @@
 var nconf = require("nconf");
 nconf.argv().env();
 
-if (nconf.get('ABIBAO_API_GATEWAY_PRODUCTION_ENABLE')) {
+if (nconf.get("ABIBAO_API_GATEWAY_PRODUCTION_ENABLE")) {
   // production
   require("newrelic");
 } else {

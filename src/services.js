@@ -13,8 +13,8 @@ var nconf = require("nconf");
 nconf.argv().env();
 
 var options = {
-  host: nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
-  port: nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
+  host: nconf.get("ABIBAO_API_GATEWAY_EXPOSE_IP"),
+  port: nconf.get("ABIBAO_API_GATEWAY_EXPOSE_PORT"),
   labels: ["api", "administrator"]
 };
 
@@ -42,7 +42,7 @@ module.exports.start_io = function(domain) {
     // AdministratorLoginWithCredentialsCommand
     socket.on("urn:socket:get:/v1/administrators/login", function(payload) {
       domain.logger.info("socket get /v1/administrators/login", socket.id);
-      domain.AdministratorLoginWithCredentialsCommand(payload).then(function(credentials) {
+      domain.administratorLoginWithCredentialsCommand(payload).then(function(credentials) {
         socket.emit("response:socket:get:/v1/administrators/login", credentials);
       })
       .catch(function(error) {
@@ -152,7 +152,7 @@ var logger_console = bunyan.createLogger({
   level: "debug",
   streams: [{
     type: "rotating-file",
-    path: nconf.get('ABIBAO_API_GATEWAY_LOGS_FILE'),
+    path: nconf.get("ABIBAO_API_GATEWAY_LOGS_FILE"),
     period: "1d",   // daily rotation
     count: 3        // keep 3 back copies
   }]

@@ -25,7 +25,7 @@ exports.constants_delete = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.CampaignDeleteConstantCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignDeleteConstantCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
@@ -58,7 +58,7 @@ exports.constants_update = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.CampaignUpdateConstantCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignUpdateConstantCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
@@ -91,7 +91,7 @@ exports.constants_create = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.CampaignCreateConstantCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignCreateConstantCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
@@ -127,7 +127,7 @@ exports.items_create = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.campaign = request.params.urn;
-    request.server.domain.CampaignItemCreateCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignItemCreateCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
@@ -165,7 +165,7 @@ exports.publish = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.CampaignPublishCommand(request.payload).then(function(result) {
+    request.server.domain.campaignPublishCommand(request.payload).then(function(result) {
       reply(result);
     })
     .catch(function(error) {
@@ -201,7 +201,7 @@ exports.create = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.CampaignCreateWithCompanyCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignCreateWithCompanyCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
@@ -225,7 +225,7 @@ exports.list = {
   notes: "Retourne toutes les campagnes",
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.CampaignFilterQuery({}).then(function(campaigns) {
+    request.server.domain.campaignFilterQuery({}).then(function(campaigns) {
       reply(campaigns);
     })
     .catch(function(error) {
@@ -254,7 +254,7 @@ exports.read = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.CampaignReadPopulateQuery(request.params.urn).then(function(campaign) {
+    request.server.domain.campaignReadPopulateQuery(request.params.urn).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
