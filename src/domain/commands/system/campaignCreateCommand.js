@@ -15,9 +15,9 @@ module.exports = function(payload) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
+      payload.id = new ObjectId().toString();
+      payload.createdAt = Date.now();
       var model = new self.CampaignModel(payload);
-      model.id = new ObjectId().toString();
-      model.createdAt = Date.now();
       model.save().then(function(created) {
         delete created.id;
         delete created.company;

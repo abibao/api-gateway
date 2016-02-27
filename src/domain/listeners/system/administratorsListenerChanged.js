@@ -17,11 +17,11 @@ module.exports = function() {
       feed.each(function(error, doc) {
         if (error) return self.logger.error(self.action, self.name, error);
         if (doc.isSaved() === false) {
-          self.administratorDeleteEvent(doc);
+          self.AdministratorDeleteEvent(doc);
         } else if (doc.getOldValue() === null) {
-          self.administratorCreateEvent(doc);
+          self.AdministratorCreateEvent(doc);
         } else {
-          self.administratorUpdateEvent(doc, doc.getOldValue());
+          self.AdministratorUpdateEvent(doc, doc.getOldValue());
         }
       });
     });

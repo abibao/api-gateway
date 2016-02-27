@@ -17,11 +17,11 @@ module.exports = function() {
       feed.each(function(error, doc) {
         if (error) return self.logger.error(self.action, self.name, error);
         if (doc.isSaved() === false) {
-          self.campaignDeleteEvent(doc);
+          self.CampaignDeleteEvent(doc);
         } else if (doc.getOldValue() === null) {
-          self.campaignCreateEvent(doc);
+          self.CampaignCreateEvent(doc);
         } else {
-          self.campaignUpdateEvent(doc, doc.getOldValue());
+          self.CampaignUpdateEvent(doc, doc.getOldValue());
         }
       });
     });
