@@ -11,12 +11,12 @@ module.exports = function(id, callback) {
     
     self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
     
-    self.SystemReadDataQuery(self.IndividualModel, id).then(function(individual) {
-      return self.SystemFindDataQuery(self.SurveyModel, {individual:id}).then(function(surveys) {
+    self.systemReadDataQuery(self.IndividualModel, id).then(function(individual) {
+      return self.systemFindDataQuery(self.SurveyModel, {individual:id}).then(function(surveys) {
         delete individual.hashedPassword;
         delete individual.salt;
         individual.surveys = surveys;
-        return self.SystemReadDataQuery(self.EntityModel, individual.charity).then(function(charity) {
+        return self.systemReadDataQuery(self.EntityModel, individual.charity).then(function(charity) {
           individual.charity = charity;
           callback(null, individual);
         });

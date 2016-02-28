@@ -4,7 +4,6 @@ var normalize = require("path").normalize;
 var resolve = require("path").resolve;
 
 var AuthController = require("./controllers/auth");
-var AdministratorsController = require("./controllers/administrators");
 var EntitiesController = require("./controllers/entities");
 
 exports.endpoints = [
@@ -18,8 +17,8 @@ exports.endpoints = [
   { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: require("./handlers/campaigns/assign") },
   
   // administrators
-  { method: "POST", path: "/v1/administrators/login", config: AdministratorsController.login }, // done
-  { method: "POST", path: "/v1/administrators/register", config: AdministratorsController.register }, // done
+  { method: "POST", path: "/v1/administrators/login", config: require("./handlers/administrators/login") },
+  { method: "POST", path: "/v1/administrators/register", config: require("./handlers/administrators/register") },
   
   // auth
   { method: "GET", path: "/v1/auth/global/informations", config: AuthController.globalInformations }, // done

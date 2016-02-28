@@ -6,22 +6,22 @@ var Boom = require("boom");
 module.exports = {
   auth: false,
   tags: ["api", "1.1) not authentified"],
-  description: "Ajoute un individual sur abibao",
-  notes: "Ajoute un individual sur abibao",
+  description: "Authentifie un administrateur sur abibao",
+  notes: "Authentifie un administrateur sur abibao",
   payload: {
     allow: "application/x-www-form-urlencoded",
   },
   validate: {
     payload: {
-      email: Joi.string().required().email(),
-      password1: Joi.string().required(),
-      password2: Joi.string().required()
+      email: Joi.string().email().required(),
+      password: Joi.string().required()
     }
   },
   jsonp: "callback",
   handler(request, reply) {
-    request.server.domain.individualRegisterCommand(request.payload).then(function(individual) {
-      reply(individual);
+    request.server.domain.administratorLoginWithCredentialsCommand(request.payload)
+    .then(function(credentials) {
+      reply(credentials);
     })
     .catch(function(error) {
       request.server.logger.error(error);

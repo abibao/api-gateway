@@ -2,7 +2,6 @@
 
 var Joi = require("joi");
 var Boom = require("boom");
-var MD5 = require("md5");
 
 module.exports = {
   auth: false,

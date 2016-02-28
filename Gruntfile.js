@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON("package.json"),
 		env: {
-			tests_suite: {
+			tests: {
 				IP: "localhost",
 				PORT: 3000
     	}

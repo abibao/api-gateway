@@ -4,10 +4,13 @@ var Joi = require("joi");
 var Boom = require("boom");
 
 module.exports = {
-  auth: false,
-  tags: ["api", "1.1) not authentified"],
-  description: "Ajoute un individual sur abibao",
-  notes: "Ajoute un individual sur abibao",
+  auth: {
+    strategy: "jwt",
+    scope: ["administrator"]
+  },
+  tags: ["api", "1.3) administrator"],
+  description: "Ajoute un administrator sur abibao",
+  notes: "Ajoute un administrator sur abibao",
   payload: {
     allow: "application/x-www-form-urlencoded",
   },
@@ -20,8 +23,8 @@ module.exports = {
   },
   jsonp: "callback",
   handler(request, reply) {
-    request.server.domain.individualRegisterCommand(request.payload).then(function(individual) {
-      reply(individual);
+    request.server.domain.administratorRegisterCommand(request.payload).then(function(administrator) {
+      reply(administrator);
     })
     .catch(function(error) {
       request.server.logger.error(error);
