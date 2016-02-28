@@ -4,9 +4,7 @@ var normalize = require("path").normalize;
 var resolve = require("path").resolve;
 
 var AuthController = require("./controllers/auth");
-var IndividualsController = require("./controllers/individuals");
 var AdministratorsController = require("./controllers/administrators");
-var CampaignsController = require("./controllers/campaigns");
 var EntitiesController = require("./controllers/entities");
 
 exports.endpoints = [
@@ -15,9 +13,9 @@ exports.endpoints = [
   { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"..","www/dashboard")) } } },
   
   // individuals
-  { method: "POST", path: "/v1/individuals/login", config: IndividualsController.login }, // done
-  { method: "POST", path: "/v1/individuals/register", config: IndividualsController.register }, // done
-  { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: IndividualsController.campaignAssign }, // done
+  { method: "POST", path: "/v1/individuals/login", config: require("./handlers/individuals/login") },
+  { method: "POST", path: "/v1/individuals/register", config: require("./handlers/individuals/register") },
+  { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: require("./handlers/campaigns/assign") },
   
   // administrators
   { method: "POST", path: "/v1/administrators/login", config: AdministratorsController.login }, // done
@@ -39,14 +37,10 @@ exports.endpoints = [
   { method: "GET", path: "/v1/campaigns", config: require("./handlers/campaigns/list") },
   { method: "POST", path: "/v1/campaigns", config: require("./handlers/campaigns/create") },
   { method: "GET", path: "/v1/campaigns/{urn}", config: require("./handlers/campaigns/read") },
-  { method: "POST", path: "/v1/campaigns/{urn}/publish", config: CampaignsController.publish },
+  { method: "POST", path: "/v1/campaigns/{urn}/publish", config: require("./handlers/campaigns/publish") },
   { method: "POST", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/create") },
   { method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/update") },
   { method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/delete") },
-  { method: "POST", path: "/v1/campaigns/{urn}/items", config: CampaignsController.itemsCreate }
+  { method: "POST", path: "/v1/campaigns/{urn}/items", config: require("./handlers/campaigns/items/create") }
   
 ];
-
-// { method: "POST", path: "/v1/auth/resend/verification/email", config: AuthController.resend_verification_email },
-// { method: "POST", path: "/v1/individuals/verify/email/{token}", config: IndividualsController.verify_email },
-// { method: "GET", path: "/v1/individuals/count", config: IndividualsController.count },

@@ -17,7 +17,7 @@ module.exports = {
     }
   },
   jsonp: "callback",
-  handler: function(request, reply) {
+  handler(request, reply) {
     request.server.domain.campaignReadPopulateQuery(request.params.urn).then(function(campaign) {
       reply(campaign);
     })

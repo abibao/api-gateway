@@ -11,7 +11,7 @@ module.exports = {
   description: "Retourne toutes les campagnes",
   notes: "Retourne toutes les campagnes",
   jsonp: "callback",
-  handler: function(request, reply) {
+  handler(request, reply) {
     request.server.domain.campaignFilterQuery({}).then(function(campaigns) {
       reply(campaigns);
     })
