@@ -15,13 +15,13 @@ exports.endpoints = [
   { method: "POST", path: "/v1/individuals/login", config: require("./handlers/individuals/login") },
   { method: "POST", path: "/v1/individuals/register", config: require("./handlers/individuals/register") },
   { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: require("./handlers/campaigns/assign") },
+  { method: "GET", path: "/v1/auth/global/informations", config: require("./handlers/individuals/auth/globalInformations") },
   
   // administrators
   { method: "POST", path: "/v1/administrators/login", config: require("./handlers/administrators/login") },
   { method: "POST", path: "/v1/administrators/register", config: require("./handlers/administrators/register") },
   
   // auth
-  { method: "GET", path: "/v1/auth/global/informations", config: AuthController.globalInformations }, // done
   { method: "POST", path: "/v1/auth/surveys/{urn}/answers", config: AuthController.surveysAnswers },
   { method: "GET", path: "/v1/auth/surveys/{urn}", config: AuthController.surveysRead },
   

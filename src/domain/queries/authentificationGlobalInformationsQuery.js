@@ -47,7 +47,7 @@ module.exports = function(credentials) {
               surveysInProgress: self.r.table("surveys").filter({"individual":individual("id"),"complete":false}).coerceTo("array").merge(function(survey) {
                 return {
                   urn: survey("id"),
-                  campaign: self.r.table("campaigns").get(survey("campaign")).merge(function(campaign) {
+                  campaign: self.r.table("campaigns").get(survey("campaign")).merge(function() {
                     return {
                       urn: survey("id")
                     };

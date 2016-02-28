@@ -1,19 +1,19 @@
 "use strict";
 
 var Promise = require("bluebird");
+var uuid = require("node-uuid");
+var _ = require("lodash");
 var async = require("async");
 
-var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "CampaignPublishCommand";
 
-module.exports = function(payload, callback) {
+module.exports = function(payload) {
   
   var self = this;
-  var timeStart = new Date();
-  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
+      var quid = uuid.v1();
       self.r.table("campaigns").get( self.getIDfromURN(payload.urn) ).then(function(campaign) {
         // TODO :: if ( campaign.publish===true ) return reject("campaign already published");
         campaign.publish = true;
@@ -28,28 +28,24 @@ module.exports = function(payload, callback) {
                 campaign: campaign.id,
                 company: campaign.company
               };
-              if ( individual.charity===undefined ) {
+              if ( _.isUndefined(individual.charity) ) {
                 next();
               } else {
                 self.individualSendEmailCampaignEvent(data);
                 next();
               }
-            }, function(err, results) {
-              timeEnd = new Date();
-              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
+            }, function(err) {
+              if (err) { reject(err); }
+              self.debug.command(CURRENT_NAME, quid);
               resolve(updated);
             });
           });
         });
       })
       .catch(function(error) {
-        timeEnd = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         reject(error);
       });
     } catch (e) {
-      timeEnd = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

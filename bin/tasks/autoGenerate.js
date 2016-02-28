@@ -18,7 +18,7 @@ var errorPromised = function(e) {
   error(e);
 };
 
-module.exports = function(table, collection, model) {
+module.exports = function(table, collection) {
 
   warning("Task: ", "Create");
   warning("***********************************************************************");
@@ -77,7 +77,7 @@ module.exports = function(table, collection, model) {
       Promise.all(sequence).catch(errorPromised);
       next();
       
-    }, function(error) {
+    }, function() {
       warning("END sequence");
       warning("***********************************************************************");
     });

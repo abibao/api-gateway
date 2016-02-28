@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto-generate": "./bin/abibao generate",
