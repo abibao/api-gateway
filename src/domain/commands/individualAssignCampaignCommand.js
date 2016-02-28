@@ -21,13 +21,16 @@ module.exports = function(sealed) {
       sealed = Base64.decode(sealed);
       Iron.unseal(sealed, nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"), Iron.defaults, function (err, unsealed) {
         // control
-        if (err) {
-          return reject(err);
+        switch (true) {
+          case ( _.isNull(err)===false ): return reject(err);
+          case ( _.isUndefined(unsealed.individual) ): return reject( new Error("Individual is undefined") );
+          case ( _.isUndefined(unsealed.campaign) ): return reject( new Error("Campaign is undefined") );
+          case ( _.isUndefined(unsealed.action) ): return reject( new Error("Action is undefined") );
+          case (unsealed.action!==self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH): return reject( new Error("Action is unauthorized") );
+          default:
+            break;
         }
-        if ( _.isUndefined(unsealed.individual) ) { return reject( new Error("Individual is undefined") ); }
-        if ( _.isUndefined(unsealed.campaign) ) { return reject( new Error("Campaign is undefined") ); }
-        if ( _.isUndefined(unsealed.action) ) { return reject( new Error("Action is undefined") ); }
-        if (unsealed.action!==self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH) { return reject( new Error("Action is unauthorized") ); }
+        // continue
         var data = {
           campaign: unsealed.campaign,
           company: unsealed.company, 
@@ -35,9 +38,9 @@ module.exports = function(sealed) {
           individual: unsealed.individual
         };
         var survey;
-        self.SurveyFilterQuery(data).then(function(surveys) {
+        self.surveyFilterQuery(data).then(function(surveys) {
           if ( surveys.length===0 ) {
-            return self.SurveyCreateCommand(data).then(function(survey) {
+            return self.surveyCreateCommand(data).then(function(survey) {
               return self.individualCreateAuthTokenCommand(survey.urnIndividual).then(function(token) {
                 survey.token = token;
                 delete survey.campaign;
