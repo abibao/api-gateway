@@ -70,7 +70,7 @@ exports.login = {
  * promise : done
  * tests : false
  **/
-exports.campaign_assign = {
+exports.campaignAssign = {
   auth: false,
   tags: ["api", "1.1) not authentified"],
   description: "Ajoute un sondage à un utilisateur donnée",
@@ -91,46 +91,4 @@ exports.campaign_assign = {
     });
   }
 };
-
-/**exports.count = {
-  auth: {
-    strategy: "jwt",
-    scope: ["administrator"]
-  },
-  tags: ["api", "1.3) administrator"],
-  description: "Récupère le nombre total d\"utilisateurs de type "individual"",
-  notes: "Récupère le nombre total d\"utilisateurs de type "individual"",
-  jsonp: "callback",
-  handler: function(request, reply) {
-    request.server.domain.individualsCountQuery().then(function(result) {
-      reply(result);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};**/
-
-/**exports.verify_email = {
-  auth: false,
-  tags: ["api", "1.1) not authentified"],
-  description: "Valide le compte d\"un utilisateur",
-  notes: "Valide le compte d\"un utilisateur",
-  validate: {
-    params: {
-      token: Joi.string().required()
-    }
-  },
-  jsonp: "callback",
-  handler: function(request, reply) {
-    request.server.domain.individualVerifyEmailCommand(request.params.token).then(function(result) {
-      reply(result);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};**/
 

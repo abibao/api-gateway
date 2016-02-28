@@ -1,18 +1,17 @@
 "use strict";
 
 var Promise = require("bluebird");
+var uuid = require("node-uuid");
 
-var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "IndividualRegisterCommand";
 
 module.exports = function(payload) {
 
   var self = this;
-  var timeStart = new Date();
-  var timeEnd;
   
   return new Promise(function(resolve, reject) {
     try {
+      var quid = uuid.v1();
       // password confirmation
       if (payload.password1!==payload.password2) {
         return reject( new Error("invalid password confimation") );
@@ -27,19 +26,14 @@ module.exports = function(payload) {
         }
         // create individual
         self.individualCreateCommand(payload).then(function(individual) {
-          timeEnd = new Date();
-          self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
+          self.debug.command(CURRENT_NAME, quid);
           resolve(individual);
         });
       })
       .catch(function(error) {
-        timeEnd = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         reject(error);
       });
     } catch (e) {
-      timeEnd = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

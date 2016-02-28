@@ -35,6 +35,10 @@ exports.constantsDelete = {
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.constantsUpdate = {
   auth: {
     strategy: "jwt",

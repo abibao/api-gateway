@@ -17,7 +17,7 @@ exports.endpoints = [
   // individuals
   { method: "POST", path: "/v1/individuals/login", config: IndividualsController.login }, // done
   { method: "POST", path: "/v1/individuals/register", config: IndividualsController.register }, // done
-  { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: IndividualsController.campaign_assign }, // done
+  { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: IndividualsController.campaignAssign }, // done
   
   // administrators
   { method: "POST", path: "/v1/administrators/login", config: AdministratorsController.login }, // done
