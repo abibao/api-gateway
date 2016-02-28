@@ -36,14 +36,14 @@ exports.endpoints = [
   { method: "GET", path: "/v1/entities/{urn}/campaigns", config: EntitiesController.campaigns_list },
   
   // campaigns
-  { method: "GET", path: "/v1/campaigns", config: CampaignsController.list }, // done
-  { method: "POST", path: "/v1/campaigns", config: CampaignsController.create }, // done
-  { method: "GET", path: "/v1/campaigns/{urn}", config: CampaignsController.read }, // done
+  { method: "GET", path: "/v1/campaigns", config: require("./handlers/campaigns/list") },
+  { method: "POST", path: "/v1/campaigns", config: require("./handlers/campaigns/create") },
+  { method: "GET", path: "/v1/campaigns/{urn}", config: require("./handlers/campaigns/read") },
   { method: "POST", path: "/v1/campaigns/{urn}/publish", config: CampaignsController.publish },
   { method: "POST", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/create") },
   { method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/update") },
   { method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/delete") },
-  { method: "POST", path: "/v1/campaigns/{urn}/items", config: CampaignsController.itemsCreate },
+  { method: "POST", path: "/v1/campaigns/{urn}/items", config: CampaignsController.itemsCreate }
   
 ];
 
