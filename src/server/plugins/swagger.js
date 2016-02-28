@@ -42,37 +42,31 @@ var SwaggerProvision = function(server, callback) {
   server.route({
     path: "/",
     method: "GET",
-    handler: function (request, reply) {
+    handler(request, reply) {
       reply.redirect("/docs");
     }
   });
   // register Swagger
   server.register([
     require("inert"),
-    require("vision"),
-    {
+    require("vision"), {
       register: HapiSwagger,
-      options: options
-    }], function (err) {
-      
-	  if (err) { return callback(err) }
-    // server.logger.info("swagger registered provision");
-    
-    // register Swagger UI
-    server.register([
-    {
-      register: require("hapi-swaggered-ui"),
-      options: optionsui
-    }], {
-      select: "api"
-    }, function (err) {
-      
-    	if (err) { return callback(err) }
-      // server.logger.info("swagger-ui registered provision");
-      
-      callback();
+      options
+    }], 
+    function (err) {
+  	  if (err) { return callback(err) }
+      // register Swagger UI
+      server.register([
+      {
+        register: require("hapi-swaggered-ui"),
+        options: optionsui
+      }], {
+        select: "api"
+      }, function (err) {
+      	if (err) { return callback(err); }
+        callback();
+      });
     });
-  });
 };
 
 module.exports = SwaggerProvision;

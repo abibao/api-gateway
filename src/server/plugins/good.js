@@ -14,8 +14,8 @@ var GoodProvision = function(server, callback) {
           response: "info"
         },
         formatters: {
-          response: function (data) {
-            return data.method+" "+  data.path+" "+data.statusCode+" ("+data.responseTime+"ms)";
+          response(data) {
+            return data.method+" "+data.path+" "+data.statusCode+" ("+data.responseTime+"ms)";
           }
         }
       },
@@ -24,13 +24,10 @@ var GoodProvision = function(server, callback) {
   };
   server.register({
     register: Good,
-    options: options
+    options
   }, function (err) {
-    if (err) { return callback(err) }
-    // server.logger.info("good registered provision");
-    
+    if (err) { return callback(err); }
     callback();
-    
   });
 };
 

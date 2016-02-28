@@ -10,14 +10,10 @@ var options = {
 var BlippProvision = function(server, callback) {
   server.register({
     register: Blipp,
-    options: options
+    options
   }, function (err) {
-    
-    if (err) { return callback(err) }
-    // server.logger.info("blipp registered provision");
-    
+    if (err) { return callback(err); }
     callback();
-    
   });
 };
 
