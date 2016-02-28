@@ -4,7 +4,7 @@ var Promise = require("bluebird");
 var uuid = require("node-uuid");
 var _ = require("lodash");
 
-var CURRENT_NAME = "CampaignUpdateConstantCommand";
+var CURRENT_NAME = "campaignConstantCreateCommand";
 
 module.exports = function(payload) {
 

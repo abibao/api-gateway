@@ -42,7 +42,7 @@ exports.endpoints = [
   { method: "POST", path: "/v1/campaigns/{urn}/publish", config: CampaignsController.publish },
   { method: "POST", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constantsCreate },
   { method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constantsUpdate },
-  { method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: CampaignsController.constantsDelete },
+  { method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaignsConstantsDelete") },
   { method: "POST", path: "/v1/campaigns/{urn}/items", config: CampaignsController.itemsCreate },
   
 ];

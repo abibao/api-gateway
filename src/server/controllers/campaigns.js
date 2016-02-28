@@ -7,42 +7,6 @@ var Boom = require("boom");
  * promise : done
  * tests : false
  **/
-exports.constantsDelete = {
-  auth: {
-    strategy: "jwt",
-    scope: ["administrator"]
-  },
-  tags: ["api", "1.3) administrator"],
-  description: "Supprime une constante à un sondage donné",
-  notes: "Supprime une constante à un sondage donné",
-  payload: {
-    allow: "application/x-www-form-urlencoded",
-  },
-  validate: {
-    params: {
-      urn: Joi.string().required()
-    },
-    payload: {
-      label: Joi.string().required()
-    }
-  },
-  jsonp: "callback",
-  handler: function(request, reply) {
-    request.payload.urn = request.params.urn;
-    request.server.domain.campaignDeleteConstantCommand(request.payload).then(function(campaign) {
-      reply(campaign);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};
-
-/**
- * promise : done
- * tests : false
- **/
 exports.constantsUpdate = {
   auth: {
     strategy: "jwt",
@@ -66,7 +30,7 @@ exports.constantsUpdate = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.campaignUpdateConstantCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignConstantUpdateCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
@@ -103,7 +67,7 @@ exports.constantsCreate = {
   jsonp: "callback",
   handler: function(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.campaignCreateConstantCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignConstantCreateCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
