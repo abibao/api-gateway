@@ -26,10 +26,10 @@ exports.endpoints = [
   { method: "GET", path: "/v1/auth/surveys/{urn}", config: AuthController.surveysRead },
   
   // entities
-  { method: "GET", path: "/v1/entities", config: EntitiesController.list }, // done
-  { method: "POST", path: "/v1/entities", config: EntitiesController.create }, // done
-  { method: "GET", path: "/v1/entities/{urn}", config: EntitiesController.read }, // done
-  { method: "PATCH", path: "/v1/entities/{urn}", config: EntitiesController.update }, // done
+  { method: "GET", path: "/v1/entities", config: require("./handlers/entities/list") },
+  { method: "POST", path: "/v1/entities", config: require("./handlers/entities/create") },
+  { method: "GET", path: "/v1/entities/{urn}", config: require("./handlers/entities/read") },
+  { method: "PATCH", path: "/v1/entities/{urn}", config: require("./handlers/entities/update") },
   { method: "GET", path: "/v1/entities/{urn}/campaigns", config: EntitiesController.campaigns_list },
   
   // campaigns

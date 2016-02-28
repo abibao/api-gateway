@@ -3,23 +3,23 @@
 var Joi = require("joi");
 var Boom = require("boom");
 
-exports.campaigns_list = {
+module.exports = {
   auth: {
     strategy: "jwt",
     scope: ["administrator"]
   },
   tags: ["api", "1.3) administrator"],
-  description: "Retourne la liste des campagnes d\"une entité donnée",
-  notes: "Retourne la liste des campagnes d\"une entité donnée",
+  description: "Retourne une entité donnée",
+  notes: "Retourne une entité donnée",
   validate: {
     params: {
       urn: Joi.string().required()
     }
   },
   jsonp: "callback",
-  handler: function(request, reply) {
-    request.server.domain.entityListCampaignsQuery(request.params.urn).then(function(campaigns) {
-      reply(campaigns);
+  handler(request, reply) {
+    request.server.domain.entityReadQuery(request.params.urn).then(function(entity) {
+      reply(entity);
     })
     .catch(function(error) {
       request.server.logger.error(error);
