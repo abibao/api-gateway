@@ -24,9 +24,9 @@ exports.endpoints = [
   { method: "POST", path: "/v1/administrators/register", config: AdministratorsController.register }, // done
   
   // auth
-  { method: "GET", path: "/v1/auth/global/informations", config: AuthController.global_informations }, // done
-  { method: "POST", path: "/v1/auth/surveys/{urn}/answers", config: AuthController.surveys_answers },
-  { method: "GET", path: "/v1/auth/surveys/{urn}", config: AuthController.surveys_read },
+  { method: "GET", path: "/v1/auth/global/informations", config: AuthController.globalInformations }, // done
+  { method: "POST", path: "/v1/auth/surveys/{urn}/answers", config: AuthController.surveysAnswers },
+  { method: "GET", path: "/v1/auth/surveys/{urn}", config: AuthController.surveysRead },
   
   // entities
   { method: "GET", path: "/v1/entities", config: EntitiesController.list }, // done

@@ -25,7 +25,7 @@ exports.register = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.IndividualRegisterCommand(request.payload).then(function(individual) {
+    request.server.domain.individualRegisterCommand(request.payload).then(function(individual) {
       reply(individual);
     })
     .catch(function(error) {
@@ -55,7 +55,7 @@ exports.login = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.IndividualLoginWithCredentialsCommand(request.payload)
+    request.server.domain.individualLoginWithCredentialsCommand(request.payload)
     .then(function(credentials) {
       reply(credentials);
     })
@@ -82,7 +82,7 @@ exports.campaign_assign = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.IndividualAssignCampaignCommand(request.params.token).then(function(result) {
+    request.server.domain.individualAssignCampaignCommand(request.params.token).then(function(result) {
       reply(result);
     })
     .catch(function(error) {
@@ -102,7 +102,7 @@ exports.campaign_assign = {
   notes: "Récupère le nombre total d\"utilisateurs de type "individual"",
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.IndividualsCountQuery().then(function(result) {
+    request.server.domain.individualsCountQuery().then(function(result) {
       reply(result);
     })
     .catch(function(error) {
@@ -124,7 +124,7 @@ exports.campaign_assign = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.IndividualVerifyEmailCommand(request.params.token).then(function(result) {
+    request.server.domain.individualVerifyEmailCommand(request.params.token).then(function(result) {
       reply(result);
     })
     .catch(function(error) {

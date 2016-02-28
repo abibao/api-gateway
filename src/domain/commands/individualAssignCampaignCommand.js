@@ -24,10 +24,10 @@ module.exports = function(sealed) {
         if (err) {
           return reject(err);
         }
-        if ( _.isUndefined(unsealed.individual) ) { return reject( new Error("Individual is undefined.") ); }
-        if ( _.isUndefined(unsealed.campaign) ) { return reject( new Error("Campaign is undefined.") ); }
-        if ( _.isUndefined(unsealed.action) ) { return reject( new Error("Action is undefined.") ); }
-        if (unsealed.action!==self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH) { return reject( new Error("Action is unauthorized.") ); }
+        if ( _.isUndefined(unsealed.individual) ) { return reject( new Error("Individual is undefined") ); }
+        if ( _.isUndefined(unsealed.campaign) ) { return reject( new Error("Campaign is undefined") ); }
+        if ( _.isUndefined(unsealed.action) ) { return reject( new Error("Action is undefined") ); }
+        if (unsealed.action!==self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH) { return reject( new Error("Action is unauthorized") ); }
         var data = {
           campaign: unsealed.campaign,
           company: unsealed.company, 

@@ -7,7 +7,7 @@ var Joi = require("joi");
  * promise : progress
  * tests : false
  **/
-exports.surveys_answers = {
+exports.surveysAnswers = {
   auth: {
     strategy: "jwt",
     scope: ["individual"]
@@ -40,7 +40,7 @@ exports.surveys_answers = {
   }
 };
 
-exports.surveys_read = {
+exports.surveysRead = {
   auth: {
     strategy: "jwt",
     scope: ["individual"]
@@ -55,7 +55,7 @@ exports.surveys_read = {
   },
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.SurveyReadPopulateControlIndividualQuery(request.auth.credentials, request.params).then(function(survey) {
+    request.server.domain.surveyReadPopulateControlIndividualQuery(request.auth.credentials, request.params).then(function(survey) {
       reply(survey);
     })
     .catch(function(error) {
@@ -69,7 +69,7 @@ exports.surveys_read = {
  * promise : done
  * tests : false
  **/
-exports.global_informations = {
+exports.globalInformations = {
   auth: {
     strategy: "jwt",
     scope: ["individual"]
@@ -79,7 +79,7 @@ exports.global_informations = {
   notes: "Retourne des informations rapides sur l\"utilisateur actuellement connecté", 
   jsonp: "callback",
   handler: function(request, reply) {
-    request.server.domain.AuthentificationGlobalInformationsQuery(request.auth.credentials).then(function(user) {
+    request.server.domain.authentificationGlobalInformationsQuery(request.auth.credentials).then(function(user) {
       reply(user);
     })
     .catch(function(error) {
@@ -88,23 +88,3 @@ exports.global_informations = {
     });
   }
 };
-
-/**exports.resend_verification_email = {
-  auth: {
-    strategy: "jwt",
-    scope: ["individual"]
-  },
-  tags: ["api", "1.2) individual"],
-  description: "Renvoie un email de validation de compte",
-  notes: "Renvoie un email de validation de compte",
-  jsonp: "callback",
-  handler: function(request, reply) {
-    request.server.domain.IndividualSendAgainEmailVerificationCommand(request.auth.credentials).then(function(result) {
-      reply(result);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};**/

@@ -67,7 +67,7 @@ module.exports = {
         }
         async.mapSeries(files, function(item, next) {
           var name = path.basename(item, ".js");
-          debug(">>> ["+name+"] has just being injected");
+          debug(">>> ["+_.upperFirst(name)+"] has just being injected");
           if (type==="models") {
             self[name] = require("./"+type+"/"+name)(self.thinky);
           } else {
