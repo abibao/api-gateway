@@ -1,33 +1,32 @@
 "use strict";
 
+var Promise = require("bluebird");
+var uuid = require("node-uuid");
 var _ = require("lodash");
 
-var CURRENT_ACTION = "Command";
 var CURRENT_NAME = "CampaignCreateConstantCommand";
 
-module.exports = function(params, callback) {
+module.exports = function(payload) {
 
   var self = this;
   
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
-    
-    self.SystemReadDataQuery(self.CampaignModel, params.urn).then(function(campaign) {
-      if ( _.isUndefined(campaign.constants) ) { campaign.constants = {}; }
-      campaign.constants[params.label] = params.description;
-      return self.SystemValidateDataCommand(campaign).then(function() {
-        return self.SystemSaveDataCommand(campaign).then(function(created) {
-          callback(null, created);
+  return new Promise(function(resolve, reject) {
+    try {
+      var quid = uuid.v1();
+      self.debug.command(CURRENT_NAME, quid);
+      self.campaignReadQuery(payload.urn).then(function(campaign) {
+        if ( _.isUndefined(campaign.constants) ) { campaign.constants = {}; }
+        campaign.constants[payload.label] = payload.description;
+        return self.campaignUpdateCommand(campaign).then(function(campaign) {
+          resolve(campaign);
         });
+      })
+      .catch(function(error) {
+        reject(error);
       });
-    })
-    .catch(function(error) {
-      callback(error, null);
-    });
-
-  } catch (e) {
-    callback(e, null);
-  }
+    } catch (e) {
+      reject(e);
+    }
+  });
   
 };

@@ -3,6 +3,10 @@
 var Joi = require("joi");
 var Boom = require("boom");
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.constantsDelete = {
   auth: {
     strategy: "jwt",
@@ -72,6 +76,10 @@ exports.constantsUpdate = {
   }
 };
 
+/**
+ * promise : done
+ * tests : false
+ **/
 exports.constantsCreate = {
   auth: {
     strategy: "jwt",
@@ -105,6 +113,10 @@ exports.constantsCreate = {
   }
 };
 
+/**
+ * promise : progress
+ * tests : false
+ **/
 exports.itemsCreate = {
   auth: {
     strategy: "jwt",

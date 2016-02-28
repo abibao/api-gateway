@@ -1,24 +1,24 @@
 "use strict";
 
+var Promise = require("bluebird");
 var uuid = require("node-uuid");
+var _ = require("lodash");
 
-var CURRENT_NAME = "CampaignConstantDeleteCommand";
+var CURRENT_NAME = "campaignConstantDeleteCommand";
 
-module.exports = function(params) {
+module.exports = function(payload) {
 
   var self = this;
   
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.SystemReadDataQuery(self.CampaignModel, params.urn).then(function(campaign) {
-        if ( campaign.constants===undefined ) campaign.constants = {};
-        delete campaign.constants[params.label];
-        return self.SystemValidateDataCommand(campaign).then(function() {
-          return self.SystemSaveDataCommand(campaign).then(function(created) {
-            self.debug.command(CURRENT_NAME, quid);
-            resolve(created);
-          });
+      self.debug.command(CURRENT_NAME, quid);
+      self.campaignReadQuery(payload.urn).then(function(campaign) {
+        if ( _.isUndefined(campaign.constants) ) { campaign.constants = {}; }
+        delete campaign.constants[payload.label];
+        return self.campaignUpdateCommand(campaign).then(function(campaign) {
+          resolve(campaign);
         });
       })
       .catch(function(error) {
