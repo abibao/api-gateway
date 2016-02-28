@@ -9,8 +9,8 @@ module.exports = {
     scope: ["administrator"]
   },
   tags: ["api", "1.3) administrator"],
-  description: "Supprime une constante à un sondage donné",
-  notes: "Supprime une constante à un sondage donné",
+  description: "Modifie une constante à un sondage donné",
+  notes: "Modifie une constante à un sondage donné",
   payload: {
     allow: "application/x-www-form-urlencoded",
   },
@@ -19,13 +19,14 @@ module.exports = {
       urn: Joi.string().required()
     },
     payload: {
-      label: Joi.string().required()
+      label: Joi.string().required(),
+      description: Joi.string().required()
     }
   },
   jsonp: "callback",
-  handler: function(request, reply) {
+  handler(request, reply) {
     request.payload.urn = request.params.urn;
-    request.server.domain.campaignConstantDeleteCommand(request.payload).then(function(campaign) {
+    request.server.domain.campaignConstantUpdateCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {
