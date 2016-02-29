@@ -18,11 +18,8 @@ module.exports = function(thinky) {
       return _.isUndefined(this.id)  ? null : "urn:abibao:campaign:item:"+cryptr.encrypt(this.id);
     }),
     // fields
-    optional: type.boolean().required().default(false),
-    title: type.string().required(),
-    description: type.string(),
-    component: type.object().required(),
-    answer: type.object().required(),
+    label: type.string().required(),
+    type: type.string().required(),
     // linked
     campaign: type.string().required(),
     // automatic

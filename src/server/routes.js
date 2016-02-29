@@ -36,10 +36,14 @@ exports.endpoints = [
   { method: "GET", path: "/v1/campaigns", config: require("./handlers/campaigns/list") },
   { method: "POST", path: "/v1/campaigns", config: require("./handlers/campaigns/create") },
   { method: "GET", path: "/v1/campaigns/{urn}", config: require("./handlers/campaigns/read") },
-  { method: "POST", path: "/v1/campaigns/{urn}/publish", config: require("./handlers/campaigns/publish") },
-  { method: "POST", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/create") },
-  { method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/update") },
-  { method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/delete") },
-  { method: "POST", path: "/v1/campaigns/{urn}/items", config: require("./handlers/campaigns/items/create") }
+  //{ method: "POST", path: "/v1/campaigns/{urn}/publish", config: require("./handlers/campaigns/publish") },
+  //{ method: "POST", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/create") },
+  //{ method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/update") },
+  //{ method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/delete") },
+  //{ method: "POST", path: "/v1/campaigns/{urn}/items", config: require("./handlers/campaigns/items/create") },
+  
+  // component: text-input
+  { method: "POST", path: "/v1/campaigns/items/short-text", config: require("./handlers/campaigns/items/componentShortText/create") },
+  { method: "POST", path: "/v1/campaigns/items/long-text", config: require("./handlers/campaigns/items/componentLongText/create") },
   
 ];
