@@ -3,7 +3,7 @@
 var Promise = require("bluebird");
 var uuid = require("node-uuid");
 
-var CURRENT_NAME = "CampaignItemShortTextCreateCommand";
+var CURRENT_NAME = "CampaignItemMultipleChoiceCreateCommand";
 
 module.exports = function(payload) {
 
@@ -13,9 +13,9 @@ module.exports = function(payload) {
     try {
       var quid = uuid.v1();
       self.debug.command(CURRENT_NAME, quid);
-      self.campaignReadQuery(payload.campaign).then(function(campaign) {
+      self.campaignReadQuery(payload.campaign).then(function() {
         payload.campaign = self.getIDfromURN(payload.campaign);
-        payload.type = "ABIBAO_COMPONENT_SHORT_TEXT";
+        payload.type = "ABIBAO_COMPONENT_MULTIPLE_CHOICE";
         return self.campaignItemCreateCommand(payload).then(function(campaign) {
           self.debug.command(CURRENT_NAME, quid);
           resolve(campaign);

@@ -42,8 +42,9 @@ exports.endpoints = [
   //{ method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/delete") },
   //{ method: "POST", path: "/v1/campaigns/{urn}/items", config: require("./handlers/campaigns/items/create") },
   
-  // component: text-input
+  // components
   { method: "POST", path: "/v1/campaigns/items/short-text", config: require("./handlers/campaigns/items/componentShortText/create") },
   { method: "POST", path: "/v1/campaigns/items/long-text", config: require("./handlers/campaigns/items/componentLongText/create") },
+  { method: "POST", path: "/v1/campaigns/items/multiple-choice", config: require("./handlers/campaigns/items/componentMultipleChoice/create") },
   
 ];

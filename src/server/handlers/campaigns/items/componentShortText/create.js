@@ -27,7 +27,7 @@ module.exports = {
   },
   jsonp: "callback",
   handler(request, reply) {
-    request.server.domain.CampaignItemShortTextCreateCommand(request.payload).then(function(campaignItem) {
+    request.server.domain.campaignItemShortTextCreateCommand(request.payload).then(function(campaignItem) {
       reply(campaignItem);
     })
     .catch(function(error) {
