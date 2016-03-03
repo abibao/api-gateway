@@ -39,28 +39,3 @@ exports.surveysAnswers = {
     });
   }
 };
-
-exports.surveysRead = {
-  auth: {
-    strategy: "jwt",
-    scope: ["individual"]
-  },
-  tags: ["api", "1.2) individual"],
-  description: "Retourne les données d\"un sondage", 
-  notes: "Retourne les données d\"un sondage",
-  validate: {
-    params: {
-      urn: Joi.string().required()
-    }
-  },
-  jsonp: "callback",
-  handler: function(request, reply) {
-    request.server.domain.surveyReadPopulateControlIndividualQuery(request.auth.credentials, request.params).then(function(survey) {
-      reply(survey);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
-  }
-};

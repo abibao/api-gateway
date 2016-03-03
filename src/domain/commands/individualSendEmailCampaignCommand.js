@@ -1,5 +1,6 @@
 "use strict";
 
+var Promise = require("bluebird");
 var Iron = require("iron");
 var Base64 = require("base64-url");
 var nodemailer = require("nodemailer");
@@ -29,7 +30,7 @@ module.exports = function(data) {
       var unsealed = data;
       unsealed.action = self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH;
       Iron.seal(unsealed,  nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"), Iron.defaults, function (err, sealed) {
-        if (err) { return reject(err) }
+        if (err) { return reject(err); }
         sealed = Base64.encode(sealed);
         var mailOptions =  {
           from: nconf.get("ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_NAME")+" <"+nconf.get("ABIBAO_API_GATEWAY_SERVER_MAILER_FROM_EMAIL")+">",
@@ -39,7 +40,7 @@ module.exports = function(data) {
           html: "<a href=\""+nconf.get("ABIBAO_WWW_SURVEYS_URI")+"/assign/"+sealed+"\">Cliquez ici pour commencer le sondage.</a>"
         };
         transporter.sendMail(mailOptions, function(error, info) {
-          if (error) { return reject(error) }
+          if (error) { return reject(error); }
           if (!info) { return reject( new Error("no informations found") ); }
           self.debug.command(CURRENT_NAME, quid);
           resolve();

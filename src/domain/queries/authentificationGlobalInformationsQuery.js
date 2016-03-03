@@ -79,7 +79,7 @@ module.exports = function(credentials) {
             // surveysInProgress:  calculate URN
             _.map(individual.surveysInProgress, function(item) {
               item.urn = self.getURNfromID(item.urn, "survey");
-              item.campaign.urn = self.getURNfromID(item.urn, "campaign");
+              item.campaign.urn = self.getURNfromID(item.campaign.urn, "campaign");
             });
             // surveysCompleted:  calculate URN
             _.map(individual.surveysCompleted, function(item) {

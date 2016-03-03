@@ -16,6 +16,7 @@ exports.endpoints = [
   { method: "POST", path: "/v1/individuals/register", config: require("./handlers/individuals/register") },
   { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: require("./handlers/campaigns/assign") },
   { method: "GET", path: "/v1/auth/global/informations", config: require("./handlers/individuals/auth/globalInformations") },
+  { method: "GET", path: "/v1/auth/surveys/{urn}", config: require("./handlers/individuals/auth/surveys/read") },
   
   // administrators
   { method: "POST", path: "/v1/administrators/login", config: require("./handlers/administrators/login") },
@@ -23,7 +24,6 @@ exports.endpoints = [
   
   // auth
   { method: "POST", path: "/v1/auth/surveys/{urn}/answers", config: AuthController.surveysAnswers },
-  { method: "GET", path: "/v1/auth/surveys/{urn}", config: AuthController.surveysRead },
   
   // entities
   { method: "GET", path: "/v1/entities", config: require("./handlers/entities/list") },
@@ -36,7 +36,7 @@ exports.endpoints = [
   { method: "GET", path: "/v1/campaigns", config: require("./handlers/campaigns/list") },
   { method: "POST", path: "/v1/campaigns", config: require("./handlers/campaigns/create") },
   { method: "GET", path: "/v1/campaigns/{urn}", config: require("./handlers/campaigns/read") },
-  //{ method: "POST", path: "/v1/campaigns/{urn}/publish", config: require("./handlers/campaigns/publish") },
+  { method: "POST", path: "/v1/campaigns/{urn}/publish", config: require("./handlers/campaigns/publish") },
   //{ method: "POST", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/create") },
   //{ method: "PATCH", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/update") },
   //{ method: "DELETE", path: "/v1/campaigns/{urn}/constants", config: require("./handlers/campaigns/constants/delete") },

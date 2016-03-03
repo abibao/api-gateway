@@ -1,32 +1,39 @@
 "use strict";
 
-var CURRENT_ACTION = "Query";
+var Promise = require("bluebird");
+var _ = require("lodash");
+var uuid = require("node-uuid");
+
 var CURRENT_NAME = "SurveyReadPopulateControlIndividualQuery";
  
-module.exports = function(credentials, params, callback) {
+module.exports = function(payload) {
   
   var self = this;
   
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
-    
-    self.systemReadDataQuery(self.SurveyModel, params.urn).then(function(survey) {
-      if ( credentials.id!==survey.individual ) return callback("Individual control failed", null);
-      return self.systemReadDataQuery(self.CampaignModel, survey.campaign).then(function(campaign) {
-        survey.campaign = campaign;
-        return self.systemFindDataQuery(self.CampaignItemModel, {campaign:campaign.id}).then(function(items) {
-          campaign.items = items;
-          callback(null, campaign);
+  return new Promise(function(resolve, reject) {
+    try {
+      var quid = uuid.v1();
+      self.surveyReadQuery(payload.urn).then(function(survey) {
+        if ( payload.credentials.urn!==survey.urnIndividual ) { return reject( new Error("Individual control failed") ); }
+        return self.campaignReadQuery(survey.urnCampaign).then(function(campaign) {
+          survey.campaign = campaign;
+          var idCampaign = self.getIDfromURN(campaign.urn);
+          return self.campaignItemFilterQuery({campaign:idCampaign}).then(function(items) {
+            _.map(items, function(item) {
+              delete item.campaign;
+            });
+            campaign.items = items;
+            self.debug.query(CURRENT_NAME, quid);
+            resolve(campaign);
+          });
         });
+      })
+      .catch(function(error) {
+        reject(error);
       });
-    })
-    .catch(function(error) {
-      callback(error, null);
-    });
-    
-  } catch (e) {
-    callback(e, null);
-  }
-
+    } catch (e) {
+      reject(e);
+    }
+  });
+  
 };

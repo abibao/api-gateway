@@ -13,7 +13,6 @@ module.exports = function(urn) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.debug.query("");
       self.campaignReadQuery(urn).then(function(campaign) {
         self.entityReadQuery(campaign.urnCompany).then(function(entity) {
           delete campaign.urnCompany;
