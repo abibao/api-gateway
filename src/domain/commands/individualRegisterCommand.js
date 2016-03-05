@@ -24,10 +24,11 @@ module.exports = function(payload) {
         if (individuals.length>0) {
           return reject( new Error("Email already exists in database") );
         }
-        // create individual
-        self.individualCreateCommand(payload).then(function(individual) {
-          self.debug.command(CURRENT_NAME, quid);
-          resolve(individual);
+        return self.individualCreateCommand(payload).then(function(individual) {
+          return self.individualCreateFirstSurveyAbibaoCommand(individual).then(function() {
+            self.debug.query(CURRENT_NAME, quid);
+            resolve({created:true});
+          });
         });
       })
       .catch(function(error) {

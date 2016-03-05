@@ -11,11 +11,15 @@ exports.endpoints = [
   // www - dashboard
   { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"..","www/dashboard")) } } },
   
+  // flex as3 patch/post
+  { method: "POST", path: "/v1/auth/charity", config: require("./handlers/individuals/auth/charity/update") },
+  
   // individuals
   { method: "POST", path: "/v1/individuals/login", config: require("./handlers/individuals/login") },
   { method: "POST", path: "/v1/individuals/register", config: require("./handlers/individuals/register") },
   { method: "POST", path: "/v1/individual/campaign/assign/{token}", config: require("./handlers/campaigns/assign") },
   { method: "GET", path: "/v1/auth/global/informations", config: require("./handlers/individuals/auth/globalInformations") },
+  { method: "PATCH", path: "/v1/auth/charity", config: require("./handlers/individuals/auth/charity/update") },
   { method: "GET", path: "/v1/auth/surveys/{urn}", config: require("./handlers/individuals/auth/surveys/read") },
   
   // administrators
@@ -26,6 +30,7 @@ exports.endpoints = [
   { method: "POST", path: "/v1/auth/surveys/{urn}/answers", config: AuthController.surveysAnswers },
   
   // entities
+  { method: "GET", path: "/v1/entities/charity", config: require("./handlers/entities/charity") },
   { method: "GET", path: "/v1/entities", config: require("./handlers/entities/list") },
   { method: "POST", path: "/v1/entities", config: require("./handlers/entities/create") },
   { method: "GET", path: "/v1/entities/{urn}", config: require("./handlers/entities/read") },

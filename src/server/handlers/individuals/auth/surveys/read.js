@@ -17,7 +17,7 @@ module.exports = {
     }
   },
   jsonp: "callback",
-  handler: function(request, reply) {
+  handler(request, reply) {
     var payload = {
       credentials: request.auth.credentials,
       urn: request.params.urn

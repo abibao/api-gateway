@@ -24,10 +24,10 @@ module.exports = function(urn, callback) {
       return {
         campaigns: self.r.table("campaigns").filter({company: entity("id")}).without("company").coerceTo("array").merge(function(campaign) {
           return {
-            urn: "urn:abibao:campaign:"+cryptr.encrypt(campaign("id")),
+            urn: "urn:abibao:database:campaign:"+cryptr.encrypt(campaign("id")),
             items: self.r.table("campaigns_items").filter({campaign: campaign("id")}).without("id", "campaign").coerceTo("array").merge(function(item) {
               return {
-                urn: "urn:abibao:campaign:item:"+cryptr.encrypt(item("id"))
+                urn: "urn:abibao:database:campaign:item:"+cryptr.encrypt(item("id"))
               };
             })
           }; 

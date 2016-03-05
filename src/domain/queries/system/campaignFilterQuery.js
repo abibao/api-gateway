@@ -17,6 +17,8 @@ module.exports = function(filters) {
         _.map(models, function(model) {
           delete model.id;
           delete model.company;
+          delete model.charity;
+          delete model.campaign;
         });
         self.debug.query(CURRENT_NAME, quid);
         resolve(models);

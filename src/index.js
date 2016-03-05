@@ -27,7 +27,11 @@ Services.startDomain(function(err) {
     if (err) { return debug(err) }
     // start listeners
     domain.administratorsListenerChanged();
+    domain.campaignsItemsListenerChanged();
+    domain.campaignsListenerChanged();
     domain.entitiesListenerChanged();
+    domain.individualsListenerChanged();
+    domain.surveysListenerChanged();
     // start sockets
     Services.startIO(domain);
     // finals injections

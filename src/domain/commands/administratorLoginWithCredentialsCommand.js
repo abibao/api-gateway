@@ -14,7 +14,7 @@ module.exports = function(payload) {
       var quid = uuid.v1();
       self.administratorFilterQuery({email:payload.email}).then(function(administrators) {
         if (administrators.length===0) {
-          return reject( new Error("User not found") );
+          return reject( new Error("Email address and/or password invalid") );
         }
         if (administrators.length>1) {
           return reject( new Error("Too many emails, contact an administrator") );
@@ -30,7 +30,7 @@ module.exports = function(payload) {
             reject(error);
           });
         } else {
-          reject("User not authenticate");
+          reject("Email address and/or password invalid");
         }
       })
       .catch(function(error) {

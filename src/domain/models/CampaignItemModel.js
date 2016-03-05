@@ -15,7 +15,7 @@ module.exports = function(thinky) {
   var CampaignItemModel = thinky.createModel("campaigns_items", {
     // virtuals
     urn: type.virtual().default(function() {
-      return _.isUndefined(this.id)  ? null : "urn:abibao:campaign:item:"+cryptr.encrypt(this.id);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:database:campaign:item:"+cryptr.encrypt(this.id);
     }),
     // fields
     label: type.string().required(),

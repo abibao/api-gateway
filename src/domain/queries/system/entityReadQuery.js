@@ -15,6 +15,8 @@ module.exports = function(urn) {
       self.EntityModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         delete model.id;
         delete model.company;
+        delete model.charity;
+        delete model.campaign;
         self.debug.query(CURRENT_NAME, quid);
         resolve(model);
       }).catch(function(error) {

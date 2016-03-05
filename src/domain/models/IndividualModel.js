@@ -16,14 +16,17 @@ module.exports = function(thinky) {
   var IndividualModel = thinky.createModel("individuals", {
     // virtuals
     urn: type.virtual().default(function() {
-      return _.isUndefined(this.id)  ? null : "urn:abibao:individual:"+cryptr.encrypt(this.id);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:database:individual:"+cryptr.encrypt(this.id);
+    }),
+    urnCharity: type.virtual().default(function() {
+      return _.isUndefined(this.charity)  ? null : "urn:abibao:database:entity:"+cryptr.encrypt(this.charity);
     }),
     // fields
     email: type.string().email().required(),
     scope: type.string().default("individual"),
     verified: type.boolean().default(false),
     // linked
-    entity: type.string(),
+    charity: type.string().default("none"),
     // calculated
     hashedPassword: type.string(),
     salt: type.string(),

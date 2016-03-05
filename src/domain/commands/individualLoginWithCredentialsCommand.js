@@ -15,7 +15,7 @@ module.exports = function(payload) {
     try {
       self.individualFilterQuery({email:payload.email}).then(function(individuals) {
         if (individuals.length===0) {
-          return reject( new Error("User not found") );
+          return reject( new Error("Email address and/or password invalid") );
         }
         if (individuals.length>1) {
           return reject( new Error("Too many emails, contact an individual") );
@@ -24,9 +24,16 @@ module.exports = function(payload) {
         if (individual.authenticate(payload.password)) {
           // all done then reply token
           self.individualCreateAuthTokenCommand(individual.urn).then(function(token) {
-            timeEnd = new Date();
-            self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-            resolve({token:token});
+            var credentials = {
+              action: self.ABIBAO_CONST_TOKEN_AUTH_ME,
+              urn: individual.urn, 
+              scope: individual.scope
+            };
+            return self.authentificationGlobalInformationsQuery(credentials).then(function(infos) {
+              timeEnd = new Date();
+              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
+              resolve({token:token,globalInfos:infos});
+            });
           })
           .catch(function(error) {
             timeEnd = new Date();
@@ -36,7 +43,7 @@ module.exports = function(payload) {
         } else {
           timeEnd = new Date();
           self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-          reject("User not authenticate");
+          reject("Email address and/or password invalid");
         }
       })
       .catch(function(error) {

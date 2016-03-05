@@ -4,6 +4,7 @@ var Hapi = require("hapi");
 var Routes = require("./server/routes");
 
 // var fs = require("fs");
+var uuid = require("node-uuid");
 var _ = require("lodash");
 var async = require("async");
 var bunyan = require("bunyan");
@@ -34,6 +35,13 @@ var server = new Hapi.Server({
 });
 
 server.connection(options);
+/*const preResponse = function (request, reply) {
+  var response = request.response;
+  response.output.headers['x-abibao-response-id'] = uuid.v1();
+  reply.continue();
+};
+server.ext('onPreResponse', preResponse);*/
+
 var io = require("socket.io")(server.listener);
 var domain = require("./domain");
 

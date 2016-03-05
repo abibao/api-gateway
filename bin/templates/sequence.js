@@ -17,21 +17,21 @@ module.exports = function(model, collection) {
       JS_MODEL_NAME: model+"Model",
       JS_COMMAND_NAME: model+"CreateCommand"
     }),
-    mustachePromise(normalize(resolve(__dirname,"../templates/commands/update.tpl")), normalize(resolve(__dirname,"../../src/domain/commands/system")), _.camelCase(model+"UpdateCommand")+".js", { 
-      JS_MODEL_NAME: model+"Model",
-      JS_COMMAND_NAME: model+"UpdateCommand"
-    }),
     mustachePromise(normalize(resolve(__dirname,"../templates/queries/read.tpl")), normalize(resolve(__dirname,"../../src/domain/queries/system")), _.camelCase(model+"ReadQuery")+".js", { 
       JS_MODEL_NAME: model+"Model",
       JS_QUERY_NAME: model+"ReadQuery"
     }),
-    mustachePromise(normalize(resolve(__dirname,"../templates/queries/filter.tpl")), normalize(resolve(__dirname,"../../src/domain/queries/system")), _.camelCase(model+"FilterQuery")+".js", { 
+    mustachePromise(normalize(resolve(__dirname,"../templates/commands/update.tpl")), normalize(resolve(__dirname,"../../src/domain/commands/system")), _.camelCase(model+"UpdateCommand")+".js", { 
       JS_MODEL_NAME: model+"Model",
-      JS_QUERY_NAME: model+"FilterQuery"
+      JS_COMMAND_NAME: model+"UpdateCommand"
     }),
     mustachePromise(normalize(resolve(__dirname,"../templates/commands/delete.tpl")), normalize(resolve(__dirname,"../../src/domain/commands/system")), _.camelCase(model+"DeleteCommand")+".js", { 
       JS_MODEL_NAME: model+"Model",
       JS_COMMAND_NAME: model+"DeleteCommand"
+    }),
+    mustachePromise(normalize(resolve(__dirname,"../templates/queries/filter.tpl")), normalize(resolve(__dirname,"../../src/domain/queries/system")), _.camelCase(model+"FilterQuery")+".js", { 
+      JS_MODEL_NAME: model+"Model",
+      JS_QUERY_NAME: model+"FilterQuery"
     }),
     mustachePromise(normalize(resolve(__dirname,"../templates/listeners/default.tpl")), normalize(resolve(__dirname,"../../src/domain/listeners/system")), _.camelCase(collection+"ListenerChanged")+".js", { 
       JS_MODEL_NAME: model+"Model",

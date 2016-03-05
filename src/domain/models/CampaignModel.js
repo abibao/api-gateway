@@ -15,10 +15,10 @@ module.exports = function(thinky) {
   var CampaignModel = thinky.createModel("campaigns", {
     // virtuals
     urn: type.virtual().default(function() {
-      return _.isUndefined(this.id)  ? null : "urn:abibao:campaign:"+cryptr.encrypt(this.id);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:database:campaign:"+cryptr.encrypt(this.id);
     }),
     urnCompany: type.virtual().default(function() {
-      return _.isUndefined(this.id)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.company);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:database:entity:"+cryptr.encrypt(this.company);
     }),
     // fields
     name: type.string().required(),
@@ -26,6 +26,8 @@ module.exports = function(thinky) {
     price: type.number().min(0).required(),
     currency: type.string().enum(["EUR"]).required(), // ISO 4217 : https://fr.wikipedia.org/wiki/ISO_4217
     constants: type.object(),
+    // abibao fondamentals
+    abibao: type.number().min(0).default(0),
     // linked
     company: type.string().required(), // entité de type "company" qui fournit le sondage
     // automatic

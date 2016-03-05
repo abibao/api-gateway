@@ -5,7 +5,8 @@
   "scripts": {
     "auto-generate": "./bin/abibao generate",
     "test": "grunt test",
-    "start": "DEBUG=abibao:* node . | bunyan"
+    "start": "DEBUG=abibao* node . | bunyan",
+    "start-new": "DEBUG=abibao* node src/gateway | bunyan"
   },
   "repository": {
     "type": "git",

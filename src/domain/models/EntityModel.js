@@ -15,12 +15,12 @@ module.exports = function(thinky) {
   var EntityModel = thinky.createModel("entities", {
     // virtuals
     urn: type.virtual().default(function() {
-      return _.isUndefined(this.id)  ? null : "urn:abibao:entity:"+cryptr.encrypt(this.id);
+      return _.isUndefined(this.id)  ? null : "urn:abibao:database:entity:"+cryptr.encrypt(this.id);
     }),
     // fields
     name: type.string().required(),
     contact: type.string().email().required(),
-    type: type.string().enum(["charity", "company"]).required(),
+    type: type.string().enum(["abibao", "charity", "company"]).required(),
     icon: type.string().default("images/icons/default.png"),
     avatar: type.string().default("images/avatars/default.png"),
     picture: type.string().default("images/pictures/default.png"),

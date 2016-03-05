@@ -29,6 +29,7 @@ module.exports = function(credentials) {
                 return self.r.table("entities").get(val).merge(function(charity) {
                   return {
                     urn: charity("id"),
+                    type: charity("type"),
                     me: {
                       totalSurveysCompleted: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").count(),
                       totalPriceCollected: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
@@ -37,11 +38,17 @@ module.exports = function(credentials) {
                     totalSurveysCompleted: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").count(),
                     totalPriceCollected: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
                   };
-                }).pluck("urn","name","me", "totalIndividuals","totalPriceCollected","totalSurveysCompleted");
+                }).pluck("urn","type","name","me", "totalIndividuals","totalPriceCollected","totalSurveysCompleted");
               }),
               surveysCompleted: self.r.table("surveys").filter({"individual":individual("id"),"complete":true}).coerceTo("array").merge(function(survey) {
                 return {
-                  urn: survey("id")
+                  urn: survey("id"),
+                  campaign: self.r.table("campaigns").get(survey("campaign")).merge(function() {
+                    return {
+                      urn: survey("id"),
+                      type: survey("type")
+                    };
+                  }).pluck("urn","name","price","currency","abibao")
                 };
               }).pluck("urn"),
               surveysInProgress: self.r.table("surveys").filter({"individual":individual("id"),"complete":false}).coerceTo("array").merge(function(survey) {
@@ -51,9 +58,9 @@ module.exports = function(credentials) {
                     return {
                       urn: survey("id")
                     };
-                  }).pluck("urn","name","price","currency"),
-                  company: self.r.table("entities").get(survey("company"))("name"),
-                  charity: self.r.table("entities").get(survey("charity"))("name"),
+                  }).pluck("urn","name","price","currency","abibao"),
+                  company: self.r.table("entities").get(survey("company")).pluck("name", "type"),
+                  charity: self.r.table("entities").get(survey("charity")).pluck("name", "type"),
                   nbItems: self.r.table("campaigns_items").filter({"campaign":survey("campaign")}).count(),
                   nbAnswers: ( _.isUndefined(survey.answers)===false ) ? survey("answers").keys().count() : 0,
                 };
@@ -85,6 +92,22 @@ module.exports = function(credentials) {
             _.map(individual.surveysCompleted, function(item) {
               item.urn = self.getURNfromID(item.urn, "survey");
             });
+            // split abibao surveys from others
+            individual.charitiesHistory = _.filter(individual.charitiesHistory, function(o) { return o.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
+            individual.abibaoInProgress = _.filter(individual.surveysInProgress, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
+            individual.surveysInProgress = _.filter(individual.surveysInProgress, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
+            individual.surveysCompleted = _.filter(individual.surveysCompleted, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
+            // repack abibaoInProgress
+            _.map(individual.abibaoInProgress, function(o) {
+              o.position = o.campaign.abibao;
+              delete o.company;
+              delete o.charity;
+              delete o.campaign;
+            });
+            // remove currentCharity if id=="none"
+            if ( self.getIDfromURN(individual.currentCharity.urn)==="none" ) {
+              delete individual.currentCharity;
+            }
             // end of command
             self.debug.query(CURRENT_NAME, quid);
             return resolve(individual);
