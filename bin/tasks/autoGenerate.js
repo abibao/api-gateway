@@ -50,6 +50,11 @@ module.exports = function(table, collection) {
         model: "CampaignItem"
       },
       {
+        table: "campaigns_constants",
+        collection: "CampaignsConstants",
+        model: "CampaignConstant"
+      },
+      {
         table: "individuals",
         collection: "Individuals",
         model: "Individual"

@@ -6,7 +6,7 @@ var uuid = require("node-uuid");
 var mongoose = require("mongoose");
 var ObjectId = mongoose.Types.ObjectId;
 
-var CURRENT_NAME = "AdministratorCreateCommand";
+var CURRENT_NAME = "CampaignConstantCreateCommand";
 
 module.exports = function(payload) {
 
@@ -17,7 +17,7 @@ module.exports = function(payload) {
       var quid = uuid.v1();
       payload.id = new ObjectId().toString();
       payload.createdAt = Date.now();
-      var model = new self.AdministratorModel(payload);
+      var model = new self.CampaignConstantModel(payload);
       model.save().then(function(created) {
         delete created.id;
         delete created.company;

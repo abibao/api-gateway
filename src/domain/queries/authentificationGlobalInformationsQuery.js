@@ -45,18 +45,18 @@ module.exports = function(credentials) {
                   urn: survey("id"),
                   campaign: self.r.table("campaigns").get(survey("campaign")).merge(function() {
                     return {
-                      urn: survey("id"),
-                      type: survey("type")
+                      urn: survey("campaign")
                     };
-                  }).pluck("urn","name","price","currency","abibao")
+                  }).pluck("urn","name","price","currency","abibao"),
+                  company: self.r.table("entities").get(survey("company")).pluck("name", "type")
                 };
-              }).pluck("urn"),
+              }).pluck("urn","company"),
               surveysInProgress: self.r.table("surveys").filter({"individual":individual("id"),"complete":false}).coerceTo("array").merge(function(survey) {
                 return {
                   urn: survey("id"),
                   campaign: self.r.table("campaigns").get(survey("campaign")).merge(function() {
                     return {
-                      urn: survey("id")
+                      urn: survey("campaign")
                     };
                   }).pluck("urn","name","price","currency","abibao"),
                   company: self.r.table("entities").get(survey("company")).pluck("name", "type"),
@@ -96,7 +96,12 @@ module.exports = function(credentials) {
             individual.charitiesHistory = _.filter(individual.charitiesHistory, function(o) { return o.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
             individual.abibaoInProgress = _.filter(individual.surveysInProgress, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
             individual.surveysInProgress = _.filter(individual.surveysInProgress, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
+            individual.abibaoCompleted = _.filter(individual.surveysCompleted, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
             individual.surveysCompleted = _.filter(individual.surveysCompleted, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
+            // repack abibaoCompleted
+            individual.abibaoCompleted = _.map(individual.abibaoCompleted, function(o) {
+              return o.urn;
+            });
             // repack abibaoInProgress
             _.map(individual.abibaoInProgress, function(o) {
               o.position = o.campaign.abibao;

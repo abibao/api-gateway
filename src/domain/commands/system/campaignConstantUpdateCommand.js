@@ -3,7 +3,7 @@
 var Promise = require("bluebird");
 var uuid = require("node-uuid");
 
-var CURRENT_NAME = "CampaignItemUpdateCommand";
+var CURRENT_NAME = "CampaignConstantUpdateCommand";
 
 module.exports = function(payload) {
 
@@ -12,7 +12,7 @@ module.exports = function(payload) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.CampaignItemModel.get( self.getIDfromURN(payload.urn) ).run().then(function(model) {
+      self.CampaignConstantModel.get( self.getIDfromURN(payload.urn) ).run().then(function(model) {
         return model.merge(payload).save().then(function(updated) {
           delete updated.id;
           delete updated.company;

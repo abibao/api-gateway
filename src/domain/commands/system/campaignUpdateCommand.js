@@ -16,6 +16,8 @@ module.exports = function(payload) {
         return model.merge(payload).save().then(function(updated) {
           delete updated.id;
           delete updated.company;
+          delete updated.charity;
+          delete updated.campaign;
           self.debug.command(CURRENT_NAME, quid);
           resolve(updated);
         });

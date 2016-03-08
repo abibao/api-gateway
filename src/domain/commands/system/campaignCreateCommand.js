@@ -21,6 +21,8 @@ module.exports = function(payload) {
       model.save().then(function(created) {
         delete created.id;
         delete created.company;
+        delete created.charity;
+        delete created.campaign;
         self.debug.command(CURRENT_NAME, quid);
         resolve(created);
       })
