@@ -25,7 +25,7 @@ module.exports = function(payload) {
                   constants: self.r.table("campaigns_constants").filter({prefix: item("constants")}).coerceTo("array").pluck("prefix", "suffix", "fr").map(function(constant) {
                     return {
                       name: constant("prefix").add("__").add(constant("suffix")),
-                      fr_FR: constant("fr")
+                      frFR: constant("fr")
                     };
                   })
                 };
@@ -48,7 +48,7 @@ module.exports = function(payload) {
           _.map(item.constants, function(constant) {
             mapping.push(constant.name);
             survey.dictionary[constant.name] = {
-              fr_FR: constant.fr_FR
+              frFR: constant.frFR
             };
           });
           item.constants = mapping;

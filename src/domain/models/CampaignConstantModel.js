@@ -18,7 +18,7 @@ module.exports = function(thinky) {
       return _.isUndefined(this.id)  ? null : "urn:abibao:database:campaign:constants:"+cryptr.encrypt(this.id);
     }),
     name: type.virtual().default(function() {
-      return this.prefix + '_' + this.suffix;
+      return this.prefix + "__" + this.suffix;
     }),
     // fields
     prefix: type.string().required(),

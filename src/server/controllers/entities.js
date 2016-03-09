@@ -17,7 +17,7 @@ exports.campaigns_list = {
     }
   },
   jsonp: "callback",
-  handler: function(request, reply) {
+  handler(request, reply) {
     request.server.domain.entityListCampaignsQuery(request.params.urn).then(function(campaigns) {
       reply(campaigns);
     })

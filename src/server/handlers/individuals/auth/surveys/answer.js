@@ -24,7 +24,7 @@ module.exports = {
     }
   },
   jsonp: "callback",
-  handler: function(request, reply) {
+  handler(request, reply) {
     request.payload.survey = request.params.urn;
     request.payload.credentials = request.auth.credentials;
     request.server.domain.individualSurveyAnswerCommand(request.payload).then(function(result) {

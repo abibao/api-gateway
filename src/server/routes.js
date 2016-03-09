@@ -1,14 +1,8 @@
 "use strict";
 
-var normalize = require("path").normalize;
-var resolve = require("path").resolve;
-
 var EntitiesController = require("./controllers/entities");
 
 exports.endpoints = [
-  
-  // www - dashboard
-  { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"..","www/dashboard")) } } },
   
   // flex as3 patch/post
   { method: "POST", path: "/v1/auth/charity", config: require("./handlers/individuals/auth/charity/update") },
