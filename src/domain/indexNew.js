@@ -30,7 +30,7 @@ internal.domain = {
   // injected
   logger: null,
   io: null,
-  thinky
+  thinky,
   ThinkyErrors: thinky.Errors,
   Query: thinky.Query,
   r: thinky.r,
