@@ -62,7 +62,7 @@ module.exports = function(credentials) {
                   company: self.r.table("entities").get(survey("company")).pluck("name", "type"),
                   charity: self.r.table("entities").get(survey("charity")).pluck("name", "type"),
                   nbItems: self.r.table("campaigns_items").filter({"campaign":survey("campaign")}).count(),
-                  nbAnswers: ( _.isUndefined(survey.answers)===false ) ? survey("answers").keys().count() : 0,
+                  nbAnswers: ( survey("answers").hasFields('answers')===false ) ? 0 : survey.getField("answers").keys().count(),
                 };
               }).pluck("urn","campaign","company","charity","modifiedAt","nbItems","nbAnswers","answers","complete")
             };

@@ -9,6 +9,6 @@ module.exports = function(data) {
   var self = this;
   
   var quid = uuid.v1();
-  self.debug.query(CURRENT_NAME, quid, data);
+  self.debug.event(CURRENT_NAME, quid, data);
 
 };

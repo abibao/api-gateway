@@ -6,7 +6,7 @@ var uuid = require("node-uuid");
 var CURRENT_NAME = "CampaignReadQuery";
 
 module.exports = function(urn) {
-
+  
   var self = this;
   
   return new Promise(function(resolve, reject) {
@@ -17,6 +17,7 @@ module.exports = function(urn) {
         delete model.company;
         delete model.charity;
         delete model.campaign;
+        delete model.item;
         self.debug.query(CURRENT_NAME, quid);
         resolve(model);
       }).catch(function(error) {

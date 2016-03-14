@@ -16,17 +16,20 @@ module.exports = {
   },
   validate: {
     payload: {
+      // component
       campaign: Joi.string().required(),
       question: Joi.string().required(),
       description: Joi.string(),
-      required: Joi.boolean().default(false).required(),
+      required: Joi.boolean().required().default(false),
       image: Joi.string().default("http://"),
-      constants: Joi.string().required(),
+      // component specific
       multipleSelections: Joi.boolean().required().default(false),
       randomize: Joi.boolean().required().default(false),
       addCustomOption: Joi.boolean().required().default(false),
       alignment: Joi.string().valid(["vertical","horizontal"]).required().default("horizontal"),
-      label: Joi.string().required()
+      // abibao
+      label: Joi.string().required().description("Le nom de la variable où sera stockée la réponse"),
+      tags: Joi.string()
     }
   },
   jsonp: "callback",

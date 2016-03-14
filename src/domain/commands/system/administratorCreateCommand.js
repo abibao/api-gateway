@@ -23,6 +23,7 @@ module.exports = function(payload) {
         delete created.company;
         delete created.charity;
         delete created.campaign;
+        delete created.item;
         self.debug.command(CURRENT_NAME, quid);
         resolve(created);
       })

@@ -28,7 +28,7 @@ Services.startDomain(function(err) {
     // start listeners
     domain.administratorsListenerChanged();
     domain.campaignsItemsListenerChanged();
-    domain.campaignsConstantsListenerChanged();
+    domain.campaignsItemsChoicesListenerChanged();
     domain.campaignsListenerChanged();
     domain.entitiesListenerChanged();
     domain.individualsListenerChanged();

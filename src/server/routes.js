@@ -1,8 +1,14 @@
 "use strict";
 
+var resolve = require("path").resolve;
+var normalize = require("path").normalize;
+
 var EntitiesController = require("./controllers/entities");
 
 exports.endpoints = [
+  
+  // www - dashboard
+  { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"www")) } } },
   
   // flex as3 patch/post
   { method: "POST", path: "/v1/auth/charity", config: require("./handlers/individuals/auth/charity/update") },
@@ -34,12 +40,15 @@ exports.endpoints = [
   { method: "GET", path: "/v1/campaigns/{urn}", config: require("./handlers/campaigns/read") },
   { method: "POST", path: "/v1/campaigns/{urn}/publish", config: require("./handlers/campaigns/publish") },
   
-  // constants
-  { method: "POST", path: "/v1/constants", config: require("./handlers/campaigns/constants/create") },
+  // choices
+  { method: "POST", path: "/v1/choices", config: require("./handlers/campaigns/items/choices/create") },
   
   // components
   { method: "POST", path: "/v1/campaigns/items/short-text", config: require("./handlers/campaigns/items/componentShortText/create") },
   { method: "POST", path: "/v1/campaigns/items/long-text", config: require("./handlers/campaigns/items/componentLongText/create") },
   { method: "POST", path: "/v1/campaigns/items/multiple-choice", config: require("./handlers/campaigns/items/componentMultipleChoice/create") },
+  { method: "POST", path: "/v1/campaigns/items/yes-no", config: require("./handlers/campaigns/items/componentYesNo/create") },
+  { method: "POST", path: "/v1/campaigns/items/dropdown", config: require("./handlers/campaigns/items/componentDropdown/create") },
+  { method: "POST", path: "/v1/campaigns/items/number", config: require("./handlers/campaigns/items/componentNumber/create") }
   
 ];

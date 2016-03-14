@@ -18,6 +18,7 @@ module.exports = function(payload) {
           delete updated.company;
           delete updated.charity;
           delete updated.campaign;
+          delete updated.item;
           self.debug.command(CURRENT_NAME, quid);
           resolve(updated);
         });

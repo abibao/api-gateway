@@ -3,7 +3,7 @@
 var Promise = require("bluebird");
 var uuid = require("node-uuid");
 
-var CURRENT_NAME = "CampaignConstantReadQuery";
+var CURRENT_NAME = "CampaignItemChoiceReadQuery";
 
 module.exports = function(urn) {
   
@@ -12,11 +12,12 @@ module.exports = function(urn) {
   return new Promise(function(resolve, reject) {
     var quid = uuid.v1();
     try {
-      self.CampaignConstantModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
+      self.CampaignItemChoiceModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         delete model.id;
         delete model.company;
         delete model.charity;
         delete model.campaign;
+        delete model.item;
         self.debug.query(CURRENT_NAME, quid);
         resolve(model);
       }).catch(function(error) {

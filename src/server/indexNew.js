@@ -28,13 +28,17 @@ var options = {
   labels: ["api", "administrator"]
 };
 internal.server.connection(options);
-const preResponse = function (request, reply) {
+/*const preResponse = function (request, reply) {
   var response = request.response;
   response.output.headers["x-abibao-response-id"] = uuid.v1();
   reply.continue();
-};
-internal.server.ext("onPreResponse", preResponse);
+};*/
+//internal.server.ext("onPreResponse", preResponse);
 
+internal.server.logger = {
+  debug: require("debug")("abibao:server:debug"),
+  error: require("debug")("abibao:server:error")
+};
 module.exports.singleton = internal.server;
 
 module.exports.start = function() {

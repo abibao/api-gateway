@@ -18,6 +18,7 @@ module.exports = {
     payload: {
       urnCompany: Joi.string().required(),
       name: Joi.string().required(),
+      abibao: Joi.string().min(0).default(0),
       price: Joi.number().min(0).required(),
       currency: Joi.string().valid(["EUR"]).required(),
       description: Joi.string()

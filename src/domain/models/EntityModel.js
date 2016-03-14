@@ -11,7 +11,7 @@ module.exports = function(thinky) {
   
   var type = thinky.type;
   var r = thinky.r;
-  
+
   var EntityModel = thinky.createModel("entities", {
     // virtuals
     urn: type.virtual().default(function() {
@@ -20,7 +20,7 @@ module.exports = function(thinky) {
     // fields
     name: type.string().required(),
     contact: type.string().email().required(),
-    type: type.string().enum(["abibao", "charity", "company"]).required(),
+    type: type.string().enum(["none", "abibao", "charity", "company"]).required(),
     icon: type.string().default("images/icons/default.png"),
     avatar: type.string().default("images/avatars/default.png"),
     picture: type.string().default("images/pictures/default.png"),
@@ -28,6 +28,9 @@ module.exports = function(thinky) {
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())
   }); 
+  
+  // var CampaignModel = thinky.models['campaigns'];
+  // EntityModel.hasMany(CampaignModel, "campaigns", "id", "company");
   
   EntityModel.pre("save", function(next) {
     var data = this;

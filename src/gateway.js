@@ -37,8 +37,9 @@ Promise.all([domainPromisify, serverPromisify])
     server.singleton.domain = domain.singleton;
     // start
     server.singleton.start(function(err) {
+      domain.singleton.administratorsListenerChanged();
       if (err) { return debug(err); }
-      _.forEach(server.singleton.plugins.blipp.text().split("\n"), function(item) {
+      _.map(server.singleton.plugins.blipp.text().split("\n"), function(item) {
         if (item!=="") { debug(item.trim()); }
       });
     });

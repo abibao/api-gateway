@@ -35,6 +35,7 @@ var server = new Hapi.Server({
 });
 
 server.connection(options);
+
 /*const preResponse = function (request, reply) {
   var response = request.response;
   response.output.headers['x-abibao-response-id'] = uuid.v1();
@@ -81,6 +82,7 @@ module.exports.startIO = function(domain) {
 module.exports.startDomain = function(callback) {
   domain.logger = loggerConsole;
   domain.debug = {
+    listener: require("debug")("abibao:domain:listener"),
     event: require("debug")("abibao:domain:event"),
     command: require("debug")("abibao:domain:command"),
     query: require("debug")("abibao:domain:query")

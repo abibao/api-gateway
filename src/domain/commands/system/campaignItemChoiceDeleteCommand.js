@@ -3,7 +3,7 @@
 var Promise = require("bluebird");
 var uuid = require("node-uuid");
 
-var CURRENT_NAME = "CampaignConstantDeleteCommand";
+var CURRENT_NAME = "CampaignItemChoiceDeleteCommand";
 
 module.exports = function(urn) {
 
@@ -12,7 +12,7 @@ module.exports = function(urn) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.CampaignConstantModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
+      self.CampaignItemChoiceModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         return model.delete().then(function() {
           self.debug.command(CURRENT_NAME, quid);
           resolve({deleted:true});

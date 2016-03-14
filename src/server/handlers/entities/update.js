@@ -20,7 +20,7 @@ module.exports = {
     },
     payload: {
       name: Joi.string(),
-      type: Joi.string().valid(["charity", "company"]),
+      type: Joi.string().valid(["abibao", "charity", "company"]),
       contact: Joi.string().email(),
       description: Joi.string(),
       picture: Joi.string(),

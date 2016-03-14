@@ -21,8 +21,11 @@ module.exports = {
       description: Joi.string(),
       required: Joi.boolean().required().default(false),
       image: Joi.string().default("http://"),
+      // component specific
       maxLength: Joi.number().required().default(-1),
-      label: Joi.string().required()
+      // abibao
+      label: Joi.string().required().description("Le nom de la variable où sera stockée la réponse"),
+      tags: Joi.string()
     }
   },
   jsonp: "callback",

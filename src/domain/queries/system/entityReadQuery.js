@@ -17,6 +17,7 @@ module.exports = function(urn) {
         delete model.company;
         delete model.charity;
         delete model.campaign;
+        delete model.item;
         self.debug.query(CURRENT_NAME, quid);
         resolve(model);
       }).catch(function(error) {

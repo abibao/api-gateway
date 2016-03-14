@@ -2,7 +2,7 @@
 
 var uuid = require("node-uuid");
 
-var CURRENT_NAME = "CampaignsConstantsListenerChanged";
+var CURRENT_NAME = "CampaignsItemsChoicesListenerChanged";
 
 module.exports = function() {
   
@@ -11,19 +11,19 @@ module.exports = function() {
   try {
     
     var quid = uuid.v1();
-    self.debug.query(CURRENT_NAME, quid);
+    self.debug.listener(CURRENT_NAME, quid);
     
-    self.CampaignConstantModel.changes().then(function(feed) {
+    self.CampaignItemChoiceModel.changes().then(function(feed) {
       feed.each(function(error, doc) {
         if (error) {
           return error;
         }
         if (doc.isSaved() === false) {
-          self.campaignConstantDeleteEvent(doc);
+          self.campaignItemChoiceDeleteEvent(doc);
         } else if (doc.getOldValue() === null) {
-          self.campaignConstantCreateEvent(doc);
+          self.campaignItemChoiceCreateEvent(doc);
         } else {
-          self.campaignConstantUpdateEvent(doc, doc.getOldValue());
+          self.campaignItemChoiceUpdateEvent(doc, doc.getOldValue());
         }
       });
     });

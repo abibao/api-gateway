@@ -3,7 +3,7 @@
 var Promise = require("bluebird");
 var uuid = require("node-uuid");
 
-var CURRENT_NAME = "CampaignConstantUpdateCommand";
+var CURRENT_NAME = "CampaignItemChoiceCreateWithCampaignAssignCommand";
 
 module.exports = function(payload) {
 
@@ -12,14 +12,12 @@ module.exports = function(payload) {
   return new Promise(function(resolve, reject) {
     try {
       var quid = uuid.v1();
-      self.CampaignConstantModel.get( self.getIDfromURN(payload.urn) ).run().then(function(model) {
-        return model.merge(payload).save().then(function(updated) {
-          delete updated.id;
-          delete updated.company;
-          delete updated.charity;
-          delete updated.campaign;
+      payload.item = self.getIDfromURN(payload.item);
+      payload.campaign = self.getIDfromURN(payload.campaign);
+      self.campaignItemChoiceCreateCommand(payload).then(function(choice) {
+        return self.campaignItemChoiceReadQuery(choice.urn).then(function(choice) {
           self.debug.command(CURRENT_NAME, quid);
-          resolve(updated);
+          resolve(choice);
         });
       })
       .catch(function(error) {

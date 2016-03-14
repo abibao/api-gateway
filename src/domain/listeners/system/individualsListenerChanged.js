@@ -11,7 +11,7 @@ module.exports = function() {
   try {
     
     var quid = uuid.v1();
-    self.debug.query(CURRENT_NAME, quid);
+    self.debug.listener(CURRENT_NAME, quid);
     
     self.IndividualModel.changes().then(function(feed) {
       feed.each(function(error, doc) {

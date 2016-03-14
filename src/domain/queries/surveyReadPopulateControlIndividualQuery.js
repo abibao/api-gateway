@@ -19,15 +19,16 @@ module.exports = function(payload) {
           company: self.r.table("entities").get(survey("company"))("type"),
           campaign: self.r.table("campaigns").get(survey("campaign")).merge(function(campaign) {
             return {
-              urn: survey("id"),
+              urn: survey("campaign"),
               items: self.r.table("campaigns_items").filter({campaign: campaign("id")}).coerceTo("array").merge(function(item) {
                 return {
-                  constants: self.r.table("campaigns_constants").filter({prefix: item("constants")}).coerceTo("array").pluck("prefix", "suffix", "fr").map(function(constant) {
+                  urn: item("id"),
+                  choices: self.r.table("campaigns_items_choices").filter({item: item("id")}).coerceTo("array").merge(function(choice) {
                     return {
-                      name: constant("prefix").add("__").add(constant("suffix")),
-                      frFR: constant("fr")
+                      meta: choice("prefix").add("__").add(choice("suffix")),
+                      urn: choice("id")
                     };
-                  })
+                  }).without("id", "item", "campaign", "createdAt", "modifiedAt")
                 };
               }).without("id", "campaign", "createdAt", "modifiedAt")
             };
@@ -35,26 +36,20 @@ module.exports = function(payload) {
         };
       }).without("id", "charity", "individual")
       .then(function(survey) {
-        survey.individual = payload.credentials.urn;
-        survey.survey = payload.urn;
         survey.name = survey.campaign.name;
         if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_COMPANY ) { survey.fromCompany=true; }
         if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO ) { survey.fromAbibao=true; }
         if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_CHARITY ) { survey.fromCharity=true; }
         if ( survey.fromAbibao ) { survey.fromAbibaoPosition = survey.campaign.abibao; }
-        survey.dictionary = {};
         _.map(survey.campaign.items, function(item) {
-          var mapping = [];
-          _.map(item.constants, function(constant) {
-            mapping.push(constant.name);
-            survey.dictionary[constant.name] = {
-              frFR: constant.frFR
-            };
-          });
-          item.constants = mapping;
           survey.items = survey.campaign.items;
           if ( _.isUndefined(survey.answers) ) { survey.answers={}; }
-          
+        });
+        _.map(survey.campaign.items, function(item) {
+          item.urn = self.getURNfromID(item.urn, 'item');
+          _.map(item.choices, function(choice) {
+            choice.urn = self.getURNfromID(choice.urn, 'choice');
+          });
         });
         delete survey.campaign;
         delete survey.company;

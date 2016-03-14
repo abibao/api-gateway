@@ -27,8 +27,6 @@ var internal = {};
 
 internal.domain = {
   
-  // injected
-  logger: null,
   io: null,
   thinky,
   ThinkyErrors: thinky.Errors,
@@ -53,6 +51,14 @@ internal.domain = {
   
 };
 
+internal.domain.debug = {
+  query: require("debug")("abibao:domain:query"),
+  command: require("debug")("abibao:domain:command")
+};
+internal.domain.logger = {
+  debug: require("debug")("abibao:domain:debug"),
+  error: require("debug")("abibao:domain:error")
+};
 module.exports.singleton = internal.domain;
 
 module.exports.start = function() {
