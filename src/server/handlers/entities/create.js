@@ -17,7 +17,7 @@ module.exports = {
   validate: {
     payload: {
       name: Joi.string().required(),
-      type: Joi.string().valid(["charity", "company"]).required(),
+      type: Joi.string().valid(["abibao", "charity", "company"]).required(),
       contact: Joi.string().email().required(),
       description: Joi.string()
     }

@@ -9,25 +9,28 @@ module.exports = {
     scope: ["administrator"]
   },
   tags: ["api", "1.3) administrator"],
-  description: "Ajoute une campagne, affectée à une compagnie donnée",
-  notes: "Ajoute une campagne, affectée à une compagnie donnée",
+  description: "Modifie une campagne au sein de Abibao",
+  notes:  "Modifie une campagne au sein de Abibao",
   payload: {
     allow: "application/x-www-form-urlencoded",
   },
   validate: {
+    params: {
+      urn: Joi.string().required()
+    },
     payload: {
-      urnCompany: Joi.string().required(),
-      name: Joi.string().required(),
+      name: Joi.string(),
       abibao: Joi.string().min(0).default(0),
-      price: Joi.number().min(0).required(),
-      currency: Joi.string().valid(["EUR"]).required(),
-      published: Joi.boolean().default(false).required(),
+      price: Joi.number().min(0),
+      currency: Joi.string().valid(["EUR"]),
+      published: Joi.boolean().default(false),
       description: Joi.string()
     }
   },
   jsonp: "callback",
   handler(request, reply) {
-    request.server.domain.campaignCreateWithCompanyCommand(request.payload).then(function(campaign) {
+    request.payload.urn = request.params.urn;
+    request.server.domain.campaignUpdateCommand(request.payload).then(function(campaign) {
       reply(campaign);
     })
     .catch(function(error) {

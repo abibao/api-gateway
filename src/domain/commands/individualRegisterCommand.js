@@ -14,7 +14,7 @@ module.exports = function(payload) {
       var quid = uuid.v1();
       // password confirmation
       if (payload.password1!==payload.password2) {
-        return reject( new Error("invalid password confimation") );
+        return reject("invalid password confimation");
       }
       payload.password = payload.password1;
       delete payload.password1;
@@ -35,7 +35,7 @@ module.exports = function(payload) {
         reject(error);
       });
     } catch (e) {
-      reject(e);
+        reject(e);
     }
   });
   

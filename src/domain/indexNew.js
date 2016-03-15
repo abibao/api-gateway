@@ -51,13 +51,11 @@ internal.domain = {
   
 };
 
-internal.domain.debug = {
-  query: require("debug")("abibao:domain:query"),
-  command: require("debug")("abibao:domain:command")
-};
 internal.domain.logger = {
   debug: require("debug")("abibao:domain:debug"),
-  error: require("debug")("abibao:domain:error")
+  error: require("debug")("abibao:domain:error"),
+  query: require("debug")("abibao:domain:query"),
+  command: require("debug")("abibao:domain:command")
 };
 module.exports.singleton = internal.domain;
 

@@ -1,9 +1,7 @@
-<EntityDataGrid>
+<CampaignItemDataGrid>
   
-  <ul class="collection">
-    <li class="collection-item avatar" each={ data in opts.dataProvider }>
-      <EntityItemRenderer item-data={ data } />
-    </li>
+  <ul class="collection" each={ data in opts.dataProvider }>
+    <CampaignItemItemRenderer item-data={ data } />
   </ul>
   
   <script>
@@ -26,4 +24,4 @@
     
   </style>
   
-</EntityDataGrid>
+</CampaignItemDataGrid>

@@ -31,7 +31,7 @@ module.exports = function(thinky) {
     // linked
     company: type.string().required(), // entité de type "company" qui fournit le sondage
     // automatic
-    publish: type.boolean().default(false),
+    published: type.boolean().default(false),
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())
   }); 

@@ -38,6 +38,7 @@ exports.endpoints = [
   { method: "GET", path: "/v1/campaigns", config: require("./handlers/campaigns/list") },
   { method: "POST", path: "/v1/campaigns", config: require("./handlers/campaigns/create") },
   { method: "GET", path: "/v1/campaigns/{urn}", config: require("./handlers/campaigns/read") },
+  { method: "PATCH", path: "/v1/campaigns/{urn}", config: require("./handlers/campaigns/update") },
   { method: "POST", path: "/v1/campaigns/{urn}/publish", config: require("./handlers/campaigns/publish") },
   
   // choices

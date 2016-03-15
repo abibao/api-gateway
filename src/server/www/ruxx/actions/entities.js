@@ -1,147 +1,57 @@
-function EntitiesActions(facade) {
+function EntitiesActions() {
 
 	var self = this;
 	
-	self.update = function(payload) {
-	  var dataToSave = _.clone(payload);
-	  delete dataToSave.createdAt;
-	  delete dataToSave.modifiedAt;
-	  delete dataToSave.urn;
-	  delete dataToSave.campaigns;
-    console.log("EntitiesActions.save", dataToSave);
-    return new Promise(function(resolve, reject) {
-      // Headers
-      $.ajaxSetup({
-        headers: { 'Authorization': Cookies.get("Authorization") }
-      });
-      // Resolve 
-      var jqxhr = $.ajax({
-        method: "PATCH",
-        url: "/v1/entities/"+payload.urn,
-        data: dataToSave
-      }, function(data) {
-        jqxhr.hasError = false;
-      })
-      .fail(function(error) {
-        jqxhr.hasError = true;
-      })
-      .done(function(data) {
-      })
-      .always(function(data) {
-      });
-      // Set another completion function for the request above
-      jqxhr.complete(function(data) {
-        console.log("global complete", jqxhr.hasError, data);
-        if (jqxhr.hasError) {
-          facade.trigger("EVENT_UPDATE_ENTITY_ERROR", data);
-          reject(data);
-        } else {
-          facade.trigger("EVENT_UPDATE", data);
-          resolve(data);
-        }
-      });
+	self.update = function(entity) {
+	  var data = _.clone(entity);
+	  delete data.createdAt;
+	  delete data.modifiedAt;
+	  delete data.urn;
+	  delete data.campaigns;
+    facade.call("PATCH", "/v1/entities/"+entity.urn, data).then(function(entity) {
+      console.log("EntitiesActions.update", entity);
+      facade.trigger("EVENT_RIOT_UPDATE");
+      facade.trigger("EVENT_UPDATE_ENTITY");
+    }).catch(function(error) {
+      console.log("EntitiesActions.update", "ERROR", error);
+      facade.trigger("EVENT_CALLER_ERROR", error);
     });
 	};
 	
-	self.read = function(urn) {
-    console.log("EntitiesActions.read", urn);
-    return new Promise(function(resolve, reject) {
-      // Headers
-      $.ajaxSetup({
-        headers: { 'Authorization': Cookies.get("Authorization") }
-      });
-      // Resolve 
-      var jqxhr = $.getJSON("/v1/entities/"+urn, function(data) {
-        jqxhr.hasError = false;
-      })
-      .fail(function(error) {
-        jqxhr.hasError = true;
-      })
-      .done(function(data) {
-      })
-      .always(function(data) {
-      });
-      // Set another completion function for the request above
-      jqxhr.complete(function(data) {
-        console.log("global complete", jqxhr.hasError, data);
-        if (jqxhr.hasError) {
-          facade.trigger("EVENT_READ_ENTITY_ERROR", data);
-          reject(data);
-        } else {
-          facade.trigger("EVENT_RIOT_UPDATE", data);
-          resolve(data);
-        }
-      });
+	self.selectEntity = function(urn) {
+    facade.call("GET", "/v1/entities/"+urn).then(function(entity) {
+      console.log("EntitiesActions.selectEntity", entity);
+      self.populateCampaigns(entity);
+    }).catch(function(error) {
+      console.log("EntitiesActions.selectEntity", "ERROR", error);
+      facade.trigger("EVENT_CALLER_ERROR", error);
     });
 	};
 	
-	self.list = function(payload) {
-    console.log("EntitiesActions.list");
-    return new Promise(function(resolve, reject) {
-      // Headers
-      $.ajaxSetup({
-        headers: { 'Authorization': Cookies.get("Authorization") }
+	self.list = function() {
+    facade.call("GET", "/v1/entities").then(function(entities) {
+      console.log("EntitiesActions.list", entities);
+      facade.stores.entities.charities = _.filter(entities, function(item) {
+        return (item.type==="charity");
       });
-      // Resolve 
-      var jqxhr = $.getJSON("/v1/entities", function(data) {
-        jqxhr.hasError = false;
-      })
-      .fail(function(error) {
-        jqxhr.hasError = true;
-      })
-      .done(function(data) {
-      })
-      .always(function(data) {
-        facade.stores.entities.charities = _.filter(data, function(item) {
-          return (item.type==="charity");
-        });
-        facade.stores.entities.companies = _.filter(data, function(item) {
-          return (item.type==="company" || item.type==="abibao");
-        });
+      facade.stores.entities.companies = _.filter(entities, function(item) {
+        return (item.type==="company" || item.type==="abibao");
       });
-      // Set another completion function for the request above
-      jqxhr.complete(function(data) {
-        console.log("global complete", jqxhr.hasError, data);
-        if (jqxhr.hasError) {
-          facade.trigger("EVENT_INITIALIZE_ENTITIES_ERROR", data);
-          reject(data);
-        } else {
-          facade.trigger("EVENT_RIOT_UPDATE", data);
-          resolve(data);
-        }
-      });
+      facade.trigger("EVENT_RIOT_UPDATE");
+    }).catch(function(error) {
+      console.log("EntitiesActions.list", "ERROR", error);
+      facade.trigger("EVENT_CALLER_ERROR", error);
     });
 	};
 	
-	self.campaigns = function(urn) {
-    console.log("EntitiesActions.campaigns", urn);
-    return new Promise(function(resolve, reject) {
-      // Headers
-      $.ajaxSetup({
-        headers: { 'Authorization': Cookies.get("Authorization") }
-      });
-      // Resolve 
-      var jqxhr = $.getJSON("/v1/entities/"+urn+'/campaigns', function(data) {
-        jqxhr.hasError = false;
-      })
-      .fail(function(error) {
-        jqxhr.hasError = true;
-      })
-      .done(function(data) {
-      })
-      .always(function(data) {
-      });
-      // Set another completion function for the request above
-      jqxhr.complete(function(data) {
-        console.log("global complete", jqxhr.hasError, data);
-        if (jqxhr.hasError) {
-          facade.trigger("EVENT_READ_ENTITY_CAMPAIGNS_ERROR", data);
-          reject(data);
-        } else {
-          facade.trigger("EVENT_RIOT_UPDATE", data);
-          resolve(data);
-        }
-      });
+	self.populateCampaigns = function(entity) {
+	  facade.call("GET", "/v1/entities/"+entity.urn+"/campaigns").then(function(campaigns) {
+      console.log("EntitiesActions.populateCampaigns", campaigns);
+      entity.campaigns = campaigns;
+      facade.setCurrentEntity(entity);
+    }).catch(function(error) {
+      console.log("EntitiesActions.populateCampaigns", "ERROR", error);
+      facade.trigger("EVENT_CALLER_ERROR", error);
     });
 	};
 	

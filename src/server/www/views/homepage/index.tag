@@ -7,9 +7,9 @@
     </div>
     <div class="row" if={ facade.stores.auth.authentified() }>
       <h5>Liste des associations</h5>
-      <EntityDataGrid if={ facade.stores.auth.authentified() } data-provider={ facade.stores.entities.charities }> </EntityDataGrid>
+      <HomepageEntitiesDataGrid if={ facade.stores.auth.authentified() } data-provider={ facade.stores.entities.charities }> </HomepageEntitiesDataGrid>
       <h5>Liste des compagnies</h5>
-      <EntityDataGrid if={ facade.stores.auth.authentified() } data-provider={ facade.stores.entities.companies }> </EntityDataGrid>
+      <HomepageEntitiesDataGrid if={ facade.stores.auth.authentified() } data-provider={ facade.stores.entities.companies }> </HomepageEntitiesDataGrid>
     </div>
   </div>
   
