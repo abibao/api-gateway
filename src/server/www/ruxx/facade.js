@@ -16,6 +16,11 @@ function Facade() {
     entities: new EntitiesActions(self)
   };
   
+  self.on("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", function(urn) {
+    console.log("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", urn);
+    self.actions.campaigns.createItemMultipleChoice(urn);
+  });
+  
   self.on("EVENT_SELECT_CAMPAIGN", function(urn) {
     console.log("EVENT_SELECT_CAMPAIGN", urn);
     self.actions.campaigns.selectCampaign(urn);

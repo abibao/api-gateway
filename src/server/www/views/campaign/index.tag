@@ -11,6 +11,12 @@
               <div class="row"> </div>
               <div class="row">
                 <div class="input-field col s12">
+                  <input disabled value="{ facade.getCurrentCampaign().company.name }" autocomplete="off" class="fit-parent form" type="text">
+                  <label class="active brown-text text-darken-2">Compagnie</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
                   <input onchange={ changeNameHandler } value="{ facade.getCurrentCampaign().name }" autocomplete="off" class="fit-parent form" type="text" placeholder="Choisissez le nom de l'entité">
                   <label class="active brown-text text-darken-2">Nom de la campagne</label>
                 </div>
@@ -50,11 +56,14 @@
       <div class="card grey lighten-5 z-depth-1 col s12 m6 right">
         <div class="card-content blue-grey-text text-darken-2">
           <h4>Liste des items [{ facade.getCurrentCampaign().items.length }]</h4>
-          <CampaignItemDataGrid data-provider={ facade.getCurrentCampaign().items }> </EntityCampaignsDataGrid>
+          <div>
+            <a href="#" onclick={ createItemMultipleChoiceHandler } tooltip="ABIBAO_COMPONENT_MULTIPLE_CHOICE"><i class="material-icons blue-grey-text text-darken-2 left">filter_1</i></a>
+            <a href="#" tooltip="ABIBAO_COMPONENT_DROPDOWN"><i class="material-icons blue-grey-text text-darken-2 left">filter_2</i></a>
+            <a href="#"><i class="material-icons blue-grey-text text-darken-2 left">filter_3</i></a>
+            <a href="#"><i class="material-icons blue-grey-text text-darken-2 left">filter_4</i></a>
+          </div>
           <div class="row"> </div>
-          <p>
-            <a class="waves-effect waves-light btn blue-grey darken-2 disabled" onclick={ createCampaignItemHandler }>Ajouter</a>
-          </p>
+          <CampaignItemDataGrid data-provider={ facade.getCurrentCampaign().items } />
         </div>
       </div>
       
@@ -77,6 +86,10 @@
       $('textarea').trigger('autoresize');
       facade.trigger("EVENT_RIOT_UPDATE");
     });
+    
+    createItemMultipleChoiceHandler(e) {
+      facade.trigger("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", facade.getCurrentCampaign().urn);
+    };
     
     changeNameHandler(e) {
       facade.getCurrentCampaign().name =  e.currentTarget.value;

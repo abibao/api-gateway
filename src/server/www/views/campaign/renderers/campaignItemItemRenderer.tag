@@ -1,7 +1,10 @@
 <CampaignItemItemRenderer>
   
   <li class="collection-item">
-    <i class="material-icons circle">add</i><span class="title">{ opts.itemData.question }</span>
+    <i if={ opts.itemData.type==='ABIBAO_COMPONENT_MULTIPLE_CHOICE' } class="material-icons brown-text text-darken-2 left">filter_1</i>
+    <i if={ opts.itemData.type==='ABIBAO_COMPONENT_DROPDOWN' } class="material-icons brown-text text-darken-2 left">filter_2</i>
+    <span class="title">{ opts.itemData.question }</span>
+    <a href="#" onclick={ onSelect } class="right"><i class="material-icons blue-grey-text text-darken-2">mode_edit</i></a>
   </li>
   
   <script>
@@ -15,7 +18,7 @@
     });
     
     onSelect(e) {
-      facade.trigger("EVENT_SELECT_CAMPAIGN", opts.itemData.urn);
+      facade.trigger("EVENT_SELECT_CAMPAIGN_ITEM", opts.itemData.urn);
     }
     
   </script>

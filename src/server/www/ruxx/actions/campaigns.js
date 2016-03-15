@@ -2,6 +2,26 @@ function CampaignsActions(facade) {
 
 	var self = this;
   
+  self.createItemMultipleChoice = function(urn) {
+    var payload = {
+      campaign: urn,
+      question: "The question ?",
+      required: true,
+      multipleSelections: false,
+      randomize: false,
+      addCustomOption: false,
+      alignment: "horizontal",
+      label: "ABIBAO_ANSWER_"
+    };
+    facade.call("POST", "/v1/campaigns/items/multiple-choice", payload).then(function(item) {
+      console.log("CampaignsActions.createItemMultipleChoice", item);
+      // facade.setCurrentCampaign(campaign);
+    }).catch(function(error) {
+      console.log("CampaignsActions.createItemMultipleChoice", "ERROR", error);
+      facade.trigger("EVENT_CALLER_ERROR", error);
+    });
+	};
+  
   self.update = function(campaign) {
 	  var data = _.clone(campaign);
 	  delete data.createdAt;

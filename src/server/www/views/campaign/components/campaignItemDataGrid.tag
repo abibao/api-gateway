@@ -1,7 +1,7 @@
 <CampaignItemDataGrid>
   
   <ul class="collection" each={ data in opts.dataProvider }>
-    <CampaignItemItemRenderer item-data={ data } />
+    <CampaignItemItemRenderer item-data={ data }> </CampaignItemItemRenderer>
   </ul>
   
   <script>
@@ -21,7 +21,9 @@
   </script>
   
   <style scoped>
-    
+    ul.collection {
+      margin-bottom: 0;
+    }
   </style>
   
 </CampaignItemDataGrid>
