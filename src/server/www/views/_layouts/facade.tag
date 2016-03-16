@@ -1,7 +1,5 @@
-<error404 if={ facade.getCurrentState()===Facade.STATE_404_ERROR }>
+<Facade>
 
-  <h1>ERREUR 404</h1>
-  
   <script>
     
     var self = this;
@@ -9,15 +7,13 @@
 
     self.on("mount", function() {
       facade.tags[self.name] = self;
+      facade.debug("tags list %o", facade.tags);
+      facade.start();
     });
     
     self.on("update", function() {
     });
     
   </script>
-  
-  <style scoped>
-    
-  </style>
-  
-</error404>
+
+</Facade>

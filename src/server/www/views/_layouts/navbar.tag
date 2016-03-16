@@ -20,7 +20,6 @@
     
     self.on("mount", function() {
       facade.tags[self.name] = self;
-      if ( _.keys(facade.tags).length===Facade.Tags ) facade.start();
     });
     
     self.on("update", function() {

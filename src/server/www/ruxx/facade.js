@@ -5,6 +5,10 @@ function Facade() {
 
 	self.version = "1.4.0";
 	
+	self.debug = debug('abibao:facade');
+	self.debugCall = debug('abibao:facade:call');
+	self.debugAction = debug('abibao:facade:action');
+	
   self.tags = {};
   self.stores = {
     auth: new AuthStore(),
@@ -17,40 +21,43 @@ function Facade() {
   };
   
   self.on("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", function(urn) {
-    console.log("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", urn);
+    self.debug("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE %s", urn);
     self.actions.campaigns.createItemMultipleChoice(urn);
   });
   
   self.on("EVENT_SELECT_CAMPAIGN", function(urn) {
-    console.log("EVENT_SELECT_CAMPAIGN", urn);
+    self.debug("EVENT_SELECT_CAMPAIGN %s", urn);
     self.actions.campaigns.selectCampaign(urn);
   });
   
   self.on("EVENT_SELECT_ENTITY", function(urn) {
-    console.log("EVENT_SELECT_ENTITY", urn);
+    self.debug("EVENT_SELECT_ENTITY %s", urn);
     self.actions.entities.selectEntity(urn);
   });
   
   self.on("EVENT_UPDATE_ENTITY", function() {
+    self.debug("EVENT_UPDATE_ENTITY");
     self.actions.entities.list();
   });
   
   self.on("EVENT_GATEWAY_ERROR", function(error) {
-    console.log("EVENT_GATEWAY_ERROR", error);
+    self.debug("EVENT_GATEWAY_ERROR %o", error.responseJSON);
     Materialize.toast(error.message, 1500, "deep-orange darken-3");
   });
   
   self.on("EVENT_RIOT_UPDATE", function() {
-    console.log("EVENT_RIOT_UPDATE");
+    self.debug("EVENT_RIOT_UPDATE");
     riot.update();
   });
   
   self.on("EVENT_BACK_SELECTED_ENTITY", function() {
+    self.debug("EVENT_BACK_SELECTED_ENTITY");
     self.setCurrentCampaign(null);
     riot.route("/entity/"+self._currentCampaign.company.urn);
   });
   
   self.on("EVENT_LOGIN_AUTH_COMPLETE", function() {
+    self.debug("EVENT_LOGIN_AUTH_COMPLETE");
     if ( self.getCurrentState()===Facade.STATE_LOGIN ) { riot.route("/homepage"); }
     self.actions.entities.list();
   });
@@ -78,6 +85,7 @@ function Facade() {
     self._currentEntity = _.clone(value);
     riot.route("/entity/"+self._currentEntity.urn);
     Materialize.toast("Chargement \"entity\" effectuée", 1500, "light-green darken-2");
+    console.log(facade.tags["entity"]);
     facade.tags["entity"].trigger("EVENT_CREATION_COMPLETE");
   };
   
@@ -87,13 +95,13 @@ function Facade() {
     return self._currentState;
   };
   self.setCurrentState = function(value) {
-    console.log("setCurrentState", value);
+    self.debug("setCurrentState: %s", value);
     self._currentState = value;
     self.trigger("EVENT_RIOT_UPDATE");
   };
   
   self.start = function() {
-    console.log("start facade");
+    self.debug("start facade");
     riot.route.start(true);
     // current routes
     var route = window.location.hash.split("/");
@@ -122,37 +130,26 @@ function Facade() {
         headers: { 'Authorization': Cookies.get("Authorization") }
       });
       // Resolve 
-      var jqxhr = $.ajax({
+      $.ajax({
         method: method,
         url: url,
         data: payload
-      }, function(data) {
-        jqxhr.hasError = false;
       })
       .fail(function(error) {
-        jqxhr.hasError = true;
+        self.debugCall("error %s %s %o", method, url, data);
+        self.trigger("EVENT_GATEWAY_ERROR", error.responseJSON);
+        reject(error);
       })
       .done(function(data) {
-      })
-      .always(function(data) {
-      });
-      // Set another completion function for the request above
-      jqxhr.complete(function(data) {
-        console.log("call complete", method, url, jqxhr.hasError, data);
-        if (jqxhr.hasError) {
-          self.trigger("EVENT_GATEWAY_ERROR", data);
-          reject(data);
-        } else {
-          self.trigger("EVENT_RIOT_UPDATE", data);
-          resolve(data);
-        }
+        self.debugCall("complete %s %s %o", method, url, data);
+        self.trigger("EVENT_RIOT_UPDATE");
+        resolve(data);
       });
 	  });
 	};
 	
 }
 
-Facade.Tags = 6; // sum of "_layout" and "views"
 Facade.STATE_404_ERROR = "error404";
 Facade.STATE_LOGIN = "login";
 Facade.STATE_HOMEPAGE = "homepage";

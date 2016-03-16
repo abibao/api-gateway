@@ -20,10 +20,15 @@ module.exports = function(thinky) {
     // fields
     name: type.string().required(),
     contact: type.string().email().required(),
+    url: type.string().default("http://").required(),
     type: type.string().enum(["none", "abibao", "charity", "company"]).required(),
     icon: type.string().default("images/icons/default.png"),
     avatar: type.string().default("images/avatars/default.png"),
     picture: type.string().default("images/pictures/default.png"),
+    title: type.string().required(),
+    hangs: type.string().required(),
+    description: type.string().required(),
+    usages: type.array().required(),
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())

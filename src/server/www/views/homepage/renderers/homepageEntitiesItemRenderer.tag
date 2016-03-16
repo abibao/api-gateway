@@ -7,7 +7,7 @@
     Contact : { opts.itemData.contact }<br>
     Dernière modification : { opts.itemData.modifiedAt }
   </p>
-  <a href="#" if={ opts.itemData.type!=='charity' } onclick={ onSelect } class="secondary-content"><i class="material-icons blue-grey-text text-darken-2">mode edit</i></a>
+  <a href="javascript:void(0)" if={ opts.itemData.type!=='charity' } onclick={ onSelect } class="secondary-content"><i class="material-icons blue-grey-text text-darken-2">mode edit</i></a>
   
   <script>
     

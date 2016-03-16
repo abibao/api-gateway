@@ -16,10 +16,14 @@ module.exports = {
   },
   validate: {
     payload: {
-      name: Joi.string().required(),
-      type: Joi.string().valid(["abibao", "charity", "company"]).required(),
-      contact: Joi.string().email().required(),
-      description: Joi.string()
+      name: Joi.string().required().description("Le titre qui apparaît dans les listes"),
+      type: Joi.string().valid(["abibao", "charity", "company"]).default("charity").required().description("Type de l'entité"),
+      contact: Joi.string().email().required().description("Email du contact"),
+      url: Joi.string().default("http://").required().description("URL du site de l'entité"),
+      title: Joi.string().required().description("Le titre qui apparaît sur la fiche détaillée"),
+      hangs: Joi.string().required().description("La phrase qui décrit la fiche détaillée"),
+      description: Joi.string().required().description("La description (300 caractères)"),
+      usages: Joi.string().required().description("Exemples concrêts de l'usage des dons.")
     }
   },
   jsonp: "callback",

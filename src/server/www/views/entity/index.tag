@@ -4,38 +4,47 @@
     <div class="row"> </div>
     <div class="row">
       <div class="card grey lighten-5 z-depth-1 col s12 m5">
-        <div class="card-content blue-grey-text text-darken-2">
-          <h4>Entity</h4>
+        <!-- STATE_DEFAULT -->
+        <div if={ getCurrentState()==='STATE_DEFAULT' } class="card-content blue-grey-text text-darken-2">
+          <a href="javascript:void(0)" onclick={ changeViewDetailsHandler } class="large right"><i class="material-icons blue-grey-text text-darken-2">assessment</i></a>
+          <a href="javascript:void(0)" onclick={ changeViewPicturesHandler } class="large right"><i class="material-icons blue-grey-text text-darken-2">image</i></a>
+          <h4>Entity (Défaut)</h4>
           <div class="row">
             <form class="col s12">
               <div class="row"> </div>
               <div class="row">
                 <div class="input-field col s12">
-                  <input onchange={ changeNameHandler } value="{ facade.getCurrentEntity().name }" autocomplete="off" class="fit-parent form" type="text" placeholder="Choisissez le nom de l'entité">
-                  <label class="active brown-text text-darken-2">Nom de l'entité</label>
+                  <input onchange={ changeNameHandler } value="{ facade.getCurrentEntity().name }" autocomplete="off" class="fit-parent form" type="text" placeholder="Saisissez une valeur">
+                  <label class="active brown-text text-darken-2">Nom</label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s12">
-                  <input onchange={ changeCantactHandler } value="{ facade.getCurrentEntity().contact }" autocomplete="off" class="fit-parent form" type="email" placeholder="Choisissez le nom de l'entité">
+                  <input onchange={ changeCantactHandler } value="{ facade.getCurrentEntity().contact }" autocomplete="off" class="fit-parent form" type="email" placeholder="Saisissez une valeur">
                   <label class="active brown-text text-darken-2">Email de contact</label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s12">
+                  <input onchange={ changeURLHandler } value="{ facade.getCurrentEntity().url }" autocomplete="off" class="fit-parent form" type="email" placeholder="Saisissez une valeur">
+                  <label class="active brown-text text-darken-2">URL du site</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
                   <select onchange={ changeTypeHandler }>
-                    <option value="" disabled { (facade.getCurrentEntity().type==='') ? 'selected' : '' }>Choisissez le type de l'entité</option>
+                    <option value="" disabled { (facade.getCurrentEntity().type==='') ? 'selected' : '' }>Choisissez une valeur</option>
                     <option value="abibao" { (facade.getCurrentEntity().type==='abibao') ? 'selected' : '' }>Abibao</option>
                     <option value="charity" { (facade.getCurrentEntity().type==='charity') ? 'selected' : '' }>Association</option>
                     <option value="company" { (facade.getCurrentEntity().type==='company') ? 'selected' : '' }>Entreprise</option>
                   </select>
-                  <label class="brown-text text-darken-2">Type de l'entité</label>
+                  <label class="brown-text text-darken-2">Type</label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s12">
                   <textarea row="5" class="materialize-textarea" length="255">{ facade.getCurrentEntity().description }</textarea>
-                  <label class="active brown-text text-darken-2">Description de l'entité</label>
+                  <label class="active brown-text text-darken-2">Description</label>
                 </div>
               </div>
             </form>
@@ -59,14 +68,16 @@
   
   <script>
     
-    self = this;
+    var self = this;
     self.name = "entity";
     
-    self.loaded = false;
+    self._currentState = "STATE_DEFAULT";
+    self.getCurrentState = function() {
+      return self._currentState;
+    };
     
     self.on("mount", function() {
       facade.tags[self.name] = self;
-      if ( _.keys(facade.tags).length===Facade.Tags ) facade.start();
     });
     
     self.on("EVENT_CREATION_COMPLETE", function() {
@@ -76,12 +87,21 @@
       facade.trigger("EVENT_RIOT_UPDATE");
     });
     
+    changeViewDetailsHandler(e) {
+      self._currentState = "STATE_DETAILS";
+      self.update();
+    }
+    
     changeNameHandler(e) {
       facade.getCurrentEntity().name = e.currentTarget.value;
     };
     
     changeContactHandler(e) {
       facade.getCurrentEntity().contact = e.currentTarget.value;
+    };
+    
+    changeURLHandler(e) {
+      facade.getCurrentEntity().url = e.currentTarget.value;
     };
     
     changeTypeHandler(e) {

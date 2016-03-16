@@ -17,7 +17,6 @@
     });
     
     self.on("update", function() {
-      if (!_.isUndefined(opts.dataProvider)) { self.keys = _.keys(opts.dataProvider[0]); }
     });
     
   </script>

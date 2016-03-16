@@ -57,10 +57,10 @@
         <div class="card-content blue-grey-text text-darken-2">
           <h4>Liste des items [{ facade.getCurrentCampaign().items.length }]</h4>
           <div>
-            <a href="#" onclick={ createItemMultipleChoiceHandler } tooltip="ABIBAO_COMPONENT_MULTIPLE_CHOICE"><i class="material-icons blue-grey-text text-darken-2 left">filter_1</i></a>
-            <a href="#" tooltip="ABIBAO_COMPONENT_DROPDOWN"><i class="material-icons blue-grey-text text-darken-2 left">filter_2</i></a>
-            <a href="#"><i class="material-icons blue-grey-text text-darken-2 left">filter_3</i></a>
-            <a href="#"><i class="material-icons blue-grey-text text-darken-2 left">filter_4</i></a>
+            <a href="javascript:void(0)" onclick={ createItemMultipleChoiceHandler } tooltip="ABIBAO_COMPONENT_MULTIPLE_CHOICE"><i class="material-icons blue-grey-text text-darken-2 left">filter_1</i></a>
+            <a href="javascript:void(0)" tooltip="ABIBAO_COMPONENT_DROPDOWN"><i class="material-icons blue-grey-text text-darken-2 left">filter_2</i></a>
+            <a href="javascript:void(0)"><i class="material-icons blue-grey-text text-darken-2 left">filter_3</i></a>
+            <a href="javascript:void(0)"><i class="material-icons blue-grey-text text-darken-2 left">filter_4</i></a>
           </div>
           <div class="row"> </div>
           <CampaignItemDataGrid data-provider={ facade.getCurrentCampaign().items } />
@@ -72,12 +72,11 @@
   
   <script>
     
-    self = this;
+    var self = this;
     self.name = "campaign";
     
     self.on("mount", function() {
       facade.tags[self.name] = self;
-      if ( _.keys(facade.tags).length===Facade.Tags ) facade.start();
     });
     
     self.on("EVENT_CREATION_COMPLETE", function() {
@@ -112,7 +111,7 @@
     };
     
     updateCampaignHandler(e) {
-    console.log(facade.getCurrentCampaign());
+      console.log("updateCampaignHandler", facade.getCurrentCampaign());
       facade.actions.campaigns.update(facade.getCurrentCampaign());
     };
     

@@ -3,6 +3,7 @@ var tags = [
   "views/homepage/components/homepageEntitiesDataGrid.tag",
   "views/homepage/renderers/homepageEntitiesItemRenderer.tag",
   "views/entity/index.tag",
+  "views/entity/components/entityDetails.tag",
   "views/entity/components/entityCampaignsDataGrid.tag",
   "views/entity/renderers/entityCampaignsItemRenderer.tag",
   "views/campaign/index.tag",
@@ -11,6 +12,7 @@ var tags = [
   "views/login/index.tag",
   "views/_layouts/navbar.tag",  
   "views/_layouts/error404.tag",
+  "views/_layouts/facade.tag"
 ];
 
 var facade = new Facade();

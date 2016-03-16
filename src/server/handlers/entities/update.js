@@ -19,13 +19,14 @@ module.exports = {
       urn: Joi.string().required()
     },
     payload: {
-      name: Joi.string(),
-      type: Joi.string().valid(["abibao", "charity", "company"]),
-      contact: Joi.string().email(),
-      description: Joi.string(),
-      picture: Joi.string(),
-      avatar: Joi.string(),
-      icon: Joi.string()
+      name: Joi.string().description("Le titre qui apparaît dans les listes"),
+      type: Joi.string().valid(["abibao", "charity", "company"]).default("charity").description("Type de l'entité"),
+      contact: Joi.string().email().description("Email du contact"),
+      url: Joi.string().description("URL du site de l'entité"),
+      title: Joi.string().description("Le titre qui apparaît sur la fiche détaillée"),
+      hangs: Joi.string().description("La phrase qui décrit la fiche détaillée"),
+      description: Joi.string().description("La description (300 caractères)"),
+      usages: Joi.string().description("Exemples concrêts de l'usage des dons.")
     }
   },
   jsonp: "callback",
