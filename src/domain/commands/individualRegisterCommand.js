@@ -14,7 +14,7 @@ module.exports = function(payload) {
       var quid = uuid.v1();
       // password confirmation
       if (payload.password1!==payload.password2) {
-        return reject("invalid password confimation");
+        return reject( new Error("invalid password confimation") );
       }
       payload.password = payload.password1;
       delete payload.password1;
@@ -24,18 +24,17 @@ module.exports = function(payload) {
         if (individuals.length>0) {
           return reject( new Error("Email already exists in database") );
         }
-        return self.individualCreateCommand(payload).then(function(individual) {
-          return self.individualCreateFirstSurveyAbibaoCommand(individual).then(function() {
-            self.debug.query(CURRENT_NAME, quid);
-            resolve({created:true});
-          });
+        // create individual
+        self.individualCreateCommand(payload).then(function(individual) {
+          self.debug.command(CURRENT_NAME, quid);
+          resolve(individual);
         });
       })
       .catch(function(error) {
         reject(error);
       });
     } catch (e) {
-        reject(e);
+      reject(e);
     }
   });
   
