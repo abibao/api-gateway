@@ -1,6 +1,7 @@
 function CampaignsActions(facade) {
 
 	var self = this;
+  self.facade = facade;
   
   self.createItemMultipleChoice = function(urn) {
     var payload = {
@@ -23,19 +24,24 @@ function CampaignsActions(facade) {
 	};
   
   self.update = function(campaign) {
-	  var data = _.clone(campaign);
-	  delete data.createdAt;
-	  delete data.modifiedAt;
-	  delete data.urn;
-	  delete data.items;
-	  delete data.company;
-    facade.call("PATCH", "/v1/campaigns/"+campaign.urn, data).then(function(campaign) {
-      console.log("CampaignsActions.update", campaign);
-      facade.trigger("EVENT_RIOT_UPDATE");
-      facade.trigger("EVENT_UPDATE_CAMPAIGN");
-    }).catch(function(error) {
-      console.log("EntitiesActions.update", "ERROR", error);
-      facade.trigger("CampaignsActions", error);
+    return new Promise(function(resolve, reject) {
+  	  var data = _.clone(campaign);
+  	  delete data.createdAt;
+  	  delete data.modifiedAt;
+  	  delete data.urn;
+  	  delete data.items;
+  	  delete data.company;
+  	  self.facade.setLoading(true);
+      facade.call("PATCH", "/v1/campaigns/"+campaign.urn, data).then(function(campaign) {
+        self.facade.setLoading(false);
+        self.facade.debugAction("CampaignsActions.update %o", campaign);
+        resolve();
+      }).catch(function(error) {
+        self.facade.setLoading(false);
+        self.facade.debugAction("CampaignsActions.update (ERROR) %o", error);
+        self.facade.trigger("EVENT_CALLER_ERROR", error);
+        reject(error);
+      });
     });
 	};
 	

@@ -20,7 +20,7 @@ module.exports = {
     },
     payload: {
       name: Joi.string(),
-      abibao: Joi.string().min(0).default(0),
+      position: Joi.number().min(0).default(0),
       price: Joi.number().min(0),
       currency: Joi.string().valid(["EUR"]),
       published: Joi.boolean().default(false),

@@ -36,8 +36,7 @@ function Facade() {
     console.log("setCurrentCampaign", value);
     self._currentCampaign = _.clone(value);
     riot.route("/campaign/"+self._currentCampaign.urn);
-    //Materialize.toast("Chargement \"campaign\" effectuée", 1500, "light-green darken-2");
-    facade.tags["campaign"].trigger("EVENT_CREATION_COMPLETE");
+    facade.tagscampaign.trigger("EVENT_CREATION_COMPLETE");
   };
   
   /** CURRENT ENTITY **/
@@ -48,11 +47,7 @@ function Facade() {
   self.setCurrentEntity = function(value) {
     self.debug("setCurrentEntity %o", value);
     self._currentEntity = _.clone(value);
-    switch(value) {
-      case Facade.STATE_ENTITY:
-        self.actions.entities.list();
-        break;
-    }
+    self.tags.entity.trigger("selectEntityLoadComplete");
     riot.route("/entity/"+self._currentEntity.urn);
   };
   

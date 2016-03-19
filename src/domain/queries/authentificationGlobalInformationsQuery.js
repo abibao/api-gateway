@@ -104,7 +104,6 @@ module.exports = function(credentials) {
             });
             // repack abibaoInProgress
             _.map(individual.abibaoInProgress, function(o) {
-              o.position = o.campaign.abibao;
               delete o.company;
               delete o.charity;
               delete o.campaign;

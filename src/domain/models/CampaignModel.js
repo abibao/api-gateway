@@ -25,9 +25,7 @@ module.exports = function(thinky) {
     description: type.string(),
     price: type.number().min(0).required(),
     currency: type.string().enum(["EUR"]).required(), // ISO 4217 : https://fr.wikipedia.org/wiki/ISO_4217
-    constants: type.object(),
-    // abibao fondamentals
-    abibao: type.number().min(0).default(0),
+    position: type.number().min(0).default(0),
     // linked
     company: type.string().required(), // entité de type "company" qui fournit le sondage
     // automatic

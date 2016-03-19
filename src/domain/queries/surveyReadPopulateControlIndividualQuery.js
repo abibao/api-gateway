@@ -40,7 +40,6 @@ module.exports = function(payload) {
         if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_COMPANY ) { survey.fromCompany=true; }
         if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO ) { survey.fromAbibao=true; }
         if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_CHARITY ) { survey.fromCharity=true; }
-        if ( survey.fromAbibao ) { survey.fromAbibaoPosition = survey.campaign.abibao; }
         _.map(survey.campaign.items, function(item) {
           survey.items = survey.campaign.items;
           if ( _.isUndefined(survey.answers) ) { survey.answers={}; }

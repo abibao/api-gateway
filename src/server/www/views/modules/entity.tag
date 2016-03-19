@@ -1,12 +1,14 @@
 <entity if={ facade.getCurrentState()===Facade.STATE_ENTITY }>
 
-  <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1">
-    <div class="uk-width-1-1">
-      <p>
-        <h2><a href="#homepage">HOMEPAGE</a> > ENTITY</h2>
-      </p>
-      <div class="uk-flex">
-        <div class="uk-width-1-2 uk-panel uk-panel-box uk-margin-left">
+  <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1 white">
+    
+    <br>
+    <h3><a href="#homepage">HOMEPAGE</a> > ENTITY</h3>
+    <hr class="uk-article-divider">
+    <div class="uk-grid uk-grid-medium">
+      <div class="uk-width-1-2">
+      
+        <div class="uk-panel uk-panel-box">
           <ul class="uk-dotnav">
             <li class={ (dotnav==="dotnav1") ? 'uk-active' : '' }><a href="javascript:void(0)" onclick={ selectDotnavDefault }>Défault</a></li>
             <li class={ (dotnav==="dotnav2") ? 'uk-active' : '' }><a href="javascript:void(0)" onclick={ selectDotnavDetails }>Défault</a></li>
@@ -18,7 +20,11 @@
                 <span class="uk-text-bold">Nom *</span><br>
                 <input onchange={ changeNameHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().name }" placeholder="Saisissez une valeur">
                 <span class="uk-text-bold">Type *</span><br>
-                <input onchange={ changeTypeHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().type }" placeholder="Saisissez une valeur">
+                <select onchange={ changeTypeHandler } class="uk-width-1-1">
+                  <option value="abibao" selected={ (facade.getCurrentEntity().type==='abibao') ? 'selected' : ''  }>Abibao</option>
+                  <option value="company" selected={ (facade.getCurrentEntity().type==='company') ? 'selected' : ''  }>Compagnie</option>
+                  <option value="charity" selected={ (facade.getCurrentEntity().type==='charity') ? 'selected' : ''  }>Association</option>
+                </select>
                 <span class="uk-text-bold">Contact *</span><br>
                 <input onchange={ changeContactHandler } class="uk-width-1-1" type="email" value="{ facade.getCurrentEntity().contact }" placeholder="Saisissez une valeur">
                 <span class="uk-text-bold">Site web *</span><br>
@@ -26,7 +32,7 @@
               </div>
             </fieldset>
             <br>
-            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large">Sauver</button>
+            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
           </form>
           <form if={ dotnav==="dotnav2" } class="uk-form uk-width-1-1">
             <fieldset>
@@ -40,7 +46,7 @@
               </div>
             </fieldset>
             <br>
-            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large">Sauver</button>
+            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
           </form>
           <form if={ dotnav==="dotnav3" } class="uk-form uk-width-1-1">
             <div class="uk-form-row uk-width-1-1">
@@ -66,22 +72,44 @@
               </fieldset>
             </div>
             <br>
-            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large">Sauver</button>
+            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
           </form>
         </div>
+        
       </div>
-      <div class="uk-width-1-2 uk-panel uk-panel-box uk-margin-left">
-      
+      <div class="uk-width-1-2">
+        
+        <div class="uk-panel uk-panel-box">
+          <h4>Campagnes de sondages</h4>
+          <ul onchange={ changeCampaignsOrderHandler } class="uk-nestable" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
+            <li class="uk-nestable-item" each={ campaign in facade.getCurrentEntity().campaigns }>
+              <input type="text" class="urnCampaign" value={ campaign.urn } style="display:none">
+              <div class="uk-nestable-panel">
+                <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
+                { campaign.position }: { campaign.name } <div class="uk-badge uk-badge-notification { (campaign.published) ? 'uk-badge-success' : 'uk-badge-danger' } uk-float-right">{ campaign.items.length }</div>
+              </div>
+            </li>
+          </ul>
+          <button type="button" onclick={ updateCampaignsHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+          <button type="button" onclick={ createCampaignHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2 white-text">Ajouter</button>
+        </div>
+        
       </div>
     </div>
+    
   </div>
-  
+
   <script>
     
     var self = this;
     self.name = "entity";
     
     self.dotnav = "dotnav1";
+    
+    self.on("mount", function() {
+      facade.tags[self.name] = self;
+      $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
+    });
     
     selectDotnavDefault(e) {
       self.dotnav = "dotnav1";
@@ -99,9 +127,24 @@
       self.update();
     }
     
-    self.on("mount", function() {
-      facade.tags[self.name] = self;
+    self.on("selectEntityLoadComplete", function() {
+      facade.debugHTML("entity.tag: %s", "selectEntityLoadComplete");
     });
+    
+    self.nestableArrivedHandler = function() {
+      facade.debugHTML("entity.tag: %s", "nestableArrivedHandler");
+      UIkit.nestable($(".uk-nestable"));
+    };
+    
+    changeCampaignsOrderHandler(e) {
+      var i = 1;
+      _.map($(".uk-nestable li .urnCampaign"), function(item) {
+        var campaign = _.find(facade.getCurrentEntity().campaigns, {urn: item.value});
+        campaign.position = i;
+        i = i + 1;
+      });
+      self.update();
+    };
     
     changeViewDefaultHandler(e) {
       self._currentState = "STATE_DEFAULT";
@@ -150,6 +193,12 @@
       facade.actions.entities.update(facade.getCurrentEntity());
     };
     
+    updateCampaignsHandler(e) {
+      _.map(facade.getCurrentEntity().campaigns, function(campaign) {
+        facade.actions.campaigns.update(campaign);
+      });
+    };
+    
     createCampaignHandler(e) {
     };
     
@@ -190,8 +239,6 @@
   <style scoped>
   
     .uk-container {
-      border-left: solid #e0e0e0 0.25rem;
-      border-right: solid #e0e0e0 0.25rem;
       width: 960px;
     }
     

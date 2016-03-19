@@ -44,7 +44,7 @@ function EntitiesActions(facade) {
         self.populateCampaigns(entity)
         .then(function(campaigns) {
           self.facade.setLoading(false);
-          entity.campaigns = campaigns;
+          entity.campaigns = _.sortBy(campaigns, ["position", "name"]);
           facade.setCurrentEntity(entity);
           resolve();
         })
