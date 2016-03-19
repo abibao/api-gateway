@@ -5,9 +5,10 @@ function Facade() {
 
 	self.version = "1.4.0";
 	
-	self.debug = debug('abibao:facade');
-	self.debugCall = debug('abibao:facade:call');
-	self.debugAction = debug('abibao:facade:action');
+	self.debug = debug("abibao:facade");
+	self.debugCall = debug("abibao:facade:call");
+	self.debugAction = debug("abibao:facade:action");
+	self.debugHTML = debug("abibao:html");
 	
   self.tags = {};
   self.stores = {
@@ -20,48 +21,12 @@ function Facade() {
     entities: new EntitiesActions(self)
   };
   
-  self.on("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", function(urn) {
-    self.debug("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE %s", urn);
-    self.actions.campaigns.createItemMultipleChoice(urn);
-  });
-  
-  self.on("EVENT_SELECT_CAMPAIGN", function(urn) {
-    self.debug("EVENT_SELECT_CAMPAIGN %s", urn);
-    self.actions.campaigns.selectCampaign(urn);
-  });
-  
-  self.on("EVENT_SELECT_ENTITY", function(urn) {
-    self.debug("EVENT_SELECT_ENTITY %s", urn);
-    self.actions.entities.selectEntity(urn);
-  });
-  
-  self.on("EVENT_UPDATE_ENTITY", function() {
-    self.debug("EVENT_UPDATE_ENTITY");
-    self.actions.entities.list();
-  });
-  
-  self.on("EVENT_GATEWAY_ERROR", function(error) {
-    self.debug("EVENT_GATEWAY_ERROR %o", error.responseJSON);
-    Materialize.toast(error.message, 1500, "deep-orange darken-3");
-  });
-  
+
   self.on("EVENT_RIOT_UPDATE", function() {
-    self.debug("EVENT_RIOT_UPDATE");
+    // self.debug("EVENT_RIOT_UPDATE");
     riot.update();
   });
-  
-  self.on("EVENT_BACK_SELECTED_ENTITY", function() {
-    self.debug("EVENT_BACK_SELECTED_ENTITY");
-    self.setCurrentCampaign(null);
-    riot.route("/entity/"+self._currentCampaign.company.urn);
-  });
-  
-  self.on("EVENT_LOGIN_AUTH_COMPLETE", function() {
-    self.debug("EVENT_LOGIN_AUTH_COMPLETE");
-    if ( self.getCurrentState()===Facade.STATE_LOGIN ) { riot.route("/homepage"); }
-    self.actions.entities.list();
-  });
-  
+
   /** CURRENT CAMPAIGN **/
   self._currentCampaign = null;
   self.getCurrentCampaign = function() {
@@ -71,7 +36,7 @@ function Facade() {
     console.log("setCurrentCampaign", value);
     self._currentCampaign = _.clone(value);
     riot.route("/campaign/"+self._currentCampaign.urn);
-    Materialize.toast("Chargement \"campaign\" effectuée", 1500, "light-green darken-2");
+    //Materialize.toast("Chargement \"campaign\" effectuée", 1500, "light-green darken-2");
     facade.tags["campaign"].trigger("EVENT_CREATION_COMPLETE");
   };
   
@@ -81,16 +46,18 @@ function Facade() {
     return self._currentEntity;
   };
   self.setCurrentEntity = function(value) {
-    console.log("setCurrentEntity", value);
+    self.debug("setCurrentEntity %o", value);
     self._currentEntity = _.clone(value);
+    switch(value) {
+      case Facade.STATE_ENTITY:
+        self.actions.entities.list();
+        break;
+    }
     riot.route("/entity/"+self._currentEntity.urn);
-    Materialize.toast("Chargement \"entity\" effectuée", 1500, "light-green darken-2");
-    console.log(facade.tags["entity"]);
-    facade.tags["entity"].trigger("EVENT_CREATION_COMPLETE");
   };
   
   /** CURRENT STATE **/
-  self._currentState = Facade.STATE_HOMEPAGE;
+  self._currentState = Facade.STATE_INITIALIZE;
   self.getCurrentState = function() {
     return self._currentState;
   };
@@ -101,33 +68,55 @@ function Facade() {
   };
   
   self.start = function() {
-    self.debug("start facade");
+    // initialize router
     riot.route.start(true);
-    // current routes
-    var route = window.location.hash.split("/");
-    switch(route[0]) {
-      case "#campaign":
-        var campaign = window.location.hash.split("/")[1];
-        self.setCurrentState(Facade.STATE_CAMPAIGN);
-        self.trigger("EVENT_SELECT_CAMPAIGN", campaign);
-        break;
-      case "#entity":
-        var entity = window.location.hash.split("/")[1];
-        self.setCurrentState(Facade.STATE_ENTITY);
-        self.trigger("EVENT_SELECT_ENTITY", entity);
-        break;
-      default:
-        break;
+    // authentified or not ?
+    if ( self.stores.auth.authentified()===false ) { 
+      window.location = "#login";
+      self.setCurrentState(Facade.STATE_LOGIN);
+      return riot.route("/login");
     }
-    // auth
-    if ( facade.stores.auth.authentified() ) self.trigger("EVENT_LOGIN_AUTH_COMPLETE");
+    // analayse current route
+    var routes = window.location.hash.split("/");
+    // go now.
+    self.setLoading(true);
+    self.actions.entities.list()
+    .then(function() {
+      self.debug("start facade on %s / authentified=%s", routes[0], self.stores.auth.authentified());
+      switch(routes[0]) {
+        case "#homepage":
+          self.setCurrentState(Facade.STATE_HOMEPAGE);
+          break;
+        case "#campaign":
+          var campaign = routes[1];
+          self.setCurrentState(Facade.STATE_CAMPAIGN);
+          break;
+        case "#entity":
+          var entity = routes[1];
+          self.actions.entities.selectEntity(entity)
+          .then(function() {
+            self.setCurrentState(Facade.STATE_ENTITY);
+          })
+          .catch(function(error) {
+            
+          });
+          break;
+        default:
+          break;
+      }
+    })
+    .catch(function(error) {
+      self.debug("error facade %o", error);
+    });
   };
   
 	self.call = function(method, url, payload) {
+	  self.debugCall("new promise %s %s %o", method, url, payload);
+	  self.setLoading(true);
 	  return new Promise(function(resolve, reject) {
       // Headers
       $.ajaxSetup({
-        headers: { 'Authorization': Cookies.get("Authorization") }
+        headers: { "Authorization": Cookies.get("Authorization") }
       });
       // Resolve 
       $.ajax({
@@ -136,21 +125,41 @@ function Facade() {
         data: payload
       })
       .fail(function(error) {
-        self.debugCall("error %s %s %o", method, url, data);
-        self.trigger("EVENT_GATEWAY_ERROR", error.responseJSON);
-        reject(error);
+        self.debugCall("error %s %s %o", method, url, error);
+        self.trigger("EVENT_CALLER_ERROR", error);
+        return reject(error);
       })
       .done(function(data) {
         self.debugCall("complete %s %s %o", method, url, data);
         self.trigger("EVENT_RIOT_UPDATE");
-        resolve(data);
+        return resolve(data);
       });
 	  });
 	};
 	
+	self._loading = false;
+	self.setLoading = function(value) {
+	  self._loading = value;
+	  self.trigger("EVENT_RIOT_UPDATE");
+	};
+	self.getLoading = function() {
+	  return self._loading;
+	};
+	
+	self.on("EVENT_CALLER_ERROR", function(error) {
+    self.debug("EVENT_CALLER_ERROR %o", error.responseJSON);
+    UIkit.notify({
+      message: error.responseJSON.message,
+      status: "warning",
+      timeout: 4000,
+      pos: "top-center"
+    });
+  });
+	
 }
 
 Facade.STATE_404_ERROR = "error404";
+Facade.STATE_INITIALIZE = "initialize";
 Facade.STATE_LOGIN = "login";
 Facade.STATE_HOMEPAGE = "homepage";
 Facade.STATE_CAMPAIGN = "campaign";

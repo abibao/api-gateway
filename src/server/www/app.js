@@ -1,16 +1,9 @@
 var tags = [
-  "views/homepage/index.tag",
-  "views/homepage/components/homepageEntitiesDataGrid.tag",
-  "views/homepage/renderers/homepageEntitiesItemRenderer.tag",
-  "views/entity/index.tag",
-  "views/entity/components/entityDetails.tag",
-  "views/entity/components/entityCampaignsDataGrid.tag",
-  "views/entity/renderers/entityCampaignsItemRenderer.tag",
+  "views/modules/login.tag",
+  "views/modules/homepage.tag",
+  "views/modules/entity.tag",
   "views/campaign/index.tag",
-  "views/campaign/components/campaignItemDataGrid.tag",
-  "views/campaign/renderers/campaignItemItemRenderer.tag",
-  "views/login/index.tag",
-  "views/_layouts/navbar.tag",  
+  "views/_layouts/loading.tag",  
   "views/_layouts/error404.tag",
   "views/_layouts/facade.tag"
 ];

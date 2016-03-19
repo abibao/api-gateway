@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="ltr" class="uk-height-1-1">
   <head>
     <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,17 +9,21 @@
 		<meta name="keywords" content="">
 		<meta name="author" content="Gilles Perreymond">
 		<link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" rel="stylesheet">
+		<link href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/uikit.almost-flat.min.css" rel="stylesheet">
+		<link href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/components/notify.almost-flat.min.css" rel="stylesheet">
+		<link href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/components/upload.almost-flat.min.css" rel="stylesheet">
+		<link href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/components/form-file.almost-flat.min.css" rel="stylesheet">
+		<link href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/components/placeholder.almost-flat.css" rel="stylesheet">
+		<link href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/components/dotnav.almost-flat.min.css" rel="stylesheet">
 		<script src="ruxx/debug.js"></script>
   </head>
-  <body class="grey lighten-3">
+  <body class="uk-height-1-1">
     
-    <navbar> </navbar>
-    
+    <loading> </loading>
+    <login> </login>
     <homepage> </homepage>
     <entity> </entity>
     <campaign> </campaign>
-    <login> </login>
     <error404> </error404>
     <facade> </facade>
     
@@ -31,7 +35,9 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/js/uikit.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/js/components/notify.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/js/components/upload.min.js"></script>
     
     <!-- riot application -->
     <script src="ruxx/actions/auth.js"></script>
@@ -43,7 +49,7 @@
     <script src="app.js"></script>
     <script>
       $(document).ready(function() {
-        debug("abibao:html")("ready!");
+        facade.debugHTML("ready!");
       });
     </script>
     
