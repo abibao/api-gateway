@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.5.2-build0005",
+  "version": "1.5.2-build0006",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto-generate": "./bin/abibao generate",
@@ -53,6 +53,7 @@
     "jsonfile": "2.2.3",
     "jsonwebtoken": "5.7.0",
     "lodash": "4.6.1",
+    "markdown": "0.5.0",
     "md5": "2.1.0",
     "mongoose": "4.4.6",
     "nconf": "0.8.4",

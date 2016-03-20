@@ -21,7 +21,7 @@ module.exports = {
       question: Joi.string().required(),
       description: Joi.string(),
       required: Joi.boolean().required().default(false),
-      image: Joi.string().default("http://"),
+      image: Joi.string().default(""),
       // component specific
       // abibao
       label: Joi.string().required().description("Le nom de la variable où sera stockée la réponse"),

@@ -20,7 +20,7 @@ module.exports = function(thinky) {
     // fields
     name: type.string().required(),
     contact: type.string().email().required(),
-    url: type.string().default("http://").required(),
+    url: type.string().default("").required(),
     type: type.string().enum(["none", "abibao", "charity", "company"]).required(),
     icon: type.string().default("images/icons/default.png"),
     avatar: type.string().default("images/avatars/default.png"),

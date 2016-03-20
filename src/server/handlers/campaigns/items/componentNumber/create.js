@@ -21,7 +21,7 @@ module.exports = {
       question: Joi.string().required(),
       description: Joi.string(),
       required: Joi.boolean().required().default(false),
-      image: Joi.string().default("http://"),
+      image: Joi.string().default(""),
       // component specific
       minimum: Joi.number().required().default(0),
       maximum: Joi.number().required().default(0),
