@@ -26,6 +26,8 @@ module.exports = function(thinky) {
     price: type.number().min(0).required(),
     currency: type.string().enum(["EUR"]).required(), // ISO 4217 : https://fr.wikipedia.org/wiki/ISO_4217
     position: type.number().min(0).default(0),
+    screenWelcomeContent: type.string().default(""),
+    screenThankYouContent: type.string().default(""),
     // linked
     company: type.string().required(), // entité de type "company" qui fournit le sondage
     // automatic

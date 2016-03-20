@@ -57,15 +57,17 @@ module.exports = function(credentials) {
                   campaign: self.r.table("campaigns").get(survey("campaign")).merge(function(campaign) {
                     return {
                       urn: survey("campaign"),
-                      position: campaign("position")
+                      position: campaign("position"),
+                      screenWelcomeContent: campaign("screenWelcomeContent"),
+                      screenThankYouContent: campaign("screenThankYouContent")
                     };
-                  }).pluck("urn","name","price","currency","campaign","position"),
+                  }).pluck("urn","name","price","currency","campaign","position","screenWelcomeContent","screenThankYouContent"),
                   company: self.r.table("entities").get(survey("company")).pluck("name", "type"),
                   charity: self.r.table("entities").get(survey("charity")).pluck("name", "type"),
                   nbItems: self.r.table("campaigns_items").filter({"campaign":survey("campaign")}).count(),
                   nbAnswers: ( survey("answers").hasFields('answers')===false ) ? 0 : survey.getField("answers").keys().count(),
                 };
-              }).pluck("urn","campaign","company","charity","modifiedAt","nbItems","nbAnswers","answers","complete","position")
+              }).pluck("urn","campaign","company","charity","modifiedAt","nbItems","nbAnswers","answers","complete","position","screenWelcomeContent","screenThankYouContent")
             };
           }).pluck("email","charitiesHistory","currentCharity","surveysInProgress","surveysCompleted")
           .then(function(individual) {
@@ -89,6 +91,8 @@ module.exports = function(credentials) {
               item.urn = self.getURNfromID(item.urn, "survey");
               item.name = item.campaign.name;
               item.position = item.campaign.position;
+              item.screenWelcomeContent = item.campaign.screenWelcomeContent,
+              item.screenThankYouContent = item.campaign.screenThankYouContent,
               item.campaign = self.getURNfromID(item.campaign.urn, "campaign");
             });
             // surveysCompleted:  calculate URN
@@ -97,7 +101,7 @@ module.exports = function(credentials) {
             });
             // split abibao surveys from others
             individual.charitiesHistory = _.filter(individual.charitiesHistory, function(o) { return o.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
-            individual.abibaoInProgress = _.filter(individual.surveysInProgress, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
+            individual.abibaoInProgress = _.sortBy( _.filter(individual.surveysInProgress, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO;}), "position" );
             individual.surveysInProgress = _.filter(individual.surveysInProgress, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
             individual.abibaoCompleted = _.filter(individual.surveysCompleted, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
             individual.surveysCompleted = _.filter(individual.surveysCompleted, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
