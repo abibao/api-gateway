@@ -47,24 +47,25 @@ module.exports = function(credentials) {
                     return {
                       urn: survey("campaign")
                     };
-                  }).pluck("urn","name","price","currency","abibao"),
+                  }).pluck("urn","name","price","currency"),
                   company: self.r.table("entities").get(survey("company")).pluck("name", "type")
                 };
               }).pluck("urn","company"),
               surveysInProgress: self.r.table("surveys").filter({"individual":individual("id"),"complete":false}).coerceTo("array").merge(function(survey) {
                 return {
                   urn: survey("id"),
-                  campaign: self.r.table("campaigns").get(survey("campaign")).merge(function() {
+                  campaign: self.r.table("campaigns").get(survey("campaign")).merge(function(campaign) {
                     return {
-                      urn: survey("campaign")
+                      urn: survey("campaign"),
+                      position: campaign("position")
                     };
-                  }).pluck("urn","name","price","currency","abibao"),
+                  }).pluck("urn","name","price","currency","campaign","position"),
                   company: self.r.table("entities").get(survey("company")).pluck("name", "type"),
                   charity: self.r.table("entities").get(survey("charity")).pluck("name", "type"),
                   nbItems: self.r.table("campaigns_items").filter({"campaign":survey("campaign")}).count(),
                   nbAnswers: ( survey("answers").hasFields('answers')===false ) ? 0 : survey.getField("answers").keys().count(),
                 };
-              }).pluck("urn","campaign","company","charity","modifiedAt","nbItems","nbAnswers","answers","complete")
+              }).pluck("urn","campaign","company","charity","modifiedAt","nbItems","nbAnswers","answers","complete","position")
             };
           }).pluck("email","charitiesHistory","currentCharity","surveysInProgress","surveysCompleted")
           .then(function(individual) {
@@ -86,7 +87,9 @@ module.exports = function(credentials) {
             // surveysInProgress:  calculate URN
             _.map(individual.surveysInProgress, function(item) {
               item.urn = self.getURNfromID(item.urn, "survey");
-              item.campaign.urn = self.getURNfromID(item.campaign.urn, "campaign");
+              item.name = item.campaign.name;
+              item.position = item.campaign.position;
+              item.campaign = self.getURNfromID(item.campaign.urn, "campaign");
             });
             // surveysCompleted:  calculate URN
             _.map(individual.surveysCompleted, function(item) {
@@ -106,15 +109,25 @@ module.exports = function(credentials) {
             _.map(individual.abibaoInProgress, function(o) {
               delete o.company;
               delete o.charity;
-              delete o.campaign;
             });
             // remove currentCharity if id=="none"
             if ( self.getIDfromURN(individual.currentCharity.urn)==="none" ) {
               delete individual.currentCharity;
             }
-            // end of command
-            self.debug.query(CURRENT_NAME, quid);
-            return resolve(individual);
+            // first login so we need to assign 2 abibao surveys
+            if ( individual.abibaoCompleted.length===0 && individual.abibaoInProgress.length===0) {
+              return self.individualCreateAbibaoSurveyCommand(individual.urn, 1).then(function() {
+                return self.individualCreateAbibaoSurveyCommand(individual.urn, 2).then(function() {
+                  return self.authentificationGlobalInformationsQuery(credentials).then(function(result) {
+                    resolve(result);
+                  });
+                });
+              });
+            } else {
+              // end of command
+              self.debug.query(CURRENT_NAME, quid);
+              return resolve(individual);
+            }
           })
           .catch(function(error) {
             return reject(error);
