@@ -1,6 +1,8 @@
 var nconf = require("nconf");
 nconf.argv().env();
 
+var confName = nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_DB") || process.env.ABIBAO_API_GATEWAY_SERVER_RETHINK_DB;
+
 /**
  * New Relic agent configuration.
  *
@@ -11,7 +13,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ["api.abibao.com-"+nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_DB")],
+  app_name: ["api.abibao.com-"+confName],
   /**
    * Your New Relic license key.
    */
