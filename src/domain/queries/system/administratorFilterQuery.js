@@ -12,7 +12,10 @@ module.exports = function(filters) {
   
   return new Promise(function(resolve, reject) {
     try {
+      
       var quid = uuid.v1();
+      self.debug.query('%s - %s start', CURRENT_NAME, quid );
+    
       self.AdministratorModel.filter(filters).run().then(function(models) {
         _.map(models, function(model) {
           delete model.id;
@@ -21,7 +24,6 @@ module.exports = function(filters) {
           delete model.campaign;
           delete model.item;
         });
-        self.debug.query(CURRENT_NAME, quid);
         resolve(models);
       }).catch(function(error) {
         reject(error);

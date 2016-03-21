@@ -2,6 +2,8 @@
 
 var Promise = require("bluebird");
 var _ = require("lodash");
+var waterfall = require("async").waterfall;
+var map = require("async").map;
 var uuid = require("node-uuid");
 
 var CURRENT_NAME = "AuthentificationGlobalInformationsQuery";
@@ -11,137 +13,147 @@ module.exports = function(credentials) {
   var self = this;
   
   return new Promise(function(resolve, reject) {
+    
     var quid = uuid.v1();
+    self.debug.query('%s - %s start', CURRENT_NAME, quid );
+    
     try {
+      
       if ( _.isUndefined(credentials.action) ) { return reject( new Error("Action is undefined") ); }
       if ( credentials.action!==self.ABIBAO_CONST_TOKEN_AUTH_ME ) { return reject( new Error("Action is unauthorized") ); }
-      switch (credentials.scope) {
-        case self.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL:
-          credentials.id = self.getIDfromURN(credentials.urn);
-          self.r.table("individuals").get(credentials.id).merge(function(individual) {
-            return {
-              currentCharity: self.r.table("entities").get(individual("charity")).merge(function(entity) {
-                return {
-                  urn: entity("id")
-                };
-              }).pluck("urn","name","contact","icon","avatar","picture"),
-              charitiesHistory: self.r.table("surveys").filter({"individual":individual("id")})("charity").distinct().map(function(val) {
-                return self.r.table("entities").get(val).merge(function(charity) {
-                  return {
-                    urn: charity("id"),
-                    type: charity("type"),
-                    me: {
-                      totalSurveysCompleted: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").count(),
-                      totalPriceCollected: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
-                    },
-                    totalIndividuals: self.r.table("surveys").filter({"charity":charity("id")}).coerceTo("array").count(),
-                    totalSurveysCompleted: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").count(),
-                    totalPriceCollected: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
-                  };
-                }).pluck("urn","type","name","me", "totalIndividuals","totalPriceCollected","totalSurveysCompleted");
-              }),
-              surveysCompleted: self.r.table("surveys").filter({"individual":individual("id"),"complete":true}).coerceTo("array").merge(function(survey) {
-                return {
-                  urn: survey("id"),
-                  campaign: self.r.table("campaigns").get(survey("campaign")).merge(function() {
-                    return {
-                      urn: survey("campaign")
-                    };
-                  }).pluck("urn","name","price","currency"),
-                  company: self.r.table("entities").get(survey("company")).pluck("name", "type")
-                };
-              }).pluck("urn","company"),
-              surveysInProgress: self.r.table("surveys").filter({"individual":individual("id"),"complete":false}).coerceTo("array").merge(function(survey) {
-                return {
-                  urn: survey("id"),
-                  campaign: self.r.table("campaigns").get(survey("campaign")).merge(function(campaign) {
-                    return {
-                      urn: survey("campaign"),
-                      position: campaign("position"),
-                      screenWelcomeContent: campaign("screenWelcomeContent"),
-                      screenThankYouContent: campaign("screenThankYouContent")
-                    };
-                  }).pluck("urn","name","price","currency","campaign","position","screenWelcomeContent","screenThankYouContent"),
-                  company: self.r.table("entities").get(survey("company")).pluck("name", "type"),
-                  charity: self.r.table("entities").get(survey("charity")).pluck("name", "type"),
-                  nbItems: self.r.table("campaigns_items").filter({"campaign":survey("campaign")}).count(),
-                  nbAnswers: ( survey("answers").hasFields('answers')===false ) ? 0 : survey.getField("answers").keys().count(),
-                };
-              }).pluck("urn","campaign","company","charity","modifiedAt","nbItems","nbAnswers","answers","complete","position","screenWelcomeContent","screenThankYouContent")
-            };
-          }).pluck("email","charitiesHistory","currentCharity","surveysInProgress","surveysCompleted")
-          .then(function(individual) {
-            individual.news = [];
-            individual.news.push ({
-              title: "Titre de news 1",
-              type: "ABIBAO_CONST_NEWS_FROM_ABIBAO",
-              image: "images/news/default.png",
-              description: "<p>Phasellus molestie, orci nec aliquam fermentum, nisl leo ultrices velit, sed suscipit risus augue ut nisi.</p> Ut vestibulum, erat eget pharetra finibus, risus urna viverra nunc, eu euismod turpis sem ac turpis. In laoreet ullamcorper vehicula. Phasellus nunc tortor, commodo nec iaculis non, consequat vitae neque. Aliquam nec erat elementum, dictum magna non, suscipit dolor. Donec sodales aliquam lectus non ultricies. Nulla nec luctus nulla, eget viverra purus. Phasellus volutpat erat a lectus viverra aliquam. ",
-            });
-            // individidual: set URN
-            individual.urn = credentials.urn;
-            // charitiesHistory: calculate URN
-            _.map(individual.charitiesHistory, function(item) {
-              item.urn = self.getURNfromID(item.urn, "entity");
-            });
-            // charitiesHistory: calculate URN
-            individual.currentCharity.urn = self.getURNfromID(individual.currentCharity.urn, "entity");
-            // surveysInProgress:  calculate URN
-            _.map(individual.surveysInProgress, function(item) {
-              item.urn = self.getURNfromID(item.urn, "survey");
-              item.name = item.campaign.name;
-              item.position = item.campaign.position;
-              item.screenWelcomeContent = item.campaign.screenWelcomeContent,
-              item.screenThankYouContent = item.campaign.screenThankYouContent,
-              item.campaign = self.getURNfromID(item.campaign.urn, "campaign");
-            });
-            // surveysCompleted:  calculate URN
-            _.map(individual.surveysCompleted, function(item) {
-              item.urn = self.getURNfromID(item.urn, "survey");
-            });
-            // split abibao surveys from others
-            individual.charitiesHistory = _.filter(individual.charitiesHistory, function(o) { return o.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
-            individual.abibaoInProgress = _.sortBy( _.filter(individual.surveysInProgress, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO;}), "position" );
-            individual.surveysInProgress = _.filter(individual.surveysInProgress, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
-            individual.abibaoCompleted = _.filter(individual.surveysCompleted, function(o) { return o.company.type===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
-            individual.surveysCompleted = _.filter(individual.surveysCompleted, function(o) { return o.company.type!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; });
-            // repack abibaoCompleted
-            individual.abibaoCompleted = _.map(individual.abibaoCompleted, function(o) {
-              return o.urn;
-            });
-            // repack abibaoInProgress
-            _.map(individual.abibaoInProgress, function(o) {
-              delete o.company;
-              delete o.charity;
-            });
-            // remove currentCharity if id=="none"
-            if ( self.getIDfromURN(individual.currentCharity.urn)==="none" ) {
-              delete individual.currentCharity;
-            }
-            // first login so we need to assign 2 abibao surveys
-            if ( individual.abibaoCompleted.length===0 && individual.abibaoInProgress.length===0) {
-              return self.individualCreateAbibaoSurveyCommand(individual.urn, 1).then(function() {
-                return self.individualCreateAbibaoSurveyCommand(individual.urn, 2).then(function() {
-                  return self.authentificationGlobalInformationsQuery(credentials).then(function(result) {
-                    resolve(result);
+      if ( credentials.scope!==self.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL) { return reject( new Error("Scope is unauthorized") ); }
+      
+      var waterfallResults = {};
+      
+      credentials.id = self.getIDfromURN(credentials.urn);
+      
+      waterfall([
+        
+        // initialize
+        function(callback) {
+          callback(null, waterfallResults);
+        },
+        // individual
+        function(results, callback) {
+          self.individualReadQuery(credentials.urn).then(function(individual) {
+            waterfallResults.individual = individual;
+            callback(null, waterfallResults);
+          })
+          .catch(callback);
+        },
+        // currentCharity
+        function(results, callback) {
+          self.entityReadQuery(waterfallResults.individual.urnCharity).then(function(entity) {
+            waterfallResults.currentCharity = entity;
+            callback(null, waterfallResults);
+          })
+          .catch(callback);
+        },
+        // charitiesHistory
+        function(results, callback) {
+          waterfallResults.charitiesHistory = []; // TODO
+          callback(null, waterfallResults);
+          /*self.r.table("surveys").filter({"individual":individual("id")})("charity").distinct().map(function(val) {
+            return self.r.table("entities").get(val).merge(function(charity) {
+              return {
+                urn: charity("id"),
+                type: charity("type"),
+                me: {
+                  totalSurveysCompleted: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").count(),
+                  totalPriceCollected: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
+                },
+                totalIndividuals: self.r.table("surveys").filter({"charity":charity("id")}).coerceTo("array").count(),
+                totalSurveysCompleted: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").count(),
+                totalPriceCollected: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
+              };
+            }).pluck("urn","type","name","me", "totalIndividuals","totalPriceCollected","totalSurveysCompleted");
+          });*/
+        },
+        // surveysCompleted / surveysInProgress / abibaoCompleted / abibaoInProgress 
+        function(results, callback) {
+          self.surveyFilterQuery({"individual":credentials.id}).then(function(surveys) {
+            map(surveys, function(survey, next) {
+              survey.nbAnswers = ( _.isUndefined(survey.answers)===false ) ? _.keys(survey.answers).length : 0;
+              self.campaignItemFilterQuery({campaign:self.getIDfromURN(survey.urnCampaign)}).then(function(campaignItems) {
+                survey.nbQuestions = campaignItems.length;
+                return self.entityReadQuery(survey.urnCompany).then(function(company) {
+                  survey.companyType = company.type;
+                  return self.campaignReadQuery(survey.urnCampaign).then(function(campaign) {
+                    survey.position = campaign.position;
+                    survey.name = campaign.name;
+                    next();
                   });
                 });
-              });
-            } else {
-              // end of command
-              self.debug.query(CURRENT_NAME, quid);
-              return resolve(individual);
-            }
+              })
+              .catch(next);
+            }, function(err, res) {
+              if (err) { return reject(err); }
+              waterfallResults.surveysCompleted = _.orderBy( _.filter(surveys, function(o) { return o.complete===true && o.companyType!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
+              waterfallResults.surveysInProgress = _.orderBy( _.filter(surveys, function(o) { return o.complete===false && o.companyType!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
+              waterfallResults.abibaoCompleted = _.orderBy( _.filter(surveys, function(o) { return o.complete===true && o.companyType===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
+              waterfallResults.abibaoInProgress = _.orderBy( _.filter(surveys, function(o) { return o.complete===false && o.companyType===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
+              callback(null, waterfallResults);
+            });
           })
-          .catch(function(error) {
-            return reject(error);
-          });
-          break;
-        case self.ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR:
-          return reject( new Error("Scope administrator is unauthorized") );
-        default:
-          return reject( new Error("Scope is unauthorized") );
-      }
+          .catch(callback);
+        }
+        
+      ], function(error, result) {
+        if (error) { return reject(error); }
+        // construt the final result
+        var finalResult = {
+          urn: waterfallResults.individual.urn,
+          email: waterfallResults.individual.email,
+          charitiesHistory: waterfallResults.charitiesHistory,
+          abibaoCompleted: _.map(waterfallResults.abibaoCompleted, function(item) {
+            return {
+              urn: item.urn,
+              name: item.name,
+              modifiedAt: item.modifiedAt
+            };
+          }),
+          abibaoInProgress: _.map(waterfallResults.abibaoInProgress, function(item) {
+            return {
+              urn: item.urn,
+              name: item.name,
+              urnCampaign: item.urnCampaign,
+              position: item.position,
+              answers: item.answers || {},
+              nbAnswers: item.nbAnswers,
+              nbQuestions: item.nbQuestions,
+              screenWelcomeContent: item.screenWelcomeContent || "",
+              screenThankYouContent: item.screenThankYouContent || "",
+              modifiedAt: item.modifiedAt,
+              complete: item.complete
+            };
+          }),
+          surveysInProgress: _.map(waterfallResults.surveysInProgress, function(item) {
+            return {
+              urn: item.urn,
+              name: item.name,
+              urnCampaign: item.urnCampaign,
+              position: item.position,
+              answers: item.answers || {},
+              nbAnswers: item.nbAnswers,
+              nbQuestions: item.nbQuestions,
+              screenWelcomeContent: item.screenWelcomeContent || "",
+              screenThankYouContent: item.screenThankYouContent || "",
+              modifiedAt: item.modifiedAt,
+              complete: item.complete
+            };
+          }),
+          surveysCompleted: _.map(waterfallResults.surveysCompleted, function(item) {
+            return {
+              urn: item.urn,
+              name: item.name,
+              modifiedAt: item.modifiedAt
+            };
+          }),
+          currentCharity: (waterfallResults.currentCharity.type==="none") ? "" : waterfallResults.currentCharity.urn
+        };
+        resolve(finalResult);
+      });
+      
     } catch (e) {
       reject(e);
     }

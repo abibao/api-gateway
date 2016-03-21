@@ -10,7 +10,10 @@ module.exports = function(urn) {
   var self = this;
   
   return new Promise(function(resolve, reject) {
+    
     var quid = uuid.v1();
+    self.debug.query('%s - %s start', CURRENT_NAME, quid );
+    
     try {
       self.CampaignModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         delete model.id;
@@ -18,7 +21,6 @@ module.exports = function(urn) {
         delete model.charity;
         delete model.campaign;
         delete model.item;
-        self.debug.query(CURRENT_NAME, quid);
         resolve(model);
       }).catch(function(error) {
         reject(error);

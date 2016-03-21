@@ -20,10 +20,10 @@ module.exports = function(payload) {
           campaign: self.r.table("campaigns").get(survey("campaign")).merge(function(campaign) {
             return {
               urn: survey("campaign"),
-              items: self.r.table("campaigns_items").filter({campaign: campaign("id")}).coerceTo("array").merge(function(item) {
+              items: self.r.table("campaigns_items").filter({campaign: campaign("id")}).orderBy("createdAt").coerceTo("array").merge(function(item) {
                 return {
                   urn: item("id"),
-                  choices: self.r.table("campaigns_items_choices").filter({item: item("id")}).coerceTo("array").merge(function(choice) {
+                  choices: self.r.table("campaigns_items_choices").filter({item: item("id")}).orderBy("position").coerceTo("array").merge(function(choice) {
                     return {
                       meta: choice("prefix").add("__").add(choice("suffix")),
                       urn: choice("id")
