@@ -88,10 +88,10 @@ module.exports = function(credentials) {
               .catch(next);
             }, function(err, res) {
               if (err) { return reject(err); }
-              waterfallResults.surveysCompleted = _.orderBy( _.filter(surveys, function(o) { return o.complete===true && o.companyType!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
-              waterfallResults.surveysInProgress = _.orderBy( _.filter(surveys, function(o) { return o.complete===false && o.companyType!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
-              waterfallResults.abibaoCompleted = _.orderBy( _.filter(surveys, function(o) { return o.complete===true && o.companyType===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
-              waterfallResults.abibaoInProgress = _.orderBy( _.filter(surveys, function(o) { return o.complete===false && o.companyType===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"]);
+              waterfallResults.surveysCompleted = _.orderBy( _.filter(surveys, function(o) { return o.complete===true && o.companyType!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"], ["asc", "asc"]);
+              waterfallResults.surveysInProgress = _.orderBy( _.filter(surveys, function(o) { return o.complete===false && o.companyType!==self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"], ["asc", "asc"]);
+              waterfallResults.abibaoCompleted = _.orderBy( _.filter(surveys, function(o) { return o.complete===true && o.companyType===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"], ["asc", "asc"]);
+              waterfallResults.abibaoInProgress = _.orderBy( _.filter(surveys, function(o) { return o.complete===false && o.companyType===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO; }), ["position", "createdAt"], ["asc", "asc"]);
               callback(null, waterfallResults);
             });
           })

@@ -30,7 +30,7 @@ module.exports = function(urn) {
                   delete choice.modifiedAt;
                   return choice;
                 });
-                _.orderBy(item.choices, ['position'], ['asc']);
+                _.orderBy(item.choices, ["position"], ["asc"]);
                 next();
               });
             }, function() {
