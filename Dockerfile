@@ -5,6 +5,7 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+COPY newrelic.js /usr/src/app/
 COPY package.json /usr/src/app/
 ADD src /usr/src/app
 
