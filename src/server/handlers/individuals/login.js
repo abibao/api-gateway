@@ -25,6 +25,7 @@ module.exports = {
     })
     .catch(function(error) {
       request.server.logger.error(error);
+      if (error==="ERROR_BAD_AUTHENTIFICATION") { return reply(Boom.unauthorized("Email address and/or password invalid")); }
       reply(Boom.badRequest(error));
     });
   }

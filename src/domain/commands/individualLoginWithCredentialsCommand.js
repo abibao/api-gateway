@@ -15,7 +15,7 @@ module.exports = function(payload) {
     try {
       self.individualFilterQuery({email:payload.email}).then(function(individuals) {
         if (individuals.length===0) {
-          return reject( new Error("Email address and/or password invalid") );
+          return reject("ERROR_BAD_AUTHENTIFICATION");
         }
         if (individuals.length>1) {
           return reject( new Error("Too many emails, contact an individual") );
@@ -43,7 +43,7 @@ module.exports = function(payload) {
         } else {
           timeEnd = new Date();
           self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-          reject("Email address and/or password invalid");
+          reject("ERROR_BAD_AUTHENTIFICATION");
         }
       })
       .catch(function(error) {
