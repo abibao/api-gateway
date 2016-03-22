@@ -1,12 +1,12 @@
 {
   "name": "api-gateway",
-  "version": "1.5.2-build0008",
+  "version": "1.5.2-build0010",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto-generate": "./bin/abibao generate",
     "test": "grunt test",
-    "start": "DEBUG=abibao* node . | bunyan",
-    "start-new": "DEBUG=abibao* node src/gateway | bunyan"
+    "start": "DEBUG=abibao* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan",
+    "start-new": "DEBUG=abibao* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node src/gateway | bunyan"
   },
   "repository": {
     "type": "git",

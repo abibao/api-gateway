@@ -3,16 +3,12 @@
 var debug = require("debug")("abibao:initializers");
 debug("start");
 
+// load configurations
 var nconf = require("nconf");
 nconf.argv().env();
+require("dotenv").config({silent:true});
+require("newrelic");
 
-if (nconf.get("ABIBAO_API_GATEWAY_PRODUCTION_ENABLE")) {
-  // production
-  require("newrelic");
-} else {
-  // development
-  require("dotenv").config({silent:false});
-}
 // declare services
 var Services = require("./services");
 
