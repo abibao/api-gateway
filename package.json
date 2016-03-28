@@ -37,7 +37,6 @@
     "cryptr": "2.0.0",
     "debug": "2.2.0",
     "dotenv": "2.0.0",
-    "geoip-lite": "1.1.7",
     "good": "6.6.0",
     "good-bunyan": "0.1.2",
     "hapi": "13.2.2",
