@@ -8,7 +8,7 @@ var EntitiesController = require("./controllers/entities");
 exports.endpoints = [
   
   // www - dashboard
-  { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"www")) } } },
+  { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"../www")) } } },
   
   // flex as3 patch/post
   { method: "POST", path: "/v1/auth/charity", config: require("./handlers/individuals/auth/charity/update") },
@@ -45,6 +45,7 @@ exports.endpoints = [
   { method: "POST", path: "/v1/choices", config: require("./handlers/campaigns/items/choices/create") },
   
   // components
+  { method: "PATCH", path: "/v1/campaigns/items/{urn}", config: require("./handlers/campaigns/items/update") },
   { method: "POST", path: "/v1/campaigns/items/short-text", config: require("./handlers/campaigns/items/componentShortText/create") },
   { method: "POST", path: "/v1/campaigns/items/long-text", config: require("./handlers/campaigns/items/componentLongText/create") },
   { method: "POST", path: "/v1/campaigns/items/multiple-choice", config: require("./handlers/campaigns/items/componentMultipleChoice/create") },

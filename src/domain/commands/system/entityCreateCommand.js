@@ -14,7 +14,10 @@ module.exports = function(payload) {
   
   return new Promise(function(resolve, reject) {
     try {
+      
       var quid = uuid.v1();
+      var timeStart = new Date();
+      
       payload.id = new ObjectId().toString();
       payload.createdAt = Date.now();
       var model = new self.EntityModel(payload);
@@ -24,7 +27,8 @@ module.exports = function(payload) {
         delete created.charity;
         delete created.campaign;
         delete created.item;
-        self.debug.command(CURRENT_NAME, quid);
+        var timeEnd = new Date();
+        self.debug.query('[%s] %s in %s ms', quid, CURRENT_NAME, timeEnd-timeStart );
         resolve(created);
       })
       .catch(function(error) {

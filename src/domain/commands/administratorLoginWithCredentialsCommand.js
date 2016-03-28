@@ -11,7 +11,10 @@ module.exports = function(payload) {
   
   return new Promise(function(resolve, reject) {
     try {
+      
       var quid = uuid.v1();
+      self.debug.query(CURRENT_NAME, quid);
+      
       self.administratorFilterQuery({email:payload.email}).then(function(administrators) {
         if (administrators.length===0) {
           return reject( new Error("Email address and/or password invalid") );
@@ -23,7 +26,6 @@ module.exports = function(payload) {
         if (administrator.authenticate(payload.password)) {
           // all done then reply token
           self.administratorCreateAuthTokenCommand(administrator.urn).then(function(token) {
-            self.debug.command(CURRENT_NAME, quid);
             resolve({token:token});
           })
           .catch(function(error) {

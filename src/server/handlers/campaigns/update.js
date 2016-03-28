@@ -20,11 +20,13 @@ module.exports = {
     },
     payload: {
       name: Joi.string(),
-      position: Joi.number().min(0).default(0),
+      position: Joi.number().min(0),
+      screenWelcomeContent: Joi.string().allow(""),
+      screenThankYouContent: Joi.string().allow(""),
       price: Joi.number().min(0),
       currency: Joi.string().valid(["EUR"]),
-      published: Joi.boolean().default(false),
-      description: Joi.string()
+      published: Joi.boolean(),
+      description: Joi.string().allow("")
     }
   },
   jsonp: "callback",

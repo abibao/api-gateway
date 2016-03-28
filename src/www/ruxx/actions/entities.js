@@ -5,7 +5,7 @@ function EntitiesActions(facade) {
 	
 	self.update = function(entity) {
 	  //
-	  var data = _.clone(entity);
+	  var data = lodash.clone(entity);
 	  delete data.createdAt;
 	  delete data.modifiedAt;
 	  delete data.urn;
@@ -44,7 +44,7 @@ function EntitiesActions(facade) {
         self.populateCampaigns(entity)
         .then(function(campaigns) {
           self.facade.setLoading(false);
-          entity.campaigns = _.sortBy(campaigns, ["position", "name"]);
+          entity.campaigns = lodash.sortBy(campaigns, ["position", "name"]);
           facade.setCurrentEntity(entity);
           resolve();
         })
@@ -69,10 +69,10 @@ function EntitiesActions(facade) {
       .then(function(entities) {
         self.facade.setLoading(false);
         self.facade.debugAction("EntitiesActions.list %o", entities);
-        self.facade.stores.entities.charities = _.filter(entities, function(item) {
+        self.facade.stores.entities.charities = lodash.filter(entities, function(item) {
           return (item.type==="charity");
         });
-        self.facade.stores.entities.companies = _.filter(entities, function(item) {
+        self.facade.stores.entities.companies = lodash.filter(entities, function(item) {
           return (item.type==="company" || item.type==="abibao");
         });
         resolve();

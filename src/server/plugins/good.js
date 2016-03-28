@@ -13,11 +13,11 @@ var GoodProvision = function(server, callback) {
           ops: "debug",
           response: "info"
         },
-        formatters: {
+        /*formatters: {
           response(data) {
             return data.method+" "+data.path+" "+data.statusCode+" ("+data.responseTime+"ms)";
           }
-        }
+        }*/
       },
       events: { log: "*", response: "*" }
     }] 

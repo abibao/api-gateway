@@ -20,7 +20,7 @@ module.exports = {
     },
     payload: {
       name: Joi.string().description("Le titre qui apparaît dans les listes"),
-      type: Joi.string().valid(["abibao", "charity", "company"]).default("charity").description("Type de l'entité"),
+      type: Joi.string().valid(["abibao", "charity", "company"]).description("Type de l'entité"),
       contact: Joi.string().email().description("Email du contact"),
       url: Joi.string().description("URL du site de l'entité"),
       title: Joi.string().description("Le titre qui apparaît sur la fiche détaillée"),

@@ -1,9 +1,9 @@
 <loading if={ facade.getLoading() }>
 
-  <div class="uk-vertical-align uk-text-center uk-height-1-1 white">
+  <div class="uk-vertical-align uk-text-center uk-height-1-1">
     <div class="uk-vertical-align-middle">
-      <h1 class="blue-grey-text text-darken-2">Action(s) en cours...</h1>
-      <h2 class="blue-grey-text text-darken-1">Nous nous efforçons d'écourter votre attente</h2>
+      <h1>Action(s) en cours...</h1>
+      <h2>Nous nous efforçons d'écourter votre attente</h2>
     </div>
   </div>
   

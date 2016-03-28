@@ -1,17 +1,14 @@
-<homepage if={ facade.getCurrentState()===Facade.STATE_HOMEPAGE }>
+<homepage>
   
-  <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1 white">
-    
-    <br>
-    <h3>HOMEPAGE</h3>
-    <hr class="uk-article-divider">
-    
+  <navbar> </navbar>
+  
+  <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1">
+
     <h4>Les associations</h4>
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2" each={ charity in facade.stores.entities.charities }>
         <div class="uk-panel uk-panel-box">
-          <div class="uk-panel-badge"><a href="javascript:void(0)" class="uk-icon-justify uk-icon-toggle-right uk-icon-medium"></a></div>
-          <h3 class="uk-panel-title">{ charity.name }</h3>
+          <h3 class="uk-panel-title"><a href="javascript:void(0)">{ charity.name }</a></h3>
           <img class="uk-thumbnail uk-float-left" style="margin: 0.25rem" src={ charity.avatar+'.svg' } alt="" width="80" height="80">
           <div class="uk-float-left" style="margin: 0.25rem">
             <span class="uk-text-bold">titre:</span> <span class="uk-text-truncate">{ charity.title }</span><br>
@@ -27,8 +24,7 @@
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2" each={ company in facade.stores.entities.companies }>
         <div class="uk-panel uk-panel-box">
-          <div class="uk-panel-badge"><a onclick={ selectCompanyHandler } href="javascript:void(0)" class="uk-icon-justify uk-icon-toggle-right uk-icon-medium"></a></div>
-          <h3 class="uk-panel-title">{ company.name }</h3>
+          <h3 class="uk-panel-title"><a href="/#entities/{ company.urn }">{ company.name }</a></h3>
           <img class="uk-thumbnail uk-float-left" style="margin: 0.25rem" src={ company.avatar+'.svg' } alt="" width="80" height="80">
           <div class="uk-float-left" style="margin: 0.25rem">
             <span class="uk-text-bold">titre:</span> <span class="uk-text-truncate">{ company.title }</span><br>
@@ -50,16 +46,12 @@
     self.disabled = ''; 
     
     self.on("mount", function() {
-      facade.tags[self.name] = self;
+      facade.initialize();
     });
     
     self.on("update", function() {
       (facade.getLoading()===false) ? self.disabled = '' : self.disabled = 'disabled';
     });
-    
-    selectCompanyHandler(e) {
-      facade.actions.entities.selectEntity(e.item.company.urn);
-    };
     
   </script>
   

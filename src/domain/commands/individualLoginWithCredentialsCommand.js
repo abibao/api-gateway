@@ -1,18 +1,23 @@
 "use strict";
 
 var Promise = require("bluebird");
+var uuid = require("node-uuid");
 
-var CURRENT_ACTION = "Command";
-var CURRENT_NAME = "IndividualLoginWithCredentialsCommand";
+var CURRENT_NAME = "AdministratorLoginWithCredentialsCommand";
 
 module.exports = function(payload) {
 
   var self = this;
-  var timeStart = new Date();
-  var timeEnd;
-
+  
   return new Promise(function(resolve, reject) {
     try {
+      
+      var request = {
+        CURRENT_NAME: CURRENT_NAME,
+        QUID: uuid.v1()
+      };
+      self.logger.info({command:request}, '[command]');
+      
       self.individualFilterQuery({email:payload.email}).then(function(individuals) {
         if (individuals.length===0) {
           return reject("ERROR_BAD_AUTHENTIFICATION");
@@ -30,30 +35,20 @@ module.exports = function(payload) {
               scope: individual.scope
             };
             return self.authentificationGlobalInformationsQuery(credentials).then(function(infos) {
-              timeEnd = new Date();
-              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
               resolve({token:token,globalInfos:infos});
             });
           })
           .catch(function(error) {
-            timeEnd = new Date();
-            self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
             reject(error);
           });
         } else {
-          timeEnd = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
           reject("ERROR_BAD_AUTHENTIFICATION");
         }
       })
       .catch(function(error) {
-        timeEnd = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
         reject(error);
       });
     } catch (e) {
-      timeEnd = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
       reject(e);
     }
   });

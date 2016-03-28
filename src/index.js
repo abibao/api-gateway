@@ -15,7 +15,6 @@ var Services = require("./services");
 // manage instances
 var server = Services.server();
 var domain = Services.domain();
-var io = Services.io();
 
 Services.startDomain(function(err) {
   if (err) { return debug(err); }
@@ -29,11 +28,8 @@ Services.startDomain(function(err) {
     domain.entitiesListenerChanged();
     domain.individualsListenerChanged();
     domain.surveysListenerChanged();
-    // start sockets
-    Services.startIO(domain);
-    // finals injections
+    // inject domain in server
     server.domain = domain;
-    io.domain = domain;
     debug("end");
   });
 });

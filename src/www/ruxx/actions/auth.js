@@ -2,6 +2,11 @@ function AuthActions(facade) {
 
 	var self = this;
 	self.facade = facade;
+	 
+	self.logout = function() {
+	  Cookies.remove("Authorization");
+	  riot.route("/homepage");
+	};
 	
 	self.login = function(payload) {
   	return new Promise(function(resolve, reject) {
@@ -11,7 +16,7 @@ function AuthActions(facade) {
         self.facade.debugAction("AuthActions.login %o", user);
         Cookies.set("Authorization", user.token);
         self.facade.setLoading(false);
-        if ( self.facade.getCurrentState()===Facade.STATE_LOGIN ) { riot.route("/homepage"); }
+        riot.route("/homepage");
         resolve();
       })
       .catch(function(error) {

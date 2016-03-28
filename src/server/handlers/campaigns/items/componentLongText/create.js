@@ -20,6 +20,7 @@ module.exports = {
       campaign: Joi.string().required(),
       question: Joi.string().required(),
       description: Joi.string(),
+      placeholder: Joi.string().allow(""),
       required: Joi.boolean().required().default(false),
       image: Joi.string().default(""),
       // component specific

@@ -19,6 +19,8 @@ module.exports = {
       urnCompany: Joi.string().required(),
       name: Joi.string().required(),
       position: Joi.number().min(0).default(0),
+      screenWelcomeContent: Joi.string().allow(""),
+      screenThankYouContent: Joi.string().allow(""),
       price: Joi.number().min(0).required(),
       currency: Joi.string().valid(["EUR"]).required(),
       published: Joi.boolean().default(false).required(),

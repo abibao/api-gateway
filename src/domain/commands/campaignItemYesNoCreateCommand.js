@@ -16,6 +16,7 @@ module.exports = function(payload) {
       self.campaignReadQuery(payload.campaign).then(function() {
         payload.campaign = self.getIDfromURN(payload.campaign);
         payload.type = "ABIBAO_COMPONENT_YES_NO";
+        payload.directive = "formYesNo";
         return self.campaignItemCreateCommand(payload).then(function(campaign) {
           self.debug.command(CURRENT_NAME, quid);
           resolve(campaign);

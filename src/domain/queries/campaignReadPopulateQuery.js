@@ -24,17 +24,19 @@ module.exports = function(urn) {
               var idItem = self.getIDfromURN(item.urn);
               self.campaignItemChoiceFilterQuery({item: idItem}).then(function(choices) {
                 item.choices = _.map(choices, function(choice) {
+                  if ( _.isUndefined(choice.position) ) { choice.position=0; }
                   delete choice.urnCampaign;
                   delete choice.urnItem;
                   delete choice.createdAt;
                   delete choice.modifiedAt;
                   return choice;
                 });
-                _.orderBy(item.choices, ["position"], ["asc"]);
+                if ( _.isUndefined(item.position) ) { item.position=0; }
+                item.choices = _.orderBy(item.choices, ["position"], ["asc"]);
                 next();
               });
             }, function() {
-              campaign.items = items;
+              campaign.items = _.orderBy(items, ["position"], ["asc"]);
               self.debug.query(CURRENT_NAME, quid);
               resolve(campaign);
             });

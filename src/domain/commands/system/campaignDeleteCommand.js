@@ -11,10 +11,14 @@ module.exports = function(urn) {
   
   return new Promise(function(resolve, reject) {
     try {
+      
       var quid = uuid.v1();
+      var timeStart = new Date();
+      
       self.CampaignModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         return model.delete().then(function() {
-          self.debug.command(CURRENT_NAME, quid);
+          var timeEnd = new Date();
+          self.debug.query('[%s] %s in %s ms', quid, CURRENT_NAME, timeEnd-timeStart );
           resolve({deleted:true});
         });
       })

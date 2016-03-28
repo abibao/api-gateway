@@ -1,10 +1,9 @@
-<entity if={ facade.getCurrentState()===Facade.STATE_ENTITY }>
-
-  <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1 white">
+<entity>
+  
+  <navbar> </navbar>
+  
+  <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1">
     
-    <br>
-    <h3><a href="#homepage">HOMEPAGE</a> > ENTITY</h3>
-    <hr class="uk-article-divider">
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2">
       
@@ -86,7 +85,7 @@
               <input type="text" class="urnCampaign" value={ campaign.urn } style="display:none">
               <div class="uk-nestable-panel">
                 <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-                { campaign.position }: { campaign.name } <div class="uk-badge uk-badge-notification { (campaign.published) ? 'uk-badge-success' : 'uk-badge-danger' } uk-float-right">{ campaign.items.length }</div>
+                <a href="/#campaigns/{ campaign.urn }">{ campaign.name }</a> <div class="uk-badge uk-badge-notification { (campaign.published) ? 'uk-badge-success' : 'uk-badge-danger' } uk-float-right">{ campaign.items.length }</div>
               </div>
             </li>
           </ul>
@@ -107,7 +106,10 @@
     self.dotnav = "dotnav1";
     
     self.on("mount", function() {
-      facade.tags[self.name] = self;
+      facade.actions.entities.selectEntity(riot.router.current.params.urn)
+      .catch(function(error) {
+        riot.route("/homepage");
+      });
       $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
     });
     
@@ -138,8 +140,8 @@
     
     changeCampaignsOrderHandler(e) {
       var i = 1;
-      _.map($(".uk-nestable li .urnCampaign"), function(item) {
-        var campaign = _.find(facade.getCurrentEntity().campaigns, {urn: item.value});
+      lodash.map($(".uk-nestable li .urnCampaign"), function(item) {
+        var campaign = lodash.find(facade.getCurrentEntity().campaigns, {urn: item.value});
         campaign.position = i;
         i = i + 1;
       });
@@ -194,7 +196,7 @@
     };
     
     updateCampaignsHandler(e) {
-      _.map(facade.getCurrentEntity().campaigns, function(campaign) {
+      lodash.map(facade.getCurrentEntity().campaigns, function(campaign) {
         facade.actions.campaigns.update(campaign);
       });
     };
@@ -237,11 +239,15 @@
   </script>
   
   <style scoped>
-  
     .uk-container {
       width: 960px;
     }
-    
+    .uk-badge-success {
+      width: 28px;
+    }
+    .uk-badge-danger {
+      width: 28px;
+    }
   </style>
   
 </entity>

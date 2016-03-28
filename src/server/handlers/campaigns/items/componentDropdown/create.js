@@ -19,13 +19,14 @@ module.exports = {
       // component
       campaign: Joi.string().required(),
       question: Joi.string().required(),
-      description: Joi.string(),
+      description: Joi.string().allow(""),
+      placeholder: Joi.string().allow(""),
       required: Joi.boolean().required().default(false),
-      image: Joi.string().default(""),
+      image: Joi.string().allow("").default(""),
       // component specific
       // abibao
       label: Joi.string().required().description("Le nom de la variable où sera stockée la réponse"),
-      tags: Joi.string()
+      tags: Joi.string().allow("")
     }
   },
   jsonp: "callback",

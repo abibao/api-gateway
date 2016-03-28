@@ -21,6 +21,7 @@ module.exports = function(thinky) {
     label: type.string().required(),
     type: type.string().required(),
     tags: type.string(),
+    position: type.number().min(0).default(0),
     // linked
     campaign: type.string().required(),
     // automatic

@@ -1,19 +1,23 @@
-<Facade>
+<error404>
 
+  <h1>ERREUR 404</h1>
+  
   <script>
     
     var self = this;
     self.name = "error404";
 
     self.on("mount", function() {
-      facade.tags[self.name] = self;
-      facade.debug("tags list %o", facade.tags);
-      facade.start();
+      
     });
     
     self.on("update", function() {
     });
     
   </script>
-
-</Facade>
+  
+  <style scoped>
+    
+  </style>
+  
+</error404>

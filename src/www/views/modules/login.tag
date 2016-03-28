@@ -1,4 +1,4 @@
-<login if={ facade.getCurrentState()===Facade.STATE_LOGIN }> 
+<login> 
   
   <div id="container" class="uk-vertical-align uk-text-center uk-height-1-1 white">
     <div class="uk-vertical-align-middle" style="width: 250px;">
@@ -26,7 +26,7 @@
     self.name = "login";
     
     self.on("mount", function() {
-      facade.tags[self.name] = self;
+      
     });
     
     loginHandler(e) {

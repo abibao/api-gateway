@@ -7,7 +7,7 @@ function AuthStore() {
 	
   self.authentified = function() {
     var ca = Cookies.get("Authorization");
-    return _.isUndefined(ca)===false;
+    return lodash.isUndefined(ca)===false;
   };
   
 }
