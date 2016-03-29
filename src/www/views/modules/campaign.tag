@@ -41,7 +41,7 @@
                 <i if={ campaignItem.type==="ABIBAO_COMPONENT_YES_NO" } class="uk-nestable-handle uk-icon uk-icon-toggle-on uk-margin-small-right"></i>
                 <div if={ campaignItem.choices.length>0 } class="uk-badge uk-badge-notification uk-badge-success">{ campaignItem.choices.length }</div>
                 <div if={ campaignItem.choices.length===0 } class="uk-badge uk-badge-notification uk-badge-danger"> </div>
-                <a href="/#campaigns/items/{ campaignItem.urn }">{ campaignItem.question }</a>
+                <a href="/#campaigns-items/{ campaignItem.urn }">{ campaignItem.question }</a>
               </div>
             </li>
           </ul>
@@ -57,7 +57,6 @@
   <script>
     
     var self = this;
-    self.name = "campaign";
     
     self.on("mount", function() {
       facade.actions.campaigns.selectCampaign(riot.router.current.params.urn)

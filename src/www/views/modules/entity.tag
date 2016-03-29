@@ -101,7 +101,6 @@
   <script>
     
     var self = this;
-    self.name = "entity";
     
     self.dotnav = "dotnav1";
     

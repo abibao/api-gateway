@@ -41,7 +41,6 @@
   <script>
     
     var self = this;
-    self.name = "homepage";
     
     self.disabled = ''; 
     

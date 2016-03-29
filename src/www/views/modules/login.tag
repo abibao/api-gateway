@@ -23,7 +23,6 @@
   <script>
     
     var self = this;
-    self.name = "login";
     
     self.on("mount", function() {
       

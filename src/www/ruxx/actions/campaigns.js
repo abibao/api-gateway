@@ -89,4 +89,23 @@ function CampaignsActions(facade) {
 	  });
 	};
 	
+	self.selectCampaignItem = function(urn) {
+	  return new Promise(function(resolve, reject) {
+  	  self.facade.setLoading(true);
+      self.facade.call("GET", "/v1/campaigns/items/"+urn)
+      .then(function(item) {
+        self.facade.debugAction("CampaignsActions.selectCampaignItem %o", item);
+        self.facade.setLoading(false);
+        facade.setCurrentCampaignItem(item);
+        resolve();
+      })
+      .catch(function(error) {
+        self.facade.setLoading(false);
+        self.facade.debugAction("CampaignsActions.selectCampaignItem (ERROR) %o", error);
+        self.facade.trigger("EVENT_CALLER_ERROR", error);
+        reject(error);
+      });
+	  });
+	};
+	
 }

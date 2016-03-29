@@ -45,6 +45,7 @@ exports.endpoints = [
   { method: "POST", path: "/v1/choices", config: require("./handlers/campaigns/items/choices/create") },
   
   // components
+  { method: "GET", path: "/v1/campaigns/items/{urn}", config: require("./handlers/campaigns/items/read") },
   { method: "PATCH", path: "/v1/campaigns/items/{urn}", config: require("./handlers/campaigns/items/update") },
   { method: "POST", path: "/v1/campaigns/items/short-text", config: require("./handlers/campaigns/items/componentShortText/create") },
   { method: "POST", path: "/v1/campaigns/items/long-text", config: require("./handlers/campaigns/items/componentLongText/create") },

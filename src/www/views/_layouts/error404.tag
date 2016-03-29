@@ -5,13 +5,9 @@
   <script>
     
     var self = this;
-    self.name = "error404";
 
     self.on("mount", function() {
       
-    });
-    
-    self.on("update", function() {
     });
     
   </script>

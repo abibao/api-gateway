@@ -3,6 +3,7 @@ var tags = [
   "views/modules/homepage.tag",
   "views/modules/entity.tag",
   "views/modules/campaign.tag",
+  "views/modules/campaignItem.tag",
   "views/_layouts/loading.tag",  
   "views/_layouts/error404.tag",
   "views/_layouts/navbar.tag"
@@ -53,6 +54,7 @@ async.map(tags, function(item, next) {
     new Route({path: '/homepage', tag: 'homepage'}),
     new Route({path: '/entities/:urn', tag: 'entity'}),
     new Route({path: '/campaigns/:urn', tag: 'campaign'}),
+    new Route({path: '/campaigns-items/:urn', tag: 'campaign-item'}),
     new DefaultRoute({path: '/homepage', tag: 'homepage'}),
     new NotFoundRoute({path: '/404', tag: 'error404'})
   ]);
