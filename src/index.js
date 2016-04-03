@@ -5,8 +5,8 @@ debug("start");
 
 // load configurations
 var nconf = require("nconf");
-nconf.argv().env();
-require("dotenv").config({silent:true});
+nconf.argv().env().file({ file: 'conf-env.json' });
+
 require("newrelic");
 
 // declare services

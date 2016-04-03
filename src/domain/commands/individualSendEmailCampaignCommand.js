@@ -7,13 +7,15 @@ var nodemailer = require("nodemailer");
 var uuid = require("node-uuid");
 
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 var CURRENT_NAME = "IndividualSendEmailCampaignCommand";
 
 // create reusable transporter object using SMTP transport
 var transporter = nodemailer.createTransport({
-    service: "Gmail",
+    pool: true,
+    host: nconf.get("ABIBAO_API_GATEWAY_SERVER_MAILER_HOST"),
+    port: nconf.get("ABIBAO_API_GATEWAY_SERVER_MAILER_PORT"),
     auth: {
         user: nconf.get("ABIBAO_API_GATEWAY_SERVER_MAILER_USERNAME"),
         pass: nconf.get("ABIBAO_API_GATEWAY_SERVER_MAILER_PASSWORD")

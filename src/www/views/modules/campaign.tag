@@ -13,9 +13,9 @@
               <div class="uk-form-row uk-width-1-1">
                 <span class="uk-text-bold">Compagnie</span><br>
                 <input class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaign().company.name }" disabled>
-                <span class="uk-text-bold">Nom *</span><br>
+                <span class="uk-text-bold">Nom</span><br>
                 <input onchange={ changeNameHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaign().name }" placeholder="Saisissez une valeur">
-                <span class="uk-text-bold">Description *</span><br>
+                <span class="uk-text-bold">Description</span><br>
                 <textarea onchange={ changeDescriptionHandler } rows="6" class="uk-width-1-1" placeholder="Saisissez une valeur">{ facade.getCurrentCampaign().description }</textarea>
               </div>
             </fieldset>

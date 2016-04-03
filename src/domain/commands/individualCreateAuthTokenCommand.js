@@ -5,7 +5,7 @@ var JWT = require("jsonwebtoken");
 var uuid = require("node-uuid");
 
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 var CURRENT_NAME = "IndividualCreateAuthTokenCommand";
 

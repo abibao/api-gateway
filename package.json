@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.5.3-deve",
+  "version": "1.5.4-deve",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto-generate": "./bin/abibao generate",
@@ -16,7 +16,7 @@
     "gateway",
     "abibao"
   ],
-  "author": "Team@Abibao",
+  "author": "team abibao",
   "license": "MIT",
   "bugs": {
     "url": "https://gitlab.com/abibao/api-gateway/issues"
@@ -59,6 +59,7 @@
     "node-uuid": "1.4.7",
     "nodemailer": "2.3.0",
     "resolve-app-pkginfo": "1.0.0",
+    "servicebus": "2.0.1",
     "socket.io": "1.4.5",
     "thinky": "2.2.6",
     "vision": "4.0.1"

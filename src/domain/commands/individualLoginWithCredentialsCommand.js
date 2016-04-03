@@ -3,7 +3,7 @@
 var Promise = require("bluebird");
 var uuid = require("node-uuid");
 
-var CURRENT_NAME = "AdministratorLoginWithCredentialsCommand";
+var CURRENT_NAME = "IndividualLoginWithCredentialsCommand";
 
 module.exports = function(payload) {
 
@@ -35,7 +35,17 @@ module.exports = function(payload) {
               scope: individual.scope
             };
             return self.authentificationGlobalInformationsQuery(credentials).then(function(infos) {
-              resolve({token:token,globalInfos:infos});
+              if (infos.abibaoCompleted.length===0 && infos.abibaoInProgress.length===0) {
+                return self.individualCreateAbibaoSurveyCommand(infos.urn, 1).then(function() {
+                  return self.individualCreateAbibaoSurveyCommand(infos.urn, 2).then(function() {
+                    return self.authentificationGlobalInformationsQuery(credentials).then(function(infos) {
+                      resolve({token:token,globalInfos:infos});
+                    });
+                  });
+                });
+              } else {
+                resolve({token:token,globalInfos:infos});
+              }
             });
           })
           .catch(function(error) {

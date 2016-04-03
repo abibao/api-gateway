@@ -4,7 +4,7 @@ var Basic = require("hapi-auth-basic");
 var AuthJWT = require("hapi-auth-jwt2");
 
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 var AuthProvision = function(server, callback) {
   server.register([ {register: Basic}, {register: AuthJWT} ], function (err) {

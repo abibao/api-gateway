@@ -6,7 +6,7 @@ var path = require("path");
 var dir = require("node-dir");
 
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 var _ = require("lodash");
 var Cryptr = require("cryptr");

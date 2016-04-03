@@ -2,7 +2,7 @@
 
 var _ = require("lodash");
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 var crypto = require("crypto");
 var Cryptr = require("cryptr"),

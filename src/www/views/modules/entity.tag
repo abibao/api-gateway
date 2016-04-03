@@ -16,17 +16,17 @@
           <form if={ dotnav==="dotnav1" } class="uk-form uk-width-1-1">
             <fieldset>
               <div class="uk-form-row uk-width-1-1">
-                <span class="uk-text-bold">Nom *</span><br>
+                <span class="uk-text-bold">Nom</span><br>
                 <input onchange={ changeNameHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().name }" placeholder="Saisissez une valeur">
-                <span class="uk-text-bold">Type *</span><br>
+                <span class="uk-text-bold">Type</span><br>
                 <select onchange={ changeTypeHandler } class="uk-width-1-1">
                   <option value="abibao" selected={ (facade.getCurrentEntity().type==='abibao') ? 'selected' : ''  }>Abibao</option>
                   <option value="company" selected={ (facade.getCurrentEntity().type==='company') ? 'selected' : ''  }>Compagnie</option>
                   <option value="charity" selected={ (facade.getCurrentEntity().type==='charity') ? 'selected' : ''  }>Association</option>
                 </select>
-                <span class="uk-text-bold">Contact *</span><br>
+                <span class="uk-text-bold">Contact</span><br>
                 <input onchange={ changeContactHandler } class="uk-width-1-1" type="email" value="{ facade.getCurrentEntity().contact }" placeholder="Saisissez une valeur">
-                <span class="uk-text-bold">Site web *</span><br>
+                <span class="uk-text-bold">Site web</span><br>
                 <input onchange={ changeURLHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().url }" placeholder="Saisissez une valeur">
               </div>
             </fieldset>
@@ -36,11 +36,11 @@
           <form if={ dotnav==="dotnav2" } class="uk-form uk-width-1-1">
             <fieldset>
               <div class="uk-form-row uk-width-1-1">
-                <span class="uk-text-bold">Titre *</span><br>
+                <span class="uk-text-bold">Titre</span><br>
                 <input onchange={ changeTitleHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().title }" placeholder="Saisissez une valeur">
-                <span class="uk-text-bold">Accroche *</span><br>
+                <span class="uk-text-bold">Accroche</span><br>
                 <input onchange={ changeHangsHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().hangs }" placeholder="Saisissez une valeur">
-                <span class="uk-text-bold">Description *</span><br>
+                <span class="uk-text-bold">Description</span><br>
                 <textarea onchange={ changeDescriptionHandler } rows="6" class="uk-width-1-1" placeholder="Saisissez une valeur">{ facade.getCurrentEntity().description }</textarea>
               </div>
             </fieldset>

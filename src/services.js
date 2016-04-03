@@ -57,7 +57,7 @@ logger.addSerializers({query: querySerializer});
 }); */
 
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 var options = {
   host: nconf.get("ABIBAO_API_GATEWAY_EXPOSE_IP"),

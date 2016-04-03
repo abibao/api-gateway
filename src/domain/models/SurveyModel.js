@@ -2,7 +2,7 @@
 
 var _ = require("lodash");
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 var Cryptr = require("cryptr"),
 cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));

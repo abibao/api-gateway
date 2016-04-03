@@ -1,7 +1,7 @@
 "use strict";
 
 var nconf = require("nconf");
-nconf.argv().env();
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 module.exports = function validate (request, username, password, callback) {
   
