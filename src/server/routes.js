@@ -7,6 +7,9 @@ var EntitiesController = require("./controllers/entities");
 
 exports.endpoints = [
   
+  // www - max
+  { method: "GET", path: "/abibao/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"../www-abibao")) } } },
+  
   // www - dashboard
   { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"../www")) } } },
   

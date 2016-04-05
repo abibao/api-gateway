@@ -22,7 +22,7 @@ module.exports = function(payload) {
       // email already exists ?
       self.individualFilterQuery({email: payload.email}).then(function(individuals) {
         if (individuals.length>0) {
-          return reject( new Error("Email already exists in database") );
+          return reject( new Error("Email already exists in database") ); // 200 plus message
         }
         // create individual
         self.individualCreateCommand(payload).then(function(individual) {
