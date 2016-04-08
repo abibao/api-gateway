@@ -8,10 +8,10 @@ var CURRENT_NAME = "IndividualRegisterCommand";
 module.exports = function(payload) {
 
   var self = this;
+  var starttime = new Date();
   
   return new Promise(function(resolve, reject) {
     try {
-      var quid = uuid.v1();
       // password confirmation
       if (payload.password1!==payload.password2) {
         return reject( new Error("invalid password confimation") );
@@ -26,7 +26,14 @@ module.exports = function(payload) {
         }
         // create individual
         self.individualCreateCommand(payload).then(function(individual) {
-          self.debug.command(CURRENT_NAME, quid);
+          
+          var request = {
+            name: CURRENT_NAME,
+            uuid: uuid.v1(),
+            exectime: new Date() - starttime
+          };
+          self.logger.info({command:request}, '[command]');
+          
           resolve(individual);
         });
       })

@@ -25,10 +25,10 @@ var transporter = nodemailer.createTransport({
 module.exports = function(data) {
  
   var self = this;
+  var starttime = new Date();
   
   return new Promise(function(resolve, reject) {
     try {
-      var quid = uuid.v1();
       var unsealed = data;
       unsealed.action = self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH;
       Iron.seal(unsealed,  nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"), Iron.defaults, function (err, sealed) {
@@ -44,7 +44,14 @@ module.exports = function(data) {
         transporter.sendMail(mailOptions, function(error, info) {
           if (error) { return reject(error); }
           if (!info) { return reject( new Error("no informations found") ); }
-          self.debug.command(CURRENT_NAME, quid);
+          
+          var request = {
+            name: CURRENT_NAME,
+            uuid: uuid.v1(),
+            exectime: new Date() - starttime
+          };
+          self.logger.info({command:request}, '[command]');
+          
           resolve();
         });
       });
