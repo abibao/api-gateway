@@ -5,6 +5,9 @@ var Routes = require("./server/routes");
 var async = require("async");
 var bunyan = require("bunyan");
 
+var nconf = require("nconf");
+nconf.argv().env().file({ file: 'nconf-env.json' });
+
 function commandSerializer(command) {
   return {
     //remoteAddress: command.info.remoteAddress,
@@ -30,19 +33,6 @@ function querySerializer(query) {
 var logger = bunyan.createLogger({
   name: "api-gateway",
   level: "debug",
-  serializers: bunyan.stdSerializers,
-  streams: [{
-    level: 'debug',
-    stream: process.stdout
-  }]
-});
-
-logger.addSerializers({command: commandSerializer});
-logger.addSerializers({query: querySerializer});
-
-/* var logger = bunyan.createLogger({
-  name: "api-gateway",
-  level: "debug",
   streams: [{
     level: 'debug',
     stream: process.stdout
@@ -50,14 +40,14 @@ logger.addSerializers({query: querySerializer});
     level: 'info',
     type: "raw",
       stream: require('bunyan-logstash-tcp').createStream({
-        host: "94.23.215.61",
-        port: 5000
+        host: nconf.get("ABIBAO_API_GATEWAY_LOGSTASH_HOST"),
+        port: nconf.get("ABIBAO_API_GATEWAY_LOGSTASH_PORT")
       })
   }]
-}); */
+});
 
-var nconf = require("nconf");
-nconf.argv().env().file({ file: 'nconf-env.json' });
+logger.addSerializers({command: commandSerializer});
+logger.addSerializers({query: querySerializer});
 
 var options = {
   host: nconf.get("ABIBAO_API_GATEWAY_EXPOSE_IP"),

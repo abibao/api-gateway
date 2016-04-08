@@ -11,6 +11,7 @@ var CURRENT_NAME = "{{JS_COMMAND_NAME}}";
 module.exports = function(payload) {
 
   var self = this;
+  var starttime = new Date();
   
   return new Promise(function(resolve, reject) {
     try {
@@ -27,8 +28,14 @@ module.exports = function(payload) {
         delete created.charity;
         delete created.campaign;
         delete created.item;
-        var timeEnd = new Date();
-        self.debug.query('[%s] %s in %s ms', quid, CURRENT_NAME, timeEnd-timeStart );
+        
+        var request = {
+          name: CURRENT_NAME,
+          uuid: uuid.v1(),
+          exectime: new Date() - starttime
+        };
+        self.logger.info({command:request}, '[command]');
+        
         resolve(created);
       })
       .catch(function(error) {

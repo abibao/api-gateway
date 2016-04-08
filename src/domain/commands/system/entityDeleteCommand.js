@@ -8,6 +8,7 @@ var CURRENT_NAME = "EntityDeleteCommand";
 module.exports = function(urn) {
 
   var self = this;
+  var starttime = new Date();
   
   return new Promise(function(resolve, reject) {
     try {
@@ -17,8 +18,14 @@ module.exports = function(urn) {
       
       self.EntityModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         return model.delete().then(function() {
-          var timeEnd = new Date();
-          self.debug.query('[%s] %s in %s ms', quid, CURRENT_NAME, timeEnd-timeStart );
+          
+          var request = {
+            name: CURRENT_NAME,
+            uuid: uuid.v1(),
+            exectime: new Date() - starttime
+          };
+          self.logger.info({command:request}, '[command]');
+          
           resolve({deleted:true});
         });
       })

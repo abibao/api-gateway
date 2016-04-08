@@ -43,7 +43,13 @@
                   <li class="uk-nestable-item" each={ campaignItemChoice in facade.getCurrentCampaignItem().choices } data-uk-tooltip="pos:'left'">
                     <div class="uk-nestable-panel uk-text-truncate">
                       <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-                      { campaignItemChoice.text }
+                      <a onclick="UIkit.modal('#{ campaignItemChoice.urn.replace(/:/gi,'') }').show()" href="javascript:void(0)">{ campaignItemChoice.text }</a>
+                      <div id="{ campaignItemChoice.urn.replace(/:/gi,'') }" class="uk-modal">
+                        <div class="uk-modal-dialog">
+                          <div class="uk-modal-header">...</div>
+                          ...
+                          <div class="uk-modal-footer">...</div>
+                        </div>
                     </div>
                   </li>
                 </ul>
@@ -54,6 +60,8 @@
       </div>
       
     </div>
+    
+</div>
     
   </div>
   

@@ -11,11 +11,9 @@ var CURRENT_NAME = "AuthentificationGlobalInformationsQuery";
 module.exports = function(credentials) {
   
   var self = this;
+  var starttime = new Date();
   
   return new Promise(function(resolve, reject) {
-    
-    var quid = uuid.v1();
-    self.debug.query('%s - %s start', CURRENT_NAME, quid );
     
     try {
       
@@ -151,6 +149,14 @@ module.exports = function(credentials) {
           }),
           currentCharity: (waterfallResults.currentCharity.type==="none") ? "" : waterfallResults.currentCharity.urn
         };
+        
+        var request = {
+          name: CURRENT_NAME,
+          uuid: uuid.v1(),
+          exectime: new Date() - starttime
+        };
+        self.logger.info({query:request}, '[query]');
+        
         resolve(finalResult);
       });
       

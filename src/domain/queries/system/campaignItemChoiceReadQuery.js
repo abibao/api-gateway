@@ -2,6 +2,7 @@
 
 var Promise = require("bluebird");
 var uuid = require("node-uuid");
+var newrelic = require("newrelic");
 
 var CURRENT_NAME = "CampaignItemChoiceReadQuery";
 
