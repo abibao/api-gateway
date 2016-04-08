@@ -16,9 +16,6 @@ module.exports = function(payload) {
   return new Promise(function(resolve, reject) {
     try {
       
-      var quid = uuid.v1();
-      var timeStart = new Date();
-      
       payload.id = new ObjectId().toString();
       payload.createdAt = Date.now();
       var model = new self.IndividualModel(payload);

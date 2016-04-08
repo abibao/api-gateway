@@ -13,9 +13,6 @@ module.exports = function(urn) {
   return new Promise(function(resolve, reject) {
     try {
       
-      var quid = uuid.v1();
-      var timeStart = new Date();
-      
       self.CampaignItemChoiceModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         return model.delete().then(function() {
           
