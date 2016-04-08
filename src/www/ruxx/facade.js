@@ -20,6 +20,17 @@ function Facade() {
     entities: new EntitiesActions(self)
   };
   
+  /** CURRENT CAMPAIGN ITEM CHOICE **/
+  self._currentCampaignItemChoice = null;
+  self.getCurrentCampaignItemChoice = function() {
+    return self._currentCampaignItemChoice;
+  };
+  self.setCurrentCampaignItemChoice = function(value) {
+    self.debug("setCurrentCampaignItemChoice %o", value);
+    self._currentCampaignItemChoice = lodash.clone(value);
+    riot.update();
+  };
+  
   /** CURRENT CAMPAIGN ITEM **/
   self._currentCampaignItem = null;
   self.getCurrentCampaignItem = function() {

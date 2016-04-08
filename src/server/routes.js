@@ -7,14 +7,8 @@ var EntitiesController = require("./controllers/entities");
 
 exports.endpoints = [
   
-  // www - max
-  { method: "GET", path: "/abibao/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"../www-abibao")) } } },
-  
   // www - dashboard
   { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"../www")) } } },
-  
-  // flex as3 patch/post
-  { method: "POST", path: "/v1/auth/charity", config: require("./handlers/individuals/auth/charity/update") },
   
   // individuals
   { method: "POST", path: "/v1/individuals/login", config: require("./handlers/individuals/login") },
@@ -46,6 +40,7 @@ exports.endpoints = [
   
   // choices
   { method: "POST", path: "/v1/choices", config: require("./handlers/campaigns/items/choices/create") },
+  { method: "GET", path: "/v1/choices/{urn}", config: require("./handlers/campaigns/items/choices/read") },
   
   // components
   { method: "GET", path: "/v1/campaigns/items/{urn}", config: require("./handlers/campaigns/items/read") },

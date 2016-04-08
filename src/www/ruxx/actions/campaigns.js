@@ -108,4 +108,23 @@ function CampaignsActions(facade) {
 	  });
 	};
 	
+	self.selectCampaignItemChoice = function(urn) {
+	  return new Promise(function(resolve, reject) {
+  	  self.facade.setLoading(true);
+      self.facade.call("GET", "/v1/choices/"+urn)
+      .then(function(item) {
+        self.facade.debugAction("CampaignsActions.selectCampaignItemChoice %o", item);
+        self.facade.setLoading(false);
+        facade.setCurrentCampaignItemChoice(item);
+        resolve();
+      })
+      .catch(function(error) {
+        self.facade.setLoading(false);
+        self.facade.debugAction("CampaignsActions.selectCampaignItemChoice (ERROR) %o", error);
+        self.facade.trigger("EVENT_CALLER_ERROR", error);
+        reject(error);
+      });
+	  });
+	};
+	
 }
