@@ -17,6 +17,9 @@ module.exports = function(thinky) {
     urn: type.virtual().default(function() {
       return _.isUndefined(this.id)  ? null : "urn:abibao:database:campaign:item:"+cryptr.encrypt(this.id);
     }),
+    urnCampaign: type.virtual().default(function() {
+      return _.isUndefined(this.id)  ? null : "urn:abibao:database:campaign:"+cryptr.encrypt(this.campaign);
+    }),
     // fields
     label: type.string().required(),
     type: type.string().required(),

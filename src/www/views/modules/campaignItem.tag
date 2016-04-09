@@ -11,6 +11,8 @@
           <form class="uk-form uk-width-1-1">
             <fieldset>
               <div class="uk-form-row uk-width-1-1">
+                <span class="uk-text-bold">Campagne</span><br>
+                <input class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaign().name }" disabled>
                 <span class="uk-text-bold">Type</span><br>
                 <input class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().type }" disabled>
                 <span class="uk-text-bold">Question</span><br>
@@ -23,6 +25,7 @@
             </fieldset>
             <br>
             <button type="button" onclick={ updateCampaignItemHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+            <a href="/#campaigns/{ facade.getCurrentCampaign().urn }" class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2"><i class="uk-icon-backward"></i>Campagne</a>
           </form>
         </div>
       </div>
@@ -62,7 +65,9 @@
     var self = this;
     
     self.on("mount", function() {
-      facade.actions.campaigns.selectCampaignItem(riot.router.current.params.urn)
+      facade.actions.campaigns.selectCampaignItem(riot.router.current.params.urn).then(function() {
+        return facade.actions.campaigns.selectCampaign(facade.getCurrentCampaignItem().urnCampaign);
+      })
       .catch(function(error) {
         riot.route("/homepage");
       });
