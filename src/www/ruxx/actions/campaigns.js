@@ -70,6 +70,29 @@ function CampaignsActions(facade) {
     });
 	}
 	
+	self.updateItemChoice = function(choice) {
+    return new Promise(function(resolve, reject) {
+  	  var data = lodash.clone(choice);
+  	  delete data.createdAt;
+  	  delete data.modifiedAt;
+  	  delete data.urn;
+  	  delete data.meta;
+  	  delete data.urnCampaign;
+  	  delete data.urnItem;
+  	  self.facade.setLoading(true);
+      facade.call("PATCH", "/v1/choices/"+choice.urn, data).then(function(choice) {
+        self.facade.setLoading(false);
+        self.facade.debugAction("CampaignsActions.updateItemChoice %o", choice);
+        resolve();
+      }).catch(function(error) {
+        self.facade.setLoading(false);
+        self.facade.debugAction("CampaignsActions.updateItemChoice (ERROR) %o", error);
+        self.facade.trigger("EVENT_CALLER_ERROR", error);
+        reject(error);
+      });
+    });
+	}
+	
 	self.selectCampaign = function(urn) {
 	  return new Promise(function(resolve, reject) {
   	  self.facade.setLoading(true);

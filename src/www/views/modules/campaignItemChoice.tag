@@ -25,8 +25,8 @@
             </fieldset>
             <br>
             <button type="button" onclick={ updateCampaignItemChoiceHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2">Sauver</button>
-            <a href="/#campaigns/{ facade.getCurrentCampaign().urn }" class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2"><i class="uk-icon-backward"></i>Campagne</a>
-            <a href="/#campaigns-items/{ facade.getCurrentCampaignItem().urn }" class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2 uk-margin-small-right"><i class="uk-icon-backward"></i>Question</a>
+            <a href="/#campaigns/{ facade.getCurrentCampaign().urn }" class="uk-button uk-button-primary uk-button-large uk-float-right brown darken-2"><i class="uk-icon-backward"></i>Campagne</a>
+            <a href="/#campaigns-items/{ facade.getCurrentCampaignItem().urn }" class="uk-button uk-button-primary uk-button-large uk-float-right brown darken-2 uk-margin-small-right"><i class="uk-icon-backward"></i>Question</a>
           </form>
         </div>
       </div>
@@ -49,6 +49,10 @@
         riot.route("/homepage");
       });
     });
+    
+    updateCampaignItemChoiceHandler(e) {
+      facade.actions.campaigns.updateItemChoice(facade.getCurrentCampaignItemChoice());
+    }
     
   </script>
   

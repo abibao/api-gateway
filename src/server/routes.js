@@ -41,6 +41,7 @@ exports.endpoints = [
   // choices
   { method: "POST", path: "/v1/choices", config: require("./handlers/campaigns/items/choices/create") },
   { method: "GET", path: "/v1/choices/{urn}", config: require("./handlers/campaigns/items/choices/read") },
+  { method: "PATCH", path: "/v1/choices/{urn}", config: require("./handlers/campaigns/items/choices/update") },
   
   // components
   { method: "GET", path: "/v1/campaigns/items/{urn}", config: require("./handlers/campaigns/items/read") },
