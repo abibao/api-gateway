@@ -28,7 +28,7 @@ module.exports = function(thinky) {
     title: type.string().required(),
     hangs: type.string().required(),
     description: type.string().required(),
-    usages: type.array().required(),
+    usages: type.string().required(),
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())
