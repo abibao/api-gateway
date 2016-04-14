@@ -5,7 +5,7 @@ debug("start");
 
 // load configurations
 var nconf = require("nconf");
-nconf.argv().env().file({ file: 'conf-env.json' });
+nconf.argv().env().file({ file: 'nconf-env.json' });
 
 require("newrelic");
 
