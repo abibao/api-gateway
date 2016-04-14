@@ -11,6 +11,7 @@ ADD src /usr/src/app
 
 RUN apk add --update make gcc g++ python && \
   npm install --production && \
+  npm install rethinkdbdash@2.2.18 && \
   npm uninstall -g npm && \
   apk del make gcc g++ python && \
   rm -rf /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp

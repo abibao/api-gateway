@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto-generate": "./bin/abibao generate",
@@ -27,7 +27,7 @@
   "dependencies": {
     "async": "2.0.0-rc.3",
     "base64-url": "1.2.2",
-    "bluebird": "3.3.4",
+    "bluebird": "3.3.5",
     "boom": "3.1.2",
     "bunyan": "1.8.0",
     "bunyan-logstash-tcp": "0.3.4",
@@ -48,7 +48,7 @@
     "joi": "8.0.5",
     "jsonfile": "2.2.3",
     "jsonwebtoken": "5.7.0",
-    "lodash": "4.9.0",
+    "lodash": "4.11.1",
     "markdown": "0.5.0",
     "md5": "2.1.0",
     "mongoose": "4.4.12",
@@ -56,7 +56,7 @@
     "newrelic": "1.26.2",
     "node-dir": "0.1.11",
     "node-uuid": "1.4.7",
-    "nodemailer": "2.3.1",
+    "nodemailer": "2.3.2",
     "resolve-app-pkginfo": "1.0.0",
     "thinky": "2.2.7",
     "vision": "4.1.0"
