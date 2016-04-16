@@ -16,7 +16,8 @@ var options = {
   host: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST"),
   port: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT"),
   db: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_DB"),
-  authKey: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY")
+  authKey: nconf.get("ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY"),
+  silent: true
 };
 var thinky = require("thinky")(options);
 
@@ -72,6 +73,9 @@ module.exports = {
           debug(">>> ["+_.upperFirst(name)+"] has just being injected");
           if (type==="models") {
             self[name] = require("./"+type+"/"+name)(self.thinky);
+          } else if (type==="listeners") {
+            self[name] = require("./"+type+"/"+name);
+            self[name]();
           } else {
             self[name] = require("./"+type+"/"+name);
           }

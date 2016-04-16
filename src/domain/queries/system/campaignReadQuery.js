@@ -1,18 +1,17 @@
 "use strict";
 
 var Promise = require("bluebird");
-var uuid = require("node-uuid");
-var newrelic = require("newrelic");
-
-var CURRENT_NAME = "CampaignReadQuery";
 
 module.exports = function(urn) {
+  
+  var CURRENT_NAME = "CampaignReadQuery";
   
   var self = this;
   var starttime = new Date();
   
+  self.debug.query('%s %s', CURRENT_NAME, urn);
+  
   return new Promise(function(resolve, reject) {
-    
     try {
       self.CampaignModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
         delete model.id;
@@ -20,24 +19,21 @@ module.exports = function(urn) {
         delete model.charity;
         delete model.campaign;
         delete model.item;
-        
         var request = {
           name: CURRENT_NAME,
-          uuid: uuid.v1(),
           exectime: new Date() - starttime
         };
         self.logger.info({query:request}, '[query]');
-        
         resolve(model);
-        
-      }).catch(function(error) {
-        self.logger.error(error);
+      })
+      .catch(function(error) {
+        self.debug.error('%s %o', CURRENT_NAME, error);
         reject(error);
       });
     } catch (e) {
-      self.logger.error(e);
+      self.debug.error('%s %o', CURRENT_NAME, e);
       reject(e);
     }
   });
-
+  
 };

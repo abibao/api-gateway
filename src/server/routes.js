@@ -7,8 +7,8 @@ var EntitiesController = require("./controllers/entities");
 
 exports.endpoints = [
   
-  // www - dashboard
-  { method: "GET", path: "/dashboard/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"../www")) } } },
+  // www - administrator dashboard
+  { method: "GET", path: "/administrator/{param*}", handler: { directory: { defaultExtension: "html", path: normalize(resolve(__dirname,"../www")) } } },
   
   // individuals
   { method: "POST", path: "/v1/individuals/login", config: require("./handlers/individuals/login") },

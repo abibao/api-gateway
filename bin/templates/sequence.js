@@ -32,23 +32,6 @@ module.exports = function(model, collection) {
     mustachePromise(normalize(resolve(__dirname,"../templates/queries/filter.tpl")), normalize(resolve(__dirname,"../../src/domain/queries/system")), _.camelCase(model+"FilterQuery")+".js", { 
       JS_MODEL_NAME: model+"Model",
       JS_QUERY_NAME: model+"FilterQuery"
-    }),
-    mustachePromise(normalize(resolve(__dirname,"../templates/listeners/default.tpl")), normalize(resolve(__dirname,"../../src/domain/listeners/system")), _.camelCase(collection+"ListenerChanged")+".js", { 
-      JS_MODEL_NAME: model+"Model",
-      JS_EVENT_NAME: _.camelCase(model),
-      JS_LISTENER_NAME: collection+"ListenerChanged"
-    }),
-    mustachePromise(normalize(resolve(__dirname,"../templates/events/default.tpl")), normalize(resolve(__dirname,"../../src/domain/events/system")), _.camelCase(model+"CreateEvent")+".js", { 
-      JS_EVENT_NAME: model+"CreateEvent",
-      JS_IO_EVENT_NAME: "EVENT_"+model.toUpperCase()+"_CREATED"
-    }),
-    mustachePromise(normalize(resolve(__dirname,"../templates/events/default.tpl")), normalize(resolve(__dirname,"../../src/domain/events/system")), _.camelCase(model+"UpdateEvent")+".js", { 
-      JS_EVENT_NAME: model+"UpdateEvent",
-      JS_IO_EVENT_NAME: "EVENT_"+model.toUpperCase()+"_UPDATE"
-    }),
-    mustachePromise(normalize(resolve(__dirname,"../templates/events/delete.tpl")), normalize(resolve(__dirname,"../../src/domain/events/system")), _.camelCase(model+"DeleteEvent")+".js", { 
-      JS_EVENT_NAME: model+"DeleteEvent",
-      JS_IO_EVENT_NAME: "EVENT_"+model.toUpperCase()+"_DELETED"
     })
   ];
 };

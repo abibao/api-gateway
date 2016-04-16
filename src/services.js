@@ -4,39 +4,20 @@ var Hapi = require("hapi");
 var Routes = require("./server/routes");
 var async = require("async");
 var bunyan = require("bunyan");
+var uuid = require("node-uuid");
 
 var nconf = require("nconf");
 nconf.argv().env().file({ file: 'nconf-env.json' });
 
-function commandSerializer(command) {
-  return {
-    //remoteAddress: command.info.remoteAddress,
-    //hostname: command.info.hostname,
-    //referrer: command.info.referrer,
-    name: command.name,
-    uuid: command.uuid,
-    exectime: command.exectime
-  };
-}
-
-function querySerializer(query) {
-  return {
-    //remoteAddress: command.info.remoteAddress,
-    //hostname: command.info.hostname,
-    //referrer: command.info.referrer,
-    name: query.name,
-    uuid: query.uuid,
-    exectime: query.exectime
-  };
+function cqrsSerializer(data) {
+  data.uuid = uuid.v1();
+  return data;
 }
 
 var logger = bunyan.createLogger({
   name: "api-gateway",
-  level: "debug",
+  level: "info",
   streams: [{
-    level: 'debug',
-    stream: process.stdout
-  }, {
     level: 'info',
     type: "raw",
       stream: require('bunyan-logstash-tcp').createStream({
@@ -46,8 +27,8 @@ var logger = bunyan.createLogger({
   }]
 });
 
-logger.addSerializers({command: commandSerializer});
-logger.addSerializers({query: querySerializer});
+logger.addSerializers({command: cqrsSerializer});
+logger.addSerializers({query: cqrsSerializer});
 
 var options = {
   host: nconf.get("ABIBAO_API_GATEWAY_EXPOSE_IP"),
@@ -74,9 +55,10 @@ module.exports.startDomain = function(callback) {
     listener: require("debug")("abibao:domain:listener"),
     event: require("debug")("abibao:domain:event"),
     command: require("debug")("abibao:domain:command"),
-    query: require("debug")("abibao:domain:query")
+    query: require("debug")("abibao:domain:query"),
+    error: require("debug")("abibao:domain:error"),
   };
-  var plugins = ["models", "queries/system", "commands/system", "events/system", "listeners/system", "queries", "commands", "events", "listeners"];
+  var plugins = ["models", "queries/system", "commands/system", "queries", "commands", "listeners"];
   async.mapSeries(plugins, function(item, next) {
     domain.injector(item, function(error, result) {
       next(error, result);

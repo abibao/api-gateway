@@ -20,14 +20,6 @@ Services.startDomain(function(err) {
   if (err) { return debug(err); }
   Services.startServer(function(err) {
     if (err) { return debug(err); }
-    // start listeners
-    domain.administratorsListenerChanged();
-    domain.campaignsItemsListenerChanged();
-    domain.campaignsItemsChoicesListenerChanged();
-    domain.campaignsListenerChanged();
-    domain.entitiesListenerChanged();
-    domain.individualsListenerChanged();
-    domain.surveysListenerChanged();
     // inject domain in server
     server.domain = domain;
     debug("end");

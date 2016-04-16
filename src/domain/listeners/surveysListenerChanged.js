@@ -1,7 +1,5 @@
 "use strict";
 
-var uuid = require("node-uuid");
-
 var CURRENT_NAME = "SurveysAbibaoListenerChanged";
 
 module.exports = function() {
@@ -10,8 +8,7 @@ module.exports = function() {
   
   try {
     
-    var quid = uuid.v1();
-    self.debug.listener(CURRENT_NAME, quid);
+    self.debug.listener('[start] %s', CURRENT_NAME);
     
     self.SurveyModel.changes().then(function(feed) {
       feed.each(function(error, doc) {
@@ -19,17 +16,20 @@ module.exports = function() {
           return error;
         }
         if (doc.isSaved() === false) {
-          self.surveyDeleteEvent(doc);
+          // delete
+          self.debug.listener('[delete] %s, %o', CURRENT_NAME, doc);
         } else if (doc.getOldValue() === null) {
-          self.surveyCreateEvent(doc);
+          // create
+          self.debug.listener('[create] %s %o', CURRENT_NAME, doc);
         } else {
-          self.surveyUpdateEvent(doc, doc.getOldValue());
+          // update
+          self.debug.listener('[update] %s %o', CURRENT_NAME, doc);
         }
       });
     });
     
   } catch (e) {
-    self.logger.error(self.action, self.name, e);
+    self.debug.error('%s %o', CURRENT_NAME, e);
   }
   
 };

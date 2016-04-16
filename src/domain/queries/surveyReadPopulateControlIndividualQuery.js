@@ -1,18 +1,19 @@
 "use strict";
 
 var Promise = require("bluebird");
-var uuid = require("node-uuid");
 var _ = require("lodash");
-
-var CURRENT_NAME = "SurveyReadPopulateControlIndividualQuery";
  
 module.exports = function(payload) {
   
+  var CURRENT_NAME = "SurveyReadPopulateControlIndividualQuery";
+  
   var self = this;
+  var starttime = new Date();
+  
+  self.debug.query('%s %o', CURRENT_NAME, payload);
   
   return new Promise(function(resolve, reject) {
     try {
-      var quid = uuid.v1();
       var idSurvey = self.getIDfromURN(payload.urn);
       self.r.table("surveys").get(idSurvey).merge(function(survey) {
         return {
@@ -52,13 +53,19 @@ module.exports = function(payload) {
         });
         delete survey.campaign;
         delete survey.company;
-        self.debug.query(CURRENT_NAME, quid);
+        var request = {
+          name: CURRENT_NAME,
+          exectime: new Date() - starttime
+        };
+        self.logger.info({query:request}, '[query]');
         resolve(survey);
       })
       .catch(function(error) {
+        self.debug.error('%s %o', CURRENT_NAME, error);
         reject(error);
       });
     } catch (e) {
+      self.debug.error('%s %o', CURRENT_NAME, e);
       reject(e);
     }
   });

@@ -2,18 +2,18 @@
 
 var Promise = require("bluebird");
 var _ = require("lodash");
-var uuid = require("node-uuid");
-
-var CURRENT_NAME = "IndividualFilterQuery";
 
 module.exports = function(filters) {
+  
+  var CURRENT_NAME = "IndividualFilterQuery";
   
   var self = this;
   var starttime = new Date();
   
+  self.debug.query('%s %o', CURRENT_NAME, filters);
+  
   return new Promise(function(resolve, reject) {
     try {
-        
       self.IndividualModel.filter(filters).run().then(function(models) {
         _.map(models, function(model) {
           delete model.id;
@@ -22,21 +22,21 @@ module.exports = function(filters) {
           delete model.campaign;
           delete model.item;
         });
-        
         var request = {
           name: CURRENT_NAME,
-          uuid: uuid.v1(),
           exectime: new Date() - starttime
         };
         self.logger.info({query:request}, '[query]');
-        
         resolve(models);
-      }).catch(function(error) {
+      })
+      .catch(function(error) {
+        self.debug.error('%s %o', CURRENT_NAME, error);
         reject(error);
       });
     } catch (e) {
+      self.debug.error('%s %o', CURRENT_NAME, e);
       reject(e);
     }
   });
-
+  
 };
