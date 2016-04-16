@@ -1,5 +1,7 @@
 "use strict";
 
+var Promise = require('bluebird');
+
 var debug = require("debug")("abibao:domain:initializer");
 var async = require("async");
 var path = require("path");
@@ -47,6 +49,42 @@ module.exports = {
   
   getURNfromID(id, model) {
     return "urn:abibao:database:"+model+":"+cryptr.encrypt(id);
+  },
+  
+  execute(type, promise, params) {
+    var self = this;
+    var starttime = new Date();
+    
+    // debugger
+    self.debug[type]('[start] %s %o', promise, params);
+    
+    return new Promise(function(resolve, reject) {
+      self[promise](params)
+      .then(function(result){
+        // logger
+        var request = {
+          name: promise,
+          exectime: new Date() - starttime
+        };
+        self.logger.info({command:request}, '[' + type + ']');
+        // debugger
+        self.debug[type]('[finish] %s %o', promise, result);
+        // return
+        resolve(result);
+      })
+      .catch(function(error) {
+        // logger
+         var request = {
+          name: promise,
+          exectime: new Date() - starttime
+        };
+        self.logger.error({command:request}, '[command]');
+        // debugger
+        self.debug.error('%s %o', promise, error);
+        // return
+        reject(error);
+      });
+    });
   },
   
   injector(type, callback) {

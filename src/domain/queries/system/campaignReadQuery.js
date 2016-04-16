@@ -3,14 +3,7 @@
 var Promise = require("bluebird");
 
 module.exports = function(urn) {
-  
-  var CURRENT_NAME = "CampaignReadQuery";
-  
   var self = this;
-  var starttime = new Date();
-  
-  self.debug.query('%s %s', CURRENT_NAME, urn);
-  
   return new Promise(function(resolve, reject) {
     try {
       self.CampaignModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
@@ -19,19 +12,12 @@ module.exports = function(urn) {
         delete model.charity;
         delete model.campaign;
         delete model.item;
-        var request = {
-          name: CURRENT_NAME,
-          exectime: new Date() - starttime
-        };
-        self.logger.info({query:request}, '[query]');
         resolve(model);
       })
       .catch(function(error) {
-        self.debug.error('%s %o', CURRENT_NAME, error);
         reject(error);
       });
     } catch (e) {
-      self.debug.error('%s %o', CURRENT_NAME, e);
       reject(e);
     }
   });

@@ -3,14 +3,7 @@
 var Promise = require("bluebird");
 
 module.exports = function(payload) {
-  
-  var CURRENT_NAME = "CampaignItemUpdateCommand";
-  
   var self = this;
-  var starttime = new Date();
-  
-  self.debug.command('%s %o', CURRENT_NAME, payload);
-  
   return new Promise(function(resolve, reject) {
     try {
       self.CampaignItemModel.get( self.getIDfromURN(payload.urn) ).run().then(function(model) {
@@ -20,20 +13,13 @@ module.exports = function(payload) {
           delete updated.charity;
           delete updated.campaign;
           delete updated.item;
-          var request = {
-            name: CURRENT_NAME,
-            exectime: new Date() - starttime
-          };
-          self.logger.info({command:request}, '[command]');
           resolve(updated);
         });
       })
       .catch(function(error) {
-        self.debug.error('%s %o', CURRENT_NAME, error);
         reject(error);
       });
     } catch (e) {
-      self.debug.error('%s %o', CURRENT_NAME, e);
       reject(e);
     }
   });

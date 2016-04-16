@@ -19,7 +19,7 @@ module.exports = {
   },
   jsonp: "callback",
   handler(request, reply) {
-    request.server.domain.administratorLoginWithCredentialsCommand(request.payload)
+    request.server.domain.execute( 'command', 'administratorLoginWithCredentialsCommand', request.payload )
     .then(function(credentials) {
       reply(credentials);
     })
