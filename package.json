@@ -1,9 +1,9 @@
 {
   "name": "api-gateway",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
-    "auto-generate": "./bin/abibao generate",
+    "auto:generate": "./bin/abibao generate",
     "start": "DEBUG=abibao* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
   "repository": {
@@ -46,7 +46,7 @@
     "inert": "3.2.0",
     "iron": "4.0.0",
     "joi": "8.0.5",
-    "jsonfile": "2.2.3",
+    "jsonfile": "2.3.0",
     "jsonwebtoken": "5.7.0",
     "lodash": "4.11.1",
     "markdown": "0.5.0",
@@ -66,6 +66,7 @@
     "commander": "2.9.0",
     "js-object-pretty-print": "0.2.0",
     "mocha-lcov-reporter": "1.2.0",
-    "mustache": "2.2.1"
+    "mustache": "2.2.1",
+    "standard": "6.0.8"
   }
 }

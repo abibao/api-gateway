@@ -1,23 +1,23 @@
-"use strict";
+'use strict'
 
-var Boom = require("boom");
+var Boom = require('boom')
 
 module.exports = {
   auth: {
-    strategy: "jwt",
-    scope: ["individual"]
+    strategy: 'jwt',
+    scope: ['individual']
   },
-  tags: ["api", "1.2) individual"],
-  description: "Retourne toutes les entités de type associations",
-  notes: "Retourne toutes les entités de type associations",
-  jsonp: "callback",
+  tags: ['api', '1.2) individual'],
+  description: 'Retourne toutes les entités de type associations',
+  notes: 'Retourne toutes les entités de type associations',
+  jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.entityFilterQuery({type:"charity"}).then(function(entities) {
-      reply(entities);
+    request.server.domain.entityFilterQuery({type: 'charity'}).then(function (entities) {
+      reply(entities)
     })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
+      .catch(function (error) {
+        request.server.logger.error(error)
+        reply(Boom.badRequest(error))
+      })
   }
-};
+}

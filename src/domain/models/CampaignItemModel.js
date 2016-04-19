@@ -1,24 +1,23 @@
-"use strict";
+'use strict'
 
-var _ = require("lodash");
-var nconf = require("nconf");
-nconf.argv().env().file({ file: 'nconf-env.json' });
+var _ = require('lodash')
+var nconf = require('nconf')
+nconf.argv().env().file({ file: 'nconf-env.json' })
 
-var Cryptr = require("cryptr"),
-cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
+var Cryptr = require('cryptr')
+var cryptr = new Cryptr(nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
 
-module.exports = function(thinky) {
-  
-  var type = thinky.type;
-  var r = thinky.r;
-  
-  var CampaignItemModel = thinky.createModel("campaigns_items", {
+module.exports = function (thinky) {
+  var type = thinky.type
+  var r = thinky.r
+
+  var CampaignItemModel = thinky.createModel('campaigns_items', {
     // virtuals
-    urn: type.virtual().default(function() {
-      return _.isUndefined(this.id)  ? null : "urn:abibao:database:campaign:item:"+cryptr.encrypt(this.id);
+    urn: type.virtual().default(function () {
+      return _.isUndefined(this.id) ? null : 'urn:abibao:database:campaign:item:' + cryptr.encrypt(this.id)
     }),
-    urnCampaign: type.virtual().default(function() {
-      return _.isUndefined(this.id)  ? null : "urn:abibao:database:campaign:"+cryptr.encrypt(this.campaign);
+    urnCampaign: type.virtual().default(function () {
+      return _.isUndefined(this.id) ? null : 'urn:abibao:database:campaign:' + cryptr.encrypt(this.campaign)
     }),
     // fields
     label: type.string().required(),
@@ -30,14 +29,13 @@ module.exports = function(thinky) {
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())
-  }); 
-  
-  CampaignItemModel.pre("save", function(next) {
-    var data = this;
-    data.modifiedAt = r.now();
-    next();
-  });
-  
-  return CampaignItemModel;
-  
-};
+  })
+
+  CampaignItemModel.pre('save', function (next) {
+    var data = this
+    data.modifiedAt = r.now()
+    next()
+  })
+
+  return CampaignItemModel
+}

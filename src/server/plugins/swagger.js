@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-var HapiSwagger = require("hapi-swaggered");
+var HapiSwagger = require('hapi-swaggered')
 
-var pkginfo = require("resolve-app-pkginfo");
-var pkg = pkginfo.sync();
-var path = require("path");
+var pkginfo = require('resolve-app-pkginfo')
+var pkg = pkginfo.sync()
+var path = require('path')
 
 // swagger
 var options = {
-  stripPrefix: "/v1",
-  supportedMethods: ["get", "post", "delete", "patch"],
+  stripPrefix: '/v1',
+  supportedMethods: ['get', 'post', 'delete', 'patch'],
   info: {
     version: pkg.version,
     title: pkg.name,
@@ -17,56 +17,54 @@ var options = {
   },
   cors: true,
   tagging: {
-    mode : "tags"
+    mode: 'tags'
   },
   tags: {
-    "administrators": "Example administrator description"
-  },
-};
-  
+    'administrators': 'Example administrator description'
+  }
+}
+
 // swaggerui
 var optionsui = {
-  title: "[abibao] api gateway",
-  path: "/docs",
-  templates: path.join(__dirname, "./swagger-templates"),
+  title: '[abibao] api gateway',
+  path: '/docs',
+  templates: path.join(__dirname, './swagger-templates'),
   authorization: {
-    field: "Authorization",
-    scope: "header",
-    placeholder: "Saisir votre token ici..."
+    field: 'Authorization',
+    scope: 'header',
+    placeholder: 'Saisir votre token ici...'
   }
-};
+}
 
-var SwaggerProvision = function(server, callback) {
-
+var SwaggerProvision = function (server, callback) {
   // route
   server.route({
-    path: "/",
-    method: "GET",
+    path: '/',
+    method: 'GET',
     handler(request, reply) {
-      reply.redirect("/docs");
+      reply.redirect('/docs')
     }
-  });
+  })
   // register Swagger
   server.register([
-    require("inert"),
-    require("vision"), {
+    require('inert'),
+    require('vision'), {
       register: HapiSwagger,
-      options
-    }], 
+    options}],
     function (err) {
       if (err) { return callback(err) }
       // register Swagger UI
       server.register([
-      {
-        register: require("hapi-swaggered-ui"),
-        options: optionsui
-      }], {
-        select: "api"
+        {
+          register: require('hapi-swaggered-ui'),
+          options: optionsui
+        }], {
+        select: 'api'
       }, function (err) {
-      	if (err) { return callback(err); }
-        callback();
-      });
-    });
-};
+        if (err) { return callback(err) }
+        callback()
+      })
+    })
+}
 
-module.exports = SwaggerProvision;
+module.exports = SwaggerProvision
