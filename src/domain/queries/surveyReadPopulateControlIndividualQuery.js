@@ -1,73 +1,71 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
-var _ = require("lodash");
- 
-module.exports = function(payload) {
-  
-  var CURRENT_NAME = "SurveyReadPopulateControlIndividualQuery";
-  
-  var self = this;
-  var starttime = new Date();
-  
-  self.debug.query('%s %o', CURRENT_NAME, payload);
-  
-  return new Promise(function(resolve, reject) {
+var Promise = require('bluebird')
+var _ = require('lodash')
+
+module.exports = function (payload) {
+  var CURRENT_NAME = 'SurveyReadPopulateControlIndividualQuery'
+
+  var self = this
+  var starttime = new Date()
+
+  self.debug.query('%s %o', CURRENT_NAME, payload)
+
+  return new Promise(function (resolve, reject) {
     try {
-      var idSurvey = self.getIDfromURN(payload.urn);
-      self.r.table("surveys").get(idSurvey).merge(function(survey) {
+      var idSurvey = self.getIDfromURN(payload.urn)
+      self.r.table('surveys').get(idSurvey).merge(function (survey) {
         return {
-          company: self.r.table("entities").get(survey("company"))("type"),
-          campaign: self.r.table("campaigns").get(survey("campaign")).merge(function(campaign) {
+          company: self.r.table('entities').get(survey('company'))('type'),
+          campaign: self.r.table('campaigns').get(survey('campaign')).merge(function (campaign) {
             return {
-              urn: survey("campaign"),
-              items: self.r.table("campaigns_items").filter({campaign: campaign("id")}).orderBy("createdAt").coerceTo("array").merge(function(item) {
+              urn: survey('campaign'),
+              items: self.r.table('campaigns_items').filter({campaign: campaign('id')}).orderBy('createdAt').coerceTo('array').merge(function (item) {
                 return {
-                  urn: item("id"),
-                  choices: self.r.table("campaigns_items_choices").filter({item: item("id")}).orderBy("position").coerceTo("array").merge(function(choice) {
+                  urn: item('id'),
+                  choices: self.r.table('campaigns_items_choices').filter({item: item('id')}).orderBy('position').coerceTo('array').merge(function (choice) {
                     return {
-                      meta: choice("prefix").add("__").add(choice("suffix")),
-                      urn: choice("id")
-                    };
-                  }).without("id", "item", "campaign", "createdAt", "modifiedAt")
-                };
-              }).without("id", "campaign", "createdAt", "modifiedAt")
-            };
-          }).without("id", "company", "price", "currency", "createdAt", "modifiedAt")
-        };
-      }).without("id", "charity", "individual")
-      .then(function(survey) {
-        survey.name = survey.campaign.name;
-        if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_COMPANY ) { survey.fromCompany=true; }
-        if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO ) { survey.fromAbibao=true; }
-        if ( survey.company===self.ABIBAO_CONST_ENTITY_TYPE_CHARITY ) { survey.fromCharity=true; }
-        _.map(survey.campaign.items, function(item) {
-          survey.items = survey.campaign.items;
-          if ( _.isUndefined(survey.answers) ) { survey.answers={}; }
-        });
-        _.map(survey.campaign.items, function(item) {
-          item.urn = self.getURNfromID(item.urn, 'item');
-          _.map(item.choices, function(choice) {
-            choice.urn = self.getURNfromID(choice.urn, 'choice');
-          });
-        });
-        delete survey.campaign;
-        delete survey.company;
-        var request = {
-          name: CURRENT_NAME,
-          exectime: new Date() - starttime
-        };
-        self.logger.info({query:request}, '[query]');
-        resolve(survey);
-      })
-      .catch(function(error) {
-        self.debug.error('%s %o', CURRENT_NAME, error);
-        reject(error);
-      });
+                      meta: choice('prefix').add('__').add(choice('suffix')),
+                      urn: choice('id')
+                    }
+                  }).without('id', 'item', 'campaign', 'createdAt', 'modifiedAt')
+                }
+              }).without('id', 'campaign', 'createdAt', 'modifiedAt')
+            }
+          }).without('id', 'company', 'price', 'currency', 'createdAt', 'modifiedAt')
+        }
+      }).without('id', 'charity', 'individual')
+        .then(function (survey) {
+          survey.name = survey.campaign.name
+          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_COMPANY) { survey.fromCompany = true; }
+          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { survey.fromAbibao = true; }
+          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_CHARITY) { survey.fromCharity = true; }
+          _.map(survey.campaign.items, function (item) {
+            survey.items = survey.campaign.items
+            if (_.isUndefined(survey.answers)) { survey.answers = {}; }
+          })
+          _.map(survey.campaign.items, function (item) {
+            item.urn = self.getURNfromID(item.urn, 'item')
+            _.map(item.choices, function (choice) {
+              choice.urn = self.getURNfromID(choice.urn, 'choice')
+            })
+          })
+          delete survey.campaign
+          delete survey.company
+          var request = {
+            name: CURRENT_NAME,
+            exectime: new Date() - starttime
+          }
+          self.logger.info({query: request}, '[query]')
+          resolve(survey)
+        })
+        .catch(function (error) {
+          self.debug.error('%s %o', CURRENT_NAME, error)
+          reject(error)
+        })
     } catch (e) {
-      self.debug.error('%s %o', CURRENT_NAME, e);
-      reject(e);
+      self.debug.error('%s %o', CURRENT_NAME, e)
+      reject(e)
     }
-  });
-  
-};
+  })
+}

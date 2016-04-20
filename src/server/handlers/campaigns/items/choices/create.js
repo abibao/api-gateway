@@ -1,18 +1,18 @@
-"use strict";
+'use strict'
 
-var Joi = require("joi");
-var Boom = require("boom");
+var Joi = require('joi')
+var Boom = require('boom')
 
 module.exports = {
   auth: {
-    strategy: "jwt",
-    scope: ["administrator"]
+    strategy: 'jwt',
+    scope: ['administrator']
   },
-  tags: ["api", "1.3) administrator"],
+  tags: ['api', '1.3) administrator'],
   description: "Ajoute un choix pour les items d'une campagnes",
   notes: "Ajoute un choix pour les items d'une campagnes",
   payload: {
-    allow: "application/x-www-form-urlencoded",
+    allow: 'application/x-www-form-urlencoded',
   },
   validate: {
     payload: {
@@ -24,14 +24,14 @@ module.exports = {
       position: Joi.number().integer().min(0).default(0).required()
     }
   },
-  jsonp: "callback",
+  jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.campaignItemChoiceCreateWithCampaignAssignCommand(request.payload).then(function(choice) {
-      reply(choice);
+    request.server.domain.campaignItemChoiceCreateWithCampaignAssignCommand(request.payload).then(function (choice) {
+      reply(choice)
     })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
+      .catch(function (error) {
+        request.server.logger.error(error)
+        reply(Boom.badRequest(error))
+      })
   }
-};
+}

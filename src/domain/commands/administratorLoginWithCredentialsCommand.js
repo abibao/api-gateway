@@ -1,30 +1,30 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
+var Promise = require('bluebird')
 
-module.exports = function(payload) {
-  var self = this;
-  return new Promise(function(resolve, reject) {
+module.exports = function (payload) {
+  var self = this
+  return new Promise(function (resolve, reject) {
     try {
-      self.execute('query', 'administratorFilterQuery', {email:payload.email})
-      .then(function(administrators) {
-        if (administrators.length===0) throw new Error("Email address and/or password invalid");
-        if (administrators.length>1) throw new Error("Too many emails, contact an administrator");
-        var administrator = administrators[0];
-        if (administrator.authenticate(payload.password)) {
-          // all done then reply token
-          return self.execute('command', 'administratorCreateAuthTokenCommand', administrator.urn).then(function(token) {
-            resolve({token:token});
-          });
-        } else {
-          throw new Error("Email address and/or password invalid");
-        }
-      })
-      .catch(function(error) {
-        reject(error);
-      });
+      self.execute('query', 'administratorFilterQuery', {email: payload.email})
+        .then(function (administrators) {
+          if (administrators.length === 0) throw new Error('Email address and/or password invalid')
+          if (administrators.length > 1) throw new Error('Too many emails, contact an administrator')
+          var administrator = administrators[0]
+          if (administrator.authenticate(payload.password)) {
+            // all done then reply token
+            return self.execute('command', 'administratorCreateAuthTokenCommand', administrator.urn).then(function (token) {
+              resolve({token: token})
+            })
+          } else {
+            throw new Error('Email address and/or password invalid')
+          }
+        })
+        .catch(function (error) {
+          reject(error)
+        })
     } catch (e) {
-      reject(e);
+      reject(e)
     }
-  });
-};
+  })
+}

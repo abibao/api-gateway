@@ -1,14 +1,14 @@
 'use strict'
 
-// var resolve = require('path').resolve
-// var normalize = require('path').normalize
+var resolve = require('path').resolve
+var normalize = require('path').normalize
 
 var EntitiesController = require('./controllers/entities')
 
 exports.endpoints = [
 
   // www - administrator dashboard
-  // { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
+  { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
 
   // individuals
   { method: 'POST', path: '/v1/individuals/login', config: require('./handlers/individuals/login') },

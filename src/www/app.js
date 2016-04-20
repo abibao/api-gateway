@@ -1,55 +1,52 @@
 var tags = [
-  "views/modules/login.tag",
-  "views/modules/homepage.tag",
-  "views/modules/entity.tag",
-  "views/modules/campaign.tag",
-  "views/modules/campaignItem.tag",
-  "views/modules/campaignItemChoice.tag",
-  "views/_layouts/loading.tag",  
-  "views/_layouts/error404.tag",
-  "views/_layouts/navbar.tag"
-];
+  'views/modules/login.tag',
+  'views/modules/homepage.tag',
+  'views/modules/entity.tag',
+  'views/modules/campaign.tag',
+  'views/modules/campaignItem.tag',
+  'views/modules/campaignItemChoice.tag',
+  'views/_layouts/loading.tag',
+  'views/_layouts/error404.tag',
+  'views/_layouts/navbar.tag'
+]
 
-var facade = new Facade();
+var facade = new Facade()
 
-async.map(tags, function(item, next) {
-  
+async.map(tags, function (item, next) {
   // preloading tags
-  riot.compile(item, function() {
-	  next(null, item);
-	});
-	
-}, function(err, results) {
-  
-  facade.debugHTML("auth.authentified %s", facade.stores.auth.authentified())
-  
+  riot.compile(item, function () {
+    next(null, item)
+  })
+}, function (err, results) {
+  facade.debugHTML('auth.authentified %s', facade.stores.auth.authentified())
+
   // start application
-  facade.debugHTML("mount");
-  riot.mount("*", facade);
-  
+  facade.debugHTML('mount')
+  riot.mount('*', facade)
+
   // define routers
-  var Route = riot.router.Route;
-  var DefaultRoute = riot.router.DefaultRoute;
-  var NotFoundRoute = riot.router.NotFoundRoute;
-  var RedirectRoute = riot.router.RedirectRoute;
-  
+  var Route = riot.router.Route
+  var DefaultRoute = riot.router.DefaultRoute
+  var NotFoundRoute = riot.router.NotFoundRoute
+  var RedirectRoute = riot.router.RedirectRoute
+
   // redirect unlogged users to /login page
-  function securityFilter(request, response, next) {
-    facade.debugHTML("securityFilter", request);
+  function securityFilter (request, response, next) {
+    facade.debugHTML('securityFilter', request)
     try {
-      return next();
+      return next()
     } finally {
       if (!facade.stores.auth.authentified() && request.uri !== '/login') {
-        response.redirectTo = '/login';
+        response.redirectTo = '/login'
       }
     }
   }
-  
+
   // apply security filter to Riot-Router
-  riot.router.use(securityFilter);
-  
+  riot.router.use(securityFilter)
+
   // declare application routes
-  facade.debugHTML("routes");
+  facade.debugHTML('routes')
   riot.router.routes([
     new Route({path: '/login', tag: 'login'}),
     new Route({path: '/homepage', tag: 'homepage'}),
@@ -59,8 +56,7 @@ async.map(tags, function(item, next) {
     new Route({path: '/campaigns-items-choices/:urn', tag: 'campaign-item-choice'}),
     new DefaultRoute({path: '/homepage', tag: 'homepage'}),
     new NotFoundRoute({path: '/404', tag: 'error404'})
-  ]);
-  
-  riot.router.start();
-  
-});
+  ])
+
+  riot.router.start()
+})

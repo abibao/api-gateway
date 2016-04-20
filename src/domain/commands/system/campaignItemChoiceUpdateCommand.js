@@ -16,9 +16,9 @@ module.exports = function (payload) {
           resolve(updated)
         })
       })
-      .catch(function (error) {
-        reject(error)
-      })
+        .catch(function (error) {
+          reject(error)
+        })
     } catch (e) {
       reject(e)
     }

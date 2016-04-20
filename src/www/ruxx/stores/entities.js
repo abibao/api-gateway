@@ -1,12 +1,10 @@
-function EntitiesStore() {
+function EntitiesStore () {
+  var self = this
+  riot.observable(self)
 
-	var self = this;
-	riot.observable(self);
-	
-	self.charities = [];
-	self.companies = [];
-	
-	self.selectedEntity = {};
-	self.selectedEntityCampaigns = [];
-	
+  self.charities = []
+  self.companies = []
+
+  self.selectedEntity = {}
+  self.selectedEntityCampaigns = []
 }

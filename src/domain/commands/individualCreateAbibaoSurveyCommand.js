@@ -1,20 +1,19 @@
 'use strict'
 
 var Promise = require('bluebird')
-var uuid = require('node-uuid')
 
-var CURRENT_NAME = 'IndividualCreateAbibaoSurveyCommand'
-
-module.exports = function (target, position) {
+module.exports = function (data) {
   var self = this
+
+  var target = data.target
+  var position = data.position
 
   return new Promise(function (resolve, reject) {
     try {
-      var quid = uuid.v1()
-      self.entityFilterQuery({type: 'abibao'}).then(function (entities) {
+      self.execute('query', 'entityFilterQuery', {type: 'abibao'}).then(function (entities) {
         var entity = entities[0]
         entity.id = self.getIDfromURN(entity.urn)
-        return self.campaignFilterQuery({company: entity.id, position: position}).then(function (campaigns) {
+        return self.execute('query', 'campaignFilterQuery', {company: entity.id, position: position}).then(function (campaigns) {
           var campaign = campaigns[0]
           var data = {
             campaign: self.getIDfromURN(campaign.urn),
@@ -31,7 +30,6 @@ module.exports = function (target, position) {
               }
             }
             return self.execute('query', 'surveyReadPopulateControlIndividualQuery', payload).then(function () {
-              self.debug.command(CURRENT_NAME, quid)
               resolve()
             })
           })

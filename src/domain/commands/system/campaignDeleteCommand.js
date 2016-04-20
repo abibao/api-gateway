@@ -11,9 +11,9 @@ module.exports = function (urn) {
           resolve({deleted: true})
         })
       })
-      .catch(function (error) {
-        reject(error)
-      })
+        .catch(function (error) {
+          reject(error)
+        })
     } catch (e) {
       reject(e)
     }
