@@ -6,7 +6,7 @@ var debug = require('debug')('abibao:domain:initializer')
 var async = require('async')
 var path = require('path')
 var dir = require('node-dir')
-
+var uuid = require('node-uuid')
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-env.json' })
 
@@ -62,24 +62,26 @@ module.exports = {
         .then(function (result) {
           // logger
           var request = {
+            'abibao-domain-uuid': uuid.v1(),
             name: promise,
             exectime: new Date() - starttime
           }
-          self.logger.info({command: request}, '[' + type + ']')
+          self.logger.info({cqrs: request}, '[' + type + ']')
           // debugger
-          self.debug[type]('[finish] %s %o', promise, result)
+          self.debug[type]('[finish] %s', promise)
           // return
           resolve(result)
         })
         .catch(function (error) {
           // logger
           var request = {
+            'abibao-domain-uuid': uuid.v1(),
             name: promise,
             exectime: new Date() - starttime
           }
-          self.logger.error({command: request}, '[command]')
+          self.logger.error({cqrs: request}, '[' + type + ']')
           // debugger
-          self.debug.error('%s %o', promise, error)
+          self.debug.error('[finish] %s %o', promise, error)
           // return
           reject(error)
         })

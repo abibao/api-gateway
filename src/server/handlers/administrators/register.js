@@ -23,7 +23,7 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.administratorRegisterCommand(request.payload).then(function (administrator) {
+    request.server.domain.execute('command', 'administratorRegisterCommand', request.payload).then(function (administrator) {
       reply(administrator)
     })
       .catch(function (error) {

@@ -12,7 +12,7 @@ module.exports = {
   description: "Ajoute un choix pour les items d'une campagnes",
   notes: "Ajoute un choix pour les items d'une campagnes",
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {
@@ -26,7 +26,7 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.campaignItemChoiceCreateWithCampaignAssignCommand(request.payload).then(function (choice) {
+    request.server.domain.execute('command', 'campaignItemChoiceCreateWithCampaignAssignCommand', request.payload).then(function (choice) {
       reply(choice)
     })
       .catch(function (error) {

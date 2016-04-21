@@ -9,7 +9,7 @@ module.exports = {
   description: 'Authentifie un administrateur sur abibao',
   notes: 'Authentifie un administrateur sur abibao',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {

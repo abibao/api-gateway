@@ -34,6 +34,18 @@ function EntitiesActions (facade) {
     })
   }
 
+  self.selectCharity = function (urn) {
+    return new Promise(function (resolve, reject) {
+      self.facade.setLoading(true)
+      self.facade.call('GET', '/v1/entities/' + urn)
+        .then(function (charity) {
+          self.facade.setLoading(false)
+          self.facade.debugAction('EntitiesActions.selectCharity %o', charity)
+          facade.setCurrentEntity(charity)
+          resolve()
+        })
+    })
+  }
   self.selectEntity = function (urn) {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)

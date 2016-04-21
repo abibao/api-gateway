@@ -23,10 +23,10 @@ module.exports = {
       type: Joi.string().valid(['abibao', 'charity', 'company']).description("Type de l'entité"),
       contact: Joi.string().email().description('Email du contact'),
       url: Joi.string().description("URL du site de l'entité"),
-      title: Joi.string().description('Le titre qui apparaît sur la fiche détaillée'),
-      hangs: Joi.string().description('La phrase qui décrit la fiche détaillée'),
-      description: Joi.string().description('La description (300 caractères)'),
-      usages: Joi.string().description("Exemples concrêts de l'usage des dons.")
+      title: Joi.string().allow('').description('Le titre qui apparaît sur la fiche détaillée'),
+      hangs: Joi.string().allow('').description('La phrase qui décrit la fiche détaillée'),
+      description: Joi.string().allow('').description('La description (300 caractères)'),
+      usages: Joi.string().allow('').description("Exemples concrêts de l'usage des dons.")
     }
   },
   jsonp: 'callback',
