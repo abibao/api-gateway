@@ -12,7 +12,7 @@ module.exports = {
   notes: 'Retourne toutes les entités de type associations',
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.entityFilterQuery({type: 'charity'}).then(function (entities) {
+    request.server.domain.execute('query', 'charityRandomListQuery', {type: 'charity'}).then(function (entities) {
       reply(entities)
     })
       .catch(function (error) {
