@@ -3,6 +3,7 @@
   "version": "1.7.0",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
+    "test:coverage": "istanbul cover _mocha -- --timeout 15000 -R spec",
     "auto:generate": "./bin/abibao generate",
     "start": "DEBUG=abibao* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
@@ -29,14 +30,14 @@
     "base64-url": "1.2.2",
     "bluebird": "3.3.5",
     "boom": "3.1.2",
-    "bunyan": "1.8.0",
+    "bunyan": "1.8.1",
     "bunyan-logstash-tcp": "0.3.4",
     "crumb": "6.0.0",
     "crypto": "0.0.3",
     "cryptr": "2.0.0",
     "debug": "2.2.0",
     "dotenv": "2.0.0",
-    "good": "6.6.0",
+    "good": "6.6.3",
     "good-bunyan": "0.1.2",
     "hapi": "13.3.0",
     "hapi-auth-basic": "4.1.0",
@@ -62,10 +63,11 @@
     "vision": "4.1.0"
   },
   "devDependencies": {
+    "chai": "3.5.0",
     "cli-color": "1.1.0",
     "commander": "2.9.0",
     "js-object-pretty-print": "0.2.0",
-    "mocha-lcov-reporter": "1.2.0",
+    "mocha": "2.4.5",
     "mustache": "2.2.1",
     "standard": "6.0.8"
   }
