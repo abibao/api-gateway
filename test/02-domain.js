@@ -10,11 +10,11 @@ var expect = chai.expect
 var Services = require('./../src/services')
 var domain
 
-describe('testing domain commands/system', function () {
-  it('should initialize the domain', function (done) {
+describe('domain story', function () {
+  it('should initialize', function (done) {
     domain = Services.domain()
-    Services.startDomain(function (err) {
-      expect(err).to.be.null
+    Services.startDomain(function (error) {
+      expect(error).to.be.null
       done()
     })
   })

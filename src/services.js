@@ -27,8 +27,7 @@ var logger = bunyan.createLogger({
   }]
 })
 
-logger.addSerializers({command: cqrsSerializer})
-logger.addSerializers({query: cqrsSerializer})
+logger.addSerializers({cqrs: cqrsSerializer})
 
 var options = {
   host: nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),

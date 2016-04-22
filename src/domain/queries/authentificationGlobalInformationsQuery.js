@@ -42,23 +42,8 @@ module.exports = function (credentials) {
         },
         // charitiesHistory
         function (results, callback) {
-          waterfallResults.charitiesHistory = [] // TODO
+          waterfallResults.charitiesHistory = []
           callback(null, waterfallResults)
-        /* self.r.table("surveys").filter({"individual":individual("id")})("charity").distinct().map(function(val) {
-          return self.r.table("entities").get(val).merge(function(charity) {
-            return {
-              urn: charity("id"),
-              type: charity("type"),
-              me: {
-                totalSurveysCompleted: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").count(),
-                totalPriceCollected: self.r.table("surveys").filter({"individual":individual("id"),"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
-              },
-              totalIndividuals: self.r.table("surveys").filter({"charity":charity("id")}).coerceTo("array").count(),
-              totalSurveysCompleted: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").count(),
-              totalPriceCollected: self.r.table("surveys").filter({"charity":charity("id"),"complete":true}).coerceTo("array").eqJoin("campaign",self.r.table("campaigns")).zip().sum("price"),
-            }
-          }).pluck("urn","type","name","me", "totalIndividuals","totalPriceCollected","totalSurveysCompleted")
-        }); */
         },
         // surveysCompleted / surveysInProgress / abibaoCompleted / abibaoInProgress
         function (results, callback) {

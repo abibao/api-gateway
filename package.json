@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "test:coverage": "istanbul cover _mocha -- --timeout 15000 -R spec",
@@ -66,6 +66,7 @@
     "chai": "3.5.0",
     "cli-color": "1.1.0",
     "commander": "2.9.0",
+    "faker": "3.1.0",
     "js-object-pretty-print": "0.2.0",
     "mocha": "2.4.5",
     "mustache": "2.2.1",

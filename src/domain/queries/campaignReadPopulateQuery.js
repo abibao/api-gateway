@@ -13,7 +13,7 @@ module.exports = function (urn) {
         return self.execute('query', 'entityReadQuery', campaign.urnCompany).then(function (entity) {
           delete campaign.urnCompany
           campaign.company = entity
-          self.campaignItemFilterQuery({campaign: self.getIDfromURN(urn)}).then(function (items) {
+          self.execute('query', 'campaignItemFilterQuery', {campaign: self.getIDfromURN(urn)}).then(function (items) {
             mapAsync(items, function (item, next) {
               item.choices = []
               var idItem = self.getIDfromURN(item.urn)

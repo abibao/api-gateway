@@ -4,12 +4,7 @@ var Promise = require('bluebird')
 var _ = require('lodash')
 
 module.exports = function (payload) {
-  var CURRENT_NAME = 'SurveyReadPopulateControlIndividualQuery'
-
   var self = this
-  var starttime = new Date()
-
-  self.debug.query('%s %o', CURRENT_NAME, payload)
 
   return new Promise(function (resolve, reject) {
     try {
@@ -37,12 +32,12 @@ module.exports = function (payload) {
       }).without('id', 'charity', 'individual')
         .then(function (survey) {
           survey.name = survey.campaign.name
-          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_COMPANY) { survey.fromCompany = true; }
-          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { survey.fromAbibao = true; }
-          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_CHARITY) { survey.fromCharity = true; }
+          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_COMPANY) { survey.fromCompany = true }
+          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { survey.fromAbibao = true }
+          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_CHARITY) { survey.fromCharity = true }
           _.map(survey.campaign.items, function (item) {
             survey.items = survey.campaign.items
-            if (_.isUndefined(survey.answers)) { survey.answers = {}; }
+            if (_.isUndefined(survey.answers)) { survey.answers = {} }
           })
           _.map(survey.campaign.items, function (item) {
             item.urn = self.getURNfromID(item.urn, 'item')
@@ -52,19 +47,12 @@ module.exports = function (payload) {
           })
           delete survey.campaign
           delete survey.company
-          var request = {
-            name: CURRENT_NAME,
-            exectime: new Date() - starttime
-          }
-          self.logger.info({query: request}, '[query]')
           resolve(survey)
         })
         .catch(function (error) {
-          self.debug.error('%s %o', CURRENT_NAME, error)
           reject(error)
         })
     } catch (e) {
-      self.debug.error('%s %o', CURRENT_NAME, e)
       reject(e)
     }
   })

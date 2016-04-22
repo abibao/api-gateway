@@ -5,15 +5,11 @@ nconf.argv().env().file({ file: 'nconf-env.json' })
 
 var _ = require('lodash')
 
-var CURRENT_ACTION = 'Query'
-var CURRENT_NAME = 'EntityListCampaignsQuery'
-
 module.exports = function (urn) {
   var self = this
 
   return new Promise(function (resolve, reject) {
     try {
-      self.logger.debug(CURRENT_ACTION, CURRENT_NAME, 'execute')
       var id = self.getIDfromURN(urn)
       self.r.table('entities').get(id).merge(function (entity) {
         return {
@@ -30,7 +26,7 @@ module.exports = function (urn) {
         }
       })
         .then(function (result) {
-          if (result.type !== self.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject('This entity has a bad type'); }
+          if (result.type !== self.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject('This entity has a bad type') }
           _.map(result.campaigns, function (campaign) {
             delete campaign.id
             campaign.urn = self.getURNfromID(campaign.urn, 'campaign')

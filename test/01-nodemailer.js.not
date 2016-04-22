@@ -39,13 +39,11 @@ describe('testing nodemailer', function () {
   })
   it('should send an email', function (done) {
     transporter.sendMail(mailOptions, function (error, info) {
-      console.log(error, info)
       expect(error).to.be.null
       expect(info).to.be.not.null
       expect(info.rejected).to.be.a('array')
       expect(info.rejected).to.have.length(0)
       done()
     })
-  })
   })
 })
