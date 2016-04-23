@@ -1,5 +1,6 @@
 'use strict'
 
+var Promise = require('bluebird')
 var Service = require('./../../src/services')
 
 module.exports.initialize = function () {
