@@ -12,7 +12,7 @@ module.exports = {
   description: 'Répond à une question d"un sondage donné',
   notes: 'Répond à une question d"un sondage donné',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     params: {

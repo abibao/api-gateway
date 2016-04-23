@@ -6,14 +6,13 @@ module.exports = function (urn) {
   var self = this
   return new Promise(function (resolve, reject) {
     try {
-      self.IndividualModel.get(self.getIDfromURN(urn)).run().then(function (model) {
-        return model.delete().then(function () {
-          resolve({deleted: true})
-        })
+      self.IndividualModel.get(self.getIDfromURN(urn))
+      .then(function (model) {
+        return model.delete()
+          .then(function (result) {
+            resolve()
+          })
       })
-        .catch(function (error) {
-          reject(error)
-        })
     } catch (e) {
       reject(e)
     }

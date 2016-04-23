@@ -9,8 +9,8 @@ module.exports = {
     scope: ['individual']
   },
   tags: ['api', '1.2) individual'],
-  description: "Retourne les données d'un sondage",
-  notes: "Retourne les données d'un sondage",
+  description: 'Retourne les données d\'un sondage',
+  notes: 'Retourne les données d\'un sondage',
   validate: {
     params: {
       urn: Joi.string().required()

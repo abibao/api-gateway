@@ -1,6 +1,7 @@
 'use strict'
 
 var Promise = require('bluebird')
+var VError = require('verror')
 
 module.exports = function (payload) {
   var self = this
@@ -8,12 +9,8 @@ module.exports = function (payload) {
   return new Promise(function (resolve, reject) {
     try {
       self.execute('query', 'individualFilterQuery', {email: payload.email}).then(function (individuals) {
-        if (individuals.length === 0) {
-          return reject('ERROR_BAD_AUTHENTIFICATION')
-        }
-        if (individuals.length > 1) {
-          return reject(new Error('Too many emails, contact an individual'))
-        }
+        if (individuals.length === 0) { throw new VError('ERROR_BAD_AUTHENTIFICATION') }
+        if (individuals.length > 1) { throw new VError(new Error('Too many emails, contact an individual')) }
         var individual = individuals[0]
         if (individual.authenticate(payload.password)) {
           // all done then reply token
@@ -28,12 +25,12 @@ module.exports = function (payload) {
                 return self.execute('command', 'individualCreateAbibaoSurveyCommand', {target: infos.urn, position: 1}).then(function () {
                   return self.execute('command', 'individualCreateAbibaoSurveyCommand', {target: infos.urn, position: 2}).then(function () {
                     return self.execute('query', 'authentificationGlobalInformationsQuery', credentials).then(function (infos) {
-                      resolve({token: token, globalInfos: infos})
+                      resolve({token, globalInfos: infos})
                     })
                   })
                 })
               } else {
-                resolve({token: token, globalInfos: infos})
+                resolve({token, globalInfos: infos})
               }
             })
           })

@@ -12,7 +12,7 @@ module.exports = {
   description: 'Modifie un choix donné',
   notes: 'Modifie un choix donné',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {

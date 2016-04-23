@@ -20,9 +20,9 @@ module.exports = function (payload) {
         delete created.item
         resolve(created)
       })
-        .catch(function (error) {
-          reject(error)
-        })
+      .catch(function (error) {
+        reject(error)
+      })
     } catch (e) {
       reject(e)
     }

@@ -7,6 +7,7 @@ var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 var faker = require('faker')
+var _ = require('lodash')
 
 var individualFake = {
   email: faker.internet.email(),
@@ -114,8 +115,11 @@ describe('individual story', function () {
   it('shoud delete traces', function (done) {
     global.domain.r.table('individuals').get(individualFake.id).delete()
       .then(function () {
-        return global.domain.r.table('surveys').delete()
-          .then(function () {
+        return global.domain.r.table('surveys').filter({})
+          .then(function (surveys) {
+            _.map(surveys, function (item) {
+              global.domain.surveyDeleteCommand(item.urn)
+            })
             done()
           })
       })

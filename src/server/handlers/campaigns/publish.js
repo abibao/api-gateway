@@ -12,7 +12,7 @@ module.exports = {
   description: 'Publie une campagne pour un filtre d"individus donné',
   notes: 'Publie une campagne pour un filtre d"individus donné',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     params: {

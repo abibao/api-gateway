@@ -12,7 +12,7 @@ module.exports = {
   description: 'Ajoute un composant Dropdown à un sondage donné',
   notes: 'Ajoute un composant Dropdown à un sondage donné',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {

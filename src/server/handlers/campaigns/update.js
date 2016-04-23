@@ -12,7 +12,7 @@ module.exports = {
   description: 'Modifie une campagne au sein de Abibao',
   notes: 'Modifie une campagne au sein de Abibao',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     params: {

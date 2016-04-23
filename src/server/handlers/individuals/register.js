@@ -9,7 +9,7 @@ module.exports = {
   description: 'Ajoute un individual sur abibao',
   notes: 'Ajoute un individual sur abibao',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {

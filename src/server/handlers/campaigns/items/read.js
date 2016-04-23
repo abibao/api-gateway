@@ -9,8 +9,8 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: "Retourne un composant d'une campagne donnée",
-  notes: "Retourne un composant d'une campagne donnée",
+  description: 'Retourne un composant d\'une campagne donnée',
+  notes: 'Retourne un composant d\'une campagne donnée',
   validate: {
     params: {
       urn: Joi.string().required()

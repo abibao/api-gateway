@@ -12,7 +12,7 @@ module.exports = {
   description: 'Modifie une entité au sein de Abibao',
   notes: 'Modifie une entité au sein de Abibao',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     params: {
@@ -20,13 +20,13 @@ module.exports = {
     },
     payload: {
       name: Joi.string().description('Le titre qui apparaît dans les listes'),
-      type: Joi.string().valid(['abibao', 'charity', 'company']).description("Type de l'entité"),
+      type: Joi.string().valid(['abibao', 'charity', 'company']).description('Type de l\'entité'),
       contact: Joi.string().email().description('Email du contact'),
-      url: Joi.string().description("URL du site de l'entité"),
+      url: Joi.string().description('URL du site de l\'entité'),
       title: Joi.string().allow('').description('Le titre qui apparaît sur la fiche détaillée'),
       hangs: Joi.string().allow('').description('La phrase qui décrit la fiche détaillée'),
       description: Joi.string().allow('').description('La description (300 caractères)'),
-      usages: Joi.string().allow('').description("Exemples concrêts de l'usage des dons.")
+      usages: Joi.string().allow('').description('Exemples concrêts de l\'usage des dons.')
     }
   },
   jsonp: 'callback',

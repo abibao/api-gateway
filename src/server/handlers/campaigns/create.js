@@ -12,7 +12,7 @@ module.exports = {
   description: 'Ajoute une campagne, affectée à une compagnie donnée',
   notes: 'Ajoute une campagne, affectée à une compagnie donnée',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {

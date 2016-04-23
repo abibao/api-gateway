@@ -14,9 +14,9 @@ module.exports = function (urn) {
         delete model.item
         resolve(model)
       })
-        .catch(function (error) {
-          reject(error)
-        })
+      .catch(function (error) {
+        reject(error)
+      })
     } catch (e) {
       reject(e)
     }

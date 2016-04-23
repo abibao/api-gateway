@@ -9,10 +9,10 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: "Modifie un composant d'une campagne donnée",
-  notes: "Modifie un composant d'une campagne donnée",
+  description: 'Modifie un composant d\'une campagne donnée',
+  notes: 'Modifie un composant d\'une campagne donnée',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {

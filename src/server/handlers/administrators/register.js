@@ -12,7 +12,7 @@ module.exports = {
   description: 'Ajoute un administrator sur abibao',
   notes: 'Ajoute un administrator sur abibao',
   payload: {
-    allow: 'application/x-www-form-urlencoded',
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {
