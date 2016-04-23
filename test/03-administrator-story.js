@@ -8,24 +8,26 @@ var should = chai.should()
 var expect = chai.expect
 var faker = require('faker')
 
-var Services = require('./../src/services')
-var domain
-
 var administratorFake = {
   email: faker.internet.email(),
   password: faker.name.lastName()
 }
 
+var Domain = require('./modules/domain')
+
 describe('administrator story', function () {
-  it('should not re-initialize domain', function (done) {
-    domain = Services.domain()
-    Services.startDomain(function (error) {
-      expect(error).to.be.not.null
+  it('should initialize domain if not done yet', function (done) {
+    if (!global.domain) {
+      Domain.initialize()
+        .then(function () {
+          done()
+        })
+    } else {
       done()
-    })
+    }
   })
   it('should not register', function (done) {
-    domain.administratorRegisterCommand({
+    global.domain.administratorRegisterCommand({
       email: administratorFake.email,
       password1: administratorFake.password,
       password2: administratorFake.password + '_' + administratorFake.password
@@ -35,18 +37,18 @@ describe('administrator story', function () {
     })
   })
   it('should register', function (done) {
-    domain.administratorRegisterCommand({
+    global.domain.administratorRegisterCommand({
       email: administratorFake.email,
       password1: administratorFake.password,
       password2: administratorFake.password
     }).then(function (result) {
       expect(result).to.be.not.null
-      administratorFake.id = domain.getIDfromURN(result.urn)
+      administratorFake.id = global.domain.getIDfromURN(result.urn)
       done()
     })
   })
   it('should not login', function (done) {
-    domain.administratorLoginWithCredentialsCommand({
+    global.domain.administratorLoginWithCredentialsCommand({
       email: administratorFake.email,
       password: administratorFake.password + '_' + administratorFake.password
     }).catch(function (error) {
@@ -55,7 +57,7 @@ describe('administrator story', function () {
     })
   })
   it('should login', function (done) {
-    domain.administratorLoginWithCredentialsCommand({
+    global.domain.administratorLoginWithCredentialsCommand({
       email: administratorFake.email,
       password: administratorFake.password
     }).then(function (result) {
@@ -63,8 +65,8 @@ describe('administrator story', function () {
       done()
     })
   })
-  it('shoud be deleted', function (done) {
-    domain.r.table('administrators').get(administratorFake.id).delete()
+  it('shoud delete traces', function (done) {
+    global.domain.r.table('administrators').get(administratorFake.id).delete()
       .then(function () {
         done()
       })

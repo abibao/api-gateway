@@ -47,6 +47,7 @@ module.exports = function (payload) {
           })
           delete survey.campaign
           delete survey.company
+          survey.urn = payload.urn
           resolve(survey)
         })
         .catch(function (error) {

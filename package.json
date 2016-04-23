@@ -60,6 +60,7 @@
     "nodemailer": "2.3.2",
     "resolve-app-pkginfo": "1.0.0",
     "thinky": "2.2.7",
+    "verror": "1.6.1",
     "vision": "4.1.0"
   },
   "devDependencies": {

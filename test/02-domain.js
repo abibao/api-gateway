@@ -7,15 +7,17 @@ var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 
-var Services = require('./../src/services')
-var domain
+var Domain = require('./modules/domain')
 
 describe('domain story', function () {
-  it('should initialize', function (done) {
-    domain = Services.domain()
-    Services.startDomain(function (error) {
-      expect(error).to.be.null
+  it('should initialize domain if not done yet', function (done) {
+    if (!global.domain) {
+      Domain.initialize()
+        .then(function () {
+          done()
+        })
+    } else {
       done()
-    })
+    }
   })
 })

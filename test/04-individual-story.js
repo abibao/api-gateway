@@ -8,45 +8,37 @@ var should = chai.should()
 var expect = chai.expect
 var faker = require('faker')
 
-var Services = require('./../src/services')
-var domain
-
 var individualFake = {
   email: faker.internet.email(),
   password: faker.name.lastName()
 }
 
+var Domain = require('./modules/domain')
+
 describe('individual story', function () {
-  it('should not re-initialize domain', function (done) {
-    domain = Services.domain()
-    Services.startDomain(function (error) {
-      expect(error).to.be.not.null
+  it('should initialize domain if not done yet', function (done) {
+    if (!global.domain) {
+      Domain.initialize()
+        .then(function () {
+          done()
+        })
+    } else {
       done()
-    })
-  })
-  it('should not register', function (done) {
-    domain.individualRegisterCommand({
-      email: individualFake.email,
-      password1: individualFake.password,
-      password2: individualFake.password + '_' + individualFake.password
-    }).catch(function (error) {
-      expect(error).to.be.not.null
-      done()
-    })
+    }
   })
   it('should register', function (done) {
-    domain.individualRegisterCommand({
+    global.domain.individualRegisterCommand({
       email: individualFake.email,
       password1: individualFake.password,
       password2: individualFake.password
     }).then(function (result) {
       expect(result).to.be.not.null
-      individualFake.id = domain.getIDfromURN(result.urn)
+      individualFake.id = global.domain.getIDfromURN(result.urn)
       done()
     })
   })
   it('should not login', function (done) {
-    domain.individualLoginWithCredentialsCommand({
+    global.domain.individualLoginWithCredentialsCommand({
       email: individualFake.email,
       password: individualFake.password + '_' + individualFake.password
     }).catch(function (error) {
@@ -55,20 +47,77 @@ describe('individual story', function () {
     })
   })
   it('should login', function (done) {
-    domain.individualLoginWithCredentialsCommand({
+    global.domain.individualLoginWithCredentialsCommand({
       email: individualFake.email,
       password: individualFake.password
     }).then(function (result) {
+      expect(result).to.be.not.null
       individualFake.token = result.token
       individualFake.globalInfos = result.globalInfos
-      expect(result).to.be.not.null
+      expect(individualFake.globalInfos.abibaoInProgress).to.be.not.undefined
+      expect(individualFake.globalInfos.abibaoInProgress).to.be.a('array')
       done()
     })
   })
-  it('shoud be deleted', function (done) {
-    domain.r.table('individuals').get(individualFake.id).delete()
+  it('should load a survey with credentials controls', function (done) {
+    expect(individualFake.globalInfos.abibaoInProgress).to.be.not.undefined
+    expect(individualFake.globalInfos.abibaoInProgress).to.be.a('array')
+    var surveyToLoad = individualFake.globalInfos.abibaoInProgress[0]
+    global.domain.surveyReadPopulateControlIndividualQuery({
+      credentials: individualFake.token,
+      urn: surveyToLoad.urn
+    })
+      .then(function (result) {
+        expect(result).to.be.not.null
+        individualFake.surveyToAnswer = result
+        expect(individualFake.surveyToAnswer.items).to.be.not.undefined
+        expect(individualFake.surveyToAnswer.items).to.be.a('array')
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('should answer a survey with individual control error', function (done) {
+    expect(individualFake.surveyToAnswer.items).to.be.not.undefined
+    expect(individualFake.surveyToAnswer.items).to.be.a('array')
+    global.domain.individualSurveyAnswerCommand({
+      credentials: faker.name.lastName(),
+      survey: individualFake.surveyToAnswer.urn,
+      label: individualFake.surveyToAnswer.items[0].label,
+      answer: ''
+    })
+      .catch(function (error) {
+        expect(error.message).to.be.not.undefined
+        expect(error.message).to.equal('INDIVIDUAL_CONTROL_FAILED')
+        done()
+      })
+  })
+  it('should answer a survey with no error', function (done) {
+    expect(individualFake.surveyToAnswer.items).to.be.not.undefined
+    expect(individualFake.surveyToAnswer.items).to.be.a('array')
+    global.domain.individualSurveyAnswerCommand({
+      credentials: {
+        urn: individualFake.globalInfos.urn
+      },
+      survey: individualFake.surveyToAnswer.urn,
+      label: individualFake.surveyToAnswer.items[0].label,
+      answer: faker.name.lastName()
+    })
       .then(function () {
         done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('shoud delete traces', function (done) {
+    global.domain.r.table('individuals').get(individualFake.id).delete()
+      .then(function () {
+        return global.domain.r.table('surveys').delete()
+          .then(function () {
+            done()
+          })
       })
       .catch(function (error) {
         done(error)

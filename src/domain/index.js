@@ -7,6 +7,7 @@ var async = require('async')
 var path = require('path')
 var dir = require('node-dir')
 var uuid = require('node-uuid')
+
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-env.json' })
 
