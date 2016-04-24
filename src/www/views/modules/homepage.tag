@@ -8,11 +8,9 @@
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2" each={ charity in facade.stores.entities.charities }>
         <div class="uk-panel uk-panel-box" style="margin-bottom: 0.25rem">
-          <h3 class="uk-panel-title uk-text-truncate"><a href="/#charities/{ charity.urn }">{ charity.name }</a></h3>
-          <img class="uk-thumbnail uk-float-left" style="margin: 0.25rem" src={ charity.avatar+'.svg' } alt="" width="80" height="80">
+          <h4 class="uk-panel-title uk-text-truncate"><a href="/#charities/{ charity.urn }">{ charity.name }</a></h4>
+          <img class="uk-thumbnail uk-float-left" style="margin: 0.25rem" src={ charity.icon } alt="" width="80" height="80">
           <div class="uk-float-left uk-width-1-2" style="margin: 0.25rem">
-            <span class="uk-text-truncate"><span class="uk-text-bold">titre:</span> <span>{ charity.title }</span></span><br>
-            <span class="uk-text-truncate"><span class="uk-text-bold">accroche:</span> <span class="uk-text-truncate">{ charity.hangs }</span></span><br>
             <span class="uk-text-truncate"><span class="uk-text-bold">contact:</span> <a class="uk-text-truncate" href="mailto:{ charity.contact }">{ charity.contact }</a></span><br>
             <span class="uk-text-truncate"><span class="uk-text-bold">url:</span> <a class="uk-text-truncate" href="{ charity.url }">{ charity.url }</a></span>
           </div>
@@ -24,11 +22,9 @@
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2" each={ company in facade.stores.entities.companies }>
         <div class="uk-panel uk-panel-box">
-          <h3 class="uk-panel-title uk-text-truncate"><a href="/#entities/{ company.urn }">{ company.name }</a></h3>
-          <img class="uk-thumbnail uk-float-left" style="margin: 0.25rem" src={ company.avatar+'.svg' } alt="" width="80" height="80">
+          <h4 class="uk-panel-title uk-text-truncate"><a href="/#entities/{ company.urn }">{ company.name }</a></h4>
+          <img class="uk-thumbnail uk-float-left" style="margin: 0.25rem" src={ company.icon } alt="" width="80" height="80">
             <div class="uk-float-left uk-width-1-2" style="margin: 0.25rem">
-              <span class="uk-text-truncate"><span class="uk-text-bold">titre:</span> <span>{ company.title }</span></span><br>
-              <span class="uk-text-truncate"><span class="uk-text-bold">accroche:</span> <span class="uk-text-truncate">{ company.hangs }</span></span><br>
               <span class="uk-text-truncate"><span class="uk-text-bold">contact:</span> <a class="uk-text-truncate" href="mailto:{ charity.contact }">{ company.contact }</a></span><br>
               <span class="uk-text-truncate"><span class="uk-text-bold">url:</span> <a class="uk-text-truncate" href="{ charity.url }">{ company.url }</a></span>
             </div>
