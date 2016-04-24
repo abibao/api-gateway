@@ -96,3 +96,7 @@ module.exports.server = function () {
 module.exports.domain = function () {
   return domain
 }
+
+module.exports.bus = function () {
+  return { }
+}

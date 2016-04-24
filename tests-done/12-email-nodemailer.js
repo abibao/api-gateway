@@ -19,7 +19,7 @@ var mailOptions = {
 
 var transporter
 
-describe('emails story', function () {
+describe('nodemailer story', function () {
   it('should create the transporter', function (done) {
     // create reusable transporter object using SMTP transport
     transporter = nodemailer.createTransport({

@@ -9,9 +9,6 @@ function EntitiesActions (facade) {
     delete data.modifiedAt
     delete data.urn
     delete data.campaigns
-    delete data.icon
-    delete data.avatar
-    delete data.picture
     //
     data.title = data.title || 'New title...'
     data.hangs = data.hangs || 'New hangs...'

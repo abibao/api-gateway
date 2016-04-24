@@ -15,6 +15,7 @@ var Services = require('./services')
 // manage instances
 var server = Services.server()
 var domain = Services.domain()
+var bus = Services.bus()
 
 Services.startDomain(function (err) {
   if (err) { return debug(err) }

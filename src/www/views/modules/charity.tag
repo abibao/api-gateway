@@ -52,24 +52,12 @@
           <form if={ dotnav==="dotnav3" } class="uk-form uk-width-1-1">
             <div class="uk-form-row uk-width-1-1">
               <fieldset>
-                <div id="upload-drop-icon" class="uk-placeholder">
-                  <i class="uk-icon-cloud-upload uk-icon-medium uk-text-muted uk-margin-small-right"></i> <span class="uk-text-bold">Icone (50x50)</span> "Glisser/Déposer" ou <a class="uk-form-file">"Parcourir"<input id="upload-select-icon" type="file"></a>
-                </div>
-                <div id="progressbar-icon" class="uk-progress uk-hidden">
-                  <div class="uk-progress-bar" style="width: 0%;">...</div>
-                </div>
-                <div id="upload-drop-avatar" class="uk-placeholder">
-                  <i class="uk-icon-cloud-upload uk-icon-medium uk-text-muted uk-margin-small-right"></i> <span class="uk-text-bold">Avatar (200x200)</span> "Glisser/Déposer" ou <a class="uk-form-file">"Parcourir"<input id="upload-select-avatar" type="file"></a>
-                </div>
-                <div id="progressbar-avatar" class="uk-progress uk-hidden">
-                  <div class="uk-progress-bar" style="width: 0%;">...</div>
-                </div>
-                <div id="upload-drop-picture" class="uk-placeholder">
-                  <i class="uk-icon-cloud-upload uk-icon-medium uk-text-muted uk-margin-small-right"></i> <span class="uk-text-bold">Image (400x200)</span> "Glisser/Déposer" ou <a class="uk-form-file">"Parcourir"<input id="upload-select-picture" type="file"></a>
-                </div>
-                <div id="progressbar-picture" class="uk-progress uk-hidden">
-                  <div class="uk-progress-bar" style="width: 0%;">...</div>
-                </div>
+                <span class="uk-text-bold">Icone (petit)</span><br>
+                <input onchange={ changeIconHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().icon.split('/')[2] }" placeholder="Saisissez une valeur">
+                <span class="uk-text-bold">Avatar (moyen)</span><br>
+                <input onchange={ changeAvatarHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().avatar.split('/')[2] }" placeholder="Saisissez une valeur">
+                <span class="uk-text-bold">Image (grand)</span><br>
+                <input onchange={ changePictureHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentEntity().picture.split('/')[2] }" placeholder="Saisissez une valeur">
               </fieldset>
             </div>
             <br>
@@ -115,7 +103,6 @@
 
     selectDotnavImages(e) {
       self.dotnav = "dotnav3";
-      self.updateDropZoneIcon();
       self.update();
     }
 
@@ -142,6 +129,18 @@
       self._currentState = "STATE_IMAGES";
       self.update();
     };
+
+    changeIconHandler(e) {
+      facade.getCurrentEntity().icon = 'images/icons/' + e.currentTarget.value;
+    }
+
+    changeAvatarHandler(e) {
+      facade.getCurrentEntity().avatar = 'images/avatars/' + e.currentTarget.value;
+    }
+
+    changePictureHandler(e) {
+      facade.getCurrentEntity().picture = 'images/pictures/' + e.currentTarget.value;
+    }
 
     changeNameHandler(e) {
       facade.getCurrentEntity().name = e.currentTarget.value;
@@ -181,34 +180,6 @@
 
     closeEntityHandler(e) {
       riot.route("/homepage");
-    };
-
-    self.updateDropZoneIcon = function() {
-      var progressbarIcon = $("#progressbar-icon");
-      var uploadSelectIcon = $("#upload-select-icon");
-      var uploadDropIcon = $("#upload-drop-icon");
-      var bar = progressbarIcon.find('.uk-progress-bar');
-      var settings = {
-        action: '/', // upload url
-        allow : '*.(jpg|jpeg|gif|png)', // allow only images
-        loadstart: function() {
-          bar.css("width", "0%").text("0%");
-          progressbarIcon.removeClass("uk-hidden");
-        },
-        progress: function(percent) {
-          percent = Math.ceil(percent);
-          bar.css("width", percent+"%").text(percent+"%");
-        },
-        allcomplete: function(response) {
-          bar.css("width", "100%").text("100%");
-          setTimeout(function() {
-            progressbarIcon.addClass("uk-hidden");
-          }, 250);
-          // alert("Upload Completed")
-        }
-      };
-      var select = UIkit.uploadSelect(uploadSelectIcon, settings);
-      var drop = UIkit.uploadDrop(uploadDropIcon, settings);
     };
 
   </script>
