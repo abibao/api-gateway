@@ -27,14 +27,14 @@
         $(function() {
             var oauthOptions = {{{oauthOptions}}};
             var swaggerOptions = _.extend({
-                dom_id: 'swagger-ui-container',
+                dom_id: "swagger-ui-container",
                 onComplete: function(swaggerApi, swaggerUi) {
                     if (typeof initOAuth == "function" && oauthOptions) {
                         initOAuth(oauthOptions);
                     }
 
                     {{#if authorization.defaultValue}}
-                        $('#input_apiKey').val('{{authorization.defaultValue}}');
+                        $('#input_apiKey').val("{{authorization.defaultValue}}");
                         addApiKeyAuthorization();
                     {{/if}}
 
@@ -47,7 +47,7 @@
                     });
                 },
                 onFailure: function(data) {
-                    log('Unable to Load SwaggerUI');
+                    log("Unable to Load SwaggerUI");
                 }
             }, {{{swaggerOptions}}});
 
@@ -61,13 +61,13 @@
                 var addApiKeyAuthorization = function() {
                     var key = $('#input_apiKey:first').val();
 
-                    if (key && key.trim() != "') {
-                        var field = "{{authorization.field}}";
-                        var scope = "{{authorization.scope}}";
-                        key = {{#if authorization.valuePrefix}}"{{authorization.valuePrefix}}" + {{/if}} key;
-                        window.swaggerUi.api.clientAuthorizations.add('api_key', new SwaggerClient.ApiKeyAuthorization(field, key, scope));
+                    if (key && key.trim() != "") {
+                        var field = '{{authorization.field}}';
+                        var scope = '{{authorization.scope}}';
+                        key = {{#if authorization.valuePrefix}}'{{authorization.valuePrefix}}' + {{/if}} key;
+                        window.swaggerUi.api.clientAuthorizations.add("api_key", new SwaggerClient.ApiKeyAuthorization(field, key, scope));
                     } else {
-                        window.swaggerUi.api.clientAuthorizations.remove('api_key');
+                        window.swaggerUi.api.clientAuthorizations.remove("api_key");
                     }
                 };
 
@@ -77,7 +77,7 @@
             window.swaggerUi.load();
 
             function log() {
-                if ('console" in window) {
+                if ('console' in window) {
                     console.log.apply(console, arguments);
                 }
             }
@@ -85,19 +85,23 @@
     </script>
 </head>
 <body class="swagger-section">
-    <div id="header">
-        <div class="swagger-ui-wrap">
-            <a id="logo" href="#">{{title}}</a>
-            <form id="api_selector" style="{{#if authorization}}{{else}}display: none;{{/if}}">
-                <div class="input" style="display:none;"><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
-                <div class="input">
-                    <input placeholder="{{#if authorization.placeholder}}{{authorization.placeholder}}{{else}}{{authorization.field}}{{/if}}" id="input_apiKey" name="apiKey" type="text"/>
-                </div>
-                <div class="input"><a id="explore" href="#">Explore</a></div>
-            </form>
-        </div>
+<div id="header">
+    <div class="swagger-ui-wrap">
+        <a id="logo" href="#">{{title}}</a>
+        <form id="api_selector" style="{{#if authorization}}{{else}}display: none;{{/if}}">
+            <div class="input" style="display:none;"><input placeholder="http://example.com/api" id="input_baseUrl"
+                                                            name="baseUrl" type="text"/></div>
+
+            <div class="input">
+                <input placeholder="{{#if authorization.placeholder}}{{authorization.placeholder}}{{else}}{{authorization.field}}{{/if}}"
+                       id="input_apiKey" name="apiKey" type="text"/>
+            </div>
+            <div class="input"><a id="explore" href="#">Explore</a></div>
+        </form>
     </div>
-    <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
-    <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</div>
+
+<div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+<div id="swagger-ui-container" class="swagger-ui-wrap"></div>
 </body>
 </html>

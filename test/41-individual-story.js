@@ -113,14 +113,16 @@ describe('individual story', function () {
       })
   })
   it('shoud delete traces', function (done) {
-    global.domain.r.table('individuals').get(individualFake.id).delete()
+    global.domain.individualDeleteCommand(global.domain.getURNfromID(individualFake.id))
       .then(function () {
-        return global.domain.r.table('surveys').filter({})
+        global.domain.r.table('surveys').filter({})
           .then(function (surveys) {
-            _.map(surveys, function (item) {
-              global.domain.surveyDeleteCommand(item.urn)
+            _.map(surveys, function (item, key) {
+              global.domain.surveyDeleteCommand(global.domain.getURNfromID(item.id, 'survey'))
+                .then(function (result) {
+                  if (key === surveys.length - 1) { done() }
+                })
             })
-            done()
           })
       })
       .catch(function (error) {

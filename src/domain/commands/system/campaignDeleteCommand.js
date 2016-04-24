@@ -7,12 +7,10 @@ module.exports = function (urn) {
   return new Promise(function (resolve, reject) {
     try {
       self.CampaignModel.get(self.getIDfromURN(urn))
-      .then(function (model) {
-        return model.delete()
-          .then(function (result) {
-            resolve()
-          })
-      })
+        .then(function (result) {
+          result.delete().then(resolve)
+        })
+        .catch(reject)
     } catch (e) {
       reject(e)
     }
