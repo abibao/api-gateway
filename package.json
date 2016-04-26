@@ -61,7 +61,7 @@
     "nodemailer": "2.3.2",
     "resolve-app-pkginfo": "1.0.0",
     "socket.io": "1.4.5",
-    "thinky": "2.2.5",
+    "thinky": "2.2.8",
     "vision": "4.1.0"
   },
   "devDependencies": {
