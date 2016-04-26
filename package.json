@@ -49,7 +49,7 @@
     "hapi-swaggered-ui": "2.3.1",
     "inert": "3.2.0",
     "iron": "4.0.0",
-    "joi": "8.0.4",
+    "joi": "8.0.5",
     "jsonfile": "2.3.0",
     "jsonwebtoken": "5.7.0",
     "lodash": "4.6.1",
