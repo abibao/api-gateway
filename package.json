@@ -50,7 +50,7 @@
     "inert": "3.2.0",
     "iron": "4.0.0",
     "joi": "8.0.4",
-    "jsonfile": "2.2.3",
+    "jsonfile": "2.3.0",
     "jsonwebtoken": "5.7.0",
     "lodash": "4.6.1",
     "md5": "2.1.0",
