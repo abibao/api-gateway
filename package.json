@@ -78,6 +78,6 @@
     "js-object-pretty-print": "0.2.0",
     "mocha-lcov-reporter": "1.2.0",
     "mustache": "2.2.1",
-    "request-promise": "2.0.1"
+    "request-promise": "3.0.0"
   }
 }
