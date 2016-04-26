@@ -37,7 +37,7 @@
     "bunyan-slack": "0.0.10",
     "crumb": "6.0.0",
     "crypto": "0.0.3",
-    "cryptr": "1.0.0",
+    "cryptr": "2.0.0",
     "debug": "2.2.0",
     "dotenv": "2.0.0",
     "good": "6.6.3",
