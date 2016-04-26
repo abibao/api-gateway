@@ -56,7 +56,7 @@
     "md5": "2.1.0",
     "mongoose": "4.4.6",
     "nconf": "0.8.4",
-    "newrelic": "1.25.4",
+    "newrelic": "1.26.2",
     "node-dir": "0.1.11",
     "nodemailer": "2.3.0",
     "resolve-app-pkginfo": "1.0.0",
