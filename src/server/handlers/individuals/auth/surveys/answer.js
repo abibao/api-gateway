@@ -20,7 +20,7 @@ module.exports = {
     },
     payload: {
       label: Joi.string().required(),
-      answer: Joi.string().required()
+      answer: Joi.any().required()
     }
   },
   jsonp: 'callback',
