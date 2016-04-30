@@ -1,11 +1,9 @@
 'use strict'
 
 var _ = require('lodash')
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-env.json' })
 
 var Cryptr = require('cryptr')
-var cryptr = new Cryptr(nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
 
 module.exports = function (thinky) {
   var type = thinky.type

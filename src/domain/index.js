@@ -2,96 +2,104 @@
 
 var Promise = require('bluebird')
 
-var debug = require('debug')('abibao:domain:initializer')
+var internals = {
+  options: {
+    host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
+    port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
+    db: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+    authKey: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
+    silent: true
+  },
+  constants: {
+    ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
+    ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION: 'email_verification',
+    ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH: 'campaign_publish',
+    ABIBAO_CONST_ENTITY_TYPE_NONE: 'none',
+    ABIBAO_CONST_ENTITY_TYPE_ABIBAO: 'abibao',
+    ABIBAO_CONST_ENTITY_TYPE_CHARITY: 'charity',
+    ABIBAO_CONST_ENTITY_TYPE_COMPANY: 'company',
+    ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR: 'administrator',
+    ABIBAO_CONST_USER_SCOPE_INDIVIDUAL: 'individual'
+  },
+  events: { },
+  domain: false
+}
+
+var _ = require('lodash')
+var Cryptr = require('cryptr')
+var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+
+// use debuggers reference
+var abibao = {
+  debug: global.ABIBAO.debuggers.domain,
+  error: global.ABIBAO.debuggers.error
+}
+
+internals.initialize = function () {
+  abibao.debug('start initializing')
+  return new Promise(function (resolve, reject) {
+    try {
+      internals.domain.thinky = require('thinky')(internals.options)
+      internals.domain.ThinkyErrors = internals.domain.thinky.Errors
+      internals.domain.Query = internals.domain.thinky.Query
+      internals.domain.r = internals.domain.thinky.r
+      internals.domain.injector = internals.injector
+      internals.domain.execute = internals.execute
+      internals.domain.getIDfromURN = function (urn) {
+        return cryptr.decrypt(_.last(_.split(urn, ':')))
+      }
+      internals.domain.getURNfromID = function (id, model) {
+        return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
+      }
+      internals.domain.injector('commands')
+        .then(function () {
+          return internals.domain.injector('commands/system')
+        })
+        .then(function () {
+          return internals.domain.injector('queries')
+        })
+        .then(function () {
+          return internals.domain.injector('queries/system')
+        })
+        .then(function () {
+          return internals.domain.injector('models')
+        })
+        .finally(resolve)
+        .catch(reject)
+    } catch (error) {
+      abibao.error(error)
+      reject(error)
+    }
+  })
+}
+
+module.exports.singleton = function () {
+  return new Promise(function (resolve, reject) {
+    if (internals.domain !== false) { resolve(internals.domain) }
+    internals.domain = { }
+    internals.initialize()
+      .then(function () {
+        global.ABIBAO.events.DomainEvent = internals.events
+        global.ABIBAO.constants.DomainConstant = internals.constants
+        resolve(internals.domain)
+      })
+      .catch(function (error) {
+        internals.domain = false
+        abibao.error(error)
+        reject(error)
+      })
+  })
+}
+
 var async = require('async')
 var path = require('path')
 var dir = require('node-dir')
 var uuid = require('node-uuid')
 
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-env.json' })
-
-var _ = require('lodash')
-var Cryptr = require('cryptr')
-var cryptr = new Cryptr(nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-
-var options = {
-  host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
-  port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
-  db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
-  authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
-  silent: true
-}
-var thinky = require('thinky')(options)
-
-module.exports = {
-  // injected
-  logger: null,
-  io: null,
-  thinky,
-  ThinkyErrors: thinky.Errors,
-  Query: thinky.Query,
-  r: thinky.r,
-
-  ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
-  ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION: 'email_verification',
-  ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH: 'campaign_publish',
-  ABIBAO_CONST_ENTITY_TYPE_NONE: 'none',
-  ABIBAO_CONST_ENTITY_TYPE_ABIBAO: 'abibao',
-  ABIBAO_CONST_ENTITY_TYPE_CHARITY: 'charity',
-  ABIBAO_CONST_ENTITY_TYPE_COMPANY: 'company',
-  ABIBAO_CONST_USER_SCOPE_ADMINISTRATOR: 'administrator',
-  ABIBAO_CONST_USER_SCOPE_INDIVIDUAL: 'individual',
-
-  getIDfromURN(urn) {
-    return cryptr.decrypt(_.last(_.split(urn, ':')))
-  },
-
-  getURNfromID(id, model) {
-    return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
-  },
-
-  execute(type, promise, params) {
-    var self = this
-    var starttime = new Date()
-
-    // debugger
-    self.debug[type]('[start] %s %o', promise, params)
-
-    return new Promise(function (resolve, reject) {
-      self[promise](params)
-        .then(function (result) {
-          // logger
-          var request = {
-            'abibao-domain-uuid': uuid.v1(),
-            name: promise,
-            exectime: new Date() - starttime
-          }
-          self.logger.info({cqrs: request}, '[' + type + ']')
-          // debugger
-          self.debug[type]('[finish] %s', promise)
-          // return
-          resolve(result)
-        })
-        .catch(function (error) {
-          // logger
-          var request = {
-            'abibao-domain-uuid': uuid.v1(),
-            name: promise,
-            exectime: new Date() - starttime
-          }
-          self.logger.error({cqrs: request}, '[' + type + ']')
-          // debugger
-          self.debug.error('[finish] %s %o', promise, error)
-          // return
-          reject(error)
-        })
-    })
-  },
-
-  injector(type, callback) {
-    var self = this
-    debug('[' + type + ']')
+internals.injector = function (type) {
+  var self = internals.domain
+  return new Promise(function (resolve, reject) {
+    abibao.debug('[' + type + ']')
     // custom
     dir.readFiles(path.resolve(__dirname, type),
       {
@@ -99,18 +107,14 @@ module.exports = {
         match: /.js/
       },
       function (err, content, next) {
-        if (err) {
-          return callback(err, null)
-        }
+        if (err) { return reject(err) }
         next()
       },
       function (err, files) {
-        if (err) {
-          return callback(err, null)
-        }
+        if (err) { return reject(err) }
         async.mapSeries(files, function (item, next) {
           var name = path.basename(item, '.js')
-          debug('>>> [' + _.upperFirst(name) + '] has just being injected')
+          abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
           if (type === 'models') {
             self[name] = require('./' + type + '/' + name)(self.thinky)
           } else if (type === 'listeners') {
@@ -121,8 +125,40 @@ module.exports = {
           }
           next(null, true)
         }, function (error, results) {
-          callback(error, results)
+          if (error) { return reject(err) }
+          resolve(results)
         })
       })
-  }
+  })
+}
+
+internals.execute = function (type, promise, params) {
+  return new Promise(function (resolve, reject) {
+    var starttime = new Date()
+    // logger
+    var request = {
+      uuid: uuid.v1(),
+      name: promise
+    }
+    abibao.debug('[%s] start %s %s %o', request.uuid, type, promise, params)
+    global.ABIBAO.services.domain[promise](params)
+      .then(function (result) {
+        request.exectime = new Date() - starttime
+        // logger
+        // self.logger.info({cqrs: request}, '[' + type + ']')
+        // debugger
+        abibao.debug('[%s] finish %s %s', request.uuid, type, promise)
+        // return
+        resolve(result)
+      })
+      .catch(function (error) {
+        request.exectime = new Date() - starttime
+        // logger
+        // self.logger.error({cqrs: request}, '[' + type + ']')
+        // debugger
+        abibao.error('[%s] finish %s %s %o', request.uuid, type, promise, error)
+        // return
+        reject(error)
+      })
+  })
 }

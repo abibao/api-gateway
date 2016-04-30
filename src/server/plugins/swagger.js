@@ -20,7 +20,7 @@ var options = {
     mode: 'tags'
   },
   tags: {
-    'administrators': 'Example administrator description'
+    'administrators': 'Administrator description'
   }
 }
 

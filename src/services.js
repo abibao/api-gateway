@@ -1,5 +1,53 @@
 'use strict'
 
+/*
+====================================================
+ROLES
+====================================================
+  - return all singletons
+====================================================
+*/
+
+var Promise = require('bluebird')
+
+module.exports.bus = function () {
+  return new Promise(function (resolve, reject) {
+    require('./bus').singleton()
+      .then(function (item) {
+        resolve(item)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+module.exports.domain = function () {
+  return new Promise(function (resolve, reject) {
+    require('./domain').singleton()
+      .then(function (item) {
+        resolve(item)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+module.exports.server = function () {
+  return new Promise(function (resolve, reject) {
+    require('./server').singleton()
+      .then(function (item) {
+        resolve(item)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+/*
+var Promise = require('bluebird')
 var Hapi = require('hapi')
 var Routes = require('./server/routes')
 var async = require('async')
@@ -21,8 +69,8 @@ var logger = bunyan.createLogger({
     level: 'info',
     type: 'raw',
     stream: require('bunyan-logstash-tcp').createStream({
-      host: nconf.get('ABIBAO_API_GATEWAY_LOGSTASH_HOST'),
-      port: nconf.get('ABIBAO_API_GATEWAY_LOGSTASH_PORT')
+      host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_LOGSTASH_HOST'),
+      port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_LOGSTASH_PORT')
     })
   }]
 })
@@ -30,11 +78,12 @@ var logger = bunyan.createLogger({
 logger.addSerializers({cqrs: cqrsSerializer})
 
 var options = {
-  host: nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
-  port: nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
+  host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
+  port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
   labels: ['api', 'administrator']
 }
 
+var domain = require('./domain')
 var server = new Hapi.Server({
   debug: false,
   connections: {
@@ -43,10 +92,7 @@ var server = new Hapi.Server({
     }
   }
 })
-
 server.connection(options)
-
-var domain = require('./domain')
 
 module.exports.startDomain = function (callback) {
   domain.logger = logger
@@ -88,15 +134,4 @@ module.exports.startServer = function (callback) {
     })
   })
 }
-
-module.exports.server = function () {
-  return server
-}
-
-module.exports.domain = function () {
-  return domain
-}
-
-module.exports.bus = function () {
-  return { }
-}
+*/

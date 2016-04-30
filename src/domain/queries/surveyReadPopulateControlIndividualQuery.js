@@ -1,10 +1,12 @@
 'use strict'
 
 var Promise = require('bluebird')
+
+var Hoek = require('hoek')
 var _ = require('lodash')
 
 module.exports = function (payload) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {
@@ -32,9 +34,9 @@ module.exports = function (payload) {
       }).without('id', 'charity', 'individual')
         .then(function (survey) {
           survey.name = survey.campaign.name
-          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_COMPANY) { survey.fromCompany = true }
-          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { survey.fromAbibao = true }
-          if (survey.company === self.ABIBAO_CONST_ENTITY_TYPE_CHARITY) { survey.fromCharity = true }
+          if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY) { survey.fromCompany = true }
+          if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { survey.fromAbibao = true }
+          if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_CHARITY) { survey.fromCharity = true }
           _.map(survey.campaign.items, function (item) {
             survey.items = survey.campaign.items
             if (_.isUndefined(survey.answers)) { survey.answers = {} }

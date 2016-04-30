@@ -3,7 +3,7 @@
 var Joi = require('joi')
 var Boom = require('boom')
 
-exports.campaigns_list = {
+module.exports = {
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
@@ -18,11 +18,11 @@ exports.campaigns_list = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.entityListCampaignsQuery(request.params.urn).then(function (campaigns) {
-      reply(campaigns)
-    })
+    global.ABIBAO.services.domain.execute('query', 'entityListCampaignsQuery', request.params.urn)
+      .then(function (campaigns) {
+        reply(campaigns)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

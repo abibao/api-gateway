@@ -55,6 +55,8 @@ function CampaignsActions (facade) {
       delete data.label
       delete data.type
       delete data.choices
+      delete data.urnCampaign
+      delete directive
       self.facade.setLoading(true)
       facade.call('PATCH', '/v1/campaigns/items/' + item.urn, data).then(function (item) {
         self.facade.setLoading(false)

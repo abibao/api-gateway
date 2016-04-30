@@ -1,10 +1,12 @@
 'use strict'
 
 var Promise = require('bluebird')
+
+var Hoek = require('hoek')
 var _ = require('lodash')
 
 module.exports = function (urn) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {

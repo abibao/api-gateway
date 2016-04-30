@@ -9,8 +9,8 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'Retourne un composant d\'une campagne donnée',
-  notes: 'Retourne un composant d\'une campagne donnée',
+  description: "Retourne un composant d'une campagne donnée",
+  notes: "Retourne un composant d'une campagne donnée",
   validate: {
     params: {
       urn: Joi.string().required()
@@ -18,11 +18,11 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.campaignItemReadPopulateQuery(request.params.urn).then(function (campaignItem) {
-      reply(campaignItem)
-    })
+    global.ABIBAO.services.domain.execute('query', 'campaignItemReadPopulateQuery', request.params.urn)
+      .then(function (campaignItem) {
+        reply(campaignItem)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

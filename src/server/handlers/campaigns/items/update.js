@@ -9,8 +9,8 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'Modifie un composant d\'une campagne donnée',
-  notes: 'Modifie un composant d\'une campagne donnée',
+  description: "Modifie un composant d'une campagne donnée",
+  notes: "Modifie un composant d'une campagne donnée",
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -40,11 +40,11 @@ module.exports = {
   jsonp: 'callback',
   handler(request, reply) {
     request.payload.urn = request.params.urn
-    request.server.domain.campaignItemUpdateCommand(request.payload).then(function (campaignItem) {
-      reply(campaignItem)
-    })
+    global.ABIBAO.services.domain.execute('command', 'campaignItemUpdateCommand', request.payload)
+      .then(function (campaignItem) {
+        reply(campaignItem)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

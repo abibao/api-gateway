@@ -1,20 +1,19 @@
 'use strict'
 
 var Promise = require('bluebird')
+
+var Hoek = require('hoek')
 var Iron = require('iron')
 var Base64 = require('base64-url')
 var _ = require('lodash')
 
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-env.json' })
-
 module.exports = function (sealed) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {
       sealed = Base64.decode(sealed)
-      Iron.unseal(sealed, nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), Iron.defaults, function (err, unsealed) {
+      Iron.unseal(sealed, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), Iron.defaults, function (err, unsealed) {
         // control
         switch (true) {
           case _.isNull(err) === false:
@@ -25,7 +24,7 @@ module.exports = function (sealed) {
             return reject(new Error('Campaign is undefined'))
           case _.isUndefined(unsealed.action):
             return reject(new Error('Action is undefined'))
-          case unsealed.action !== self.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH:
+          case unsealed.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH:
             return reject(new Error('Action is unauthorized'))
           default:
             break

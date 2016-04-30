@@ -18,11 +18,11 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.campaignItemChoiceReadQuery(request.params.urn).then(function (choice) {
-      reply(choice)
-    })
+    global.ABIBAO.services.domain.execute('query', 'campaignItemChoiceReadQuery', request.params.urn)
+      .then(function (choice) {
+        reply(choice)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

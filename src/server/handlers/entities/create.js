@@ -17,22 +17,22 @@ module.exports = {
   validate: {
     payload: {
       name: Joi.string().required().description('Le titre qui apparaît dans les listes'),
-      type: Joi.string().valid(['abibao', 'charity', 'company']).default('charity').required().description('Type de l\'entité'),
+      type: Joi.string().valid(['abibao', 'charity', 'company']).default('charity').required().description("Type de l'entité"),
       contact: Joi.string().email().required().description('Email du contact'),
-      url: Joi.string().default('').required().description('URL du site de l\'entité'),
+      url: Joi.string().default('').required().description("URL du site de l'entité"),
       title: Joi.string().required().description('Le titre qui apparaît sur la fiche détaillée'),
       hangs: Joi.string().required().description('La phrase qui décrit la fiche détaillée'),
       description: Joi.string().required().description('La description (300 caractères)'),
-      usages: Joi.string().required().description('Exemples concrêts de l\'usage des dons.')
+      usages: Joi.string().required().description("Exemples concrêts de l'usage des dons.")
     }
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.entityCreateCommand(request.payload).then(function (entity) {
-      reply(entity)
-    })
+    global.ABIBAO.services.domain.execute('command', 'entityCreateCommand', request.payload)
+      .then(function (entity) {
+        reply(entity)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

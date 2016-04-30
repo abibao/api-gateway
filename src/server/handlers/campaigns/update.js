@@ -32,11 +32,11 @@ module.exports = {
   jsonp: 'callback',
   handler(request, reply) {
     request.payload.urn = request.params.urn
-    request.server.domain.campaignUpdateCommand(request.payload).then(function (campaign) {
-      reply(campaign)
-    })
+    global.ABIBAO.services.domain.execute('command', 'campaignUpdateCommand', request.payload)
+      .then(function (campaign) {
+        reply(campaign)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

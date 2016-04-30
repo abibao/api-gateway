@@ -1,10 +1,12 @@
 'use strict'
 
 var Promise = require('bluebird')
+
 var _ = require('lodash')
+var Hoek = require('hoek')
 
 module.exports = function (filters) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
     try {
       self.AdministratorModel.filter(filters).run().then(function (models) {

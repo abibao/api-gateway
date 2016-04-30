@@ -12,11 +12,11 @@ module.exports = {
   notes: 'Retourne toutes les entités de type associations',
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.execute('query', 'charityRandomListQuery', {type: 'charity'}).then(function (entities) {
-      reply(entities)
-    })
+    global.ABIBAO.services.domain.execute('query', 'charityRandomListQuery', {type: 'charity'})
+      .then(function (entities) {
+        reply(entities)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

@@ -25,11 +25,11 @@ module.exports = {
   jsonp: 'callback',
   handler(request, reply) {
     request.payload.urn = request.params.urn
-    request.server.domain.campaignItemChoiceUpdateCommand(request.payload).then(function (campaignItemChoice) {
-      reply(campaignItemChoice)
-    })
+    global.ABIBAO.services.domain.execute('command', 'campaignItemChoiceUpdateCommand', request.payload)
+      .then(function (campaignItemChoice) {
+        reply(campaignItemChoice)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

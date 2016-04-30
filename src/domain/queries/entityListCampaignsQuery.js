@@ -1,12 +1,10 @@
 'use strict'
 
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-env.json' })
-
 var _ = require('lodash')
+var Hoek = require('hoek')
 
 module.exports = function (urn) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {
@@ -26,7 +24,7 @@ module.exports = function (urn) {
         }
       })
         .then(function (result) {
-          if (result.type !== self.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject('This entity has a bad type') }
+          if (result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject('This entity has a bad type') }
           _.map(result.campaigns, function (campaign) {
             delete campaign.id
             campaign.urn = self.getURNfromID(campaign.urn, 'campaign')

@@ -12,11 +12,11 @@ module.exports = {
   notes: 'Retourne toutes les entités',
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.entityFilterQuery({}).then(function (entities) {
-      reply(entities)
-    })
+    global.ABIBAO.services.domain.execute('query', 'entityFilterQuery', {})
+      .then(function (entities) {
+        reply(entities)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

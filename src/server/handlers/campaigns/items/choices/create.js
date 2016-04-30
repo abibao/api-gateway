@@ -9,8 +9,8 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'Ajoute un choix pour les items d\'une campagnes',
-  notes: 'Ajoute un choix pour les items d\'une campagnes',
+  description: "Ajoute un choix pour les items d'une campagnes",
+  notes: "Ajoute un choix pour les items d'une campagnes",
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -26,11 +26,11 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.execute('command', 'campaignItemChoiceCreateWithCampaignAssignCommand', request.payload).then(function (choice) {
-      reply(choice)
-    })
+    global.ABIBAO.services.domain.execute('command', 'campaignItemChoiceCreateWithCampaignAssignCommand', request.payload)
+      .then(function (choice) {
+        reply(choice)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

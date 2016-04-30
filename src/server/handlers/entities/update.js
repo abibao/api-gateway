@@ -35,11 +35,11 @@ module.exports = {
   jsonp: 'callback',
   handler(request, reply) {
     request.payload.urn = request.params.urn
-    request.server.domain.entityUpdateCommand(request.payload).then(function (entity) {
-      reply(entity)
-    })
+    global.ABIBAO.services.domain.execute('command', 'entityUpdateCommand', request.payload)
+      .then(function (entity) {
+        reply(entity)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

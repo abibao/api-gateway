@@ -1,11 +1,9 @@
 'use strict'
 
 var _ = require('lodash')
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-env.json' })
 
 var Cryptr = require('cryptr')
-var cryptr = new Cryptr(nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
 
 module.exports = function (thinky) {
   var type = thinky.type
@@ -40,6 +38,14 @@ module.exports = function (thinky) {
     // automatic
     createdAt: type.date().required().default(r.now()),
     modifiedAt: type.date().required().default(r.now())
+  })
+
+  SurveyModel.define('formatAnswer', function (component, value) {
+    // value is a database urn ?
+    if (_.split(value, 'urn:abibao:database:').length === 2) {
+      value = global.ABIBAO.services.domain.getIDfromURN(value)
+    }
+    return value
   })
 
   SurveyModel.pre('save', function (next) {

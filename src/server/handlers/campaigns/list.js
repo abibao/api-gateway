@@ -12,11 +12,11 @@ module.exports = {
   notes: 'Retourne toutes les campagnes',
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.campaignFilterQuery({}).then(function (campaigns) {
-      reply(campaigns)
-    })
+    global.ABIBAO.services.domain.execute('query', 'campaignFilterQuery', {})
+      .then(function (campaigns) {
+        reply(campaigns)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

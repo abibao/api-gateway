@@ -3,8 +3,6 @@
 var resolve = require('path').resolve
 var normalize = require('path').normalize
 
-var EntitiesController = require('./controllers/entities')
-
 exports.endpoints = [
 
   // www - administrator dashboard
@@ -29,7 +27,7 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/entities', config: require('./handlers/entities/create') },
   { method: 'GET', path: '/v1/entities/{urn}', config: require('./handlers/entities/read') },
   { method: 'PATCH', path: '/v1/entities/{urn}', config: require('./handlers/entities/update') },
-  { method: 'GET', path: '/v1/entities/{urn}/campaigns', config: EntitiesController.campaigns_list },
+  { method: 'GET', path: '/v1/entities/{urn}/campaigns', config: require('./handlers/entities/campaigns/list') },
 
   // campaigns
   { method: 'GET', path: '/v1/campaigns', config: require('./handlers/campaigns/list') },

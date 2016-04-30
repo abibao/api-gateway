@@ -22,11 +22,11 @@ module.exports = {
       credentials: request.auth.credentials,
       urn: request.params.urn
     }
-    request.server.domain.surveyReadPopulateControlIndividualQuery(payload).then(function (survey) {
-      reply(survey)
-    })
+    global.ABIBAO.services.domain.execute('query', 'surveyReadPopulateControlIndividualQuery', payload)
+      .then(function (survey) {
+        reply(survey)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

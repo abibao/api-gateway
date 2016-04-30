@@ -1,18 +1,20 @@
 'use strict'
 
 var Promise = require('bluebird')
+
+var Hoek = require('hoek')
 var _ = require('lodash')
 var waterfall = require('async').waterfall
 var map = require('async').map
 
 module.exports = function (credentials) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {
       if (_.isUndefined(credentials.action)) { return reject(new Error('Action is undefined')) }
-      if (credentials.action !== self.ABIBAO_CONST_TOKEN_AUTH_ME) { return reject(new Error('Action is unauthorized')) }
-      if (credentials.scope !== self.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL) { return reject(new Error('Scope is unauthorized')) }
+      if (credentials.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME) { return reject(new Error('Action is unauthorized')) }
+      if (credentials.scope !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL) { return reject(new Error('Scope is unauthorized')) }
 
       var waterfallResults = {}
 
@@ -64,10 +66,10 @@ module.exports = function (credentials) {
                 .catch(next)
             }, function (err, res) {
               if (err) { return reject(err) }
-              waterfallResults.surveysCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType !== self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
-              waterfallResults.surveysInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType !== self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
-              waterfallResults.abibaoCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType === self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
-              waterfallResults.abibaoInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType === self.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+              waterfallResults.surveysCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+              waterfallResults.surveysInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+              waterfallResults.abibaoCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+              waterfallResults.abibaoInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
               callback(null, waterfallResults)
             })
           })

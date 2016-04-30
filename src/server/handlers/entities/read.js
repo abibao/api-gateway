@@ -18,11 +18,11 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.entityReadQuery(request.params.urn).then(function (entity) {
-      reply(entity)
-    })
+    global.ABIBAO.services.domain.execute('query', 'entityReadQuery', request.params.urn)
+      .then(function (entity) {
+        reply(entity)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

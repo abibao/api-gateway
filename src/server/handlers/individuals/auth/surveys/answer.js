@@ -27,11 +27,11 @@ module.exports = {
   handler(request, reply) {
     request.payload.survey = request.params.urn
     request.payload.credentials = request.auth.credentials
-    request.server.domain.individualSurveyAnswerCommand(request.payload).then(function (result) {
-      reply(result)
-    })
+    global.ABIBAO.services.domain.execute('command', 'individualSurveyAnswerCommand', request.payload)
+      .then(function (result) {
+        reply(result)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

@@ -1,11 +1,13 @@
 'use strict'
 
 var Promise = require('bluebird')
+
+var Hoek = require('hoek')
 var _ = require('lodash')
 var async = require('async')
 
 module.exports = function (payload) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {
@@ -26,7 +28,7 @@ module.exports = function (payload) {
               if (_.isUndefined(individual.charity)) {
                 next()
               } else {
-                self.individualSendEmailCampaignEvent(data)
+                // self.individualSendEmailCampaignEvent(data)
                 next()
               }
             }, function (err) {

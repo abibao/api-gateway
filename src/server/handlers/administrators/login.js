@@ -19,12 +19,11 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.execute('command', 'administratorLoginWithCredentialsCommand', request.payload)
+    global.ABIBAO.services.domain.execute('command', 'administratorLoginWithCredentialsCommand', request.payload)
       .then(function (credentials) {
         reply(credentials)
       })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

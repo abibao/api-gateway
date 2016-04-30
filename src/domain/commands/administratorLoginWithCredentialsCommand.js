@@ -2,8 +2,10 @@
 
 var Promise = require('bluebird')
 
+var Hoek = require('hoek')
+
 module.exports = function (payload) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
     try {
       self.execute('query', 'administratorFilterQuery', {email: payload.email})
@@ -13,9 +15,13 @@ module.exports = function (payload) {
           var administrator = administrators[0]
           if (administrator.authenticate(payload.password)) {
             // all done then reply token
-            return self.execute('command', 'administratorCreateAuthTokenCommand', administrator.urn).then(function (token) {
-              resolve({token: token})
-            })
+            return self.execute('command', 'administratorCreateAuthTokenCommand', administrator.urn)
+              .then(function (token) {
+                global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
+                  token: token
+                })
+                resolve({token: token})
+              })
           } else {
             throw new Error('Email address and/or password invalid')
           }

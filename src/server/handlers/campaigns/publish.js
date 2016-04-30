@@ -27,11 +27,11 @@ module.exports = {
   jsonp: 'callback',
   handler(request, reply) {
     request.payload.urn = request.params.urn
-    request.server.domain.campaignPublishCommand(request.payload).then(function (result) {
-      reply(result)
-    })
+    global.ABIBAO.services.domain.execute('command', 'campaignPublishCommand', request.payload)
+      .then(function (result) {
+        reply(result)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }

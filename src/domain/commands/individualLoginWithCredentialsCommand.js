@@ -1,22 +1,23 @@
 'use strict'
 
 var Promise = require('bluebird')
-var VError = require('verror')
+
+var Hoek = require('hoek')
 
 module.exports = function (payload) {
-  var self = this
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {
       self.execute('query', 'individualFilterQuery', {email: payload.email}).then(function (individuals) {
-        if (individuals.length === 0) { throw new VError('ERROR_BAD_AUTHENTIFICATION') }
-        if (individuals.length > 1) { throw new VError(new Error('Too many emails, contact an individual')) }
+        if (individuals.length === 0) { throw new Error('ERROR_BAD_AUTHENTIFICATION') }
+        if (individuals.length > 1) { throw new Error(new Error('Too many emails, contact an individual')) }
         var individual = individuals[0]
         if (individual.authenticate(payload.password)) {
           // all done then reply token
           self.execute('command', 'individualCreateAuthTokenCommand', individual.urn).then(function (token) {
             var credentials = {
-              action: self.ABIBAO_CONST_TOKEN_AUTH_ME,
+              action: global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME,
               urn: individual.urn,
               scope: individual.scope
             }

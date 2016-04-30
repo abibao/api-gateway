@@ -23,11 +23,11 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.execute('command', 'administratorRegisterCommand', request.payload).then(function (administrator) {
-      reply(administrator)
-    })
+    global.ABIBAO.services.domain.execute('command', 'administratorRegisterCommand', request.payload)
+      .then(function (administrator) {
+        reply(administrator)
+      })
       .catch(function (error) {
-        request.server.logger.error(error)
         reply(Boom.badRequest(error))
       })
   }
