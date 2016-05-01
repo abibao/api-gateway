@@ -25,15 +25,11 @@ module.exports = function (payload) {
         // create individual
         self.execute('command', 'individualCreateCommand', payload).then(function (individual) {
           // informations posted on slack
-          global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
+          global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
             'channel': '#cast-members-only',
             'username': 'IndividualRegisterCommand',
             'text': '[' + new Date() + '] - [' + individual.email + '] has just registered into abibao',
             'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
-          })
-          // welcome email sended to new individual
-          global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_EMAIL_WELCOME, {
-            email: individual.email
           })
           resolve(individual)
         })

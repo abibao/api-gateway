@@ -8,10 +8,12 @@ exports.endpoints = [
   // www - administrator dashboard
   { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
 
+  // auto routing
+  { method: 'GET', path: '/redirect/campaign/affect/{sealed}', config: require('./handlers/redirect/campaign/affect') },
+
   // individuals
   { method: 'POST', path: '/v1/individuals/login', config: require('./handlers/individuals/login') },
   { method: 'POST', path: '/v1/individuals/register', config: require('./handlers/individuals/register') },
-  { method: 'POST', path: '/v1/individual/campaign/assign/{token}', config: require('./handlers/campaigns/assign') },
   { method: 'GET', path: '/v1/auth/global/informations', config: require('./handlers/individuals/auth/globalInformations') },
   { method: 'PATCH', path: '/v1/auth/charity', config: require('./handlers/individuals/auth/charity/update') },
   { method: 'GET', path: '/v1/auth/surveys/{urn}', config: require('./handlers/individuals/auth/surveys/read') },

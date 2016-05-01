@@ -23,10 +23,11 @@ module.exports = function (payload) {
           waterfall.survey.complete = _.keys(waterfall.survey.answers).length === waterfall.items.length
           return self.execute('command', 'surveyUpdateCommand', waterfall.survey).then(function (updated) {
             if (waterfall.survey.isAbibao === true && waterfall.survey.complete === true) {
-              // send email
-              global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_STEP02, {
+              global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, {
                 urnIndividual: waterfall.survey.urnIndividual,
-                urnCampaign: waterfall.survey.urnCampaign
+                urnCampaign: waterfall.survey.urnCampaign,
+                urnCharity: waterfall.survey.urnCharity,
+                urnCompany: waterfall.survey.urnCompany
               })
             }
             resolve({complete: updated.complete})

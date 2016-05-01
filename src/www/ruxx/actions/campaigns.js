@@ -14,10 +14,10 @@ function CampaignsActions (facade) {
       label: 'ABIBAO_ANSWER_'
     }
     facade.call('POST', '/v1/campaigns/items/multiple-choice', payload).then(function (item) {
-      console.log('CampaignsActions.createItemMultipleChoice', item)
+      self.facade.debugAction('CampaignsActions.createItemMultipleChoice %o', item)
     // facade.setCurrentCampaign(campaign)
     }).catch(function (error) {
-      console.log('CampaignsActions.createItemMultipleChoice', 'ERROR', error)
+      self.facade.debugAction('CampaignsActions.createItemMultipleChoice (ERROR) %o', error)
       facade.trigger('EVENT_CALLER_ERROR', error)
     })
   }

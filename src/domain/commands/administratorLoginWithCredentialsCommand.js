@@ -17,7 +17,7 @@ module.exports = function (payload) {
             // all done then reply token
             return self.execute('command', 'administratorCreateAuthTokenCommand', administrator.urn)
               .then(function (token) {
-                global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
+                global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
                   token: token
                 })
                 resolve({token: token})
