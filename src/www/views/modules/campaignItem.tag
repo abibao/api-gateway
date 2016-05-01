@@ -1,11 +1,11 @@
 <campaign-item>
-  
+
   <navbar> </navbar>
-  
+
   <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1">
-  
+
     <div class="uk-grid uk-grid-medium">
-    
+
       <div class="uk-width-1-2">
         <div class="uk-panel uk-panel-box">
           <form class="uk-form uk-width-1-1">
@@ -26,6 +26,22 @@
             <br>
             <button type="button" onclick={ updateCampaignItemHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
             <a href="/#campaigns/{ facade.getCurrentCampaign().urn }" class="uk-button uk-button-primary uk-button-large uk-float-right brown darken-2"><i class="uk-icon-backward"></i>Campagne</a>
+          </form>
+        </div>
+      </div>
+
+      <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_NUMBER' } class="uk-width-1-2">
+        <div class="uk-panel uk-panel-box">
+          <form class="uk-form uk-width-1-1">
+            <fieldset>
+              <div class="uk-form-row uk-width-1-1">
+                <span class="uk-text-bold">Options</span><br>
+                <span class="uk-text-bold">Minimum</span><br>
+                <input onchange={ changeMinimumHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().minimum }" placeholder="Saisissez une valeur">
+                  <span class="uk-text-bold">Maximum</span><br>
+                  <input onchange={ changeMaximumHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().maximum }" placeholder="Saisissez une valeur">
+              </div>
+            </fieldset>
           </form>
         </div>
       </div>
@@ -55,15 +71,15 @@
           </form>
         </div>
       </div>
-      
+
     </div>
-    
+
   </div>
-  
+
   <script>
-    
+
     var self = this;
-    
+
     self.on("mount", function() {
       facade.actions.campaigns.selectCampaignItem(riot.router.current.params.urn).then(function() {
         return facade.actions.campaigns.selectCampaign(facade.getCurrentCampaignItem().urnCampaign);
@@ -73,46 +89,54 @@
       });
       $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
     });
-    
+
     self.nestableArrivedHandler = function() {
       facade.debugHTML("entity.tag: %s", "nestableArrivedHandler");
       UIkit.nestable($(".uk-nestable"));
     };
-    
+
+    changeMinimumHandler(e) {
+      facade.getCurrentCampaignItem().minimum = e.currentTarget.value;
+    };
+
+    changeMaximumHandler(e) {
+      facade.getCurrentCampaignItem().maximum = e.currentTarget.value;
+    };
+
     changeDescriptionHandler(e) {
       facade.getCurrentCampaignItem().description = e.currentTarget.value;
     };
-    
+
     changeQuestionHandler(e) {
       facade.getCurrentCampaignItem().question = e.currentTarget.value;
     };
-    
+
     changeTagsHandler(e) {
       facade.getCurrentCampaignItem().tags = e.currentTarget.value;
     };
-    
+
     updateCampaignItemHandler(e) {
       facade.actions.campaigns.updateItem(facade.getCurrentCampaignItem());
     };
-    
+
     changeMultipleSelectionsHandler(e) {
       facade.getCurrentCampaignItem().multipleSelections = e.currentTarget.checked;
     };
-    
+
     changeRandomizeHandler(e) {
       facade.getCurrentCampaignItem().randomize = e.currentTarget.checked;
     };
-    
+
     changeRequiredHandler(e) {
       facade.getCurrentCampaignItem().required = e.currentTarget.checked;
     };
-    
+
   </script>
-  
+
   <style scoped>
     .uk-container {
       width: 960px;
     }
   </script>
-  
+
 </campaign-item>
