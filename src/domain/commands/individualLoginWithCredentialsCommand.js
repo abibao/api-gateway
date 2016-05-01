@@ -23,8 +23,8 @@ module.exports = function (payload) {
             }
             return self.execute('query', 'authentificationGlobalInformationsQuery', credentials).then(function (infos) {
               if (infos.abibaoCompleted.length === 0 && infos.abibaoInProgress.length === 0) {
-                return self.execute('command', 'individualCreateAbibaoSurveyCommand', {target: infos.urn, position: 1}).then(function () {
-                  return self.execute('command', 'individualCreateAbibaoSurveyCommand', {target: infos.urn, position: 2}).then(function () {
+                return self.execute('command', 'individualCreateAbibaoSurveyCommand', {email: payload.email, target: infos.urn, position: 1}).then(function () {
+                  return self.execute('command', 'individualCreateAbibaoSurveyCommand', {email: payload.email, target: infos.urn, position: 2}).then(function () {
                     return self.execute('query', 'authentificationGlobalInformationsQuery', credentials).then(function (infos) {
                       resolve({token, globalInfos: infos})
                     })
