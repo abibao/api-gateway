@@ -41,6 +41,16 @@ module.exports = function (thinky) {
   })
 
   SurveyModel.define('formatAnswer', function (component, value) {
+    // value is an array of database urn ?
+    if (_.isArray(value)) {
+      _.map(value, function (item) {
+        if (_.split(item, 'urn:abibao:database:').length === 2) {
+          return global.ABIBAO.services.domain.getIDfromURN(item)
+        } else {
+          return item
+        }
+      })
+    }
     // value is a database urn ?
     if (_.split(value, 'urn:abibao:database:').length === 2) {
       value = global.ABIBAO.services.domain.getIDfromURN(value)
