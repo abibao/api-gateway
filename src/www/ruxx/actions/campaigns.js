@@ -210,6 +210,33 @@ function CampaignsActions (facade) {
     })
   }
 
+  self.createCampaignItemChoice = function () {
+    return new Promise(function (resolve, reject) {
+      var data = {
+        item: facade.getCurrentCampaignItem().urn,
+        campaign: facade.getCurrentCampaign().urn,
+        prefix: '_PREFIX_',
+        suffix: '_SUFFIX_',
+        text: 'Saisir le texte',
+        position: facade.getCurrentCampaignItem().choices.length + 1
+      }
+      self.facade.setLoading(true)
+      self.facade.call('POST', '/v1/choices', data)
+        .then(function (item) {
+          self.facade.debugAction('CampaignsActions.createCampaignItemChoice %o', item)
+          self.facade.setLoading(false)
+          facade.setCurrentCampaignItemChoice(item)
+          resolve()
+        })
+        .catch(function (error) {
+          self.facade.setLoading(false)
+          self.facade.debugAction('CampaignsActions.createCampaignItemChoice (ERROR) %o', error)
+          self.facade.trigger('EVENT_CALLER_ERROR', error)
+          reject(error)
+        })
+    })
+  }
+
   self.selectCampaignItemChoice = function (urn) {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)

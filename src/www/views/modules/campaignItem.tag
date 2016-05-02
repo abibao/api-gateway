@@ -26,39 +26,37 @@
               </div>
             </fieldset>
             <br>
-            <button type="button" onclick={ updateCampaignItemHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+            <button type="button" onclick={ updateCampaignItemHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
             <a href="/#campaigns/{ facade.getCurrentCampaign().urn }" class="uk-button uk-button-primary uk-button-large uk-float-right brown darken-2"><i class="uk-icon-backward"></i>Campagne</a>
           </form>
         </div>
       </div>
 
-      <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_DROPDOWN' } class="uk-width-1-2">
+      <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_DROPDOWN' || facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_MULTIPLE_CHOICE' } class="uk-width-1-2">
+
         <div class="uk-panel uk-panel-box">
-          <form class="uk-form uk-width-1-1">
-            <fieldset>
-              <div class="uk-form-row uk-width-1-1">
-                <span class="uk-text-bold">Options</span><br>
-                <input onchange={ changeRequiredHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().required===true }"> <label>Obligatoire</label><br>
-                <input onchange={ changeMultipleSelectionsHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().multipleSelections===true }"> <label>Sélection multiples</label><br>
-                <input onchange={ changeRandomizeHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().randomize===true }"> <label>Affichage au hasard</label><br>
-                <br>
-                <span class="uk-text-bold">Placeholder</span><br>
-                <input onchange={ changePlaceholderHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().placeholder }" placeholder="Saisissez une valeur">
-              </div>
-              <div class="uk-form-row uk-width-1-1">
-                <span class="uk-text-bold">Choix possibles</span>
-                <ul onchange={ changeCampaignItemsChoicesOrderHandler } class="uk-nestable" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
-                  <li class="uk-nestable-item" each={ campaignItemChoice in facade.getCurrentCampaignItem().choices } data-uk-tooltip="pos:'left'">
-                    <div class="uk-nestable-panel uk-text-truncate">
-                      <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-                      <a href="/#campaigns-items-choices/{ campaignItemChoice.urn }">{ campaignItemChoice.text }</a>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </fieldset>
+          <h4>Options</h4>
+          <input onchange={ changeRequiredHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().required===true }"> <label>Obligatoire</label><br>
+          <input onchange={ changeMultipleSelectionsHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().multipleSelections===true }"> <label>Sélection multiples</label><br>
+          <input onchange={ changeRandomizeHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().randomize===true }"> <label>Affichage au hasard</label><br>
+          <form if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_DROPDOWN' } class="uk-form uk-width-1-1">
+            <br><span class="uk-text-bold">Placeholder</span><br>
+            <input onchange={ changePlaceholderHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().placeholder }" placeholder="Saisissez une valeur">
           </form>
+          <h4>Choix de la question</h4>
+          <ul onchange={ changeCampaignItemsChoicesOrderHandler } class="uk-nestable" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
+            <li class="uk-nestable-item" each={ campaignItemChoice in facade.getCurrentCampaignItem().choices } data-uk-tooltip="pos:'left'">
+              <input type="text" class="urnCampaignItemChoice" value={ campaignItemChoice.urn } style="display:none">
+              <div class="uk-nestable-panel uk-text-truncate">
+                <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
+                <a href="/#campaigns-items-choices/{ campaignItemChoice.urn }">({ campaignItemChoice.position }) { campaignItemChoice.text }</a>
+              </div>
+            </li>
+          </ul>
+          <button type="button" onclick={ updateCampaignItemsChoicesHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
+          <button type="button" onclick={ createCampaignItemChoiceHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right">Ajouter</button>
         </div>
+
       </div>
 
       <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_NUMBER' } class="uk-width-1-2">
@@ -71,32 +69,6 @@
                 <input onchange={ changeMinimumHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().minimum }" placeholder="Saisissez une valeur">
                 <span class="uk-text-bold">Maximum</span><br>
                 <input onchange={ changeMaximumHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().maximum }" placeholder="Saisissez une valeur">
-              </div>
-            </fieldset>
-          </form>
-        </div>
-      </div>
-
-      <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_MULTIPLE_CHOICE' } class="uk-width-1-2">
-        <div class="uk-panel uk-panel-box">
-          <form class="uk-form uk-width-1-1">
-            <fieldset>
-              <div class="uk-form-row uk-width-1-1">
-                <span class="uk-text-bold">Options</span><br>
-                <input onchange={ changeRequiredHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().required===true }"> <label>Obligatoire</label><br>
-                <input onchange={ changeMultipleSelectionsHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().multipleSelections===true }"> <label>Sélection multiples</label><br>
-                <input onchange={ changeRandomizeHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().randomize===true }"> <label>Affichage au hasard</label><br>
-              </div>
-              <div class="uk-form-row uk-width-1-1">
-                <span class="uk-text-bold">Choix possibles</span>
-                <ul onchange={ changeCampaignItemsChoicesOrderHandler } class="uk-nestable" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
-                  <li class="uk-nestable-item" each={ campaignItemChoice in facade.getCurrentCampaignItem().choices } data-uk-tooltip="pos:'left'">
-                    <div class="uk-nestable-panel uk-text-truncate">
-                      <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-                      <a href="/#campaigns-items-choices/{ campaignItemChoice.urn }">{ campaignItemChoice.text }</a>
-                    </div>
-                  </li>
-                </ul>
               </div>
             </fieldset>
           </form>
@@ -128,6 +100,16 @@
     self.nestableArrivedHandler = function() {
       facade.debugHTML("entity.tag: %s", "nestableArrivedHandler");
       UIkit.nestable($(".uk-nestable"));
+    };
+
+    changeCampaignItemsChoicesOrderHandler(e) {
+      var i = 1;
+      lodash.map($(".uk-nestable li .urnCampaignItemChoice"), function(item) {
+        var item = lodash.find(facade.getCurrentCampaignItem().choices, {urn: item.value});
+        item.position = i;
+        i = i + 1;
+      });
+      self.update();
     };
 
     changePlaceholderHandler(e) {
@@ -162,6 +144,11 @@
       facade.actions.campaigns.updateItem(facade.getCurrentCampaignItem());
     };
 
+    createCampaignItemChoiceHandler(e) {
+        facade.actions.campaigns.createCampaignItemChoice()
+          .then(facade.actions.campaigns.selectCampaignItem(facade.getCurrentCampaignItem().urn))
+    }
+
     changeMultipleSelectionsHandler(e) {
       facade.getCurrentCampaignItem().multipleSelections = e.currentTarget.checked;
     };
@@ -172,6 +159,12 @@
 
     changeRequiredHandler(e) {
       facade.getCurrentCampaignItem().required = e.currentTarget.checked;
+    };
+
+    updateCampaignItemsChoicesHandler(e) {
+      lodash.map(facade.getCurrentCampaignItem().choices, function(item) {
+        facade.actions.campaigns.updateItemChoice(item);
+      });
     };
 
   </script>

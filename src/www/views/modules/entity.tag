@@ -31,7 +31,7 @@
               </div>
             </fieldset>
             <br>
-            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
           </form>
           <form if={ dotnav==="dotnav2" } class="uk-form uk-width-1-1">
             <fieldset>
@@ -45,7 +45,7 @@
               </div>
             </fieldset>
             <br>
-            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
           </form>
           <form if={ dotnav==="dotnav3" } class="uk-form uk-width-1-1">
             <div class="uk-form-row uk-width-1-1">
@@ -59,7 +59,7 @@
               </fieldset>
             </div>
             <br>
-            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+            <button type="button" onclick={ updateEntityHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
           </form>
         </div>
 
@@ -77,8 +77,8 @@
               </div>
             </li>
           </ul>
-          <button type="button" onclick={ updateCampaignsHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
-          <button type="button" onclick={ createCampaignHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2 white-text">Ajouter</button>
+          <button type="button" onclick={ updateCampaignsHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
+          <button type="button" onclick={ createCampaignHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right">Ajouter</button>
         </div>
 
       </div>

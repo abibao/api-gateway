@@ -24,7 +24,7 @@
               </div>
             </fieldset>
             <br>
-            <button type="button" onclick={ updateCampaignHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+            <button type="button" onclick={ updateCampaignHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
           </form>
         </div>
 
@@ -45,11 +45,11 @@
                 <i if={ campaignItem.type==="ABIBAO_COMPONENT_YES_NO" } class="uk-nestable-handle uk-icon uk-icon-toggle-on uk-margin-small-right"></i>
                 <div if={ campaignItem.choices.length>0 } class="uk-badge uk-badge-notification uk-badge-success">{ campaignItem.choices.length }</div>
                 <div if={ campaignItem.choices.length===0 } class="uk-badge uk-badge-notification uk-badge-danger"> </div>
-                <a href="/#campaigns-items/{ campaignItem.urn }">{ campaignItem.question }</a>
+                <a href="/#campaigns-items/{ campaignItem.urn }">({ campaignItem.position }) { campaignItem.question }</a>
               </div>
             </li>
           </ul>
-          <button type="button" onclick={ updateCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+          <button type="button" onclick={ updateCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large">Sauver</button>
           <br><br>
           <div class="uk-form-select uk-button uk-button-large uk-width-2-4 uk-float-left" data-uk-form-select>
             <span></span>
@@ -60,7 +60,7 @@
               <option>DROPDOWN</option>
             </select>
           </div>
-          <button type="button" onclick={ createCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2 white-text">Ajouter</button>
+          <button type="button" onclick={ createCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right">Ajouter</button>
         </div>
       </div>
     </div>
