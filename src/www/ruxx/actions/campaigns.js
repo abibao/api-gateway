@@ -2,23 +2,101 @@ function CampaignsActions (facade) {
   var self = this
   self.facade = facade
 
-  self.createItemMultipleChoice = function (urn) {
-    var payload = {
-      campaign: urn,
-      question: 'The question ?',
-      required: true,
-      multipleSelections: false,
-      randomize: false,
-      addCustomOption: false,
-      alignment: 'horizontal',
-      label: 'ABIBAO_ANSWER_'
-    }
-    facade.call('POST', '/v1/campaigns/items/multiple-choice', payload).then(function (item) {
-      self.facade.debugAction('CampaignsActions.createItemMultipleChoice %o', item)
-    // facade.setCurrentCampaign(campaign)
-    }).catch(function (error) {
-      self.facade.debugAction('CampaignsActions.createItemMultipleChoice (ERROR) %o', error)
-      facade.trigger('EVENT_CALLER_ERROR', error)
+  self.create = function () {
+    return new Promise(function (resolve, reject) {
+      var data = {
+        urnCompany: facade.getCurrentEntity().urn,
+        name: 'Nouvelle campagne',
+        position: facade.getCurrentEntity().campaigns.length + 1,
+        screenWelcomeContent: '',
+        screenThankYouContent: '',
+        price: 0,
+        currency: 'EUR',
+        published: false,
+        description: 'Veuillez saisir une description'
+      }
+      self.facade.setLoading(true)
+      facade.call('POST', '/v1/campaigns', data).then(function (campaign) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.create %o', campaign)
+        resolve()
+      }).catch(function (error) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.create (ERROR) %o', error)
+        self.facade.trigger('EVENT_CALLER_ERROR', error)
+        reject(error)
+      })
+    })
+  }
+
+  self.createItemDropdown = function () {
+    return new Promise(function (resolve, reject) {
+      var payload = {
+        campaign: facade.getCurrentCampaign().urn,
+        question: 'Quelle est la question ?',
+        required: true,
+        position: facade.getCurrentCampaign().items.length + 1,
+        label: 'ABIBAO_ANSWER_',
+        placeholder: 'Ceci est un placeholder'
+      }
+      facade.call('POST', '/v1/campaigns/items/dropdown', payload).then(function (item) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemDropdown %o', item)
+        resolve()
+      }).catch(function (error) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemDropdown (ERROR) %o', error)
+        self.facade.trigger('EVENT_CALLER_ERROR', error)
+        reject(error)
+      })
+    })
+  }
+
+  self.createItemYesNo = function () {
+    return new Promise(function (resolve, reject) {
+      var payload = {
+        campaign: facade.getCurrentCampaign().urn,
+        question: 'Quelle est la question ?',
+        required: true,
+        position: facade.getCurrentCampaign().items.length + 1,
+        label: 'ABIBAO_ANSWER_'
+      }
+      facade.call('POST', '/v1/campaigns/items/yes-no', payload).then(function (item) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemYesNo %o', item)
+        resolve()
+      }).catch(function (error) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemYesNo (ERROR) %o', error)
+        self.facade.trigger('EVENT_CALLER_ERROR', error)
+        reject(error)
+      })
+    })
+  }
+
+  self.createItemMultipleChoice = function () {
+    return new Promise(function (resolve, reject) {
+      var payload = {
+        campaign: facade.getCurrentCampaign().urn,
+        question: 'Quelle est la question ?',
+        required: true,
+        position: facade.getCurrentCampaign().items.length + 1,
+        label: 'ABIBAO_ANSWER_',
+        multipleSelections: false,
+        randomize: false,
+        addCustomOption: false,
+        alignment: 'horizontal'
+      }
+      facade.call('POST', '/v1/campaigns/items/multiple-choice', payload).then(function (item) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemMultipleChoice %o', item)
+        resolve()
+      }).catch(function (error) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemMultipleChoice (ERROR) %o', error)
+        self.facade.trigger('EVENT_CALLER_ERROR', error)
+        reject(error)
+      })
     })
   }
 
@@ -56,7 +134,7 @@ function CampaignsActions (facade) {
       delete data.type
       delete data.choices
       delete data.urnCampaign
-      delete directive
+      delete data.directive
       self.facade.setLoading(true)
       facade.call('PATCH', '/v1/campaigns/items/' + item.urn, data).then(function (item) {
         self.facade.setLoading(false)

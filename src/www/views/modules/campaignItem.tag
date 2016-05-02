@@ -15,6 +15,8 @@
                 <input class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaign().name }" disabled>
                 <span class="uk-text-bold">Type</span><br>
                 <input class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().type }" disabled>
+                <span class="uk-text-bold">Label</span><br>
+                <input onchange={ changeLabelHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().label }" placeholder="Saisissez une valeur">
                 <span class="uk-text-bold">Question</span><br>
                 <input onchange={ changeQuestionHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().question }" placeholder="Saisissez une valeur">
                 <span class="uk-text-bold">Description</span><br>
@@ -30,6 +32,35 @@
         </div>
       </div>
 
+      <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_DROPDOWN' } class="uk-width-1-2">
+        <div class="uk-panel uk-panel-box">
+          <form class="uk-form uk-width-1-1">
+            <fieldset>
+              <div class="uk-form-row uk-width-1-1">
+                <span class="uk-text-bold">Options</span><br>
+                <input onchange={ changeRequiredHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().required===true }"> <label>Obligatoire</label><br>
+                <input onchange={ changeMultipleSelectionsHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().multipleSelections===true }"> <label>Sélection multiples</label><br>
+                <input onchange={ changeRandomizeHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().randomize===true }"> <label>Affichage au hasard</label><br>
+                <br>
+                <span class="uk-text-bold">Placeholder</span><br>
+                <input onchange={ changePlaceholderHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().placeholder }" placeholder="Saisissez une valeur">
+              </div>
+              <div class="uk-form-row uk-width-1-1">
+                <span class="uk-text-bold">Choix possibles</span>
+                <ul onchange={ changeCampaignItemsChoicesOrderHandler } class="uk-nestable" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
+                  <li class="uk-nestable-item" each={ campaignItemChoice in facade.getCurrentCampaignItem().choices } data-uk-tooltip="pos:'left'">
+                    <div class="uk-nestable-panel uk-text-truncate">
+                      <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
+                      <a href="/#campaigns-items-choices/{ campaignItemChoice.urn }">{ campaignItemChoice.text }</a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+
       <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_NUMBER' } class="uk-width-1-2">
         <div class="uk-panel uk-panel-box">
           <form class="uk-form uk-width-1-1">
@@ -38,8 +69,8 @@
                 <span class="uk-text-bold">Options</span><br>
                 <span class="uk-text-bold">Minimum</span><br>
                 <input onchange={ changeMinimumHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().minimum }" placeholder="Saisissez une valeur">
-                  <span class="uk-text-bold">Maximum</span><br>
-                  <input onchange={ changeMaximumHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().maximum }" placeholder="Saisissez une valeur">
+                <span class="uk-text-bold">Maximum</span><br>
+                <input onchange={ changeMaximumHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().maximum }" placeholder="Saisissez une valeur">
               </div>
             </fieldset>
           </form>
@@ -90,10 +121,22 @@
       $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
     });
 
+    self.on("update", function() {
+      $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
+    })
+
     self.nestableArrivedHandler = function() {
       facade.debugHTML("entity.tag: %s", "nestableArrivedHandler");
       UIkit.nestable($(".uk-nestable"));
     };
+
+    changePlaceholderHandler(e) {
+      facade.getCurrentCampaignItem().placeholder = e.currentTarget.value;
+    }
+
+    changeLabelHandler(e) {
+      facade.getCurrentCampaignItem().label = e.currentTarget.value;
+    }
 
     changeMinimumHandler(e) {
       facade.getCurrentCampaignItem().minimum = e.currentTarget.value;

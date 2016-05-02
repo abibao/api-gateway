@@ -21,6 +21,7 @@ module.exports = {
       question: Joi.string().required(),
       description: Joi.string(),
       required: Joi.boolean().required().default(false),
+      position: Joi.number().min(0),
       image: Joi.string().default(''),
       // component specific
       multipleSelections: Joi.boolean().required().default(false),

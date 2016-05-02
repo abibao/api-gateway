@@ -100,6 +100,10 @@
       $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
     });
 
+    self.on("update", function() {
+      $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
+    })
+
     selectDotnavDefault(e) {
       self.dotnav = "dotnav1";
       self.update();
@@ -200,10 +204,10 @@
     };
 
     createCampaignHandler(e) {
-    };
-
-    closeEntityHandler(e) {
-      riot.route("/homepage");
+      facade.actions.campaigns.create()
+        .then(function() {
+          facade.actions.entities.selectEntity(facade.getCurrentEntity().urn)
+        });
     };
 
   </script>

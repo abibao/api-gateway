@@ -22,6 +22,7 @@ module.exports = {
       description: Joi.string().allow(''),
       placeholder: Joi.string().allow(''),
       required: Joi.boolean().required().default(false),
+      position: Joi.number().min(0),
       image: Joi.string().allow('').default(''),
       // component specific
       // abibao

@@ -50,9 +50,18 @@
             </li>
           </ul>
           <button type="button" onclick={ updateCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
+          <br><br>
+          <div class="uk-form-select uk-button uk-button-large uk-width-2-4 uk-float-left" data-uk-form-select>
+            <span></span>
+            <select onchange={ changeCreateItemWithType }>
+              <option>YES_NO</option>
+              <option>NUMBER</option>
+              <option>MULTIPLE_CHOICE</option>
+              <option>DROPDOWN</option>
+            </select>
+          </div>
           <button type="button" onclick={ createCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2 white-text">Ajouter</button>
         </div>
-
       </div>
     </div>
 
@@ -62,6 +71,8 @@
 
     var self = this;
 
+    self.createItemWithType = 'YES_NO'
+
     self.on("mount", function() {
       facade.actions.campaigns.selectCampaign(riot.router.current.params.urn)
       .catch(function(error) {
@@ -70,14 +81,42 @@
       $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
     });
 
+    self.on("update", function() {
+      $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
+    })
+
     self.nestableArrivedHandler = function() {
       facade.debugHTML("entity.tag: %s", "nestableArrivedHandler");
       UIkit.nestable($(".uk-nestable"));
     };
 
-    createItemMultipleChoiceHandler(e) {
-      //facade.trigger("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", facade.getCurrentCampaign().urn);
-    };
+    createCampaignItemsHandler(e) {
+      facade.debugHTML("createCampaignItemsHandler: %s", self.createItemWithType);
+      switch (self.createItemWithType) {
+        case 'DROPDOWN':
+          facade.actions.campaigns.createItemDropdown()
+            .then(function() {
+              facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
+            });
+          break;
+        case 'YES_NO':
+          facade.actions.campaigns.createItemYesNo()
+            .then(function() {
+              facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
+            });
+          break;
+        case 'MULTIPLE_CHOICE':
+          facade.actions.campaigns.createItemMultipleChoice()
+            .then(function() {
+              facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
+            });
+          break;
+      }
+    }
+
+    changeCreateItemWithType(e) {
+      self.createItemWithType = e.currentTarget.value
+    }
 
     changesSreenWelcomeContentHandler(e) {
       facade.getCurrentCampaign().screenWelcomeContent = e.currentTarget.value;
@@ -125,10 +164,6 @@
       lodash.map(facade.getCurrentCampaign().items, function(item) {
         facade.actions.campaigns.updateItem(item);
       });
-    };
-
-    closeCampaignHandler(e) {
-
     };
 
   </script>

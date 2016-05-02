@@ -49,7 +49,7 @@
         riot.route("/homepage");
       });
     });
-
+    
     changePrefixHandler(e) {
       facade.getCurrentCampaignItemChoice().prefix = e.currentTarget.value;
     }
