@@ -62,6 +62,10 @@
       <div if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_NUMBER' } class="uk-width-1-2">
         <div class="uk-panel uk-panel-box">
           <form class="uk-form uk-width-1-1">
+            <br><span class="uk-text-bold">Placeholder</span><br>
+            <input onchange={ changePlaceholderHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().placeholder }" placeholder="Saisissez une valeur">
+          </form>
+          <form class="uk-form uk-width-1-1">
             <fieldset>
               <div class="uk-form-row uk-width-1-1">
                 <span class="uk-text-bold">Options</span><br>
