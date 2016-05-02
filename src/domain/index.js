@@ -136,28 +136,30 @@ internals.injector = function (type) {
 internals.execute = function (type, promise, params) {
   return new Promise(function (resolve, reject) {
     var starttime = new Date()
-    // logger
-    var request = {
+    var data = {
       uuid: uuid.v1(),
-      name: promise
+      environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV'),
+      type: type,
+      promise: promise
     }
-    abibao.debug('[%s] start %s %s %o', request.uuid, type, promise, params)
+    abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
     global.ABIBAO.services.domain[promise](params)
       .then(function (result) {
-        request.exectime = new Date() - starttime
-        // logger
-        // self.logger.info({cqrs: request}, '[' + type + ']')
-        // debugger
-        abibao.debug('[%s] finish %s %s', request.uuid, type, promise)
+        data.exectime = new Date() - starttime
+        // loggers
+        global.ABIBAO.logger.info(data)
+        // debuggers
+        abibao.debug('[%s] finish %s %s', data.uuid, type, promise)
         // return
         resolve(result)
       })
       .catch(function (error) {
-        request.exectime = new Date() - starttime
-        // logger
-        // self.logger.error({cqrs: request}, '[' + type + ']')
-        // debugger
-        abibao.error('[%s] finish %s %s %o', request.uuid, type, promise, error)
+        data.exectime = new Date() - starttime
+        data.error = error
+        // loggers
+        global.ABIBAO.logger.error(data)
+        // debuggers
+        abibao.error('[%s] finish %s %s %o', data.uuid, type, promise, error)
         // return
         reject(error)
       })
