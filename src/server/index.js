@@ -37,7 +37,7 @@ internals.initialize = function () {
       })
       internals.server.logger = global.ABIBAO.logger
       internals.server.connection(internals.options)
-      var plugins = ['good', 'auth', 'swagger']
+      var plugins = ['inert', 'good', 'auth']
       async.mapSeries(plugins, function (item, next) {
         require('./plugins/' + item)(internals.server, function () {
           next(null, item)

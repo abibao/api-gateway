@@ -20,13 +20,14 @@ module.exports = function (message) {
         // send email
         var email = new sendgrid.Email({
           to: [message.email],
-          from: 'team@abibao.com',
-          fromname: 'Team Abibao',
-          subject: 'Bienvenue sur Abibao',
+          from: 'bonjour@abibao.com',
+          fromname: 'Abibao',
+          subject: "Regardez comme il est facile d'aider une association.",
           text: ' ',
           html: ' '
         })
         email.addCategory('individual_welcome')
+        email.setASMGroupID(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_ASM_GROUP_ID_ABIBAO_AFFECT_CAMPAIGNS_AUTO'))
         email.addSubstitution('%urn_survey%', global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_URI') + '/redirect/campaign/affect/' + sealed)
         email.addFilter('templates', 'enable', 1)
         email.addFilter('templates', 'template_id', global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_TEMPLATE_ABIBAO_AFFECT_CAMPAIGNS_AUTO'))

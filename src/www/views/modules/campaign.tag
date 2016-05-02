@@ -1,12 +1,12 @@
 <campaign>
-  
+
   <navbar> </navbar>
-  
+
   <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1">
-    
+
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2">
-      
+
         <div class="uk-panel uk-panel-box">
           <form class="uk-form uk-width-1-1">
             <fieldset>
@@ -17,16 +17,20 @@
                 <input onchange={ changeNameHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaign().name }" placeholder="Saisissez une valeur">
                 <span class="uk-text-bold">Description</span><br>
                 <textarea onchange={ changeDescriptionHandler } rows="6" class="uk-width-1-1" placeholder="Saisissez une valeur">{ facade.getCurrentCampaign().description }</textarea>
+                <span class="uk-text-bold">Welcome Content</span><br>
+                <textarea onchange={ changesSreenWelcomeContentHandler } rows="6" class="uk-width-1-1" placeholder="Saisissez une valeur">{ facade.getCurrentCampaign().screenWelcomeContent }</textarea>
+                <span class="uk-text-bold">ThankYou Content</span><br>
+                <textarea onchange={ changeScreenThankYouContentHandler } rows="6" class="uk-width-1-1" placeholder="Saisissez une valeur">{ facade.getCurrentCampaign().screenThankYouContent }</textarea>
               </div>
             </fieldset>
             <br>
             <button type="button" onclick={ updateCampaignHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
           </form>
         </div>
-        
+
       </div>
       <div class="uk-width-1-2">
-        
+
         <div class="uk-panel uk-panel-box">
           <h4>Questions de la campagne</h4>
           <ul onchange={ changeCampaignItemsOrderHandler } class="uk-nestable" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
@@ -48,16 +52,16 @@
           <button type="button" onclick={ updateCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-success uk-button-large blue-grey darken-2 white-text">Sauver</button>
           <button type="button" onclick={ createCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right brown darken-2 white-text">Ajouter</button>
         </div>
-        
+
       </div>
     </div>
-  
+
   </div>
 
   <script>
-    
+
     var self = this;
-    
+
     self.on("mount", function() {
       facade.actions.campaigns.selectCampaign(riot.router.current.params.urn)
       .catch(function(error) {
@@ -65,16 +69,24 @@
       });
       $(document).arrive(".uk-nestable", self.nestableArrivedHandler);
     });
-    
+
     self.nestableArrivedHandler = function() {
       facade.debugHTML("entity.tag: %s", "nestableArrivedHandler");
       UIkit.nestable($(".uk-nestable"));
     };
-    
+
     createItemMultipleChoiceHandler(e) {
       //facade.trigger("CREATE_ABIBAO_COMPONENT_MULTIPLE_CHOICE", facade.getCurrentCampaign().urn);
     };
-    
+
+    changesSreenWelcomeContentHandler(e) {
+      facade.getCurrentCampaign().screenWelcomeContent = e.currentTarget.value;
+    }
+
+    changeScreenThankYouContentHandler(e) {
+      facade.getCurrentCampaign().screenThankYouContent = e.currentTarget.value;
+    }
+
     changeCampaignItemsOrderHandler(e) {
       var i = 1;
       lodash.map($(".uk-nestable li .urnCampaignItem"), function(item) {
@@ -84,43 +96,43 @@
       });
       self.update();
     };
-    
+
     changeNameHandler(e) {
       facade.getCurrentCampaign().name =  e.currentTarget.value;
     };
-    
+
     changePriceHandler(e) {
       facade.getCurrentCampaign().price =  e.currentTarget.value;
     };
-    
+
     changeCurrencyHandler(e) {
       facade.getCurrentCampaign().currency =  e.currentTarget.selectedOptions[0].value;
     };
-    
+
     changeDescriptionHandler(e) {
       facade.getCurrentCampaign().description = e.currentTarget.value;
     };
-    
+
     changePublishedHandler(e) {
       facade.getCurrentCampaign().published = e.currentTarget.checked;
     };
-    
+
     updateCampaignHandler(e) {
       facade.actions.campaigns.update(facade.getCurrentCampaign());
     };
-    
+
     updateCampaignItemsHandler(e) {
       lodash.map(facade.getCurrentCampaign().items, function(item) {
         facade.actions.campaigns.updateItem(item);
       });
     };
-    
+
     closeCampaignHandler(e) {
-      
+
     };
-    
+
   </script>
-  
+
   <style scoped>
     .uk-container {
       width: 960px;
@@ -142,5 +154,5 @@
       padding-bottom: 0;
     }
   </style>
-  
+
 </campaign>

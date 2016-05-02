@@ -41,21 +41,29 @@ module.exports = function (thinky) {
   })
 
   SurveyModel.define('formatAnswer', function (component, value) {
-    // value is an array of database urn ?
-    if (_.isArray(value)) {
-      _.map(value, function (item) {
-        if (_.split(item, 'urn:abibao:database:').length === 2) {
-          return global.ABIBAO.services.domain.getIDfromURN(item)
-        } else {
-          return item
-        }
-      })
+    var result
+    switch (true) {
+      // value is an array of database urn ?
+      case _.isArray(value):
+        result = []
+        _.map(value, function (item) {
+          if (_.split(item, 'urn:abibao:database:').length === 2) {
+            result.push(global.ABIBAO.services.domain.getIDfromURN(item))
+          } else {
+            result.push(item)
+          }
+        })
+        break
+      // value is a database urn ?
+      case _.split(value, 'urn:abibao:database:').length === 2:
+        result = global.ABIBAO.services.domain.getIDfromURN(value)
+        break
+      // others cases
+      default:
+        result = value
+        break
     }
-    // value is a database urn ?
-    if (_.split(value, 'urn:abibao:database:').length === 2) {
-      value = global.ABIBAO.services.domain.getIDfromURN(value)
-    }
-    return value
+    return result
   })
 
   SurveyModel.pre('save', function (next) {
