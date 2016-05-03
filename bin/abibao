@@ -4,39 +4,39 @@
 // ...
 
 // declare external libraries
-var program = require("commander");
+var program = require('commander')
 
 // declare project libraries
-var packagejson = require("./../package.json"),
-    taskAutoGenerate = require("./tasks/autoGenerate"),
-    notice = require("./console").notice,
-    warning = require("./console").warning;
+var packagejson = require('./../package.json')
+var taskAutoGenerate = require('./tasks/autoGenerate')
+var notice = require('./console').notice
+var warning = require('./console').warning
 
 // now it"s all done folks!
-process.on("exit", function() {
-  warning("***********************************************************************");
-  notice();
-});
+process.on('exit', function () {
+  warning('***********************************************************************')
+  notice()
+})
 
 // initialize
-program.version(packagejson.version);
+program.version(packagejson.version)
 
 // colors is not for the deads!
-notice();
-warning("***********************************************************************");
-warning("ABIBAO CREATE RESSOURCES");
-warning("Version: ", packagejson.version);
-warning("Description: ", packagejson.description);
+notice()
+warning('***********************************************************************')
+warning('ABIBAO CREATE RESSOURCES')
+warning('Version: ', packagejson.version)
+warning('Description: ', packagejson.description)
 
 program
-  .command("generate")
-  .description("auto-generate CQRS system\n")
-  .action(taskAutoGenerate);
+  .command('generate')
+  .description('auto-generate CQRS system\n')
+  .action(taskAutoGenerate)
 
 // You want my help or not! Too late!
-program.parse(process.argv);
-if ( program.args.length===0 ) {
-  warning("***********************************************************************");
-  program.help();
-  process.exit(0);
+program.parse(process.argv)
+if (program.args.length === 0) {
+  warning('***********************************************************************')
+  program.help()
+  process.exit(0)
 }

@@ -1,34 +1,28 @@
-"use strict";
+'use strict'
 
-var Good = require("good");
+var Good = require('good')
 
-var GoodProvision = function(server, callback) {
+var GoodProvision = function (server, callback) {
   var options = {
     opsInterval: 1000,
     reporters: [{
-      reporter: require("good-bunyan"),
+      reporter: require('good-bunyan'),
       config: {
         logger: server.logger,
         levels: {
-          ops: "debug",
-          response: "info"
-        },
-        formatters: {
-          response(data) {
-            return data.method+" "+data.path+" "+data.statusCode+" ("+data.responseTime+"ms)";
-          }
+          ops: 'debug',
+          response: 'info'
         }
       },
-      events: { log: "*", response: "*" }
-    }] 
-  };
+      events: { log: '*', response: '*' }
+    }]
+  }
   server.register({
     register: Good,
-    options
-  }, function (err) {
-    if (err) { return callback(err); }
-    callback();
-  });
-};
+  options}, function (err) {
+    if (err) { return callback(err) }
+    callback()
+  })
+}
 
-module.exports = GoodProvision;
+module.exports = GoodProvision

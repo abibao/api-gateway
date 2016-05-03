@@ -1,29 +1,20 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
-var uuid = require("node-uuid");
+var Promise = require('bluebird')
 
-var CURRENT_NAME = "IndividualDeleteCommand";
+var Hoek = require('hoek')
 
-module.exports = function(urn) {
-
-  var self = this;
-  
-  return new Promise(function(resolve, reject) {
+module.exports = function (urn) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  return new Promise(function (resolve, reject) {
     try {
-      var quid = uuid.v1();
-      self.IndividualModel.get( self.getIDfromURN(urn) ).run().then(function(model) {
-        return model.delete().then(function() {
-          self.debug.command(CURRENT_NAME, quid);
-          resolve({deleted:true});
-        });
-      })
-      .catch(function(error) {
-        reject(error);
-      });
+      self.IndividualModel.get(self.getIDfromURN(urn))
+        .then(function (result) {
+          result.delete().then(resolve)
+        })
+        .catch(reject)
     } catch (e) {
-      reject(e);
+      reject(e)
     }
-  });
-  
-};
+  })
+}

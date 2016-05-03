@@ -1,61 +1,52 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
+var Promise = require('bluebird')
 
-var CURRENT_ACTION = "Command";
-var CURRENT_NAME = "IndividualLoginWithCredentialsCommand";
+var Hoek = require('hoek')
 
-module.exports = function(payload) {
+module.exports = function (payload) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
-  var self = this;
-  var timeStart = new Date();
-  var timeEnd;
-
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     try {
-      self.individualFilterQuery({email:payload.email}).then(function(individuals) {
-        if (individuals.length===0) {
-          return reject( new Error("Email address and/or password invalid") );
-        }
-        if (individuals.length>1) {
-          return reject( new Error("Too many emails, contact an individual") );
-        }
-        var individual = individuals[0];
+      self.execute('query', 'individualFilterQuery', {email: payload.email}).then(function (individuals) {
+        if (individuals.length === 0) { throw new Error('ERROR_BAD_AUTHENTIFICATION') }
+        if (individuals.length > 1) { throw new Error(new Error('Too many emails, contact an individual')) }
+        var individual = individuals[0]
         if (individual.authenticate(payload.password)) {
           // all done then reply token
-          self.individualCreateAuthTokenCommand(individual.urn).then(function(token) {
+          self.execute('command', 'individualCreateAuthTokenCommand', individual.urn).then(function (token) {
             var credentials = {
-              action: self.ABIBAO_CONST_TOKEN_AUTH_ME,
-              urn: individual.urn, 
+              action: global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME,
+              urn: individual.urn,
               scope: individual.scope
-            };
-            return self.authentificationGlobalInformationsQuery(credentials).then(function(infos) {
-              timeEnd = new Date();
-              self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-              resolve({token:token,globalInfos:infos});
-            });
+            }
+            return self.execute('query', 'authentificationGlobalInformationsQuery', credentials).then(function (infos) {
+              if (infos.abibaoCompleted.length === 0 && infos.abibaoInProgress.length === 0) {
+                return self.execute('command', 'individualCreateAbibaoSurveyCommand', {email: payload.email, target: infos.urn, position: 1}).then(function () {
+                  return self.execute('command', 'individualCreateAbibaoSurveyCommand', {email: payload.email, target: infos.urn, position: 2}).then(function () {
+                    return self.execute('query', 'authentificationGlobalInformationsQuery', credentials).then(function (infos) {
+                      resolve({token, globalInfos: infos})
+                    })
+                  })
+                })
+              } else {
+                resolve({token, globalInfos: infos})
+              }
+            })
           })
-          .catch(function(error) {
-            timeEnd = new Date();
-            self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-            reject(error);
-          });
+            .catch(function (error) {
+              reject(error)
+            })
         } else {
-          timeEnd = new Date();
-          self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-          reject("Email address and/or password invalid");
+          reject('ERROR_BAD_AUTHENTIFICATION')
         }
       })
-      .catch(function(error) {
-        timeEnd = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-        reject(error);
-      });
+        .catch(function (error) {
+          reject(error)
+        })
     } catch (e) {
-      timeEnd = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-      reject(e);
+      reject(e)
     }
-  });
-  
-};
+  })
+}

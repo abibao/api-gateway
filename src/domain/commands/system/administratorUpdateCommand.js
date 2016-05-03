@@ -1,33 +1,28 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
-var uuid = require("node-uuid");
+var Promise = require('bluebird')
 
-var CURRENT_NAME = "AdministratorUpdateCommand";
+var Hoek = require('hoek')
 
-module.exports = function(payload) {
-
-  var self = this;
-  
-  return new Promise(function(resolve, reject) {
+module.exports = function (payload) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  return new Promise(function (resolve, reject) {
     try {
-      var quid = uuid.v1();
-      self.AdministratorModel.get( self.getIDfromURN(payload.urn) ).run().then(function(model) {
-        return model.merge(payload).save().then(function(updated) {
-          delete updated.id;
-          delete updated.company;
-          delete updated.charity;
-          delete updated.campaign;
-          self.debug.command(CURRENT_NAME, quid);
-          resolve(updated);
-        });
+      self.AdministratorModel.get(self.getIDfromURN(payload.urn)).run().then(function (model) {
+        return model.merge(payload).save().then(function (updated) {
+          delete updated.id
+          delete updated.company
+          delete updated.charity
+          delete updated.campaign
+          delete updated.item
+          resolve(updated)
+        })
       })
-      .catch(function(error) {
-        reject(error);
-      });
+      .catch(function (error) {
+        reject(error)
+      })
     } catch (e) {
-      reject(e);
+      reject(e)
     }
-  });
-  
-};
+  })
+}

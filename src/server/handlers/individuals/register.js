@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-var Joi = require("joi");
-var Boom = require("boom");
+var Joi = require('joi')
+var Boom = require('boom')
 
 module.exports = {
   auth: false,
-  tags: ["api", "1.1) not authentified"],
-  description: "Ajoute un individual sur abibao",
-  notes: "Ajoute un individual sur abibao",
+  tags: ['api', '1.1) not authentified'],
+  description: 'Ajoute un individual sur abibao',
+  notes: 'Ajoute un individual sur abibao',
   payload: {
-    allow: "application/x-www-form-urlencoded",
+    allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     payload: {
@@ -18,14 +18,14 @@ module.exports = {
       password2: Joi.string().required()
     }
   },
-  jsonp: "callback",
+  jsonp: 'callback',
   handler(request, reply) {
-    request.server.domain.individualRegisterCommand(request.payload).then(function(individual) {
-      reply(individual);
-    })
-    .catch(function(error) {
-      request.server.logger.error(error);
-      reply(Boom.badRequest(error));
-    });
+    global.ABIBAO.services.domain.execute('command', 'individualRegisterCommand', request.payload)
+      .then(function (individual) {
+        reply(individual)
+      })
+      .catch(function (error) {
+        reply(Boom.badRequest(error))
+      })
   }
-};
+}

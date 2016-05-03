@@ -1,34 +1,22 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
+var Promise = require('bluebird')
 
-var CURRENT_ACTION = "Command";
-var CURRENT_NAME = "CampaignCreateWithCompanyCommand";
+var Hoek = require('hoek')
 
-module.exports = function(payload) {
-
-  var self = this;
-  var timeStart = new Date();
-  var timeEnd;
-  
-  return new Promise(function(resolve, reject) {
+module.exports = function (payload) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  return new Promise(function (resolve, reject) {
     try {
-      payload.company = self.getIDfromURN(payload.urnCompany);
-      self.campaignCreateCommand(payload).then(function(campaign) {
-        timeEnd = new Date();
-        self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-        resolve(campaign);
+      payload.company = self.getIDfromURN(payload.urnCompany)
+      self.execute('command', 'campaignCreateCommand', payload).then(function (campaign) {
+        resolve(campaign)
       })
-      .catch(function(error) {
-        timeEnd = new Date();
-        self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-        reject(error);
-      });
+        .catch(function (error) {
+          reject(error)
+        })
     } catch (e) {
-      timeEnd = new Date();
-      self.logger.error(CURRENT_ACTION, CURRENT_NAME, "("+(timeEnd-timeStart)+"ms)");
-      reject(e);
+      reject(e)
     }
-  });
-  
-};
+  })
+}

@@ -1,37 +1,31 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
-var uuid = require("node-uuid");
+var Promise = require('bluebird')
 
-var mongoose = require("mongoose");
-var ObjectId = mongoose.Types.ObjectId;
+var Hoek = require('hoek')
+var mongoose = require('mongoose')
+var ObjectId = mongoose.Types.ObjectId
 
-var CURRENT_NAME = "IndividualCreateCommand";
-
-module.exports = function(payload) {
-
-  var self = this;
-  
-  return new Promise(function(resolve, reject) {
+module.exports = function (payload) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  return new Promise(function (resolve, reject) {
     try {
-      var quid = uuid.v1();
-      payload.id = new ObjectId().toString();
-      payload.createdAt = Date.now();
-      var model = new self.IndividualModel(payload);
-      model.save().then(function(created) {
-        delete created.id;
-        delete created.company;
-        delete created.charity;
-        delete created.campaign;
-        self.debug.command(CURRENT_NAME, quid);
-        resolve(created);
+      payload.id = new ObjectId().toString()
+      payload.createdAt = Date.now()
+      var model = new self.IndividualModel(payload)
+      model.save().then(function (created) {
+        delete created.id
+        delete created.company
+        delete created.charity
+        delete created.campaign
+        delete created.item
+        resolve(created)
       })
-      .catch(function(error) {
-        reject(error);
-      });
+      .catch(function (error) {
+        reject(error)
+      })
     } catch (e) {
-      reject(e);
+      reject(e)
     }
-  });
-  
-};
+  })
+}

@@ -1,52 +1,45 @@
-"use strict";
+'use strict'
 
-var nconf = require("nconf");
-nconf.argv().env();
+var _ = require('lodash')
+var Hoek = require('hoek')
 
-var _ = require("lodash");
-var Cryptr = require("cryptr"),
-cryptr = new Cryptr(nconf.get("ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY"));
+module.exports = function (urn) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
 
-var CURRENT_ACTION = "Query";
-var CURRENT_NAME = "EntityListCampaignsQuery";
- 
-module.exports = function(urn, callback) {
-  
-  var self = this;
-  
-  try {
-    
-    self.logger.debug(CURRENT_ACTION, CURRENT_NAME, "execute");
-    
-    var id = cryptr.decrypt(_.last(_.split(urn, ":"))); // retrieve id database
-
-    self.r.table("entities").get(id).merge(function(entity) {
-      return {
-        campaigns: self.r.table("campaigns").filter({company: entity("id")}).without("company").coerceTo("array").merge(function(campaign) {
-          return {
-            urn: "urn:abibao:database:campaign:"+cryptr.encrypt(campaign("id")),
-            items: self.r.table("campaigns_items").filter({campaign: campaign("id")}).without("id", "campaign").coerceTo("array").merge(function(item) {
-              return {
-                urn: "urn:abibao:database:campaign:item:"+cryptr.encrypt(item("id"))
-              };
+  return new Promise(function (resolve, reject) {
+    try {
+      var id = self.getIDfromURN(urn)
+      self.r.table('entities').get(id).merge(function (entity) {
+        return {
+          campaigns: self.r.table('campaigns').filter({company: entity('id')}).without('company').coerceTo('array').merge(function (campaign) {
+            return {
+              urn: campaign('id'),
+              items: self.r.table('campaigns_items').filter({campaign: campaign('id')}).without('campaign').coerceTo('array').merge(function (item) {
+                return {
+                  urn: item('id')
+                }
+              })
+            }
+          })
+        }
+      })
+        .then(function (result) {
+          if (result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject('This entity has a bad type') }
+          _.map(result.campaigns, function (campaign) {
+            delete campaign.id
+            campaign.urn = self.getURNfromID(campaign.urn, 'campaign')
+            _.map(campaign.items, function (item) {
+              delete item.id
+              item.urn = self.getURNfromID(item.urn, 'item')
             })
-          }; 
+          })
+          resolve(result.campaigns)
         })
-      };
-    })
-    .then(function(result) {
-      if ( result.type!==self.ABIBAO_CONST_ENTITY_TYPE_COMPANY) return callback("This entity has a bad type", null);
-      _.forEach(result.campaigns, function(item) {
-        delete item.id;
-      });
-      callback(null, result.campaigns);
-    })
-    .catch(function(error) {
-      callback(error, null);
-    });
-    
-  } catch (e) {
-    callback(e, null);
-  }
-
-};
+        .catch(function (error) {
+          reject(error)
+        })
+    } catch (e) {
+      reject(e)
+    }
+  })
+}

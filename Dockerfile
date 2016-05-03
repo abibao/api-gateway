@@ -5,11 +5,13 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+COPY newrelic.js /usr/src/app/
 COPY package.json /usr/src/app/
 ADD src /usr/src/app
 
 RUN apk add --update make gcc g++ python && \
   npm install --production && \
+  npm install rethinkdbdash@2.2.18 && \
   npm uninstall -g npm && \
   apk del make gcc g++ python && \
   rm -rf /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp

@@ -1,33 +1,29 @@
-"use strict";
+'use strict'
 
-var Promise = require("bluebird");
-var _ = require("lodash");
-var uuid = require("node-uuid");
+var Promise = require('bluebird')
 
-var CURRENT_NAME = "IndividualFilterQuery";
+var _ = require('lodash')
+var Hoek = require('hoek')
 
-module.exports = function(filters) {
-  
-  var self = this;
-  
-  return new Promise(function(resolve, reject) {
+module.exports = function (filters) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  return new Promise(function (resolve, reject) {
     try {
-      var quid = uuid.v1();
-      self.IndividualModel.filter(filters).run().then(function(models) {
-        _.map(models, function(model) {
-          delete model.id;
-          delete model.company;
-          delete model.charity;
-          delete model.campaign;
-        });
-        self.debug.query(CURRENT_NAME, quid);
-        resolve(models);
-      }).catch(function(error) {
-        reject(error);
-      });
+      self.IndividualModel.filter(filters).run().then(function (models) {
+        _.map(models, function (model) {
+          delete model.id
+          delete model.company
+          delete model.charity
+          delete model.campaign
+          delete model.item
+        })
+        resolve(models)
+      })
+        .catch(function (error) {
+          reject(error)
+        })
     } catch (e) {
-      reject(e);
+      reject(e)
     }
-  });
-
-};
+  })
+}
