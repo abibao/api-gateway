@@ -1,0 +1,7 @@
+db:
+  image: tutum/mysql:latest
+  environment:
+    MYSQL_USER: "**ChangeMe**"
+    MYSQL_PASS: "**ChangeMe**"
+  volumes:
+    - /home/gperreymond/db/mysql:/var/lib/mysql

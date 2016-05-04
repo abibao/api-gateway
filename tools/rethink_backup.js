@@ -22,12 +22,13 @@ async.mapSeries(tables, function (table, next) {
   console.log(table)
   var ReQL = ' \'r.table("' + table + '")\' '
   child_process.exec(recli + ' ' + params + ' ' + ReQL, function (error, stdout, stderr) {
-    var file = path.resolve(__dirname, 'database/' + table + '.json')
+    var file = path.resolve(__dirname, '../.cache/' + table + '.json')
     jsonfile.writeFileSync(file, JSON.parse(stdout))
     next()
   })
 })
 
+/*
 r.db('prodmvp')
   .table('surveys')
   .hasFields({'answers': {'ABIBAO_ANSWER_FONDAMENTAL_GENDER': true}})
@@ -47,3 +48,4 @@ r.db('prodmvp')
     return gender
   })
   .count()
+*/
