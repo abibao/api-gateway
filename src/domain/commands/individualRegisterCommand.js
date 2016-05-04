@@ -25,6 +25,7 @@ module.exports = function (payload) {
         // create individual
         if (payload.entity) {
           payload.charity = self.getIDfromURN(payload.entity)
+          delete payload.entity
         }
         self.execute('command', 'individualCreateCommand', payload).then(function (individual) {
           // informations posted on slack
