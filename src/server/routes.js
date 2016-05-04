@@ -12,6 +12,7 @@ exports.endpoints = [
   { method: 'GET', path: '/redirect/campaign/affect/{sealed}', config: require('./handlers/redirect/campaign/affect') },
 
   // individuals
+  { method: 'POST', path: '/v1/individuals/autologin', config: require('./handlers/individuals/autologin') },
   { method: 'POST', path: '/v1/individuals/login', config: require('./handlers/individuals/login') },
   { method: 'POST', path: '/v1/individuals/register', config: require('./handlers/individuals/register') },
   { method: 'GET', path: '/v1/auth/global/informations', config: require('./handlers/individuals/auth/globalInformations') },
