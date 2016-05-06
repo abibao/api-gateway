@@ -63,15 +63,12 @@ var services = require('./services')
 services.bus()
   .then(function (item) {
     abibao.debug('bus initialized')
-    global.ABIBAO.services.bus = item
     return services.domain()
-      .then(function (item) {
+      .then(function () {
         abibao.debug('domain initialized')
-        global.ABIBAO.services.domain = item
         return services.server()
-          .then(function (item) {
+          .then(function () {
             abibao.debug('server initialized')
-            global.ABIBAO.services.server = item
             abibao.debug('end processing')
             global.ABIBAO.services.server.start(function (error) {
               if (error) { return abibao.error(error) }

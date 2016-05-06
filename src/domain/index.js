@@ -76,13 +76,14 @@ internals.initialize = function () {
 
 module.exports.singleton = function () {
   return new Promise(function (resolve, reject) {
-    if (internals.domain !== false) { resolve(internals.domain) }
+    if (internals.domain !== false) { resolve() }
     internals.domain = { }
     internals.initialize()
       .then(function () {
+        global.ABIBAO.services.domain = internals.domain
         global.ABIBAO.events.DomainEvent = internals.events
         global.ABIBAO.constants.DomainConstant = internals.constants
-        resolve(internals.domain)
+        resolve()
       })
       .catch(function (error) {
         internals.domain = false

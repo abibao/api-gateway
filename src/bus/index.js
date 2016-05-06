@@ -39,14 +39,15 @@ internals.initialize = function () {
 
 module.exports.singleton = function () {
   return new Promise(function (resolve, reject) {
-    if (internals.bus !== false) { resolve(internals.bus) }
+    if (internals.bus !== false) { resolve() }
     internals.bus = { }
     internals.initialize()
       .then(function () {
+        global.ABIBAO.services.bus = internals.bus
         global.ABIBAO.events.BusEvent = internals.events
         global.ABIBAO.events.BusConstant = internals.constants
         abibao.debug(global.ABIBAO.events.BusEvent)
-        resolve(internals.bus)
+        resolve()
       })
       .catch(function (error) {
         internals.bus = false
