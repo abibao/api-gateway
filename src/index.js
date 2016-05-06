@@ -18,6 +18,7 @@ nconf.argv().env().file({ file: 'nconf-deve.json' })
 // initialize global.ABIBAO
 global.ABIBAO = {
   starttime: new Date(),
+  name: 'API GATEWAY',
   uuid: require('node-uuid').v4(),
   nconf: nconf,
   services: { },
@@ -73,7 +74,11 @@ services.bus()
             global.ABIBAO.services.server.start(function (error) {
               if (error) { return abibao.error(error) }
               abibao.debug('server has just started')
-              global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, 'rabbitmq is alive')
+              global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, {
+                name: global.ABIBAO.name,
+                uuid: global.ABIBAO.uuid,
+                message: 'has just connected into the bus'
+              })
             })
           })
       })
