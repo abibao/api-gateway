@@ -1,11 +1,11 @@
 {
   "name": "api-gateway",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "test:coverage": "clear && istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
     "auto:generate": "clear && ./bin/abibao generate",
-    "start": "clear && DEBUG=abibao* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
+    "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
   "repository": {
     "type": "git",
