@@ -23,6 +23,10 @@ module.exports = function (payload) {
           throw new Error('Email already exists in database')
         }
         // create individual
+        if (payload.entity) {
+          payload.charity = self.getIDfromURN(payload.entity)
+          delete payload.entity
+        }
         self.execute('command', 'individualCreateCommand', payload).then(function (individual) {
           // informations posted on slack
           global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {

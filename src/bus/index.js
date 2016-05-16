@@ -9,6 +9,7 @@ var internals = {
   constants: { },
   events: {
     BUS_EVENT_IS_ALIVE: 'BUS_EVENT_IS_ALIVE' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV').toUpperCase(),
+    BUS_EVENT_ANALYTICS_COMPUTE_ANSWER: 'BUS_EVENT_ANALYTICS_COMPUTE_ANSWER' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV').toUpperCase(),
     BUS_EVENT_WEBHOOK_SLACK: 'BUS_EVENT_WEBHOOK_SLACK' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV').toUpperCase(),
     BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO: 'BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV').toUpperCase()
   },
@@ -26,7 +27,7 @@ internals.initialize = function () {
   return new Promise(function (resolve, reject) {
     try {
       internals.bus = require('servicebus').bus(internals.options)
-      internals.bus.listen(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
       internals.bus.listen(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
       internals.bus.listen(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
       resolve()
@@ -39,14 +40,15 @@ internals.initialize = function () {
 
 module.exports.singleton = function () {
   return new Promise(function (resolve, reject) {
-    if (internals.bus !== false) { resolve(internals.bus) }
+    if (internals.bus !== false) { resolve() }
     internals.bus = { }
     internals.initialize()
       .then(function () {
+        global.ABIBAO.services.bus = internals.bus
         global.ABIBAO.events.BusEvent = internals.events
         global.ABIBAO.events.BusConstant = internals.constants
         abibao.debug(global.ABIBAO.events.BusEvent)
-        resolve(internals.bus)
+        resolve()
       })
       .catch(function (error) {
         internals.bus = false

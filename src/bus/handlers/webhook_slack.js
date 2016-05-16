@@ -14,11 +14,15 @@ module.exports = function (message) {
     json: true
   }
 
-  rp(options)
-    .then(function () {
-      global.ABIBAO.debuggers.bus('BUS_EVENT_WEBHOOK_SLACK "%s" has been posted', message.text)
-    })
-    .catch(function () {
-      global.ABIBAO.debuggers.error('BUS_EVENT_WEBHOOK_SLACK "%s" has not been posted', message.text)
-    })
+  if (global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV') === 'prod') {
+    rp(options)
+      .then(function () {
+        global.ABIBAO.debuggers.bus('BUS_EVENT_WEBHOOK_SLACK "%s" has been posted', message.text)
+      })
+      .catch(function () {
+        global.ABIBAO.debuggers.error('BUS_EVENT_WEBHOOK_SLACK "%s" has not been posted', message.text)
+      })
+  } else {
+    global.ABIBAO.debuggers.error('BUS_EVENT_WEBHOOK_SLACK has not been used')
+  }
 }

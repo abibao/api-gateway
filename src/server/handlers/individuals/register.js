@@ -15,7 +15,8 @@ module.exports = {
     payload: {
       email: Joi.string().required().email(),
       password1: Joi.string().required(),
-      password2: Joi.string().required()
+      password2: Joi.string().required(),
+      entity: Joi.string()
     }
   },
   jsonp: 'callback',

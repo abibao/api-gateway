@@ -34,6 +34,8 @@ module.exports = function (payload) {
       }).without('id', 'charity', 'individual')
         .then(function (survey) {
           survey.name = survey.campaign.name
+          survey.screenWelcomeContent = survey.campaign.screenWelcomeContent
+          survey.screenThankYouContent = survey.campaign.screenThankYouContent
           if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY) { survey.fromCompany = true }
           if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { survey.fromAbibao = true }
           if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_CHARITY) { survey.fromCharity = true }
