@@ -5,7 +5,11 @@ var normalize = require('path').normalize
 
 exports.endpoints = [
 
-  // www - administrator dashboard
+  // stats
+  { method: 'GET', path: '/v1/stats/chatities/individuals', config: require('./handlers/stats/charities/individuals') },
+  { method: 'GET', path: '/v1/stats/chatities/none', config: require('./handlers/stats/charities/none') },
+
+  // www - administrator
   { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
 
   // auto routing
