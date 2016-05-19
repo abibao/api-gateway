@@ -5,8 +5,8 @@ var normalize = require('path').normalize
 
 exports.endpoints = [
 
-  // www - dashboard
-  { method: 'GET', path: '/dashboard/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../static')) } } },
+  // stats
+  { method: 'GET', path: '/v1/stats/chatities/individuals', config: require('./handlers/stats/charities/individuals') },
 
   // www - administrator
   { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
