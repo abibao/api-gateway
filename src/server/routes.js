@@ -5,7 +5,10 @@ var normalize = require('path').normalize
 
 exports.endpoints = [
 
-  // www - administrator dashboard
+  // www - dashboard
+  { method: 'GET', path: '/dashboard/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../static')) } } },
+
+  // www - administrator
   { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
 
   // auto routing
