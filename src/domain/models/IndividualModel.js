@@ -24,6 +24,7 @@ module.exports = function (thinky) {
     verified: type.boolean().default(false),
     // linked
     charity: type.string().default('none'),
+    hasRegisteredEntity: type.any().default(false),
     // calculated
     hashedPassword: type.string(),
     salt: type.string(),
