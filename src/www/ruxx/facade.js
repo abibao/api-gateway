@@ -2,7 +2,7 @@ function Facade () {
   var self = this
   riot.observable(self)
 
-  self.version = '1.5.0'
+  self.version = '1.7.0'
 
   self.debug = debug('abibao:facade')
   self.debugCall = debug('abibao:facade:call')
@@ -16,7 +16,8 @@ function Facade () {
   self.actions = {
     auth: new AuthActions(self),
     campaigns: new CampaignsActions(self),
-    entities: new EntitiesActions(self)
+    entities: new EntitiesActions(self),
+    stats: new StatsActions(self)
   }
 
   /** CURRENT CAMPAIGN ITEM CHOICE **/
@@ -83,7 +84,7 @@ function Facade () {
       $.ajaxSetup({
         headers: { 'Authorization': Cookies.get('Authorization') }
       })
-      // Resolve 
+      // Resolve
       $.ajax({
         method: method,
         url: url,
