@@ -4,7 +4,7 @@
 
   <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1">
 
-    <h4>Les compagnies</h4>
+    <h3>Les compagnies</h3>
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2" each={ company in facade.stores.entities.companies }>
         <div class="uk-panel uk-panel-box">
@@ -17,11 +17,12 @@
         </div>
       </div>
     </div>
-    
-    <h4>Les associations</h4>
+
+    <h3>Les associations</h3>
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2" each={ charity in facade.stores.entities.charities }>
-        <div class="uk-panel uk-panel-box" style="margin-bottom: 0.25rem">
+        <div class="uk-panel uk-panel-box" style="margin-bottom: 1.90rem">
+          <div class="uk-badge uk-badge-notification" style="float:right;width:60px">{ charity.members }</div>
           <h4 class="uk-panel-title uk-text-truncate"><a href="/#charities/{ charity.urn }">{ charity.name }</a></h4>
           <img class="uk-thumbnail uk-float-left" style="margin: 0.25rem" src={ charity.icon } alt="" width="80" height="80">
           <div class="uk-float-left uk-width-1-2" style="margin: 0.25rem">
