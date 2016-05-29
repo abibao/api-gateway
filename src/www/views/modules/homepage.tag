@@ -4,6 +4,20 @@
 
   <div if={ facade.getLoading()===false } class="uk-container uk-container-center uk-height-1-1">
 
+    <h3>Les statistiques</h3>
+    <div class="uk-grid uk-grid-medium">
+      <div class="uk-width-1-4">
+        <div class="uk-panel uk-panel-box">
+          <canvas id="countGendersInAbibao" class="uk-width-1-4" height="400"></canvas>
+        </div>
+      </div>
+      <div class="uk-width-1-4">
+        <div class="uk-panel uk-panel-box">
+          <canvas id="countMembersInEntities" class="uk-width-1-4" height="400"></canvas>
+        </div>
+      </div>
+    </div>
+
     <h3>Les compagnies</h3>
     <div class="uk-grid uk-grid-medium">
       <div class="uk-width-1-2" each={ company in facade.stores.entities.companies }>
@@ -47,6 +61,48 @@
 
     self.on("update", function() {
       (facade.getLoading()===false) ? self.disabled = '' : self.disabled = 'disabled';
+      // chart1
+      var countGendersInAbibao = document.getElementById('countGendersInAbibao');
+      if (countGendersInAbibao) {
+        var myPieChart = new Chart(countGendersInAbibao.getContext('2d'), {
+          type: 'doughnut',
+          data: facade.stores.stats.countGendersInAbibao(),
+          options: {
+            title: {
+              display: true,
+              position: 'bottom',
+              text: 'Hommes / Femmes'
+            },
+            legend: {
+              display: false
+            },
+            animation: {
+              animateScale: true
+            }
+          }
+        });
+      }
+      // chart2
+      var countMembersInEntities = document.getElementById('countMembersInEntities');
+      if (countMembersInEntities) {
+        var myPieChart = new Chart(countMembersInEntities.getContext('2d'), {
+          type: 'doughnut',
+          data: facade.stores.stats.countMembersInEntities(),
+          options: {
+            title: {
+              display: true,
+              position: 'bottom',
+              text: 'Associations'
+            },
+            legend: {
+              display: false
+            },
+            animation: {
+              animateScale: true
+            }
+          }
+        });
+      }
     });
 
   </script>

@@ -11,7 +11,8 @@ function Facade () {
 
   self.stores = {
     auth: new AuthStore(),
-    entities: new EntitiesStore()
+    entities: new EntitiesStore(),
+    stats: new StatsStore()
   }
   self.actions = {
     auth: new AuthActions(self),
@@ -68,8 +69,10 @@ function Facade () {
     // go now.
     self.actions.entities.list()
       .then(function () {
-        self.debug('start facade authentified=%s', self.stores.auth.authentified())
-        riot.update()
+        return self.actions.stats.countGendersInAbibao().then(function (result) {
+          self.debug('start facade authentified=%s', self.stores.auth.authentified())
+          riot.update()
+        })
       })
       .catch(function (error) {
         self.debug('start facade error %o', error)
