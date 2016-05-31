@@ -25,28 +25,34 @@ module.exports = function (payload) {
             // event for analytics
             var regex = /^(urn:abibao:database:)/
             var _answer
+            var isURN = false
             if (_.isArray(payload.answer)) {
               _.map(payload.answer, function (item) {
                 if (regex.exec(item) !== null) {
                   _answer = self.getIDfromURN(item)
+                  isURN = true
                 } else {
                   _answer = item
                 }
                 global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
                   survey: self.getIDfromURN(survey.urn),
                   label: payload.label,
-                  answer: _answer
+                  answer: _answer,
+                  isURN: isURN
                 })
               })
+            } else {
               if (regex.exec(payload.answer) !== null) {
                 _answer = self.getIDfromURN(payload.answer)
+                isURN = true
               } else {
                 _answer = payload.answer
               }
               global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
                 survey: self.getIDfromURN(survey.urn),
                 label: payload.label,
-                answer: _answer
+                answer: _answer,
+                isURN: isURN
               })
             }
             // auto affectation ?
