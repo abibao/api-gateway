@@ -2,6 +2,19 @@ function StatsStore () {
   var self = this
   riot.observable(self)
 
+  self.getGreenToRed = function (max) {
+    var colors = []
+    for (var i = 0; i < max; i++) {
+      var red = Math.round(i * 255 / max)
+      console.log(red)
+      var green = 255 - red
+      var blue = 0
+      var color = 'rgb(' + red + ',' + green + ',' + blue + ')'
+      colors.push(color)
+      if (i === max - 1) return colors
+    }
+  }
+
   self._countGendersInAbibao = {
     labels: [
       'Hommes',
@@ -10,7 +23,7 @@ function StatsStore () {
     datasets: [
       {
         data: [0, 0],
-        borderColor: '#DDDDDD',
+        borderColor: '#ffffff',
         borderWidth: 2,
         backgroundColor: [
           '#36A2EB',
@@ -28,7 +41,7 @@ function StatsStore () {
     datasets: [
       {
         data: [],
-        borderColor: '#DDDDDD',
+        borderColor: '#ffffff',
         borderWidth: 2,
         backgroundColor: [
           '#AEEA00',
@@ -45,5 +58,20 @@ function StatsStore () {
   }
   self.countMembersInEntities = function () {
     return self._countMembersInEntities
+  }
+
+  self._countMembersAges = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        borderColor: '#ffffff',
+        borderWidth: 2,
+        backgroundColor: self.getGreenToRed(10),
+        hoverBackgroundColor: []
+      }]
+  }
+  self.countMembersAges = function () {
+    return self._countMembersAges
   }
 }

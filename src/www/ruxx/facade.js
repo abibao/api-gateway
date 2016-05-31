@@ -69,9 +69,21 @@ function Facade () {
     // go now.
     self.actions.entities.list()
       .then(function () {
-        return self.actions.stats.countGendersInAbibao().then(function (result) {
-          self.debug('start facade authentified=%s', self.stores.auth.authentified())
-          riot.update()
+        return self.actions.stats.charitiesIndividuals().then(function (stats) {
+          var _stats = {}
+          lodash.map(stats, function (stat) {
+            _stats[stat.charity.urn] = stat
+          })
+          self.debugAction('stats=%o', _stats)
+          lodash.map(self.stores.entities.charities, function (item) {
+            item.members = _stats[item.urn].count
+          })
+          return self.actions.stats.individualsGenders().then(function () {
+            return self.actions.stats.individualsAges().then(function () {
+              self.debug('start facade authentified=%s', self.stores.auth.authentified())
+              riot.update()
+            })
+          })
         })
       })
       .catch(function (error) {

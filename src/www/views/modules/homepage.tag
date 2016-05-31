@@ -16,6 +16,11 @@
           <canvas id="countMembersInEntities" class="uk-width-1-4" height="400"></canvas>
         </div>
       </div>
+      <div class="uk-width-1-4">
+        <div class="uk-panel uk-panel-box">
+          <canvas id="countMembersAges" class="uk-width-1-4" height="400"></canvas>
+        </div>
+      </div>
     </div>
 
     <h3>Les compagnies</h3>
@@ -71,7 +76,7 @@
             title: {
               display: true,
               position: 'bottom',
-              text: 'Hommes / Femmes'
+              text: 'Femmes / Hommes'
             },
             legend: {
               display: false
@@ -93,6 +98,27 @@
               display: true,
               position: 'bottom',
               text: 'Associations'
+            },
+            legend: {
+              display: false
+            },
+            animation: {
+              animateScale: true
+            }
+          }
+        });
+      }
+      // chart3
+      var countMembersAges = document.getElementById('countMembersAges');
+      if (countMembersAges) {
+        var myPieChart = new Chart(countMembersAges.getContext('2d'), {
+          type: 'doughnut',
+          data: facade.stores.stats.countMembersAges(),
+          options: {
+            title: {
+              display: true,
+              position: 'bottom',
+              text: 'Répartition des âges'
             },
             legend: {
               display: false
