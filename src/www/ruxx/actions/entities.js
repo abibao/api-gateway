@@ -83,17 +83,7 @@ function EntitiesActions (facade) {
           self.facade.stores.entities.companies = lodash.filter(entities, function (item) {
             return (item.type === 'company' || item.type === 'abibao')
           })
-          return self.facade.actions.stats.countMembersInEntities().then(function (statsEntities) {
-            var stats = {}
-            lodash.map(statsEntities, function (stat) {
-              stats[stat.charity.urn] = stat
-            })
-            self.facade.debugAction('stats=%o', stats)
-            lodash.map(self.facade.stores.entities.charities, function (item) {
-              item.members = stats[item.urn].count
-            })
-            resolve()
-          })
+          resolve()
         })
         .catch(function (error) {
           self.facade.setLoading(false)
