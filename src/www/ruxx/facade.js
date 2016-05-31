@@ -78,7 +78,7 @@ function Facade () {
           lodash.map(self.stores.entities.charities, function (item) {
             item.members = _stats[item.urn].count
           })
-          return self.actions.stats.individualsGenders().then(function () {
+          return self.actions.stats.individualsGenders('FEMALE').then(function () {
             return self.actions.stats.individualsAges().then(function () {
               self.debug('start facade authentified=%s', self.stores.auth.authentified())
               riot.update()

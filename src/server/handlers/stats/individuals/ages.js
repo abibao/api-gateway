@@ -9,8 +9,13 @@ module.exports = {
     scope: ['administrator']
   },
   jsonp: 'callback',
+  validate: {
+    params: {
+      gender: Joi.string().required()
+    }
+  },
   handler(request, reply) {
-    global.ABIBAO.services.domain.execute('query', 'statsIndividualsAges', request.payload)
+    global.ABIBAO.services.domain.execute('query', 'statsIndividualsAges', request.params.gender)
       .then(function (stats) {
         reply(stats)
       })

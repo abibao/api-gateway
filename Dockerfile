@@ -5,10 +5,11 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
-COPY robot.txt /usr/app/
 COPY newrelic.js /usr/app/
 COPY package.json /usr/app/
 ADD src /usr/app
+COPY robot.txt /usr/app/
+COPY robot.txt /usr/app/www
 
 RUN apk add --update make gcc g++ python && \
     npm install --production && \

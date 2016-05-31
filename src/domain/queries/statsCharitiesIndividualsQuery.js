@@ -3,7 +3,7 @@
 var Hoek = require('hoek')
 var _ = require('lodash')
 
-module.exports = function (urn) {
+module.exports = function () {
   var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
