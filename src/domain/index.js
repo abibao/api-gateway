@@ -3,12 +3,23 @@
 var Promise = require('bluebird')
 
 var internals = {
-  options: {
+  optionsRethink: {
     host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
     port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
     db: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
     authKey: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
     silent: true
+  },
+  optionsMySQL: {
+    client: 'mysql',
+    connection: {
+      host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
+      port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
+      user: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
+      password: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD'),
+      database: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
+    },
+    debug: false
   },
   constants: {
     ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
@@ -40,7 +51,8 @@ internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
     try {
-      internals.domain.thinky = require('thinky')(internals.options)
+      internals.domain.knex = require('knex')(internals.optionsMySQL)
+      internals.domain.thinky = require('thinky')(internals.optionsRethink)
       internals.domain.ThinkyErrors = internals.domain.thinky.Errors
       internals.domain.Query = internals.domain.thinky.Query
       internals.domain.r = internals.domain.thinky.r
@@ -64,6 +76,9 @@ internals.initialize = function () {
         })
         .then(function () {
           return internals.domain.injector('models')
+        })
+        .then(function () {
+          return internals.domain.injector('models/mysql')
         })
         .finally(resolve)
         .catch(reject)
@@ -119,6 +134,8 @@ internals.injector = function (type) {
           abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
           if (type === 'models') {
             self[name] = require('./' + type + '/' + name)(self.thinky)
+          } else if (type === 'models/mysql') {
+            self[name] = require('./' + type + '/' + name)(self.knex)
           } else if (type === 'listeners') {
             self[name] = require('./' + type + '/' + name)
             self[name]()

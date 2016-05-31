@@ -19,7 +19,8 @@ var GoodProvision = function (server, callback) {
   }
   server.register({
     register: Good,
-  options}, function (err) {
+    options: options
+  }, function (err) {
     if (err) { return callback(err) }
     callback()
   })

@@ -3,17 +3,18 @@
 var Hoek = require('hoek')
 var _ = require('lodash')
 
-module.exports = function (urn) {
+module.exports = function (value) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
 
   return new Promise(function (resolve, reject) {
     try {
+      var gender = (value === 'MALE') ? '56ee9a414726e973079d96d0' : '56ee9a414726e973079d96d1'
       self.r.table('surveys')
         .map(function (item1) {
           return item1('answers')
         })
         .hasFields('ABIBAO_ANSWER_FONDAMENTAL_GENDER')
-        .filter({'ABIBAO_ANSWER_FONDAMENTAL_GENDER': '56ee9a414726e973079d96d0'})
+        .filter({'ABIBAO_ANSWER_FONDAMENTAL_GENDER': gender})
         .group('ABIBAO_ANSWER_FONDAMENTAL_AGE')
         .count()
         .ungroup()
@@ -32,6 +33,12 @@ module.exports = function (urn) {
             total: 0,
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           }
+          // 0: 0-4
+          // 1: 5-14
+          // 2: 15-24
+          // 3: 25-34
+          // 4: 35-44
+          // etc...
           _.map(data, function (stat) {
             result.data[Math.round(stat.age / 10)] = result.data[Math.round(stat.age / 10)] + stat.count
             result.total += stat.count

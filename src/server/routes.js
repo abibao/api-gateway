@@ -9,7 +9,7 @@ exports.endpoints = [
   { method: 'GET', path: '/v1/stats/chatities/individuals', config: require('./handlers/stats/charities/individuals') },
   { method: 'GET', path: '/v1/stats/chatities/none', config: require('./handlers/stats/charities/none') },
   { method: 'GET', path: '/v1/stats/individuals/genders', config: require('./handlers/stats/individuals/genders') },
-  { method: 'GET', path: '/v1/stats/individuals/ages', config: require('./handlers/stats/individuals/ages') },
+  { method: 'GET', path: '/v1/stats/individuals/ages/{gender}', config: require('./handlers/stats/individuals/ages') },
 
   // www - administrator
   { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
