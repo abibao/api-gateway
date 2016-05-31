@@ -2,12 +2,13 @@ FROM mhart/alpine-node:5.5
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /usr/app
+WORKDIR /usr/app
 
-COPY newrelic.js /usr/src/app/
-COPY package.json /usr/src/app/
-ADD src /usr/src/app
+COPY robot.txt /usr/app/
+COPY newrelic.js /usr/app/
+COPY package.json /usr/app/
+ADD src /usr/app
 
 RUN apk add --update make gcc g++ python && \
     npm install --production && \
