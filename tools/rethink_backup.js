@@ -25,7 +25,8 @@ var execReQL = function (table, skip, limit, callback) {
       console.log('table: %s skip=%s limit=%s (%s)', table, skip, limit, items.length)
       async.mapSeries(items, function (item, next) {
         console.log('..... save %s/%s.json', table, item.id)
-        var dir = path.resolve(__dirname, '../.cache/' + table)
+        var dir = path.resolve(__dirname, '../.cache/rethinkdb/' + table)
+        fse.ensureDirSync(dir)
         var filepath = path.resolve(dir, item.id + '.json')
         fse.writeJsonSync(filepath, item)
         next()
@@ -42,14 +43,15 @@ var execReQL = function (table, skip, limit, callback) {
     })
 }
 
+console.log('===== PREPARE ===============')
 var cacheDir = path.resolve(__dirname, '../.cache/')
-fse.ensureDirSync(cacheDir)
+fse.emptyDirSync(cacheDir)
 
-console.log('===== START ===============================')
+console.log('===== START ===============')
 var tables = ['administrators', 'individuals', 'entities', 'campaigns', 'campaigns_items', 'campaigns_items_choices', 'surveys']
 async.mapSeries(tables, function (table, next) {
   execReQL(table, 0, 100, next)
 }, function (err, results) {
-  console.log('===== END =================================')
+  console.log('===== END ===============')
   process.exit(0)
 })
