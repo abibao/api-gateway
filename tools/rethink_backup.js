@@ -5,47 +5,51 @@ var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
 var async = require('async')
-var jsonfile = require('jsonfile')
 var path = require('path')
-var child_process = require('child_process')
+var fse = require('fs-extra')
 
-var recli = path.resolve(__dirname, '..', 'node_modules/recli/bin/recli.js')
-var params = '-c --json ' +
-'--host ' + nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST') + ' ' +
-'--port ' + nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT') + ' ' +
-// '--database ' + nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB') + ' ' +
-'--database prodmvp' + ' ' +
-'--auth ' + nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY')
+var optionsRethink = {
+  host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
+  port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
+  db: 'prodmvp', // nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+  authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
+  silent: true
+}
 
+var thinky = require('thinky')(optionsRethink)
+
+var execReQL = function (table, skip, limit, callback) {
+  thinky.r.table(table).skip(skip).limit(limit)
+    .then(function (result) {
+      var items = result
+      console.log('table: %s skip=%s limit=%s (%s)', table, skip, limit, items.length)
+      async.mapSeries(items, function (item, next) {
+        console.log('..... save %s/%s.json', table, item.id)
+        var dir = path.resolve(__dirname, '../.cache/' + table)
+        var filepath = path.resolve(dir, item.id + '.json')
+        fse.writeJsonSync(filepath, item)
+        next()
+      }, function (err, results) {
+        if (items.length === limit) {
+          execReQL(table, skip + limit, limit, callback)
+        } else {
+          callback()
+        }
+      })
+    })
+    .catch(function (error) {
+      callback(error)
+    })
+}
+
+var cacheDir = path.resolve(__dirname, '../.cache/')
+fse.ensureDirSync(cacheDir)
+
+console.log('===== START ===============================')
 var tables = ['administrators', 'individuals', 'entities', 'campaigns', 'campaigns_items', 'campaigns_items_choices', 'surveys']
 async.mapSeries(tables, function (table, next) {
-  console.log(table)
-  var ReQL = ' \'r.table("' + table + '")\' '
-  child_process.exec(recli + ' ' + params + ' ' + ReQL, function (error, stdout, stderr) {
-    var file = path.resolve(__dirname, '../.cache/' + table + '.json')
-    jsonfile.writeFileSync(file, JSON.parse(stdout))
-    next()
-  })
+  execReQL(table, 0, 100, next)
+}, function (err, results) {
+  console.log('===== END =================================')
+  process.exit(0)
 })
-
-/*
-r.db('prodmvp')
-  .table('surveys')
-  .hasFields({'answers': {'ABIBAO_ANSWER_FONDAMENTAL_GENDER': true}})
-  .map(function (answer) {
-    var gender = answer('answers')
-    return {
-      gender: gender('ABIBAO_ANSWER_FONDAMENTAL_GENDER'),
-    }
-  })
-  .coerceTo('array')
-  .merge(function (item) {
-    var prefix = r.db('prodmvp').table('campaigns_items_choices').get(item('gender'))('prefix')
-    var suffix = r.db('prodmvp').table('campaigns_items_choices').get(item('gender'))('suffix')
-    return prefix.add('_').add(suffix)
-  })
-  .group(function (gender) {
-    return gender
-  })
-  .count()
-*/

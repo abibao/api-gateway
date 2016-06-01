@@ -1,8 +1,9 @@
 {
   "name": "api-gateway",
-  "version": "2.1.0",
+  "version": "2.5.0",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
+    "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
     "test:coverage": "clear && istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
     "auto:generate": "clear && ./bin/abibao generate",
     "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
@@ -37,6 +38,7 @@
     "cryptr": "2.0.0",
     "debug": "2.2.0",
     "dotenv": "2.0.0",
+    "fs-extra": "0.30.0",
     "good": "6.6.3",
     "good-bunyan": "0.1.2",
     "hapi": "13.4.1",
@@ -46,7 +48,6 @@
     "inert": "4.0.0",
     "iron": "4.0.1",
     "joi": "8.4.0",
-    "jsonfile": "2.3.1",
     "jsonwebtoken": "7.0.0",
     "knex": "0.11.5",
     "lodash": "4.13.1",
@@ -73,11 +74,8 @@
     "commander": "2.9.0",
     "faker": "3.1.0",
     "js-object-pretty-print": "0.2.0",
-    "jsonfile": "2.3.1",
     "mocha": "2.5.3",
     "mustache": "2.2.1",
-    "mysql": "2.10.2",
-    "recli": "0.2.4",
     "rethinkdb": "2.3.1",
     "standard": "7.1.1"
   }
