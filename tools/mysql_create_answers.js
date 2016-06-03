@@ -8,21 +8,8 @@ var _ = require('lodash')
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
-var mongoose = require('mongoose')
-var ObjectId = mongoose.Types.ObjectId
-
-var optionsMySQL = {
-  client: 'mysql',
-  connection: {
-    host: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
-    port: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
-    user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-    password: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD'),
-    database: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
-  },
-  debug: false
-}
-var knex = require('knex')(optionsMySQL)
+var Chance = require('chance')
+var chance = new Chance()
 
 var optionsRethink = {
   host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
@@ -63,35 +50,20 @@ var busSend = function (message, callback) {
       }
     })
     .then(function (result) {
-      var filepathSQL = path.resolve(dirSQL, new ObjectId().toString() + '.json')
+      var id = chance.guid() + '-' + chance.guid() + '-' + chance.guid()
+      var filepathSQL = path.resolve(dirSQL, id + '.json')
       fse.writeJsonSync(filepathSQL, result.data)
       callback()
-    // now insert data in MySQL
-    /* knex('answers')
-      .where('email', result.data.email)
-      .where('campaign_id', result.data.campaign_id)
-      .where('question', result.data.question)
-      .delete()
-      .then(function () {
-        return knex('answers').insert(result.data)
-          .then(function (inserted) {
-            console.log('----------------------> inserted', inserted)
-            console.log('----------------------> END')
-            callback()
-          })
-      })
-      .catch(function (error) {
-        console.log('----------------------> error', error)
-        console.log('----------------------> END')
-        callback()
-      }) */
     })
 }
+
+var checksum = 0
 
 async.mapSeries(files, function (file, done) { // ASYNC 0 :: the divine!
   var filepath = path.resolve(dir, file)
   var survey = fse.readJsonSync(filepath)
   var answers = Object.keys(survey.answers)
+  checksum += answers.length
   console.log('surveys %s has %s answers', survey.id, answers.length)
   async.mapSeries(answers, function (answer, next1) { // ASYNC 1
     var payload = {
@@ -144,6 +116,7 @@ async.mapSeries(files, function (file, done) { // ASYNC 0 :: the divine!
     done()
   })
 }, function () {
+  console.log('checksum=%s', checksum)
   console.log('===== END ===============')
   process.exit(0)
 })

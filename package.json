@@ -3,8 +3,9 @@
   "version": "2.5.0",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
-    "database:mysql:import:answers": "clear && node tools/mysql_import_answers.js",
     "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
+    "database:mysql:create:answers": "clear && node tools/mysql_create_answers.js",
+    "database:mysql:insert:answers": "clear && node tools/mysql_insert_answers.js",
     "test:coverage": "clear && istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
     "auto:generate": "clear && ./bin/abibao generate",
     "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
@@ -34,6 +35,7 @@
     "boom": "3.2.1",
     "bunyan": "1.8.1",
     "bunyan-logstash-tcp": "0.3.4",
+    "chance": "1.0.3",
     "crumb": "6.0.1",
     "crypto": "0.0.3",
     "cryptr": "2.0.0",
@@ -63,7 +65,7 @@
     "request-promise": "3.0.0",
     "resolve-app-pkginfo": "1.0.0",
     "sendgrid": "2.0.0",
-    "servicebus": "2.0.1",
+    "servicebus": "2.0.2",
     "standard": "7.1.1",
     "thinky": "2.3.2",
     "vision": "4.1.0"

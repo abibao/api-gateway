@@ -61,17 +61,30 @@ function StatsStore () {
   }
 
   self._countMembersAges = {
-    labels: [],
-    datasets: [
-      {
-        data: [],
-        borderColor: '#ffffff',
-        borderWidth: 2,
-        backgroundColor: self.getGreenToRed(10),
-        hoverBackgroundColor: []
-      }]
+    MALE: {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          backgroundColor: self.getGreenToRed(10),
+          hoverBackgroundColor: []
+        }]
+    },
+    FEMALE: {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          backgroundColor: self.getGreenToRed(10),
+          hoverBackgroundColor: []
+        }]
+    }
   }
-  self.countMembersAges = function () {
-    return self._countMembersAges
+  self.countMembersAges = function (gender) {
+    return self._countMembersAges[gender]
   }
 }

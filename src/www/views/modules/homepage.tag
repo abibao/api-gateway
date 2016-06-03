@@ -18,7 +18,7 @@
       </div>
       <div class="uk-width-1-4">
         <div class="uk-panel uk-panel-box">
-          <canvas id="countMembersAges" class="uk-width-1-4" height="400"></canvas>
+          <canvas id="countMembersAgesMale" class="uk-width-1-4" height="400"></canvas>
         </div>
       </div>
     </div>
@@ -109,11 +109,11 @@
         });
       }
       // chart3
-      var countMembersAges = document.getElementById('countMembersAges');
-      if (countMembersAges) {
-        var myPieChart = new Chart(countMembersAges.getContext('2d'), {
+      var countMembersAgesMale = document.getElementById('countMembersAgesMale');
+      if (countMembersAgesMale) {
+        var myPieChart = new Chart(countMembersAgesMale.getContext('2d'), {
           type: 'doughnut',
-          data: facade.stores.stats.countMembersAges(),
+          data: facade.stores.stats.countMembersAges('MALE'),
           options: {
             title: {
               display: true,
