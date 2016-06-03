@@ -8,8 +8,6 @@ var _ = require('lodash')
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
-var Chance = require('chance')
-var chance = new Chance()
 
 var optionsRethink = {
   host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
@@ -22,17 +20,26 @@ var thinky = require('thinky')(optionsRethink)
 
 console.log('===== PREPARE ===============')
 var cacheDir = path.resolve(__dirname, '../.cache/mysql/answers')
+fse.ensureDirSync(cacheDir)
 fse.emptyDirSync(cacheDir)
 
 console.log('===== START ===============')
 var dir = path.resolve(__dirname, '../.cache/rethinkdb/surveys')
-var dirSQL = path.resolve(__dirname, '../.cache/mysql/answers')
-fse.ensureDirSync(dirSQL)
 
 var files = fse.readdirSync(dir)
 
-var busSend = function (message, callback) {
-  console.log('----------------------> START')
+var isURN = function (value) {
+  try {
+    fse.accessSync(path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', value + '.json'))
+    return true
+  } catch(e) {
+    return false
+  }
+}
+
+var busSend = function (dirpath, message, callback) {
+  console.log('..... rethink')
+  var filepath = path.resolve(dirpath, message.label + '__' + message.answer + '.json')
   thinky.r.table('surveys')
     .get(message.survey)
     .merge(function (item) {
@@ -50,71 +57,72 @@ var busSend = function (message, callback) {
       }
     })
     .then(function (result) {
-      var id = chance.guid() + '-' + chance.guid() + '-' + chance.guid()
-      var filepathSQL = path.resolve(dirSQL, id + '.json')
-      fse.writeJsonSync(filepathSQL, result.data)
+      fse.writeJsonSync(filepath, result.data)
+      callback()
+    })
+    .catch(function (error) {
       callback()
     })
 }
 
 var checksum = 0
+var callbackDone
 
-async.mapSeries(files, function (file, done) { // ASYNC 0 :: the divine!
+var q = async.queue(function (task, callback) {
+  console.log('..... queue')
+  busSend(task.dir, task.message, callback)
+}, 20)
+
+// assign a callback
+q.drain = function () {
+  console.log('..... all items have been processed')
+  callbackDone()
+}
+
+async.mapSeries(files, function (file, done) {
+  callbackDone = done
   var filepath = path.resolve(dir, file)
   var survey = fse.readJsonSync(filepath)
   var answers = Object.keys(survey.answers)
-  checksum += answers.length
   console.log('surveys %s has %s answers', survey.id, answers.length)
-  async.mapSeries(answers, function (answer, next1) { // ASYNC 1
-    var payload = {
-      label: answer,
-      answer: survey.answers[answer]
-    }
-    var control = survey.answers[answer]
-    console.log('..... %s', answer, control, _.isArray(control))
-    // event for analytics
-    var _answer
-    var isURN = false
-    if (_.isArray(control) === true) {
-      async.mapSeries(control, function (item, next2) { // ASYNC 2(multi)
-        try {
-          fse.accessSync(path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', item + '.json'))
-          _answer = item
-          isURN = true
-        } catch(e) {
-          _answer = item
-        }
-        busSend({
-          survey: survey.id,
-          label: payload.label,
-          answer: _answer,
-          isURN: isURN
-        }, function () {
-          next2()
+  if (answers.length === 0) {
+    callbackDone()
+  } else {
+    var answerDir = path.resolve(cacheDir, path.basename(file, '.json'))
+    fse.ensureDirSync(answerDir)
+    _.map(answers, function (answer) {
+      var control = survey.answers[answer]
+      if (_.isArray(control) === true) {
+        _.map(control, function (item) {
+          console.log('..... (MULTI) answer=%s', item)
+          checksum += 1
+          q.push({
+            answer: answer,
+            dir: answerDir,
+            message: {
+              survey: survey.id,
+              label: answer,
+              answer: item,
+              isURN: isURN(item)
+            }
+          })
         })
-      }, function () {
-        done()
-      })
-    } else {
-      try {
-        fse.accessSync(path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', payload.answer + '.json'))
-        _answer = payload.answer
-        isURN = true
-      } catch(e) {
-        _answer = payload.answer
+      } else {
+        console.log('..... (SINGLE) answer=%s', control)
+        checksum += 1
+        q.push({
+          answer: answer,
+          dir: answerDir,
+          message: {
+            survey: survey.id,
+            label: answer,
+            answer: survey.answers[answer],
+            isURN: isURN(survey.answers[answer])
+          }
+        })
       }
-      busSend({
-        survey: survey.id,
-        label: payload.label,
-        answer: _answer,
-        isURN: isURN
-      }, function () {
-        next1()
-      })
-    }
-  }, function () {
-    done()
-  })
+    })
+  }
 }, function () {
   console.log('checksum=%s', checksum)
   console.log('===== END ===============')

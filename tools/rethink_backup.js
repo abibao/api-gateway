@@ -45,6 +45,7 @@ var execReQL = function (table, skip, limit, callback) {
 
 console.log('===== PREPARE ===============')
 var cacheDir = path.resolve(__dirname, '../.cache/rethinkdb')
+fse.ensureDirSync(cacheDir)
 fse.emptyDirSync(cacheDir)
 
 console.log('===== START ===============')
