@@ -60,7 +60,7 @@ var busSend = function (dirpath, message, callback) {
       fse.writeJsonSync(filepath, result.data)
       callback()
     })
-    .catch(function (error) {
+    .catch(function () {
       callback()
     })
 }

@@ -18,7 +18,7 @@ var errorPromised = function (e) {
   error(e)
 }
 
-module.exports = function (table, collection) {
+module.exports = function (table) {
   warning('Task: ', 'Create')
   warning('***********************************************************************')
 

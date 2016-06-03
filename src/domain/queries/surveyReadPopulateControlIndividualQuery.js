@@ -39,7 +39,7 @@ module.exports = function (payload) {
           if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY) { survey.fromCompany = true }
           if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { survey.fromAbibao = true }
           if (survey.company === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_CHARITY) { survey.fromCharity = true }
-          _.map(survey.campaign.items, function (item) {
+          _.map(survey.campaign.items, function () {
             survey.items = survey.campaign.items
             if (_.isUndefined(survey.answers)) { survey.answers = {} }
           })

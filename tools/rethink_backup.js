@@ -30,7 +30,8 @@ var execReQL = function (table, skip, limit, callback) {
         var filepath = path.resolve(dir, item.id + '.json')
         fse.writeJsonSync(filepath, item)
         next()
-      }, function (err, results) {
+      }, function (err) {
+        if (err) { return callback() }
         if (items.length === limit) {
           execReQL(table, skip + limit, limit, callback)
         } else {
@@ -53,6 +54,9 @@ var tables = ['administrators', 'individuals', 'entities', 'campaigns', 'campaig
 async.mapSeries(tables, function (table, next) {
   execReQL(table, 0, 100, next)
 }, function (err, results) {
+  if (err) {
+    console.log(err)
+  }
   console.log('===== END ===============')
   process.exit(0)
 })

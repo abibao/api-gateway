@@ -64,7 +64,7 @@ module.exports = function (credentials) {
                 })
               })
                 .catch(next)
-            }, function (err, res) {
+            }, function (err) {
               if (err) { return reject(err) }
               waterfallResults.surveysCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
               waterfallResults.surveysInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
@@ -76,7 +76,7 @@ module.exports = function (credentials) {
             .catch(callback)
         }
 
-      ], function (error, result) {
+      ], function (error) {
         if (error) { return reject(error) }
         // construt the final result
         var finalResult = {

@@ -18,19 +18,18 @@ module.exports = function (payload) {
         return self.execute('command', 'campaignUpdateCommand', campaign).then(function (updated) {
           return self.r.table('individuals').filter({}).hasFields(['charity']).then(function (individuals) {
             async.map(individuals, function (individual, next) {
-              var data = {
+              /* var data = {
                 individual: individual.id,
                 charity: individual.charity,
                 email: individual.email,
                 campaign: campaign.id,
                 company: campaign.company
-              }
+              } */
               if (_.isUndefined(individual.charity)) {
-                next()
               } else {
                 // self.individualSendEmailCampaignEvent(data)
-                next()
               }
+              next()
             }, function (err) {
               if (err) { reject(err) }
               resolve(updated)
