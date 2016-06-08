@@ -10,6 +10,8 @@ module.exports = function (payload) {
 
   return new Promise(function (resolve, reject) {
     try {
+      // email to lowercase
+      payload.email = payload.email.toLowerCase()
       // password confirmation
       if (payload.password1 !== payload.password2) {
         throw new Error('invalid password confimation')

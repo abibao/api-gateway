@@ -62,26 +62,26 @@ abibao.debug('start processing')
 // start all services
 var services = require('./services')
 services.bus()
-  .then(function (item) {
+  .then(function () {
     abibao.debug('bus initialized')
     return services.domain()
-      .then(function () {
-        abibao.debug('domain initialized')
-        return services.server()
-          .then(function () {
-            abibao.debug('server initialized')
-            abibao.debug('end processing')
-            global.ABIBAO.services.server.start(function (error) {
-              if (error) { return abibao.error(error) }
-              abibao.debug('server has just started')
-              global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, {
-                name: global.ABIBAO.name,
-                uuid: global.ABIBAO.uuid,
-                message: 'has just connected into the bus'
-              })
-            })
-          })
+  })
+  .then(function () {
+    abibao.debug('domain initialized')
+    return services.server()
+  })
+  .then(function () {
+    abibao.debug('server initialized')
+    abibao.debug('end processing')
+    global.ABIBAO.services.server.start(function (error) {
+      if (error) { return abibao.error(error) }
+      abibao.debug('server has just started')
+      global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, {
+        name: global.ABIBAO.name,
+        uuid: global.ABIBAO.uuid,
+        message: 'has just connected into the bus'
       })
+    })
   })
   .catch(function (error) {
     abibao.error(error)

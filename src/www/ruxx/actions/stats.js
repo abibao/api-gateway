@@ -52,8 +52,8 @@ function StatsActions (facade) {
       self.facade.setLoading(true)
       self.facade.call('GET', '/v1/stats/individuals/ages/' + gender)
         .then(function (stats) {
-          self.facade.stores.stats._countMembersAges.datasets[0].data = stats.data
-          self.facade.stores.stats._countMembersAges.labels = ['0-4', '5-14', '15-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75-84', '85-94']
+          self.facade.stores.stats._countMembersAges[gender].datasets[0].data = stats.data
+          self.facade.stores.stats._countMembersAges[gender].labels = ['0-4', '5-14', '15-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75-84', '85-94']
           self.facade.debugAction('StatsActions.individualsAges %o', stats)
           self.facade.setLoading(false)
           resolve(stats)

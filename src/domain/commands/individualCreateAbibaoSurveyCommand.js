@@ -34,7 +34,7 @@ module.exports = function (data) {
                 answers: {}
               }
               // create the new survey
-              return domain.execute('command', 'surveyCreateCommand', data).then(function (survey) {
+              return domain.execute('command', 'surveyCreateCommand', data).then(function () {
                 // informations posted on slack
                 global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
                   'channel': '#cast-members-only',
