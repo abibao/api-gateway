@@ -9,6 +9,8 @@ module.exports = function (payload) {
 
   return new Promise(function (resolve, reject) {
     try {
+      // email to lowercase
+      payload.email = payload.email.toLowerCase()
       self.execute('query', 'individualFilterQuery', {email: payload.email}).then(function (individuals) {
         if (individuals.length === 0) { throw new Error('ERROR_BAD_AUTHENTIFICATION') }
         if (individuals.length > 1) { throw new Error(new Error('Too many emails, contact an individual')) }
