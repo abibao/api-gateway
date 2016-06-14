@@ -52,7 +52,8 @@ var busSend = function (dirpath, message, callback) {
           campaign_name: thinky.r.table('campaigns').get(item('campaign'))('name'),
           question: message.label,
           answer: message.answer,
-          answer_text: (message.isURN === true) ? thinky.r.table('campaigns_items_choices').get(message.answer)('text') : message.answer
+          answer_text: (message.isURN === true) ? thinky.r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
+          createdAt: item('createdAt')
         }
       }
     })

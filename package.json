@@ -1,11 +1,13 @@
 {
   "name": "api-gateway",
-  "version": "2.5.0",
+  "version": "2.5.3",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
     "database:mysql:create:answers": "clear && node tools/mysql_create_answers.js",
     "database:mysql:insert:answers": "clear && node tools/mysql_insert_answers.js",
+    "database:mysql:create:users": "clear && node tools/mysql_create_users.js",
+    "database:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
     "test:coverage": "clear && istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
     "auto:generate": "clear && ./bin/abibao generate",
     "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"

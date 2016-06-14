@@ -79,9 +79,11 @@ function Facade () {
             item.members = _stats[item.urn].count
           })
           return self.actions.stats.individualsGenders().then(function () {
-            return self.actions.stats.individualsAges('FEMALE').then(function () {
-              self.debug('start facade authentified=%s', self.stores.auth.authentified())
-              riot.update()
+            return self.actions.stats.individualsAges('MALE').then(function () {
+              return self.actions.stats.individualsAges('FEMALE').then(function () {
+                self.debug('start facade authentified=%s', self.stores.auth.authentified())
+                riot.update()
+              })
             })
           })
         })

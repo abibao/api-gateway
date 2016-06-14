@@ -118,7 +118,7 @@
             title: {
               display: true,
               position: 'bottom',
-              text: 'Répartition des âges'
+              text: 'Ages des Hommes'
             },
             legend: {
               display: false
