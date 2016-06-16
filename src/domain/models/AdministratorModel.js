@@ -50,7 +50,7 @@ module.exports = function (thinky) {
       return ''
     }
     var salt = new Buffer(this.salt, 'base64')
-    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64')
+    return crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('base64')
   })
 
   return AdministratorModel
