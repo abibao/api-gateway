@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.6.2",
+  "version": "2.6.3",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
@@ -28,7 +28,7 @@
   },
   "homepage": "https://gitlab.com/abibao/api-gateway#README",
   "engines": {
-    "node": "=5.5"
+    "node": "=6.2.1"
   },
   "dependencies": {
     "async": "2.0.0-rc.6",
@@ -42,8 +42,6 @@
     "debug": "2.2.0",
     "dotenv": "2.0.0",
     "fs-extra": "0.30.0",
-    "good": "6.6.3",
-    "good-bunyan": "0.1.2",
     "hapi": "13.4.1",
     "hapi-auth-basic": "4.2.0",
     "hapi-auth-jwt2": "7.0.1",

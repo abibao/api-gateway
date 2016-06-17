@@ -2,8 +2,16 @@
 
 ### TODO
 
+- [ ] remove thinky, and use rethinkdb
 - [ ] remove node-dir from package.json
-- [ ] update good to 7.x.x
+- [ ] update ELK logs
+- [ ] add http errors from bunyan to logstash
+
+### 2.6.3
+
+- [x] remove good from project
+- [x] remove ABIBAO_API_GATEWAY_LOGS_FILE
+- [x] add http logs from bunyan to logstash
 
 ### 2.6.2
 

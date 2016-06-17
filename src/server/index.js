@@ -19,6 +19,7 @@ var abibao = {
   error: global.ABIBAO.debuggers.error
 }
 
+var uuid = require('node-uuid')
 var async = require('async')
 var Hapi = require('hapi')
 var Routes = require('./routes')
@@ -37,7 +38,24 @@ internals.initialize = function () {
       })
       internals.server.logger = global.ABIBAO.logger
       internals.server.connection(internals.options)
-      var plugins = ['inert', 'good', 'auth']
+      internals.server.on('response', function(request) {
+        var starttime = new Date()
+        var data = {
+          uuid: uuid.v1(),
+          environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV'),
+          type: 'hapi-request',
+          request: request.id,
+          info: request.info,
+          method: request.method,
+          path: request.path,
+          params: request.params,
+          payload: request.payload,
+          exectime: request.info.responded - request.info.received
+        }
+        global.ABIBAO.logger.info(data)
+        abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
+      })
+      var plugins = ['inert', 'auth']
       async.mapSeries(plugins, function (item, next) {
         require('./plugins/' + item)(internals.server, function () {
           next(null, item)
