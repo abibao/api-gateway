@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
