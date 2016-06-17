@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
@@ -8,7 +8,7 @@
     "database:mysql:insert:answers": "clear && node tools/mysql_insert_answers.js",
     "database:mysql:create:users": "clear && node tools/mysql_create_users.js",
     "database:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
-    "test:coverage": "clear && istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
+    "test:all": "clear && ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
     "auto:generate": "clear && ./bin/abibao generate",
     "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
@@ -76,6 +76,7 @@
     "codacy-coverage": "1.1.3",
     "commander": "2.9.0",
     "faker": "3.1.0",
+    "istanbul": "0.4.3",
     "js-object-pretty-print": "0.2.0",
     "mocha": "2.5.3",
     "mustache": "2.2.1",

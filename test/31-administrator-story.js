@@ -7,9 +7,11 @@ var faker = require('faker')
 var mocha = require('../src/mocha')
 
 var administratorFake = {
-  email: faker.internet.email(),
-  password: faker.name.lastName()
+  email: faker.internet.email().toLowerCase(),
+  password: faker.name.lastName().toLowerCase()
 }
+
+console.log(administratorFake)
 
 describe('administrator story', function () {
   it('should initialize global.ABIBAO', function (done) {
@@ -43,6 +45,8 @@ describe('administrator story', function () {
       password2: administratorFake.password
     }).then(function (result) {
       expect(result).to.be.not.null
+      expect(result).to.be.an('object');
+      expect(result).to.have.property('id')
       administratorFake.id = global.ABIBAO.services.domain.getIDfromURN(result.urn)
       done()
     }).catch(function (error) {
@@ -64,6 +68,8 @@ describe('administrator story', function () {
       password: administratorFake.password
     }).then(function (result) {
       expect(result).to.be.not.null
+      expect(result).to.be.an('object');
+      expect(result).to.have.property('token')
       done()
     }).catch(function (error) {
       done(error)
@@ -71,7 +77,11 @@ describe('administrator story', function () {
   })
   it('shoud delete traces', function (done) {
     global.ABIBAO.services.domain.r.table('administrators').get(administratorFake.id).delete()
-      .then(function () {
+      .then(function (result) {
+        expect(result).to.be.not.null
+        expect(result).to.be.an('object');
+        expect(result).to.have.property('deleted')
+        expect(result.deleted).to.be.equal(1);
         done()
       })
       .catch(function (error) {
