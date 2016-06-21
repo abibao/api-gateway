@@ -9,8 +9,6 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'Retourne la liste des campagnes d"une entité donnée',
-  notes: 'Retourne la liste des campagnes d"une entité donnée',
   validate: {
     params: {
       urn: Joi.string().required()

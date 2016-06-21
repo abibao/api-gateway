@@ -8,8 +8,6 @@ module.exports = {
     scope: ['individual']
   },
   tags: ['api', '1.2) individual'],
-  description: 'Retourne des informations rapides sur l"utilisateur actuellement connecté',
-  notes: 'Retourne des informations rapides sur l"utilisateur actuellement connecté',
   jsonp: 'callback',
   handler(request, reply) {
     global.ABIBAO.services.domain.execute('query', 'authentificationGlobalInformationsQuery', request.auth.credentials)

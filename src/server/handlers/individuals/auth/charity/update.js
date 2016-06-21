@@ -9,8 +9,6 @@ module.exports = {
     scope: ['individual']
   },
   tags: ['api', '1.2) individual'],
-  description: "Change et historise l'association utilisée par l'utilisateur connecté",
-  notes: "Change et historise l'association utilisée par l'utilisateur connecté",
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },

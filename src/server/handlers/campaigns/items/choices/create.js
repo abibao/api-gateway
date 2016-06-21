@@ -9,8 +9,6 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: "Ajoute un choix pour les items d'une campagnes",
-  notes: "Ajoute un choix pour les items d'une campagnes",
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },

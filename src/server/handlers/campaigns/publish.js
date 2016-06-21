@@ -9,19 +9,17 @@ module.exports = {
     scope: ['administrator']
   },
   tags: ['api', '1.3) administrator'],
-  description: 'Publie une campagne pour un filtre d"individus donné',
-  notes: 'Publie une campagne pour un filtre d"individus donné',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
   validate: {
     params: {
-      urn: Joi.string().required(),
+      urn: Joi.string().required()
     },
     payload: {
       maximum: Joi.number().integer().min(0).required(),
       filter: Joi.string().required(),
-      finishedAt: Joi.date().format('DD/MM/YYYY'),
+      finishedAt: Joi.date().format('DD/MM/YYYY')
     }
   },
   jsonp: 'callback',
