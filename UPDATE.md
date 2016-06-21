@@ -11,6 +11,8 @@
 - [x] npm-check-updates done, 100% packages up
 - [x] add snyk for security checks
 - [x] logs are only for production
+- [x] add lots of new tests for codacy-coverage
+- [x] update codacy quality
 
 ### 2.6.5
 
