@@ -3,6 +3,7 @@
   "version": "2.6.6",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
+    "auto:generate": "./npm-scripts/auto-generate.sh",
     "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
     "database:rethinkdb:import:rece": "clear && node tools/rethink_import_rece.js",
     "database:mysql:create:answers": "clear && node tools/mysql_create_answers.js",
@@ -12,8 +13,7 @@
     "security:wizard": "clear && ./node_modules/.bin/snyk wizard",
     "security:protect": "clear && ./node_modules/.bin/snyk protect",
     "test:security": "clear && ./node_modules/.bin/snyk test",
-    "test:all": "clear && export CODACY_PROJECT_TOKEN=81efd5f3bef1435188fa264d5dc98475 && ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage",
-    "auto:generate": "clear && ./bin/abibao generate",
+    "test:all": "./npm-scripts/test-all.sh",
     "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
   "repository": {
@@ -39,6 +39,7 @@
     "base64-url": "1.2.2",
     "bluebird": "3.4.1",
     "boom": "3.2.1",
+    "bson": "0.4.23",
     "bunyan": "1.8.1",
     "bunyan-logstash-tcp": "0.3.4",
     "crumb": "6.0.1",
@@ -57,9 +58,7 @@
     "jsonwebtoken": "7.0.1",
     "knex": "0.11.7",
     "lodash": "4.13.1",
-    "markdown": "0.5.0",
     "md5": "2.1.0",
-    "mongoose": "4.5.1",
     "mysql": "2.11.1",
     "nconf": "0.8.4",
     "newrelic": "1.28.1",

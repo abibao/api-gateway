@@ -4,7 +4,6 @@
 
 - [ ] remove thinky, and use rethinkdb
 - [ ] remove node-dir from package.json
-- [ ] update ELK logs
 
 ### 2.6.6
 
@@ -13,6 +12,7 @@
 - [x] logs are only for production
 - [x] add lots of new tests for codacy-coverage
 - [x] update codacy quality
+- [x] remove "mongoose" and add "bson"
 
 ### 2.6.5
 

@@ -46,13 +46,13 @@ var busSend = function (dirpath, message, callback) {
       return {
         data: {
           email: thinky.r.table('individuals').get(item('individual'))('email'),
-          charity_id: item('charity'),
-          charity_name: thinky.r.table('entities').get(item('charity'))('name'),
-          campaign_id: item('campaign'),
-          campaign_name: thinky.r.table('campaigns').get(item('campaign'))('name'),
+          'charity_id': item('charity'),
+          'charity_name': thinky.r.table('entities').get(item('charity'))('name'),
+          'campaign_id': item('campaign'),
+          'campaign_name': thinky.r.table('campaigns').get(item('campaign'))('name'),
           question: message.label,
           answer: message.answer,
-          answer_text: (message.isURN === true) ? thinky.r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
+          'answer_text': (message.isURN === true) ? thinky.r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
           createdAt: item('createdAt')
         }
       }
@@ -98,7 +98,7 @@ async.mapSeries(files, function (file, done) {
           console.log('..... (MULTI) answer=%s', item)
           checksum += 1
           q.push({
-            answer: answer,
+            answer,
             dir: answerDir,
             message: {
               survey: survey.id,
@@ -112,7 +112,7 @@ async.mapSeries(files, function (file, done) {
         console.log('..... (SINGLE) answer=%s', control)
         checksum += 1
         q.push({
-          answer: answer,
+          answer,
           dir: answerDir,
           message: {
             survey: survey.id,

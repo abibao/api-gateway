@@ -4,7 +4,6 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-var _ = require('lodash')
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
@@ -56,27 +55,28 @@ var busSend = function (individual, callback) {
         createdAt: individual.createdAt,
         modifiedAt: individual.modifiedAt
       }
+      var filepath = ''
       // consolidate data
       if (data.age !== null) {
         data.age = parseInt(data.age)
       }
-      var filepath = path.resolve(__dirname, '../.cache/rethinkdb/entities', data.charity + '.json')
+      filepath = path.resolve(__dirname, '../.cache/rethinkdb/entities', data.charity + '.json')
       if (fse.existsSync(filepath)) {
         data.charity = fse.readJsonSync(filepath).name
       }
-      var filepath = path.resolve(__dirname, '../.cache/rethinkdb/entities', data.registeredCharity + '.json')
+      filepath = path.resolve(__dirname, '../.cache/rethinkdb/entities', data.registeredCharity + '.json')
       if (fse.existsSync(filepath)) {
         data.registeredCharity = fse.readJsonSync(filepath).name
       }
-      var filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.csp + '.json')
+      filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.csp + '.json')
       if (fse.existsSync(filepath)) {
         data.csp = fse.readJsonSync(filepath).text
       }
-      var filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.department + '.json')
+      filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.department + '.json')
       if (fse.existsSync(filepath)) {
         data.department = fse.readJsonSync(filepath).text
       }
-      var filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.gender + '.json')
+      filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.gender + '.json')
       if (fse.existsSync(filepath)) {
         data.gender = fse.readJsonSync(filepath).text
       }

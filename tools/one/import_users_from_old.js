@@ -4,12 +4,8 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-var mocha = require('../../src/mocha')
-
-var _ = require('lodash')
 var async = require('async')
-var path = require('path')
-var fse = require('fs-extra')
+var engine = require('../../src/engine')
 
 var optionsRethink = {
   host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
@@ -36,10 +32,10 @@ var optionsMySQL = {
 }
 var knex = require('knex')(optionsMySQL)
 
-var users_new = []
-var users_old = []
+var usersNew = []
+var usersOld = []
 
-mocha()
+/* engine()
   .then(function () {
     knex('t_datas')
       .where({user_id: 1})
@@ -48,47 +44,46 @@ mocha()
         console.log(t_datas)
       })
   })
+*/
 
-  /*
-  mocha()
-    .then(function () {
-      knex('t_user')
-        .select()
-        .then(function (t_users) {
-          users_old.push(t_users[0])
-          async.mapLimit(users_old, 10, function (t_user, next) {
-            thinky.r.table('individuals').filter({email: t_user.user_email})
-              .then(function (users) {
-                if (users.length === 0) {
-                  console.log('%s not exists', t_user.user_email)
-                  var payload = {
-                    email: t_user.user_email.toLowerCase(),
-                    password1: 'CreateFromNothing',
-                    password2: 'CreateFromNothing',
-                    hasRegisteredEntity: 'none:old'
-                  }
-                  global.ABIBAO.services.domain.execute('command', 'individualRegisterCommand', payload)
-                    .then(function (individual) {
-                      users_new.push(individual)
-                      payload.password = 'CreateFromNothing'
-                      return global.ABIBAO.services.domain.execute('command', 'individualLoginWithCredentialsCommand', payload)
-                    })
-                    .then(function (infos) {
-                      next()
-                    })
-                    .catch(function (error) {
-                      next()
-                    })
-                } else {
-                  console.log('%s alreasy exists', t_user.user_email)
-                  next()
+engine()
+  .then(function () {
+    knex('t_user')
+      .select()
+      .then(function (tUsers) {
+        usersOld.push(tUsers[0])
+        async.mapLimit(usersOld, 10, function (tUser, next) {
+          thinky.r.table('individuals').filter({email: tUser.user_email})
+            .then(function (users) {
+              if (users.length === 0) {
+                console.log('%s not exists', tUser.user_email)
+                var payload = {
+                  email: tUser.user_email.toLowerCase(),
+                  password1: 'CreateFromNothing',
+                  password2: 'CreateFromNothing',
+                  hasRegisteredEntity: 'none:old'
                 }
-              })
-          }, function (err) {
-            console.log('users_old=%s', users_old.length)
-            console.log('users_new=%s', users_new.length)
-            process.exit(0)
-          })
+                global.ABIBAO.services.domain.execute('command', 'individualRegisterCommand', payload)
+                  .then(function (individual) {
+                    usersNew.push(individual)
+                    payload.password = 'CreateFromNothing'
+                    return global.ABIBAO.services.domain.execute('command', 'individualLoginWithCredentialsCommand', payload)
+                  })
+                  .then(function (infos) {
+                    next()
+                  })
+                  .catch(function () {
+                    next()
+                  })
+              } else {
+                console.log('%s alreasy exists', tUser.user_email)
+                next()
+              }
+            })
+        }, function () {
+          console.log('usersOld=%s', usersOld.length)
+          console.log('usersNew=%s', usersNew.length)
+          process.exit(0)
         })
-    })
-  */
+      })
+  })
