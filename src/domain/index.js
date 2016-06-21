@@ -110,7 +110,7 @@ module.exports.singleton = function () {
 
 var async = require('async')
 var path = require('path')
-var dir = require('node-dir')
+var fs = require('fs')
 var uuid = require('node-uuid')
 
 internals.injector = function (type) {
@@ -118,36 +118,27 @@ internals.injector = function (type) {
   return new Promise(function (resolve, reject) {
     abibao.debug('[' + type + ']')
     // custom
-    dir.readFiles(path.resolve(__dirname, type),
-      {
-        recursive: false,
-        match: /.js/
-      },
-      function (err, content, next) {
-        if (err) { return reject(err) }
-        next()
-      },
-      function (err, files) {
-        if (err) { return reject(err) }
-        async.mapSeries(files, function (item, next) {
-          var name = path.basename(item, '.js')
-          abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
-          if (type === 'models') {
-            self[name] = require('./' + type + '/' + name)(self.thinky)
-          } else if (type === 'models/mysql') {
-            self[name] = require('./' + type + '/' + name)(self.knex)
-          } else if (type === 'listeners') {
-            self[name] = require('./' + type + '/' + name)
-            self[name]()
-          } else {
-            self[name] = require('./' + type + '/' + name)
-          }
-          next(null, true)
-        }, function (error, results) {
-          if (error) { return reject(err) }
-          resolve(results)
-        })
-      })
+    var files = fs.readdirSync(path.resolve(__dirname, type))
+    async.mapSeries(files, function (item, next) {
+      if (item === 'system') {
+      } else {
+        var name = path.basename(item, '.js')
+        abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
+        if (type === 'models') {
+          self[name] = require('./' + type + '/' + name)(self.thinky)
+        } else if (type === 'models/mysql') {
+          self[name] = require('./' + type + '/' + name)(self.knex)
+        } else if (type === 'listeners') {
+          self[name] = require('./' + type + '/' + name)
+          self[name]()
+        } else {
+          self[name] = require('./' + type + '/' + name)
+        }
+      }
+      next(null, true)
+    }, function () {
+      resolve()
+    })
   })
 }
 

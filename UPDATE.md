@@ -3,7 +3,6 @@
 ### TODO
 
 - [ ] remove thinky, and use rethinkdb
-- [ ] remove node-dir from package.json
 
 ### 2.6.6
 
@@ -13,6 +12,8 @@
 - [x] add lots of new tests for codacy-coverage
 - [x] update codacy quality
 - [x] remove "mongoose" and add "bson"
+- [x] add crons script
+- [x] remove node-dir from package.json
 
 ### 2.6.5
 
