@@ -32,8 +32,8 @@ var execReQL = function (table, skip, limit, callback) {
         next()
       }, function (err) {
         if (err) { return callback() }
-        thinky.r.table(table).count().then(function(count) {
-          if (skip+limit<count) {
+        thinky.r.table(table).count().then(function (count) {
+          if (skip + limit < count) {
             execReQL(table, skip + limit, limit, callback)
           } else {
             callback()

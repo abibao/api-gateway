@@ -5,7 +5,15 @@
 - [ ] remove thinky, and use rethinkdb
 - [ ] remove node-dir from package.json
 - [ ] update ELK logs
-- [ ] add http errors from bunyan to logstash
+
+### 2.6.5
+
+- [x] add new batch to import manual users
+
+### 2.6.4
+
+- [x] add new batch to create a pprod database
+- [x] add http errors from bunyan to logstash
 
 ### 2.6.3
 
