@@ -6,6 +6,12 @@
 - [ ] remove node-dir from package.json
 - [ ] update ELK logs
 
+### 2.6.6
+
+- [x] npm-check-updates done, 100% packages up
+- [x] add snyk for security checks
+- [x] logs are only for production
+
 ### 2.6.5
 
 - [x] add new batch to import manual users

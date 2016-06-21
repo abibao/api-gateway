@@ -4,14 +4,14 @@ var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 
-var mocha = require('../src/mocha')
+var engine = require('../src')
 
 describe('sendgrid story', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO) {
       done()
     } else {
-      mocha()
+      engine()
         .then(function () {
           expect(global.ABIBAO.uuid).to.be.a('string')
           done()

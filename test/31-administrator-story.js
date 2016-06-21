@@ -4,7 +4,7 @@ var chai = require('chai')
 var expect = chai.expect
 var faker = require('faker')
 
-var mocha = require('../src/mocha')
+var engine = require('../src')
 
 var administratorFake = {
   email: faker.internet.email().toLowerCase(),
@@ -18,7 +18,7 @@ describe('administrator story', function () {
     if (global.ABIBAO) {
       done()
     } else {
-      mocha()
+      engine()
         .then(function () {
           expect(global.ABIBAO.uuid).to.be.a('string')
           done()
@@ -45,7 +45,7 @@ describe('administrator story', function () {
       password2: administratorFake.password
     }).then(function (result) {
       expect(result).to.be.not.null
-      expect(result).to.be.an('object');
+      expect(result).to.be.an('object')
       expect(result).to.have.property('id')
       administratorFake.id = global.ABIBAO.services.domain.getIDfromURN(result.urn)
       done()
@@ -68,7 +68,7 @@ describe('administrator story', function () {
       password: administratorFake.password
     }).then(function (result) {
       expect(result).to.be.not.null
-      expect(result).to.be.an('object');
+      expect(result).to.be.an('object')
       expect(result).to.have.property('token')
       done()
     }).catch(function (error) {
@@ -79,9 +79,9 @@ describe('administrator story', function () {
     global.ABIBAO.services.domain.r.table('administrators').get(administratorFake.id).delete()
       .then(function (result) {
         expect(result).to.be.not.null
-        expect(result).to.be.an('object');
+        expect(result).to.be.an('object')
         expect(result).to.have.property('deleted')
-        expect(result.deleted).to.be.equal(1);
+        expect(result.deleted).to.be.equal(1)
         done()
       })
       .catch(function (error) {

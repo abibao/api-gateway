@@ -3,11 +3,11 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var mocha = require('../src/mocha')
+var engine = require('../src')
 
 describe('abibao story', function () {
   it('should initialize global.ABIBAO', function (done) {
-    mocha()
+    engine()
       .then(function () {
         expect(global.ABIBAO.uuid).to.be.a('string')
         done()

@@ -61,7 +61,7 @@ var abibao = {
 
 abibao.debug('start processing')
 
-var mocha = function () {
+var engine = function () {
   return new Promise(function (resolve, reject) {
     // start all services
     var services = require('./services')
@@ -94,4 +94,4 @@ var mocha = function () {
   })
 }
 
-module.exports = mocha
+module.exports = engine
