@@ -165,7 +165,9 @@ internals.execute = function (type, promise, params) {
       .then(function (result) {
         data.exectime = new Date() - starttime
         // loggers
-        global.ABIBAO.logger.info(data)
+        if (global.ABIBAO.environnement === 'prod') {
+          global.ABIBAO.logger.info(data)
+        }
         // debuggers
         abibao.debug('[%s] finish %s %s', data.uuid, type, promise)
         // return
@@ -175,7 +177,9 @@ internals.execute = function (type, promise, params) {
         data.exectime = new Date() - starttime
         data.error = error
         // loggers
-        global.ABIBAO.logger.error(data)
+        if (global.ABIBAO.environnement === 'prod') {
+          global.ABIBAO.logger.error(data)
+        }
         // debuggers
         abibao.error('[%s] finish %s %s %o', data.uuid, type, promise, error)
         // return

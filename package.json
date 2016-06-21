@@ -12,7 +12,7 @@
     "security:wizard": "clear && ./node_modules/.bin/snyk wizard",
     "security:protect": "clear && ./node_modules/.bin/snyk protect",
     "test:security": "clear && ./node_modules/.bin/snyk test",
-    "test:all": "clear && CODACY_PROJECT_TOKEN=81efd5f3bef1435188fa264d5dc98475 ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage",
+    "test:all": "clear && export CODACY_PROJECT_TOKEN=81efd5f3bef1435188fa264d5dc98475 && ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- --timeout 15000 -R spec && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage",
     "auto:generate": "clear && ./bin/abibao generate",
     "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },

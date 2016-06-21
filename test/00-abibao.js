@@ -3,7 +3,7 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../src')
+var engine = require('../src/engine')
 
 describe('abibao story', function () {
   it('should initialize global.ABIBAO', function (done) {

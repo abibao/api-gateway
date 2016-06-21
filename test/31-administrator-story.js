@@ -4,14 +4,12 @@ var chai = require('chai')
 var expect = chai.expect
 var faker = require('faker')
 
-var engine = require('../src')
+var engine = require('../src/engine')
 
 var administratorFake = {
   email: faker.internet.email().toLowerCase(),
   password: faker.name.lastName().toLowerCase()
 }
-
-console.log(administratorFake)
 
 describe('administrator story', function () {
   it('should initialize global.ABIBAO', function (done) {
@@ -46,7 +44,7 @@ describe('administrator story', function () {
     }).then(function (result) {
       expect(result).to.be.not.null
       expect(result).to.be.an('object')
-      expect(result).to.have.property('id')
+      expect(result).to.have.property('urn')
       administratorFake.id = global.ABIBAO.services.domain.getIDfromURN(result.urn)
       done()
     }).catch(function (error) {

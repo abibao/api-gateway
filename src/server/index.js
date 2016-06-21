@@ -38,7 +38,7 @@ internals.initialize = function () {
       })
       internals.server.logger = global.ABIBAO.logger
       internals.server.connection(internals.options)
-      internals.server.on('response', function(request) {
+      internals.server.on('response', function (request) {
         var starttime = new Date()
         var data = {
           uuid: uuid.v1(),
@@ -52,7 +52,9 @@ internals.initialize = function () {
           payload: request.payload,
           exectime: request.info.responded - request.info.received
         }
-        global.ABIBAO.logger.info(data)
+        if (global.ABIBAO.environnement === 'prod') {
+          global.ABIBAO.logger.info(data)
+        }
         abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
       })
       var plugins = ['inert', 'auth']
