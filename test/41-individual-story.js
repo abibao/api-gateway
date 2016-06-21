@@ -45,6 +45,7 @@ describe('individual story', function () {
       expect(result).to.be.not.null
       expect(result).to.be.an('object')
       expect(result).to.have.property('urn')
+      individualFake.urn = result.urn
       individualFake.id = global.ABIBAO.services.domain.getIDfromURN(result.urn)
       done()
     }).catch(function (error) {
@@ -79,8 +80,6 @@ describe('individual story', function () {
     }).catch(function (error) {
       expect(error).to.be.not.null
       done()
-    }).catch(function (error) {
-      done(error)
     })
   })
   it('should not get informations (wrong action)', function (done) {
@@ -89,8 +88,6 @@ describe('individual story', function () {
     }).catch(function (error) {
       expect(error).to.be.not.null
       done()
-    }).catch(function (error) {
-      done(error)
     })
   })
   it('should not get informations (wrong scope)', function (done) {
@@ -100,8 +97,6 @@ describe('individual story', function () {
     }).catch(function (error) {
       expect(error).to.be.not.null
       done()
-    }).catch(function (error) {
-      done(error)
     })
   })
   it('should not get informations (wrong urn)', function (done) {
@@ -112,17 +107,42 @@ describe('individual story', function () {
     }).catch(function (error) {
       expect(error).to.be.not.null
       done()
+    })
+  })
+  it('should get informations', function (done) {
+    global.ABIBAO.services.domain.execute('query', 'authentificationGlobalInformationsQuery', {
+      action: global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME,
+      scope: global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL,
+      urn: individualFake.urn
+    }).then(function (result) {
+      expect(result).to.be.not.null
+      expect(result).to.be.an('object')
+      done()
+    }).catch(function (error) {
+      done(error)
+    })
+  })
+  it('should update individual', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualUpdateCommand', {
+      urn: individualFake.urn,
+      email: individualFake.email
+    }).then(function (result) {
+      expect(result).to.be.not.null
+      expect(result).to.be.an('object')
+      expect(result).to.have.property('urn')
+      expect(result.urn).to.be.equal(individualFake.urn)
+      done()
     }).catch(function (error) {
       done(error)
     })
   })
   it('shoud delete traces', function (done) {
-    global.ABIBAO.services.domain.r.table('individuals').get(individualFake.id).delete()
+    global.ABIBAO.services.domain.execute('command', 'individualDeleteCommand', individualFake.urn)
       .then(function (result) {
         expect(result).to.be.not.null
         expect(result).to.be.an('object')
-        expect(result).to.have.property('deleted')
-        expect(result.deleted).to.be.equal(1)
+        expect(result).to.have.property('urn')
+        expect(result.urn).to.be.equal(individualFake.urn)
         done()
       })
       .catch(function (error) {

@@ -68,18 +68,33 @@ describe('administrator story', function () {
       expect(result).to.be.not.null
       expect(result).to.be.an('object')
       expect(result).to.have.property('token')
+      administratorFake.urn = result.urn
+      done()
+    }).catch(function (error) {
+      done(error)
+    })
+  })
+  it('should update administrator', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'administratorUpdateCommand', {
+      urn: administratorFake.urn,
+      email: administratorFake.email
+    }).then(function (result) {
+      expect(result).to.be.not.null
+      expect(result).to.be.an('object')
+      expect(result).to.have.property('urn')
+      expect(result.urn).to.be.equal(administratorFake.urn)
       done()
     }).catch(function (error) {
       done(error)
     })
   })
   it('shoud delete traces', function (done) {
-    global.ABIBAO.services.domain.r.table('administrators').get(administratorFake.id).delete()
+    global.ABIBAO.services.domain.execute('command', 'administratorDeleteCommand', administratorFake.urn)
       .then(function (result) {
         expect(result).to.be.not.null
         expect(result).to.be.an('object')
-        expect(result).to.have.property('deleted')
-        expect(result.deleted).to.be.equal(1)
+        expect(result).to.have.property('urn')
+        expect(result.urn).to.be.equal(administratorFake.urn)
         done()
       })
       .catch(function (error) {

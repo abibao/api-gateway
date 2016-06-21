@@ -10,17 +10,21 @@ module.exports = function (payload) {
     try {
       self.execute('query', 'administratorFilterQuery', {email: payload.email})
         .then(function (administrators) {
-          if (administrators.length === 0) throw new Error('Email address and/or password invalid')
-          if (administrators.length > 1) throw new Error('Too many emails, contact an administrator')
+          if (administrators.length === 0) {
+            throw new Error('Email address and/or password invalid')
+          }
+          if (administrators.length > 1) {
+            throw new Error('Too many emails, contact an administrator')
+          }
           var administrator = administrators[0]
           if (administrator.authenticate(payload.password)) {
             // all done then reply token
             return self.execute('command', 'administratorCreateAuthTokenCommand', administrator.urn)
               .then(function (token) {
-                global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
-                  token: token
+                resolve({
+                  token: token,
+                  urn: administrator.urn
                 })
-                resolve({token: token})
               })
           } else {
             throw new Error('Email address and/or password invalid')
