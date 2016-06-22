@@ -32,6 +32,11 @@ module.exports = function (model, collection) {
     mustachePromise(normalize(resolve(__dirname, '../templates/queries/filter.tpl')), normalize(resolve(__dirname, '../../src/domain/queries/system')), _.camelCase(model + 'FilterQuery') + '.js', {
       JS_MODEL_NAME: model + 'Model',
       JS_QUERY_NAME: model + 'FilterQuery'
+    }),
+    mustachePromise(normalize(resolve(__dirname, '../templates/others/test.tpl')), normalize(resolve(__dirname, '../../test')), _.camelCase(model + 'MochaTest') + '.js', {
+      JS_DESCRIBE_NAME: model.toLowerCase() + ' auto test',
+      JS_MODEL_NAME: model.toLowerCase(),
+      JS_PROMISE_CREATE: _.camelCase(model + 'CreateCommand')
     })
   ]
 }

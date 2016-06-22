@@ -14,6 +14,7 @@
 - [x] remove "mongoose" and add "bson"
 - [x] add crons script
 - [x] remove node-dir from package.json
+- [x] add templating tests for CQ system
 
 ### 2.6.5
 
