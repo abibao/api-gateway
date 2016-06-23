@@ -85,7 +85,7 @@
     "mustache": "2.2.1",
     "request-promise": "3.0.0",
     "rethinkdb": "2.3.2",
-    "snyk": "1.14.3",
+    "snyk": "1.15.0",
     "standard": "7.1.2"
   }
 }

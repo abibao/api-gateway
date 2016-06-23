@@ -22,25 +22,28 @@ describe('individual auto test', function () {
         })
     }
   })
-  it('should create', function (done) {
-    it('should success create', function (done) {
-      global.ABIBAO.services.domain.execute('command', 'individualCreateCommand', {})
-        .then(function (created) {
-          individualFake = created
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    })
+  it('should not create', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualCreateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should read', function (done) {
-    done()
+  it('should not read', function (done) {
+    global.ABIBAO.services.domain.execute('query', 'individualReadQuery', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should update', function (done) {
-    done()
+  it('should not update', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualUpdateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should delete', function (done) {
-    done()
+  it('should not delete', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualDeleteCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
 })

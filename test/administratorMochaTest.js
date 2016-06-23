@@ -22,25 +22,28 @@ describe('administrator auto test', function () {
         })
     }
   })
-  it('should create', function (done) {
-    it('should success create', function (done) {
-      global.ABIBAO.services.domain.execute('command', 'administratorCreateCommand', administratorFake)
-        .then(function (created) {
-          administratorFake = created
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    })
+  it('should not create', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'administratorCreateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should read', function (done) {
-    done()
+  it('should not read', function (done) {
+    global.ABIBAO.services.domain.execute('query', 'administratorReadQuery', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should update', function (done) {
-    done()
+  it('should not update', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'administratorUpdateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should delete', function (done) {
-    done()
+  it('should not delete', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'administratorDeleteCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
 })

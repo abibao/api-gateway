@@ -51,6 +51,7 @@ internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
     try {
+      internals.domain.dictionnary = []
       internals.domain.knex = require('knex')(internals.optionsMySQL)
       internals.domain.thinky = require('thinky')(internals.optionsRethink)
       internals.domain.ThinkyErrors = internals.domain.thinky.Errors
@@ -133,6 +134,7 @@ internals.injector = function (type) {
           self[name]()
         } else {
           self[name] = require('./' + type + '/' + name)
+          self.dictionnary.push(name)
         }
       }
       next(null, true)

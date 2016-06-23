@@ -22,25 +22,28 @@ describe('campaign auto test', function () {
         })
     }
   })
-  it('should create', function (done) {
-    it('should success create', function (done) {
-      global.ABIBAO.services.domain.execute('command', 'campaignCreateCommand', {})
-        .then(function (created) {
-          campaignFake = created
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    })
+  it('should not create', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'campaignCreateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should read', function (done) {
-    done()
+  it('should not read', function (done) {
+    global.ABIBAO.services.domain.execute('query', 'campaignReadQuery', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should update', function (done) {
-    done()
+  it('should not update', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'campaignUpdateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should delete', function (done) {
-    done()
+  it('should not delete', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'campaignDeleteCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
 })

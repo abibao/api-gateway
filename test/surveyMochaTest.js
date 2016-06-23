@@ -22,25 +22,28 @@ describe('survey auto test', function () {
         })
     }
   })
-  it('should create', function (done) {
-    it('should success create', function (done) {
-      global.ABIBAO.services.domain.execute('command', 'surveyCreateCommand', {})
-        .then(function (created) {
-          surveyFake = created
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    })
+  it('should not create', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'surveyCreateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should read', function (done) {
-    done()
+  it('should not read', function (done) {
+    global.ABIBAO.services.domain.execute('query', 'surveyReadQuery', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should update', function (done) {
-    done()
+  it('should not update', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'surveyUpdateCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
-  it('should delete', function (done) {
-    done()
+  it('should not delete', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'surveyDeleteCommand', {})
+      .catch(function (error) {
+        done()
+      })
   })
 })
