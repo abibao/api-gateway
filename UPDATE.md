@@ -15,10 +15,11 @@
 - [x] add crons script
 - [x] remove node-dir from package.json
 - [x] add templating tests for CQ system
+- [x] finish bash import t_users
 
 ### 2.6.5
 
-- [x] add new batch to import manual users
+- [x] add new batch to import t_users
 
 ### 2.6.4
 

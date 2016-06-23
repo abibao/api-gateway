@@ -47,10 +47,9 @@ recursive(cacheDir, function (err, files) {
           knex.destroy()
         })
     })
-    .catch(function (error) {
-      console.log(error)
+    .catch(function () {
       console.log('===== END ===============')
-      process.exit(-1)
+      process.exit(0)
       knex.destroy()
     })
 })

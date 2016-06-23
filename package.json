@@ -10,6 +10,7 @@
     "database:mysql:insert:answers": "clear && node tools/mysql_insert_answers.js",
     "database:mysql:create:users": "clear && node tools/mysql_create_users.js",
     "database:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
+    "database:mysql:import:t_users": "clear && node tools/mysql_import_t_users.js",
     "crons": "./npm-scripts/crons.sh",
     "security:wizard": "clear && ./node_modules/.bin/snyk wizard",
     "security:protect": "clear && ./node_modules/.bin/snyk protect",
