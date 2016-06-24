@@ -33,7 +33,7 @@ internals.initialize = function () {
         connections: {
           routes: {
             cors: {
-              origin: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_CORS_ORIGINS'),
+              origin: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_CORS_ORIGINS').split(','),
               additionalHeaders: ['X-CSRF-Token']
             }
           }
