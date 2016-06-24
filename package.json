@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.6.6",
+  "version": "2.6.7",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
@@ -10,7 +10,7 @@
     "database:mysql:insert:answers": "clear && node tools/mysql_insert_answers.js",
     "database:mysql:create:users": "clear && node tools/mysql_create_users.js",
     "database:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
-    "database:mysql:import:t_users": "clear && node tools/mysql_import_t_users.js",
+    "database:emails:recovery": "clear && node tools/emails_recovery.js",
     "crons": "./npm-scripts/crons.sh",
     "security:wizard": "clear && ./node_modules/.bin/snyk wizard",
     "security:protect": "clear && ./node_modules/.bin/snyk protect",
@@ -86,7 +86,7 @@
     "mustache": "2.2.1",
     "request-promise": "3.0.0",
     "rethinkdb": "2.3.2",
-    "snyk": "1.15.0",
+    "snyk": "1.16.0",
     "standard": "7.1.2"
   }
 }

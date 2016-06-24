@@ -5,12 +5,8 @@ var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
 var Promise = require('bluebird')
-var path = require('path')
-var fse = require('fs-extra')
 var async = require('async')
 var _ = require('lodash')
-var bson = require('bson')
-var ObjectId = bson.ObjectId
 var engine = require('../src/engine')
 
 var optionsRethink = {
@@ -40,58 +36,67 @@ var knex = require('knex')(optionsMySQL)
 
 var stepUser = function (tUser) {
   return new Promise(function (resolve, reject) {
+    console.log('... STEP USER ...')
     var payload
     thinky.r.table('individuals').filter({email: tUser['user_email']})
       .then(function (users) {
+        var user = {}
         if (users.length === 0) {
-          console.log('%s will be created', tUser['user_email'])
+          console.log('... %s will be created', tUser['user_email'])
           payload = {
             email: tUser['user_email'].toLowerCase(),
-            password1: 'CreateFromNothing',
-            password2: 'CreateFromNothing',
+            password1: tUser['user_password'],
+            password2: tUser['user_password'],
             hasRegisteredEntity: 'none:old'
           }
           global.ABIBAO.services.domain.execute('command', 'individualRegisterCommand', payload)
-            .then(function () {
+            .then(function (result) {
+              user = result
               payload = {
-                email: tUser['user_email'].toLowerCase(),
-                password: 'CreateFromNothing'
+                email: user.email.toLowerCase(),
+                password: tUser['user_password']
               }
               return global.ABIBAO.services.domain.execute('command', 'individualLoginWithCredentialsCommand', payload)
             })
-            .then(function (result) {
-              resolve(result)
+            .then(function () {
+              resolve(user)
             })
-            .catch(function (error) {
-              console.log('[0] %o', payload)
-              reject(error)
+            .catch(function () {
+              console.log('... [ERROR 0] %o', payload)
+              resolve()
             })
         } else {
-          console.log('%s exists with id=%s', tUser['user_email'], tUser['user_id'])
+          console.log('... %s exists', tUser['user_email'])
           payload = {
-            email: tUser['user_email'].toLowerCase(),
-            password: 'CreateFromNothing'
+            email: tUser['user_email'].toLowerCase()
           }
-          global.ABIBAO.services.domain.execute('command', 'individualLoginWithCredentialsCommand', payload)
-            .then(function (result) {
-              resolve(result)
+          global.ABIBAO.services.domain.execute('query', 'individualFilterQuery', payload)
+            .then(function (users) {
+              user = users[0]
+              resolve(user)
             })
             .catch(function (error) {
-              console.log('[1] %o', payload)
-              reject(error)
+              console.log(error)
+              resolve()
             })
         }
+      })
+      .catch(function (error) {
+        console.log(error)
+        resolve()
       })
   })
 }
 
-var stepTDATA = function (tUser) {
+var stepData = function (tUser) {
   return new Promise(function (resolve, reject) {
+    console.log('... STEP DATA ...')
     var data = {
       answers: {},
       campaign: '56eb24cfe9b0fbf30250f8c7',
       charity: '56aa131ca533a2a04be325ae',
       company: '56aa131ca533a2a04be325ae',
+      individual: tUser.individual,
       complete: true
     }
     var tDatas
@@ -104,7 +109,6 @@ var stepTDATA = function (tUser) {
           resolve()
         } else {
           tData = tDatas[0]
-          console.log(tData)
           data.answers.ABIBAO_ANSWER_FONDAMENTAL_AGE = 2015 - tData['datas_age']
           return global.ABIBAO.services.domain.execute('query', 'campaignItemChoiceFilterQuery', {
             prefix: 'GENDER',
@@ -132,13 +136,26 @@ var stepTDATA = function (tUser) {
         var csp = _.filter(csps, {'suffix': tData['datas_csp'].toString()})[0]
         if (csp) {
           data.answers.ABIBAO_ANSWER_FONDAMENTAL_CSP = csp.id
+        } else {
+          console.log('... error csp n°%s', tData['datas_csp'])
+          errorsCSPS.push(tData['datas_csp'])
         }
         // end of data
         if (Object.keys(data.answers).length === 4) {
         } else {
           data.complete = false
         }
-        console.log(data)
+        return thinky.r.table('surveys').filter({
+          campaign: '56eb24cfe9b0fbf30250f8c7',
+          charity: '56aa131ca533a2a04be325ae',
+          company: '56aa131ca533a2a04be325ae',
+          individual: tUser.individual
+        }).delete()
+      })
+      .then(function () {
+        return thinky.r.table('surveys').insert(data)
+      })
+      .then(function () {
         resolve()
       })
       .catch(function () {
@@ -147,13 +164,56 @@ var stepTDATA = function (tUser) {
   })
 }
 
+var stepEmail = function (tUser) {
+  return new Promise(function (resolve, reject) {
+    if (tUser['user_email'] !== 'vincent@abibao.com') {
+      return resolve()
+    }
+    console.log('... STEP EMAIL ...')
+    // send email
+    var sendgrid = require('sendgrid').SendGrid(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
+    var request = sendgrid.emptyRequest()
+    request.method = 'POST'
+    request.path = '/v3/mail/send'
+    request.body = {
+      'personalizations': [
+        {
+          'to': [
+            {'email': tUser['user_email']},
+            {'email': 'gperreymond@gmail.com'}
+          ],
+          'subject': 'Les sondages qui financent des associations - Choisissez votre association !',
+          'substitutions': {
+            '%fingerprint%': global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI') + '/?fingerprint=this_is_the_wtf_fingerprint',
+            '%individual_login%': tUser['user_email'],
+            '%individual_password%': tUser['user_password']
+          }
+        }
+      ],
+      'from': { 'email': 'bonjour@abibao.com', 'name': 'Abibao' },
+      'content': [
+        {
+          'type': 'text/html',
+          'value': ' '
+        }
+      ],
+      'template_id': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_TEMPLATE_ABIBAO_EMAIL_RECOVERY')
+    }
+    sendgrid.API(request, function (response) {
+      if (response.statusCode === 202) {
+        resolve()
+      } else {
+        reject(response)
+      }
+    })
+  })
+}
+
 console.log('===== START ===============')
-var cacheDir = path.resolve(__dirname, '../.cache/tusers')
-fse.ensureDirSync(cacheDir)
-fse.emptyDirSync(cacheDir)
 
 var usersNew = []
 var usersOld = []
+var errorsCSPS = []
 
 engine()
   .then(function () {
@@ -161,19 +221,34 @@ engine()
       .select()
       .then(function (tUsers) {
         usersOld = tUsers
-        async.mapLimit(usersOld, 10, function (item, next) {
+        async.mapLimit(usersOld, 1, function (item, next) {
+          console.log('%s', item['user_email'])
+          item['user_password'] = 'CreateFromNothing'
           stepUser(item)
-            .then(function (result) {
-              usersNew.push(result)
+            .then(function (user) {
+              if (user) {
+                user.id = global.ABIBAO.services.domain.getIDfromURN(user.urn)
+                usersNew.push(user)
+              }
+              item.individual = user.id
+              return stepData(item)
+            })
+            /*.then(function () {
+              return stepEmail(item)
+            })*/
+            .then(function () {
               next()
             })
-            .catch(next)
         }, function () {
+          console.log(errorsCSPS)
           console.log('usersOld=%s', usersOld.length)
           console.log('usersNew=%s', usersNew.length)
           console.log('===== END ===============')
           process.exit(0)
           knex.destroy()
         })
+      })
+      .catch(function (error) {
+        console.log(error)
       })
   })
