@@ -32,7 +32,10 @@ internals.initialize = function () {
         debug: false,
         connections: {
           routes: {
-            cors: true
+            cors: {
+              origin: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_CORS_ORIGINS'),
+              additionalHeaders: ['X-CSRF-Token']
+            }
           }
         }
       })
@@ -42,7 +45,7 @@ internals.initialize = function () {
         var starttime = new Date()
         var data = {
           uuid: uuid.v1(),
-          environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV'),
+          environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
           type: 'hapi-request',
           request: request.id,
           info: request.info,
@@ -57,7 +60,7 @@ internals.initialize = function () {
         }
         abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
       })
-      var plugins = ['inert', 'auth']
+      var plugins = ['inert', 'auth', 'crumb']
       async.mapSeries(plugins, function (item, next) {
         require('./plugins/' + item)(internals.server, function () {
           next(null, item)

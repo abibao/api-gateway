@@ -4,6 +4,12 @@
 
 - [ ] remove thinky, and use rethinkdb
 
+### 2.6.7
+
+- [x] add crumb (CSRF crumb generation and validation for hapi)
+- [x] ABIBAO_API_GATEWAY_ENV replaced by ABIBAO_API_GATEWAY_ENV
+- [x] ABIBAO_API_GATEWAY_CORS_ORIGINS added
+
 ### 2.6.6
 
 - [x] npm-check-updates done, 100% packages up

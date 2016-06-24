@@ -20,7 +20,7 @@ nconf.argv().env().file({ file: 'nconf-deve.json' })
 // initialize global.ABIBAO
 global.ABIBAO = {
   starttime: new Date(),
-  environnement: nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV'),
+  environnement: nconf.get('ABIBAO_API_GATEWAY_ENV'),
   name: 'API GATEWAY',
   uuid: require('node-uuid').v4(),
   nconf: nconf,

@@ -149,7 +149,7 @@ internals.execute = function (type, promise, params) {
     var starttime = new Date()
     var data = {
       uuid: uuid.v1(),
-      environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV'),
+      environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
       type: type,
       promise: promise
     }

@@ -14,7 +14,7 @@ exports.endpoints = [
   // www - administrator
   { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
 
-  // auto routing
+  // auto affect campaign
   { method: 'GET', path: '/redirect/campaign/affect/{sealed}', config: require('./handlers/redirect/campaign/affect') },
 
   // individuals

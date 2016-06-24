@@ -99,7 +99,10 @@ function Facade () {
     return new Promise(function (resolve, reject) {
       // Headers
       $.ajaxSetup({
-        headers: { 'Authorization': Cookies.get('Authorization') }
+        headers: {
+          'Authorization': Cookies.get('abibao-jwt2-token'),
+          'X-CSRF-Token': Cookies.get('abibao-csrf-token')
+        }
       })
       // Resolve
       $.ajax({

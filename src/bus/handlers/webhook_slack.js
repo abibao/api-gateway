@@ -14,7 +14,7 @@ module.exports = function (message) {
     json: true
   }
 
-  if (global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV') === 'prod') {
+  if (global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV') === 'prod') {
     rp(options)
       .then(function () {
         global.ABIBAO.debuggers.bus('BUS_EVENT_WEBHOOK_SLACK "%s" has been posted', message.text)

@@ -61,7 +61,8 @@ var stepUser = function (tUser) {
             .then(function () {
               resolve(user)
             })
-            .catch(function () {
+            .catch(function (error) {
+              console.log(error)
               console.log('... [ERROR 0] %o', payload)
               resolve()
             })
@@ -221,7 +222,7 @@ engine()
       .select()
       .then(function (tUsers) {
         usersOld = tUsers
-        async.mapLimit(usersOld, 1, function (item, next) {
+        async.mapLimit(usersOld, 50, function (item, next) {
           console.log('%s', item['user_email'])
           item['user_password'] = 'CreateFromNothing'
           stepUser(item)

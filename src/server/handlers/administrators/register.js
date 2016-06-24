@@ -4,13 +4,11 @@ var Joi = require('joi')
 var Boom = require('boom')
 
 module.exports = {
+  security: true,
   auth: {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Ajoute un administrator sur abibao',
-  notes: 'Ajoute un administrator sur abibao',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
