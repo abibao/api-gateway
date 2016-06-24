@@ -18,7 +18,7 @@
 
     logoutHandler(e) {
       facade.actions.auth.logout();
-      riot.update();
+      riot.route('/administrator');
     }
 
   </script>

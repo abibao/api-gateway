@@ -17,17 +17,4 @@ describe('abibao story', function () {
         done(error)
       })
   })
-  it('should execute dictionnary', function (done) {
-    async.mapLimit(global.ABIBAO.services.domain.dictionnary, 1, function (item, next) {
-      global.ABIBAO.services.domain[item]()
-        .then(function (result) {
-          next()
-        })
-        .catch(function (error) {
-          next()
-        })
-    }, function () {
-      done()
-    })
-  })
 })

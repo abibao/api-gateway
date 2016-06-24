@@ -2,7 +2,7 @@ function Facade () {
   var self = this
   riot.observable(self)
 
-  self.version = '1.7.0'
+  self.version = '2.6.7'
 
   self.debug = debug('abibao:facade')
   self.debugCall = debug('abibao:facade:call')
@@ -66,27 +66,31 @@ function Facade () {
   }
 
   self.initialize = function () {
-    // go now.
+    // start sequence
     self.actions.entities.list()
       .then(function () {
-        return self.actions.stats.charitiesIndividuals().then(function (stats) {
-          var _stats = {}
-          lodash.map(stats, function (stat) {
-            _stats[stat.charity.urn] = stat
-          })
-          self.debugAction('stats=%o', _stats)
-          lodash.map(self.stores.entities.charities, function (item) {
-            item.members = _stats[item.urn].count
-          })
-          return self.actions.stats.individualsGenders().then(function () {
-            return self.actions.stats.individualsAges('MALE').then(function () {
-              return self.actions.stats.individualsAges('FEMALE').then(function () {
-                self.debug('start facade authentified=%s', self.stores.auth.authentified())
-                riot.update()
-              })
-            })
-          })
+        return self.actions.stats.charitiesIndividuals()
+      })
+      .then(function (stats) {
+        var _stats = {}
+        lodash.map(stats, function (stat) {
+          _stats[stat.charity.urn] = stat
         })
+        self.debugAction('stats=%o', _stats)
+        lodash.map(self.stores.entities.charities, function (item) {
+          item.members = _stats[item.urn].count
+        })
+        return self.actions.stats.individualsGenders()
+      })
+      .then(function () {
+        return self.actions.stats.individualsAges('MALE')
+      })
+      .then(function () {
+        return self.actions.stats.individualsAges('FEMALE')
+      })
+      .then(function () {
+        self.debug('start facade authentified=%s', self.stores.auth.authentified())
+        riot.update()
       })
       .catch(function (error) {
         self.debug('start facade error %o', error)

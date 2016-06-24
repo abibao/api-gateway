@@ -21,6 +21,11 @@
           <canvas id="countMembersAgesMale" class="uk-width-1-4" height="400"></canvas>
         </div>
       </div>
+      <div class="uk-width-1-4">
+        <div class="uk-panel uk-panel-box">
+          <canvas id="countMembersAgesFemale" class="uk-width-1-4" height="400"></canvas>
+        </div>
+      </div>
     </div>
 
     <h3>Les compagnies</h3>
@@ -119,6 +124,27 @@
               display: true,
               position: 'bottom',
               text: 'Ages des Hommes'
+            },
+            legend: {
+              display: false
+            },
+            animation: {
+              animateScale: true
+            }
+          }
+        });
+      }
+      // chart4
+      var countMembersAgesFemale = document.getElementById('countMembersAgesFemale');
+      if (countMembersAgesFemale) {
+        var myPieChart = new Chart(countMembersAgesFemale.getContext('2d'), {
+          type: 'doughnut',
+          data: facade.stores.stats.countMembersAges('FEMALE'),
+          options: {
+            title: {
+              display: true,
+              position: 'bottom',
+              text: 'Ages des Femmes'
             },
             legend: {
               display: false

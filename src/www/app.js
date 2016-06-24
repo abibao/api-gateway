@@ -60,5 +60,9 @@ async.map(tags, function (item, next) {
     new NotFoundRoute({path: '/404', tag: 'error404'})
   ])
 
+  facade.call('POST', '/v1/alive')
+    .finally(function () {
+      facade.setLoading(false)
+    })
   riot.router.start()
 })
