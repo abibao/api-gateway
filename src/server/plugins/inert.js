@@ -1,12 +1,12 @@
 'use strict'
 
-var Inert = require('inert')
+var Cors = require('hapi-cors')
 
-var InertProvision = function (server, callback) {
-  server.register([Inert], function (err) {
+var CorsProvision = function (server, callback) {
+  server.register([Cors], function (err) {
     if (err) { return callback(err) }
     callback()
   })
 }
 
-module.exports = InertProvision
+module.exports = CorsProvision
