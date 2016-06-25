@@ -6,7 +6,7 @@ var CrumbProvision = function (server, callback) {
   server.register({
     register: Crumb,
     options: {
-      key: 'abibao-csrf-token',
+      key: 'XSRF-TOKEN',
       restful: true
     }
   }, function (err) {
