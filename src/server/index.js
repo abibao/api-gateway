@@ -24,6 +24,11 @@ var async = require('async')
 var Hapi = require('hapi')
 var Routes = require('./routes')
 
+/* cors: {
+  origin: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_CORS_ORIGINS').split(','),
+  additionalHeaders: ['X-CSRF-Token']
+} */
+
 internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
@@ -32,10 +37,7 @@ internals.initialize = function () {
         debug: false,
         connections: {
           routes: {
-            cors: {
-              origin: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_CORS_ORIGINS').split(','),
-              additionalHeaders: ['X-CSRF-Token']
-            }
+            cors: false
           }
         }
       })

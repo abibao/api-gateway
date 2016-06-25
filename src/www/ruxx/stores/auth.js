@@ -5,7 +5,7 @@ function AuthStore () {
   self.dataProvider = []
 
   self.authentified = function () {
-    var ca = Cookies.get('abibao-jwt2-token')
+    var ca = Cookies.get('abibao-user-token')
     return lodash.isUndefined(ca) === false
   }
 }

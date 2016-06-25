@@ -3,7 +3,7 @@ function AuthActions (facade) {
   self.facade = facade
 
   self.logout = function () {
-    Cookies.remove('abibao-jwt2-token')
+    Cookies.remove('abibao-user-token')
     riot.route('/homepage')
   }
 
@@ -13,7 +13,7 @@ function AuthActions (facade) {
       self.facade.call('POST', '/v1/administrators/login', payload)
         .then(function (user) {
           self.facade.debugAction('AuthActions.login %o', user)
-          Cookies.set('abibao-jwt2-token', user.token)
+          Cookies.set('abibao-user-token', user.token)
           self.facade.setLoading(false)
           riot.route('/homepage')
           resolve()

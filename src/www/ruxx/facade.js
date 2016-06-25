@@ -104,7 +104,7 @@ function Facade () {
       // Headers
       $.ajaxSetup({
         headers: {
-          'Authorization': Cookies.get('abibao-jwt2-token'),
+          'Authorization': Cookies.get('abibao-user-token'),
           'X-CSRF-Token': Cookies.get('abibao-csrf-token')
         }
       })
