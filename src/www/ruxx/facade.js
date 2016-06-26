@@ -117,7 +117,7 @@ function Facade () {
       $.ajaxSetup({
         headers: {
           'Authorization': Cookies.get('USER-TOKEN'),
-          'X-CSRF-Token': Cookies.get('XSRF-TOKEN')
+          'X-CSRF-Token': Cookies.get('CSRF-TOKEN')
         },
         xhrFields: {
           withCredentials: true
@@ -136,8 +136,8 @@ function Facade () {
         })
         .done(function (data, status, xhr) {
           self.debugCall('complete %s %s %o', method, url, data)
-          if (data.xsrf) {
-            Cookies.set('XSRF-TOKEN', data.xsrf)
+          if (data.csrf) {
+            Cookies.set('CSRF-TOKEN', data.csrf)
           }
           riot.update()
           return resolve(data)
