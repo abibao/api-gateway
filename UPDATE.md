@@ -7,8 +7,8 @@
 ### 2.6.7
 
 - [x] add crumb (CSRF crumb generation and validation for hapi)
-- [x] ABIBAO_API_GATEWAY_ENV replaced by ABIBAO_API_GATEWAY_ENV
-- [x] ABIBAO_API_GATEWAY_CORS_ORIGINS added
+- [x] add allow domains checked
+- [x] ABIBAO_API_GATEWAY_RABBITMQ_ENV is now ABIBAO_API_GATEWAY_ENV
 - [x] update www
 
 ### 2.6.6

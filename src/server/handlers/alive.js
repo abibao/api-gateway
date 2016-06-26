@@ -5,6 +5,6 @@ module.exports = {
   auth: false,
   jsonp: 'callback',
   handler(request, reply) {
-    return reply({ alive: true })
+    return reply({ alive: true, xsrf: request.plugins.crumb })
   }
 }

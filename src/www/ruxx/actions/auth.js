@@ -10,7 +10,7 @@ function AuthActions (facade) {
   self.login = function (payload) {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('POST', '/v1/administrators/login', payload)
+      self.facade.call('POST', facade.baseapi + '/v1/administrators/login', payload)
         .then(function (user) {
           self.facade.debugAction('AuthActions.login %o', user)
           Cookies.set('USER-TOKEN', user.token)

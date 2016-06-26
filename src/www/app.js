@@ -48,21 +48,25 @@ async.map(tags, function (item, next) {
 
   // declare application routes
   facade.debugHTML('routes')
-  riot.router.routes([
-    new Route({path: '/login', tag: 'login'}),
-    new Route({path: '/homepage', tag: 'homepage'}),
-    new Route({path: '/entities/:urn', tag: 'entity'}),
-    new Route({path: '/charities/:urn', tag: 'charity'}),
-    new Route({path: '/campaigns/:urn', tag: 'campaign'}),
-    new Route({path: '/campaigns-items/:urn', tag: 'campaign-item'}),
-    new Route({path: '/campaigns-items-choices/:urn', tag: 'campaign-item-choice'}),
-    new DefaultRoute({path: '/homepage', tag: 'homepage'}),
-    new NotFoundRoute({path: '/404', tag: 'error404'})
-  ])
 
-  facade.call('POST', '/v1/alive')
-    .finally(function () {
+  facade.call('GET', facade.baseapi + '/v1/alive')
+    .then(function () {
+      facade.debugHTML('alive on success')
       facade.setLoading(false)
+      riot.router.routes([
+        new Route({path: '/login', tag: 'login'}),
+        new Route({path: '/homepage', tag: 'homepage'}),
+        new Route({path: '/entities/:urn', tag: 'entity'}),
+        new Route({path: '/charities/:urn', tag: 'charity'}),
+        new Route({path: '/campaigns/:urn', tag: 'campaign'}),
+        new Route({path: '/campaigns-items/:urn', tag: 'campaign-item'}),
+        new Route({path: '/campaigns-items-choices/:urn', tag: 'campaign-item-choice'}),
+        new DefaultRoute({path: '/homepage', tag: 'homepage'}),
+        new NotFoundRoute({path: '/404', tag: 'error404'})
+      ])
+      riot.router.start()
     })
-  riot.router.start()
+    .catch(function (error) {
+      facade.debugHTML('alive on error', error)
+    })
 })

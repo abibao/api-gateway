@@ -28,7 +28,17 @@ internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
     try {
-      internals.server = new Hapi.Server()
+      internals.server = new Hapi.Server({
+        connections: {
+          routes: {
+            cors: {
+              origin: ['*://*.abibao.com:*'],
+              additionalHeaders: ['Accept-language', 'X-CSRF-Token'],
+              credentials: true
+            }
+          }
+        }
+      })
       internals.server.logger = global.ABIBAO.logger
       internals.server.connection(internals.options)
       internals.server.on('response', function (request) {
@@ -50,7 +60,7 @@ internals.initialize = function () {
         }
         abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
       })
-      var plugins = ['inert', 'auth', 'crumb', 'cors']
+      var plugins = ['inert', 'auth', 'crumb']
       async.mapSeries(plugins, function (item, next) {
         require('./plugins/' + item)(internals.server, function () {
           next(null, item)

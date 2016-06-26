@@ -4,6 +4,18 @@ function Facade () {
 
   self.version = '2.6.7'
 
+  switch (true) {
+    case /local/.test(window.location.hostname):
+      self.baseapi = 'http://api.local.abibao.com:8000'
+      break
+    case /pprod/.test(window.location.hostname):
+      self.baseapi = 'http://api.pprod.abibao.com'
+      break
+    default:
+      self.baseapi = 'https://api.abibao.com'
+      break
+  }
+
   self.debug = debug('abibao:facade')
   self.debugCall = debug('abibao:facade:call')
   self.debugAction = debug('abibao:facade:action')
@@ -106,7 +118,11 @@ function Facade () {
         headers: {
           'Authorization': Cookies.get('USER-TOKEN'),
           'X-CSRF-Token': Cookies.get('XSRF-TOKEN')
-        }
+        },
+        xhrFields: {
+          withCredentials: true
+        },
+        crossDomain: true
       })
       // Resolve
       $.ajax({
@@ -118,8 +134,11 @@ function Facade () {
           self.debugCall('error %s %s %o', method, url, error)
           return reject(error)
         })
-        .done(function (data) {
+        .done(function (data, status, xhr) {
           self.debugCall('complete %s %s %o', method, url, data)
+          if (data.xsrf) {
+            Cookies.set('XSRF-TOKEN', data.xsrf)
+          }
           riot.update()
           return resolve(data)
         })
