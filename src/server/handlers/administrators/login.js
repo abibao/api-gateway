@@ -4,7 +4,6 @@ var Joi = require('joi')
 var Boom = require('boom')
 
 module.exports = {
-  security: true,
   auth: false,
   payload: {
     allow: 'application/x-www-form-urlencoded'

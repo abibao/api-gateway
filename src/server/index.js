@@ -24,18 +24,27 @@ var async = require('async')
 var Hapi = require('hapi')
 var Routes = require('./routes')
 
+/* {
+  connections: {
+    routes: {
+      cors: {
+        origin: ['*://*.abibao.com:*'],
+        additionalHeaders: ['Accept-language', 'X-CSRF-Token'],
+        credentials: true
+      }
+    }
+  }
+} */
+
 internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
     try {
       internals.server = new Hapi.Server({
+        debug: false,
         connections: {
           routes: {
-            cors: {
-              origin: ['*://*.abibao.com:*'],
-              additionalHeaders: ['Accept-language', 'X-CSRF-Token'],
-              credentials: true
-            }
+            cors: true
           }
         }
       })
@@ -60,7 +69,7 @@ internals.initialize = function () {
         }
         abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
       })
-      var plugins = ['inert', 'auth', 'crumb']
+      var plugins = ['inert', 'auth'] // 'crumb'
       async.mapSeries(plugins, function (item, next) {
         require('./plugins/' + item)(internals.server, function () {
           next(null, item)

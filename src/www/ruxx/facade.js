@@ -116,15 +116,17 @@ function Facade () {
       // Headers
       $.ajaxSetup({
         headers: {
-          'Authorization': Cookies.get('USER-TOKEN'),
-          'X-CSRF-Token': Cookies.get('CSRF-TOKEN')
-        },
-        xhrFields: {
-          withCredentials: true
-        },
-        crossDomain: true
+          'Authorization': Cookies.get('USER-TOKEN')
+        }
       })
       // Resolve
+      /*
+      'X-CSRF-Token': Cookies.get('CSRF-TOKEN')
+      xhrFields: {
+        withCredentials: true
+      },
+      crossDomain: true
+      */
       $.ajax({
         method: method,
         url: url,
