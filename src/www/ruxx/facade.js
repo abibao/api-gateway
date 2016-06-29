@@ -6,10 +6,10 @@ function Facade () {
 
   switch (true) {
     case /local/.test(window.location.hostname):
-      self.baseapi = 'http://api.local.abibao.com:8000'
+      self.baseapi = 'http://localhost:5183'
       break
     case /pprod/.test(window.location.hostname):
-      self.baseapi = 'http://api.pprod.abibao.com'
+      self.baseapi = 'https://api.pprod.abibao.com'
       break
     default:
       self.baseapi = 'https://api.abibao.com'

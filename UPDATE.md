@@ -4,6 +4,11 @@
 
 - [ ] remove thinky, and use rethinkdb
 
+### 2.6.8
+
+- [x] remove CSRF at this point
+- [x] codacy update
+
 ### 2.6.7
 
 - [x] add crumb (CSRF crumb generation and validation for hapi)

@@ -34,8 +34,12 @@ var optionsMySQL = {
 }
 var knex = require('knex')(optionsMySQL)
 
+var usersNew = []
+var usersOld = []
+var errorsCSPS = []
+
 var stepUser = function (tUser) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     console.log('... STEP USER ...')
     var payload
     thinky.r.table('individuals').filter({email: tUser['user_email']})
@@ -142,8 +146,7 @@ var stepData = function (tUser) {
           errorsCSPS.push(tData['datas_csp'])
         }
         // end of data
-        if (Object.keys(data.answers).length === 4) {
-        } else {
+        if (Object.keys(data.answers).length !== 4) {
           data.complete = false
         }
         return thinky.r.table('surveys').filter({
@@ -165,7 +168,7 @@ var stepData = function (tUser) {
   })
 }
 
-var stepEmail = function (tUser) {
+/* var stepEmail = function (tUser) {
   return new Promise(function (resolve, reject) {
     if (tUser['user_email'] !== 'vincent@abibao.com') {
       return resolve()
@@ -208,13 +211,9 @@ var stepEmail = function (tUser) {
       }
     })
   })
-}
+} */
 
 console.log('===== START ===============')
-
-var usersNew = []
-var usersOld = []
-var errorsCSPS = []
 
 engine()
   .then(function () {

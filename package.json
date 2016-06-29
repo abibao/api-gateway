@@ -1,8 +1,9 @@
 {
   "name": "api-gateway",
-  "version": "2.6.7",
+  "version": "2.6.8",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
+    "check:updates": "./node_modules/.bin/ncu",
     "auto:generate": "./npm-scripts/auto-generate.sh",
     "database:rethinkdb:import:rece": "clear && node tools/rethink_import_rece.js",
     "database:rethinkdb:backup": "clear && node tools/rethink_backup.js",
@@ -84,6 +85,7 @@
     "mocha": "2.5.3",
     "mocha-lcov-reporter": "1.2.0",
     "mustache": "2.2.1",
+    "npm-check-updates": "2.6.7",
     "request-promise": "3.0.0",
     "rethinkdb": "2.3.2",
     "snyk": "1.16.0",

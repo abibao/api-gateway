@@ -116,13 +116,12 @@ var uuid = require('node-uuid')
 
 internals.injector = function (type) {
   var self = internals.domain
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     abibao.debug('[' + type + ']')
     // custom
     var files = fs.readdirSync(path.resolve(__dirname, type))
     async.mapSeries(files, function (item, next) {
-      if (item === 'system') {
-      } else {
+      if (item !== 'system') {
         var name = path.basename(item, '.js')
         abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
         if (type === 'models') {
@@ -150,9 +149,8 @@ internals.execute = function (type, promise, params) {
     var data = {
       uuid: uuid.v1(),
       environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
-      type: type,
-      promise: promise
-    }
+      type,
+    promise}
     abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
     global.ABIBAO.services.domain[promise](params)
       .then(function (result) {
