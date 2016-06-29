@@ -8,7 +8,7 @@ var engine = require('../src/engine')
 
 describe('sendgrid story', function () {
   it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO) {
+    if (global.ABIBAO.uuid) {
       done()
     } else {
       engine()

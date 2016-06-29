@@ -22,7 +22,6 @@ global.ABIBAO = {
   starttime: new Date(),
   environnement: nconf.get('ABIBAO_API_GATEWAY_ENV'),
   name: 'API GATEWAY',
-  uuid: require('node-uuid').v4(),
   nconf: nconf,
   services: { },
   events: { },
@@ -78,6 +77,7 @@ var engine = function () {
       .then(function () {
         abibao.debug('server initialized')
         abibao.debug('end processing')
+        global.ABIBAO.uuid = require('node-uuid').v4()
         global.ABIBAO.services.server.start(function (error) {
           if (error) { return abibao.error(error) }
           abibao.debug('server has just started')

@@ -11,7 +11,7 @@ var campaignItemFake = {}
 
 describe('handlers/campaigns-items', function () {
   it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO) {
+    if (global.ABIBAO.uuid) {
       done()
     } else {
       engine()
@@ -34,7 +34,7 @@ describe('handlers/campaigns-items', function () {
         done(error)
       })
   })
-  it('should success read', function (done) {
+  it('should success read populate', function (done) {
     global.ABIBAO.services.domain.execute('query', 'campaignReadPopulateQuery', campaignFake.urn)
       .then(function (campaign) {
         campaignFake = campaign
@@ -45,7 +45,7 @@ describe('handlers/campaigns-items', function () {
         done(error)
       })
   })
-  it('should success read', function (done) {
+  it('should success read populate item', function (done) {
     global.ABIBAO.services.domain.execute('query', 'campaignItemReadPopulateQuery', campaignItemFake.urn)
       .then(function (item) {
         campaignItemFake = item

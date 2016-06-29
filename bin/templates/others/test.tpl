@@ -2,14 +2,13 @@
 
 var chai = require('chai')
 var expect = chai.expect
-var faker = require('faker')
 
 var engine = require('../src/engine')
-var {{JS_MODEL_NAME}}Fake = {}
+var data = null
 
 describe('{{JS_DESCRIBE_NAME}}', function () {
   it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO) {
+    if (global.ABIBAO.uuid) {
       done()
     } else {
       engine()
@@ -21,6 +20,53 @@ describe('{{JS_DESCRIBE_NAME}}', function () {
           done(error)
         })
     }
+  })
+  it('should initialize fake data', function (done) {
+    expect(global.ABIBAO.uuid).to.be.a('string')
+    expect(global.ABIBAO.services.domain.{{JS_MODEL_NAME}}).to.be.not.undefined
+    expect(global.ABIBAO.services.domain.{{JS_MODEL_NAME}}).to.be.not.null
+    var Model = global.ABIBAO.services.domain.{{JS_MODEL_NAME}}
+    data = new Model({}).getFakeData()
+    done()
+  })
+  it('should create', function (done) {
+    global.ABIBAO.services.domain.execute('command', '{{JS_PROMISE_CREATE}}', data)
+      .then(function (create) {
+        data = create
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('should read', function (done) {
+    global.ABIBAO.services.domain.execute('query', '{{JS_PROMISE_READ}}', data.urn)
+      .then(function (read) {
+        data = read
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('should update', function (done) {
+    global.ABIBAO.services.domain.execute('command', '{{JS_PROMISE_UPDATE}}', data)
+      .then(function (update) {
+        data = update
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('should delete', function (done) {
+    global.ABIBAO.services.domain.execute('command', '{{JS_PROMISE_DELETE}}', data.urn)
+      .then(function () {
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
   })
   it('should not create', function (done) {
     global.ABIBAO.services.domain.execute('command', '{{JS_PROMISE_CREATE}}', {})

@@ -10,4 +10,4 @@ rm -rf coverage
 
 node_modules/.bin/snyk test
 node_modules/.bin/snyk monitor
-ncu
+node_modules/.bin/ncu

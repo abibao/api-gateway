@@ -35,7 +35,7 @@ module.exports = function (model, collection) {
     }),
     mustachePromise(normalize(resolve(__dirname, '../templates/others/test.tpl')), normalize(resolve(__dirname, '../../test')), _.camelCase(model + 'MochaTest') + '.js', {
       JS_DESCRIBE_NAME: model.toLowerCase() + ' auto test',
-      JS_MODEL_NAME: model.toLowerCase(),
+      JS_MODEL_NAME: model + 'Model',
       JS_PROMISE_CREATE: _.camelCase(model + 'CreateCommand'),
       JS_PROMISE_READ: _.camelCase(model + 'ReadQuery'),
       JS_PROMISE_UPDATE: _.camelCase(model + 'UpdateCommand'),

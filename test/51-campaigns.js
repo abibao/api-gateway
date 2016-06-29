@@ -10,7 +10,7 @@ var campaignFake = {}
 
 describe('handlers/campaigns', function () {
   it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO) {
+    if (global.ABIBAO.uuid) {
       done()
     } else {
       engine()
