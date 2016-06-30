@@ -8,6 +8,7 @@
 
 - [x] remove CSRF at this point
 - [x] codacy update
+- [x] add endpoints fingerprint
 
 ### 2.6.7
 

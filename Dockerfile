@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6.2.2
+FROM mhart/alpine-node:5.5
 
 MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 
