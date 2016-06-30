@@ -23,6 +23,7 @@ var internals = {
   },
   constants: {
     ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
+    ABIBAO_CONST_TOKEN_FINGERPRINT: 'fingerprint',
     ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION: 'email_verification',
     ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH: 'campaign_publish',
     ABIBAO_CONST_TOKEN_ABIBAO_CAMPAIGN_PUBLISH_AUTO: 'abibao_campaign_publish_auto',

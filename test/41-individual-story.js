@@ -69,11 +69,40 @@ describe('individual story', function () {
       expect(result).to.be.not.null
       expect(result).to.be.an('object')
       expect(result).to.have.property('token')
-      individualFake.token = result.individualFake
       done()
     }).catch(function (error) {
       done(error)
     })
+  })
+  it('should create a fingerprint', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualCreateFingerprintTokenCommand', {
+      email: individualFake.email,
+      urn: individualFake.urn
+    }).then(function (result) {
+      expect(result).to.be.not.null
+      expect(result).to.be.a('string')
+      individualFake.fingerprint = result
+      done()
+    }).catch(function (error) {
+      done(error)
+    })
+  })
+  it('should not login with fingerprint (error)', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualLoginWithFingerprintCommand', 'Winter is coming!')
+      .catch(function (error) {
+        done()
+      })
+  })
+  it('should login with fingerprint', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualLoginWithFingerprintCommand', individualFake.fingerprint)
+      .then(function (result) {
+        expect(result).to.be.not.null
+        expect(result).to.be.an('object')
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
   })
   it('should not get informations (missing action)', function (done) {
     global.ABIBAO.services.domain.execute('query', 'authentificationGlobalInformationsQuery', {

@@ -7,7 +7,6 @@ var _ = require('lodash')
 
 module.exports = function () {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       self.execute('query', 'entityFilterQuery', {type: 'charity'}).then(function (entities) {

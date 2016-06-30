@@ -5,7 +5,7 @@ function StatsActions (facade) {
   self.charitiesIndividuals = function () {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', facade.baseapi + '/v1/stats/chatities/individuals')
+      self.facade.call('GET', facade.baseapi + '/v1/stats/charities/individuals')
         .then(function (stats) {
           var data = lodash.map(stats, function (stat) {
             return stat.count

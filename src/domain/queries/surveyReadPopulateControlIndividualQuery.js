@@ -7,7 +7,6 @@ var _ = require('lodash')
 
 module.exports = function (payload) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       var idSurvey = self.getIDfromURN(payload.urn)

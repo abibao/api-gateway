@@ -5,7 +5,6 @@ var Hoek = require('hoek')
 
 module.exports = function (urn) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       var id = self.getIDfromURN(urn)

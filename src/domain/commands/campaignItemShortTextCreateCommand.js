@@ -6,7 +6,6 @@ var Hoek = require('hoek')
 
 module.exports = function (payload) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       self.execute('query', 'campaignReadQuery', payload.campaign).then(function () {
