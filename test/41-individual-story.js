@@ -76,14 +76,16 @@ describe('individual story', function () {
   })
   it('should create a fingerprint', function (done) {
     global.ABIBAO.services.domain.execute('command', 'individualCreateFingerprintTokenCommand', {
-      email: individualFake.email,
-      urn: individualFake.urn
-    }).then(function (result) {
-      expect(result).to.be.not.null
-      expect(result).to.be.a('string')
-      individualFake.fingerprint = result
-      done()
-    }).catch(function (error) {
+      urn: individualFake.urn,
+      email: individualFake.email
+    })
+      .then(function (result) {
+        console.log(result)
+        expect(result).to.be.not.null
+        expect(result).to.be.a('string')
+        individualFake.fingerprint = result
+        done()
+      }).catch(function (error) {
       done(error)
     })
   })
