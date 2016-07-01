@@ -80,7 +80,6 @@ describe('individual story', function () {
       email: individualFake.email
     })
       .then(function (result) {
-        console.log(result)
         expect(result).to.be.not.null
         expect(result).to.be.a('string')
         individualFake.fingerprint = result

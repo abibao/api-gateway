@@ -69,6 +69,62 @@ var waterIndividualSurveys = function (waterfallResults, callback) {
     .catch(callback)
 }
 
+var abibaoCompletedHandler = function (values) {
+  return _.map(values, function (item) {
+    return {
+      urn: item.urn,
+      name: item.name,
+      modifiedAt: item.modifiedAt
+    }
+  })
+}
+
+var abibaoInProgressHandler = function (values) {
+  return _.map(values, function (item) {
+    return {
+      urn: item.urn,
+      name: item.name,
+      urnCampaign: item.urnCampaign,
+      position: item.position,
+      answers: item.answers || {},
+      nbAnswers: item.nbAnswers,
+      nbQuestions: item.nbQuestions,
+      screenWelcomeContent: item.screenWelcomeContent || '',
+      screenThankYouContent: item.screenThankYouContent || '',
+      modifiedAt: item.modifiedAt,
+      complete: item.complete
+    }
+  })
+}
+
+var surveysInProgressHandler = function (values) {
+  return _.map(values, function (item) {
+    return {
+      urn: item.urn,
+      name: item.name,
+      urnCampaign: item.urnCampaign,
+      position: item.position,
+      answers: item.answers || {},
+      nbAnswers: item.nbAnswers,
+      nbQuestions: item.nbQuestions,
+      screenWelcomeContent: item.screenWelcomeContent || '',
+      screenThankYouContent: item.screenThankYouContent || '',
+      modifiedAt: item.modifiedAt,
+      complete: item.complete
+    }
+  })
+}
+
+var surveysCompletedHandler = function (values) {
+  return _.map(values, function (item) {
+    return {
+      urn: item.urn,
+      name: item.name,
+      modifiedAt: item.modifiedAt
+    }
+  })
+}
+
 module.exports = function (credentials) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
@@ -93,50 +149,10 @@ module.exports = function (credentials) {
           urn: waterfallResults.individual.urn,
           email: waterfallResults.individual.email,
           charitiesHistory: waterfallResults.charitiesHistory,
-          abibaoCompleted: _.map(waterfallResults.abibaoCompleted, function (item) {
-            return {
-              urn: item.urn,
-              name: item.name,
-              modifiedAt: item.modifiedAt
-            }
-          }),
-          abibaoInProgress: _.map(waterfallResults.abibaoInProgress, function (item) {
-            return {
-              urn: item.urn,
-              name: item.name,
-              urnCampaign: item.urnCampaign,
-              position: item.position,
-              answers: item.answers || {},
-              nbAnswers: item.nbAnswers,
-              nbQuestions: item.nbQuestions,
-              screenWelcomeContent: item.screenWelcomeContent || '',
-              screenThankYouContent: item.screenThankYouContent || '',
-              modifiedAt: item.modifiedAt,
-              complete: item.complete
-            }
-          }),
-          surveysInProgress: _.map(waterfallResults.surveysInProgress, function (item) {
-            return {
-              urn: item.urn,
-              name: item.name,
-              urnCampaign: item.urnCampaign,
-              position: item.position,
-              answers: item.answers || {},
-              nbAnswers: item.nbAnswers,
-              nbQuestions: item.nbQuestions,
-              screenWelcomeContent: item.screenWelcomeContent || '',
-              screenThankYouContent: item.screenThankYouContent || '',
-              modifiedAt: item.modifiedAt,
-              complete: item.complete
-            }
-          }),
-          surveysCompleted: _.map(waterfallResults.surveysCompleted, function (item) {
-            return {
-              urn: item.urn,
-              name: item.name,
-              modifiedAt: item.modifiedAt
-            }
-          }),
+          abibaoCompleted: abibaoCompletedHandler(waterfallResults.abibaoCompleted),
+          abibaoInProgress: abibaoInProgressHandler(waterfallResults.abibaoInProgress),
+          surveysInProgress: surveysInProgressHandler(waterfallResults.surveysInProgress),
+          surveysCompleted: surveysCompletedHandler(waterfallResults.surveysCompleted),
           currentCharity: (waterfallResults.currentCharity.type === 'none') ? '' : waterfallResults.currentCharity.urn
         }
         resolve(finalResult)
