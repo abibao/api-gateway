@@ -51,7 +51,6 @@ internals.initialize = function () {
       internals.server.logger = global.ABIBAO.logger
       internals.server.connection(internals.options)
       internals.server.on('response', function (request) {
-        var starttime = new Date()
         var data = {
           uuid: uuid.v1(),
           environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),

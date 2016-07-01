@@ -2,12 +2,6 @@
 
 var Promise = require('bluebird')
 
-// use debuggers reference
-var abibao = {
-  debug: global.ABIBAO.debuggers.domain,
-  error: global.ABIBAO.debuggers.error
-}
-
 module.exports = function (knex) {
   return Promise.all([
     knex.schema.createTableIfNotExists('answers', function (table) {

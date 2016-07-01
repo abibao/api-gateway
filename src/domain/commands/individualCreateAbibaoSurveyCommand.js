@@ -17,7 +17,7 @@ module.exports = function (data) {
         var entity = entities[0]
         entity.id = self.getIDfromURN(entity.urn)
         // get the campaign with the requested position
-        return self.execute('query', 'campaignFilterQuery', {company: entity.id, position: position}).then(function (campaigns) {
+        return self.execute('query', 'campaignFilterQuery', {company: entity.id, position}).then(function (campaigns) {
           // control is individual as this campaign already affected
           var campaign = campaigns[0]
           return self.execute('query', 'surveyFilterQuery', {individual: self.getIDfromURN(target), campaign: self.getIDfromURN(campaign.urn)})
