@@ -10,15 +10,15 @@ var async = require('async')
 // ...
 
 // declare project libraries
-var error = require('./../console').error,
-  notice = require('./../console').notice,
-  warning = require('./../console').warning
+var error = require('./../console').error
+var notice = require('./../console').notice
+var warning = require('./../console').warning
 
 var errorPromised = function (e) {
   error(e)
 }
 
-module.exports = function (table) {
+module.exports = function () {
   warning('Task: ', 'Create')
   warning('***********************************************************************')
 

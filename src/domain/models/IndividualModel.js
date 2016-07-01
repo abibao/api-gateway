@@ -1,6 +1,7 @@
 'use strict'
 
 var _ = require('lodash')
+var faker = require('faker')
 
 var crypto = require('crypto')
 var Cryptr = require('cryptr')
@@ -59,7 +60,14 @@ module.exports = function (thinky) {
       return ''
     }
     var salt = new Buffer(this.salt, 'base64')
-    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64')
+    return crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha1').toString('base64')
+  })
+
+  IndividualModel.define('getFakeData', function () {
+    return {
+      email: faker.internet.email().toLowerCase(),
+      password: faker.name.lastName().toLowerCase()
+    }
   })
 
   return IndividualModel

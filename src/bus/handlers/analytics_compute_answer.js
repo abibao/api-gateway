@@ -8,13 +8,13 @@ module.exports = function (message) {
       return {
         data: {
           email: global.ABIBAO.services.domain.thinky.r.table('individuals').get(item('individual'))('email'),
-          charity_id: item('charity'),
-          charity_name: global.ABIBAO.services.domain.thinky.r.table('entities').get(item('charity'))('name'),
-          campaign_id: item('campaign'),
-          campaign_name: global.ABIBAO.services.domain.thinky.r.table('campaigns').get(item('campaign'))('name'),
+          'charity_id': item('charity'),
+          'charity_name': global.ABIBAO.services.domain.thinky.r.table('entities').get(item('charity'))('name'),
+          'campaign_id': item('campaign'),
+          'campaign_name': global.ABIBAO.services.domain.thinky.r.table('campaigns').get(item('campaign'))('name'),
           question: message.label,
           answer: message.answer,
-          answer_text: (message.isURN === true) ? global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(message.answer)('text') : message.answer
+          'answer_text': (message.isURN === true) ? global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(message.answer)('text') : message.answer
         }
       }
     })
@@ -23,7 +23,7 @@ module.exports = function (message) {
       // now insert data in MySQL
       global.ABIBAO.services.domain.knex('answers')
         .where('email', result.data.email)
-        .where('campaign_id', result.data.campaign_id)
+        .where('campaign_id', result.data['campaign_id'])
         .where('question', result.data.question)
         .delete()
         .then(function () {

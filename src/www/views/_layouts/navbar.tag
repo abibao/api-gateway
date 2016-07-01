@@ -2,26 +2,27 @@
 
   <nav if={ facade.getLoading()===false } class="tm-navbar uk-navbar uk-navbar-attached">
     <div class="uk-container uk-container-center">
-      <a class="uk-navbar-brand" href="/#homepage">Abibao dashboard</a>
+      <a class="uk-navbar-brand" href="/administrator">Abibao dashboard</a>
       <div class="uk-navbar-content uk-navbar-flip">
         <button if={ facade.stores.auth.authentified()===true } onclick={ logoutHandler } class="uk-button uk-button-danger">Logout</button>
         <button if={ facade.stores.auth.authentified()===false } class="uk-button uk-button-success">Login</button>
       </div>
     </div>
   </nav>
-  
+
   <br>
-  
+
   <script>
-  
+
     self = this;
-    
+
     logoutHandler(e) {
       facade.actions.auth.logout();
+      riot.route('/administrator');
     }
-  
+
   </script>
-  
+
   <style scoped>
     .tm-navbar {
         position: relative;
@@ -40,5 +41,5 @@
       padding: 0;
     }
   </style>
-  
+
 </navbar>

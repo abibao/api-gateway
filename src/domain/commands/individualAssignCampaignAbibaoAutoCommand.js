@@ -9,7 +9,6 @@ var _ = require('lodash')
 
 module.exports = function (sealed) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       sealed = Base64.decode(sealed)
@@ -28,7 +27,7 @@ module.exports = function (sealed) {
             return reject(new Error('Company is undefined'))
           case _.isUndefined(unsealed.action):
             return reject(new Error('Action is undefined'))
-          case unsealed.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_ABIBAO_CAMPAIGN_PUBLISH_AUTO:
+          case unsealed.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_FINGERPRINT:
             return reject(new Error('Action is unauthorized'))
           default:
             break

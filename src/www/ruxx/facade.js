@@ -2,7 +2,19 @@ function Facade () {
   var self = this
   riot.observable(self)
 
-  self.version = '1.7.0'
+  self.version = '2.6.7'
+
+  switch (true) {
+    case /local/.test(window.location.hostname):
+      self.baseapi = 'http://localhost:5183'
+      break
+    case /pprod/.test(window.location.hostname):
+      self.baseapi = 'https://api.pprod.abibao.com'
+      break
+    default:
+      self.baseapi = 'https://api.abibao.com'
+      break
+  }
 
   self.debug = debug('abibao:facade')
   self.debugCall = debug('abibao:facade:call')
@@ -66,25 +78,31 @@ function Facade () {
   }
 
   self.initialize = function () {
-    // go now.
+    // start sequence
     self.actions.entities.list()
       .then(function () {
-        return self.actions.stats.charitiesIndividuals().then(function (stats) {
-          var _stats = {}
-          lodash.map(stats, function (stat) {
-            _stats[stat.charity.urn] = stat
-          })
-          self.debugAction('stats=%o', _stats)
-          lodash.map(self.stores.entities.charities, function (item) {
-            item.members = _stats[item.urn].count
-          })
-          return self.actions.stats.individualsGenders().then(function () {
-            return self.actions.stats.individualsAges('FEMALE').then(function () {
-              self.debug('start facade authentified=%s', self.stores.auth.authentified())
-              riot.update()
-            })
-          })
+        return self.actions.stats.charitiesIndividuals()
+      })
+      .then(function (stats) {
+        var _stats = {}
+        lodash.map(stats, function (stat) {
+          _stats[stat.charity.urn] = stat
         })
+        self.debugAction('stats=%o', _stats)
+        lodash.map(self.stores.entities.charities, function (item) {
+          item.members = _stats[item.urn].count
+        })
+        return self.actions.stats.individualsGenders()
+      })
+      .then(function () {
+        return self.actions.stats.individualsAges('MALE')
+      })
+      .then(function () {
+        return self.actions.stats.individualsAges('FEMALE')
+      })
+      .then(function () {
+        self.debug('start facade authentified=%s', self.stores.auth.authentified())
+        riot.update()
       })
       .catch(function (error) {
         self.debug('start facade error %o', error)
@@ -97,9 +115,18 @@ function Facade () {
     return new Promise(function (resolve, reject) {
       // Headers
       $.ajaxSetup({
-        headers: { 'Authorization': Cookies.get('Authorization') }
+        headers: {
+          'Authorization': Cookies.get('USER-TOKEN')
+        }
       })
       // Resolve
+      /*
+      'X-CSRF-Token': Cookies.get('CSRF-TOKEN')
+      xhrFields: {
+        withCredentials: true
+      },
+      crossDomain: true
+      */
       $.ajax({
         method: method,
         url: url,
@@ -109,8 +136,11 @@ function Facade () {
           self.debugCall('error %s %s %o', method, url, error)
           return reject(error)
         })
-        .done(function (data) {
+        .done(function (data, status, xhr) {
           self.debugCall('complete %s %s %o', method, url, data)
+          if (data.csrf) {
+            Cookies.set('CSRF-TOKEN', data.csrf)
+          }
           riot.update()
           return resolve(data)
         })

@@ -23,6 +23,7 @@ var internals = {
   },
   constants: {
     ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
+    ABIBAO_CONST_TOKEN_FINGERPRINT: 'fingerprint',
     ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION: 'email_verification',
     ABIBAO_CONST_TOKEN_CAMPAIGN_PUBLISH: 'campaign_publish',
     ABIBAO_CONST_TOKEN_ABIBAO_CAMPAIGN_PUBLISH_AUTO: 'abibao_campaign_publish_auto',
@@ -51,6 +52,7 @@ internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
     try {
+      internals.domain.dictionnary = []
       internals.domain.knex = require('knex')(internals.optionsMySQL)
       internals.domain.thinky = require('thinky')(internals.optionsRethink)
       internals.domain.ThinkyErrors = internals.domain.thinky.Errors
@@ -110,44 +112,35 @@ module.exports.singleton = function () {
 
 var async = require('async')
 var path = require('path')
-var dir = require('node-dir')
+var fs = require('fs')
 var uuid = require('node-uuid')
 
 internals.injector = function (type) {
   var self = internals.domain
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     abibao.debug('[' + type + ']')
     // custom
-    dir.readFiles(path.resolve(__dirname, type),
-      {
-        recursive: false,
-        match: /.js/
-      },
-      function (err, content, next) {
-        if (err) { return reject(err) }
-        next()
-      },
-      function (err, files) {
-        if (err) { return reject(err) }
-        async.mapSeries(files, function (item, next) {
-          var name = path.basename(item, '.js')
-          abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
-          if (type === 'models') {
-            self[name] = require('./' + type + '/' + name)(self.thinky)
-          } else if (type === 'models/mysql') {
-            self[name] = require('./' + type + '/' + name)(self.knex)
-          } else if (type === 'listeners') {
-            self[name] = require('./' + type + '/' + name)
-            self[name]()
-          } else {
-            self[name] = require('./' + type + '/' + name)
-          }
-          next(null, true)
-        }, function (error, results) {
-          if (error) { return reject(err) }
-          resolve(results)
-        })
-      })
+    var files = fs.readdirSync(path.resolve(__dirname, type))
+    async.mapSeries(files, function (item, next) {
+      if (item !== 'system') {
+        var name = path.basename(item, '.js')
+        abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
+        if (type === 'models') {
+          self[name] = require('./' + type + '/' + name)(self.thinky)
+        } else if (type === 'models/mysql') {
+          self[name] = require('./' + type + '/' + name)(self.knex)
+        } else if (type === 'listeners') {
+          self[name] = require('./' + type + '/' + name)
+          self[name]()
+        } else {
+          self[name] = require('./' + type + '/' + name)
+          self.dictionnary.push(name)
+        }
+      }
+      next(null, true)
+    }, function () {
+      resolve()
+    })
   })
 }
 
@@ -156,16 +149,17 @@ internals.execute = function (type, promise, params) {
     var starttime = new Date()
     var data = {
       uuid: uuid.v1(),
-      environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_ENV'),
-      type: type,
-      promise: promise
-    }
+      environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
+      type,
+    promise}
     abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
     global.ABIBAO.services.domain[promise](params)
       .then(function (result) {
         data.exectime = new Date() - starttime
         // loggers
-        global.ABIBAO.logger.info(data)
+        if (global.ABIBAO.environnement === 'prod') {
+          global.ABIBAO.logger.info(data)
+        }
         // debuggers
         abibao.debug('[%s] finish %s %s', data.uuid, type, promise)
         // return
@@ -175,7 +169,9 @@ internals.execute = function (type, promise, params) {
         data.exectime = new Date() - starttime
         data.error = error
         // loggers
-        global.ABIBAO.logger.error(data)
+        if (global.ABIBAO.environnement === 'prod') {
+          global.ABIBAO.logger.error(data)
+        }
         // debuggers
         abibao.error('[%s] finish %s %s %o', data.uuid, type, promise, error)
         // return

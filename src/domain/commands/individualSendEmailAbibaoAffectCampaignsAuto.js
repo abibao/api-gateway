@@ -6,8 +6,6 @@ var nconf = global.ABIBAO.nconf
 var Iron = require('iron')
 var Base64 = require('base64-url')
 
-var sendgrid = require('sendgrid')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
-
 module.exports = function (message) {
   return new Promise(function (resolve, reject) {
     try {
@@ -18,22 +16,37 @@ module.exports = function (message) {
         sealed = Base64.encode(result)
         global.ABIBAO.debuggers.domain('sealed=%s', sealed)
         // send email
-        var email = new sendgrid.Email({
-          to: [message.email],
-          from: 'bonjour@abibao.com',
-          fromname: 'Abibao',
-          subject: "Regardez comme il est facile d'aider une association.",
-          text: ' ',
-          html: ' '
-        })
-        email.addCategory('individual_welcome')
-        email.setASMGroupID(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_ASM_GROUP_ID_ABIBAO_AFFECT_CAMPAIGNS_AUTO'))
-        email.addSubstitution('%urn_survey%', global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_URI') + '/redirect/campaign/affect/' + sealed)
-        email.addFilter('templates', 'enable', 1)
-        email.addFilter('templates', 'template_id', global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_TEMPLATE_ABIBAO_AFFECT_CAMPAIGNS_AUTO'))
-        sendgrid.send(email, function (error, json) {
-          if (error) { return reject(error) }
-          resolve(json)
+        var sendgrid = require('sendgrid').SendGrid(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
+        var request = sendgrid.emptyRequest()
+        request.method = 'POST'
+        request.path = '/v3/mail/send'
+        request.body = {
+          'personalizations': [
+            {
+              'to': [
+                { 'email': message.email }
+              ],
+              'subject': "Regardez comme il est facile d'aider une association.",
+              'substitutions': {
+                '%urn_survey%': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_URI') + '/redirect/campaign/affect/' + sealed
+              }
+            }
+          ],
+          'from': { 'email': 'bonjour@abibao.com', 'name': 'Abibao' },
+          'content': [
+            {
+              'type': 'text/html',
+              'value': ' '
+            }
+          ],
+          'template_id': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_TEMPLATE_ABIBAO_AFFECT_CAMPAIGNS_AUTO')
+        }
+        sendgrid.API(request, function (response) {
+          if (response.statusCode === 202) {
+            resolve()
+          } else {
+            reject(response)
+          }
         })
       })
     } catch (e) {

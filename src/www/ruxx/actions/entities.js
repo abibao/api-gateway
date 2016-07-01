@@ -16,7 +16,7 @@ function EntitiesActions (facade) {
     //
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('PATCH', '/v1/entities/' + entity.urn, data)
+      self.facade.call('PATCH', facade.baseapi + '/v1/entities/' + entity.urn, data)
         .then(function (entity) {
           self.facade.setLoading(false)
           self.facade.debugAction('EntitiesActions.update %o', entity)
@@ -34,7 +34,7 @@ function EntitiesActions (facade) {
   self.selectCharity = function (urn) {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', '/v1/entities/' + urn)
+      self.facade.call('GET', facade.baseapi + '/v1/entities/' + urn)
         .then(function (charity) {
           self.facade.setLoading(false)
           self.facade.debugAction('EntitiesActions.selectCharity %o', charity)
@@ -46,7 +46,7 @@ function EntitiesActions (facade) {
   self.selectEntity = function (urn) {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', '/v1/entities/' + urn)
+      self.facade.call('GET', facade.baseapi + '/v1/entities/' + urn)
         .then(function (entity) {
           self.facade.debugAction('EntitiesActions.selectEntity %o', entity)
           self.populateCampaigns(entity)
@@ -73,7 +73,7 @@ function EntitiesActions (facade) {
   self.list = function () {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', '/v1/entities')
+      self.facade.call('GET', facade.baseapi + '/v1/entities')
         .then(function (entities) {
           self.facade.setLoading(false)
           self.facade.debugAction('EntitiesActions.list %o', entities)
@@ -97,7 +97,7 @@ function EntitiesActions (facade) {
   self.populateCampaigns = function (entity) {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', '/v1/entities/' + entity.urn + '/campaigns')
+      self.facade.call('GET', facade.baseapi + '/v1/entities/' + entity.urn + '/campaigns')
         .then(function (campaigns) {
           self.facade.setLoading(false)
           self.facade.debugAction('EntitiesActions.populateCampaigns %o', campaigns)

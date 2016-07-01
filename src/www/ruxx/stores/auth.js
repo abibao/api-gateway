@@ -5,7 +5,7 @@ function AuthStore () {
   self.dataProvider = []
 
   self.authentified = function () {
-    var ca = Cookies.get('Authorization')
+    var ca = Cookies.get('USER-TOKEN')
     return lodash.isUndefined(ca) === false
   }
 }

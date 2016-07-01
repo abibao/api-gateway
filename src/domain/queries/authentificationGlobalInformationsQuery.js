@@ -7,76 +7,86 @@ var _ = require('lodash')
 var waterfall = require('async').waterfall
 var map = require('async').map
 
+var waterIndividual = function (waterfallResults, callback) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  self.execute('query', 'individualReadQuery', waterfallResults.credentials.urn)
+    .then(function (individual) {
+      waterfallResults.individual = individual
+      callback(null, waterfallResults)
+    })
+    .catch(callback)
+}
+
+var waterCurrentCharity = function (waterfallResults, callback) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  self.execute('query', 'entityReadQuery', waterfallResults.individual.urnCharity)
+    .then(function (entity) {
+      waterfallResults.currentCharity = entity
+      callback(null, waterfallResults)
+    })
+    .catch(callback)
+}
+
+var waterCharitiesHistory = function (waterfallResults, callback) {
+  waterfallResults.charitiesHistory = []
+  callback(null, waterfallResults)
+}
+
+var waterIndividualSurveys = function (waterfallResults, callback) {
+  var self = Hoek.clone(global.ABIBAO.services.domain)
+  self.execute('query', 'surveyFilterQuery', {'individual': waterfallResults.credentials.id})
+    .then(function (surveys) {
+      map(surveys, function (survey, next) {
+        survey.nbAnswers = (_.isUndefined(survey.answers) === false) ? _.keys(survey.answers).length : 0
+        self.execute('query', 'campaignItemFilterQuery', {campaign: self.getIDfromURN(survey.urnCampaign)})
+          .then(function (campaignItems) {
+            survey.nbQuestions = campaignItems.length
+          })
+          .then(function () {
+            return self.execute('query', 'entityReadQuery', survey.urnCompany)
+          })
+          .then(function (company) {
+            survey.companyType = company.type
+          })
+          .then(function () {
+            return self.execute('query', 'campaignReadQuery', survey.urnCampaign)
+          })
+          .then(function (campaign) {
+            survey.position = campaign.position
+            survey.name = campaign.name
+            next()
+          })
+          .catch(next)
+      }, function (err) {
+        if (err) { return callback(err) }
+        waterfallResults.surveysCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+        waterfallResults.surveysInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+        waterfallResults.abibaoCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+        waterfallResults.abibaoInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
+        callback(null, waterfallResults)
+      })
+    })
+    .catch(callback)
+}
+
 module.exports = function (credentials) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       if (_.isUndefined(credentials.action)) { return reject(new Error('Action is undefined')) }
       if (credentials.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME) { return reject(new Error('Action is unauthorized')) }
       if (credentials.scope !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL) { return reject(new Error('Scope is unauthorized')) }
-
-      var waterfallResults = {}
-
       credentials.id = self.getIDfromURN(credentials.urn)
 
       waterfall([
-
-        // initialize
         function (callback) {
-          callback(null, waterfallResults)
+          callback(null, {credentials})
         },
-        // individual
-        function (results, callback) {
-          self.execute('query', 'individualReadQuery', credentials.urn).then(function (individual) {
-            waterfallResults.individual = individual
-            callback(null, waterfallResults)
-          })
-            .catch(callback)
-        },
-        // currentCharity
-        function (results, callback) {
-          self.execute('query', 'entityReadQuery', waterfallResults.individual.urnCharity).then(function (entity) {
-            waterfallResults.currentCharity = entity
-            callback(null, waterfallResults)
-          })
-            .catch(callback)
-        },
-        // charitiesHistory
-        function (results, callback) {
-          waterfallResults.charitiesHistory = []
-          callback(null, waterfallResults)
-        },
-        // surveysCompleted / surveysInProgress / abibaoCompleted / abibaoInProgress
-        function (results, callback) {
-          self.execute('query', 'surveyFilterQuery', {'individual': credentials.id}).then(function (surveys) {
-            map(surveys, function (survey, next) {
-              survey.nbAnswers = (_.isUndefined(survey.answers) === false) ? _.keys(survey.answers).length : 0
-              return self.execute('query', 'campaignItemFilterQuery', {campaign: self.getIDfromURN(survey.urnCampaign)}).then(function (campaignItems) {
-                survey.nbQuestions = campaignItems.length
-                return self.execute('query', 'entityReadQuery', survey.urnCompany).then(function (company) {
-                  survey.companyType = company.type
-                  return self.execute('query', 'campaignReadQuery', survey.urnCampaign).then(function (campaign) {
-                    survey.position = campaign.position
-                    survey.name = campaign.name
-                    next()
-                  })
-                })
-              })
-                .catch(next)
-            }, function (err) {
-              if (err) { return reject(err) }
-              waterfallResults.surveysCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
-              waterfallResults.surveysInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
-              waterfallResults.abibaoCompleted = _.orderBy(_.filter(surveys, function (o) { return o.complete === true && o.companyType === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
-              waterfallResults.abibaoInProgress = _.orderBy(_.filter(surveys, function (o) { return o.complete === false && o.companyType === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO }), ['position', 'createdAt'], ['asc', 'asc'])
-              callback(null, waterfallResults)
-            })
-          })
-            .catch(callback)
-        }
-
-      ], function (error) {
+        waterIndividual,
+        waterCurrentCharity,
+        waterCharitiesHistory,
+        waterIndividualSurveys
+      ], function (error, waterfallResults) {
         if (error) { return reject(error) }
         // construt the final result
         var finalResult = {

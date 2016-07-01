@@ -3,8 +3,8 @@
 var Promise = require('bluebird')
 
 var Hoek = require('hoek')
-var mongoose = require('mongoose')
-var ObjectId = mongoose.Types.ObjectId
+var bson = require('bson')
+var ObjectId = bson.ObjectId
 
 module.exports = function (payload) {
   var self = Hoek.clone(global.ABIBAO.services.domain)

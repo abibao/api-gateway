@@ -6,7 +6,6 @@ function StatsStore () {
     var colors = []
     for (var i = 0; i < max; i++) {
       var red = Math.round(i * 255 / max)
-      console.log(red)
       var green = 255 - red
       var blue = 0
       var color = 'rgb(' + red + ',' + green + ',' + blue + ')'

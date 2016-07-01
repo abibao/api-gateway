@@ -5,7 +5,7 @@ function StatsActions (facade) {
   self.charitiesIndividuals = function () {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', '/v1/stats/chatities/individuals')
+      self.facade.call('GET', facade.baseapi + '/v1/stats/charities/individuals')
         .then(function (stats) {
           var data = lodash.map(stats, function (stat) {
             return stat.count
@@ -31,7 +31,7 @@ function StatsActions (facade) {
   self.individualsGenders = function () {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', '/v1/stats/individuals/genders')
+      self.facade.call('GET', facade.baseapi + '/v1/stats/individuals/genders')
         .then(function (stats) {
           self.facade.stores.stats._countGendersInAbibao.datasets[0].data = [stats.men, stats.women]
           self.facade.debugAction('StatsActions.individualsGenders %o', stats)
@@ -50,7 +50,7 @@ function StatsActions (facade) {
   self.individualsAges = function (gender) {
     return new Promise(function (resolve, reject) {
       self.facade.setLoading(true)
-      self.facade.call('GET', '/v1/stats/individuals/ages/' + gender)
+      self.facade.call('GET', facade.baseapi + '/v1/stats/individuals/ages/' + gender)
         .then(function (stats) {
           self.facade.stores.stats._countMembersAges[gender].datasets[0].data = stats.data
           self.facade.stores.stats._countMembersAges[gender].labels = ['0-4', '5-14', '15-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75-84', '85-94']

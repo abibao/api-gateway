@@ -8,7 +8,6 @@ var _ = require('lodash')
 
 module.exports = function (urn) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       self.execute('query', 'campaignReadQuery', urn).then(function (campaign) {

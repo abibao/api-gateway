@@ -1,6 +1,7 @@
 'use strict'
 
 var _ = require('lodash')
+var faker = require('faker')
 
 var Cryptr = require('cryptr')
 var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -15,16 +16,16 @@ module.exports = function (thinky) {
       return _.isUndefined(this.id) ? null : 'urn:abibao:database:survey:' + cryptr.encrypt(this.id)
     }),
     urnCampaign: type.virtual().default(function () {
-      return _.isUndefined(this.id) ? null : 'urn:abibao:database:campaign:' + cryptr.encrypt(this.campaign)
+      return _.isUndefined(this.campaign) ? null : 'urn:abibao:database:campaign:' + cryptr.encrypt(this.campaign)
     }),
     urnCompany: type.virtual().default(function () {
-      return _.isUndefined(this.id) ? null : 'urn:abibao:database:entity:' + cryptr.encrypt(this.company)
+      return _.isUndefined(this.company) ? null : 'urn:abibao:database:entity:' + cryptr.encrypt(this.company)
     }),
     urnCharity: type.virtual().default(function () {
-      return _.isUndefined(this.id) ? null : 'urn:abibao:database:entity:' + cryptr.encrypt(this.charity)
+      return _.isUndefined(this.charity) ? null : 'urn:abibao:database:entity:' + cryptr.encrypt(this.charity)
     }),
     urnIndividual: type.virtual().default(function () {
-      return _.isUndefined(this.id) ? null : 'urn:abibao:database:individual:' + cryptr.encrypt(this.individual)
+      return _.isUndefined(this.individual) ? null : 'urn:abibao:database:individual:' + cryptr.encrypt(this.individual)
     }),
     // linked
     campaign: type.string().required(),
@@ -70,6 +71,16 @@ module.exports = function (thinky) {
     var data = this
     data.modifiedAt = r.now()
     next()
+  })
+
+  SurveyModel.define('getFakeData', function () {
+    return {
+      campaign: faker.name.lastName().toLowerCase(),
+      company: faker.name.lastName().toLowerCase(),
+      charity: faker.name.lastName().toLowerCase(),
+      individual: faker.name.lastName().toLowerCase(),
+      answers: {}
+    }
   })
 
   return SurveyModel

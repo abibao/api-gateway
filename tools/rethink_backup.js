@@ -32,11 +32,13 @@ var execReQL = function (table, skip, limit, callback) {
         next()
       }, function (err) {
         if (err) { return callback() }
-        if (items.length === limit) {
-          execReQL(table, skip + limit, limit, callback)
-        } else {
-          callback()
-        }
+        thinky.r.table(table).count().then(function (count) {
+          if (skip + limit < count) {
+            execReQL(table, skip + limit, limit, callback)
+          } else {
+            callback()
+          }
+        })
       })
     })
     .catch(function (error) {
@@ -51,6 +53,7 @@ fse.emptyDirSync(cacheDir)
 
 console.log('===== START ===============')
 var tables = ['administrators', 'individuals', 'entities', 'campaigns', 'campaigns_items', 'campaigns_items_choices', 'surveys']
+
 async.mapSeries(tables, function (table, next) {
   execReQL(table, 0, 100, next)
 }, function (err, results) {

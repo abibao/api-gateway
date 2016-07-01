@@ -1,6 +1,7 @@
 'use strict'
 
 var _ = require('lodash')
+var faker = require('faker')
 
 var Cryptr = require('cryptr')
 var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -38,6 +39,19 @@ module.exports = function (thinky) {
     var data = this
     data.modifiedAt = r.now()
     next()
+  })
+
+  EntityModel.define('getFakeData', function () {
+    return {
+      name: faker.name.lastName().toLowerCase(),
+      contact: faker.internet.email().toLowerCase(),
+      url: faker.internet.url().toLowerCase(),
+      title: faker.name.lastName().toLowerCase(),
+      hangs: faker.name.lastName().toLowerCase(),
+      usages: faker.name.lastName().toLowerCase(),
+      description: faker.lorem.paragraph(),
+      type: 'none'
+    }
   })
 
   return EntityModel

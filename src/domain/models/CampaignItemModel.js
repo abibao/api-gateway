@@ -1,6 +1,7 @@
 'use strict'
 
 var _ = require('lodash')
+var faker = require('faker')
 
 var Cryptr = require('cryptr')
 var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -33,6 +34,14 @@ module.exports = function (thinky) {
     var data = this
     data.modifiedAt = r.now()
     next()
+  })
+
+  CampaignItemModel.define('getFakeData', function () {
+    return {
+      label: faker.name.lastName().toLowerCase(),
+      type: faker.name.lastName().toLowerCase(),
+      campaign: faker.name.lastName().toLowerCase()
+    }
   })
 
   return CampaignItemModel

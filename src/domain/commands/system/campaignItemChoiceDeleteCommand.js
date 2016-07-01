@@ -10,7 +10,14 @@ module.exports = function (urn) {
     try {
       self.CampaignItemChoiceModel.get(self.getIDfromURN(urn))
         .then(function (result) {
-          result.delete().then(resolve)
+          result.delete().then(function(deleted) {
+            delete deleted.id
+            delete deleted.company
+            delete deleted.charity
+            delete deleted.campaign
+            delete deleted.item
+            resolve(deleted)
+          })
         })
         .catch(reject)
     } catch (e) {

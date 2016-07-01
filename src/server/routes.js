@@ -5,16 +5,19 @@ var normalize = require('path').normalize
 
 exports.endpoints = [
 
+  // get CSRF cookie
+  { method: 'GET', path: '/v1/alive', config: require('./handlers/alive') },
+
   // stats
-  { method: 'GET', path: '/v1/stats/chatities/individuals', config: require('./handlers/stats/charities/individuals') },
-  { method: 'GET', path: '/v1/stats/chatities/none', config: require('./handlers/stats/charities/none') },
+  { method: 'GET', path: '/v1/stats/charities/individuals', config: require('./handlers/stats/charities/individuals') },
+  { method: 'GET', path: '/v1/stats/charities/none', config: require('./handlers/stats/charities/none') },
   { method: 'GET', path: '/v1/stats/individuals/genders', config: require('./handlers/stats/individuals/genders') },
   { method: 'GET', path: '/v1/stats/individuals/ages/{gender}', config: require('./handlers/stats/individuals/ages') },
 
   // www - administrator
   { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
 
-  // auto routing
+  // auto affect campaign
   { method: 'GET', path: '/redirect/campaign/affect/{sealed}', config: require('./handlers/redirect/campaign/affect') },
 
   // individuals

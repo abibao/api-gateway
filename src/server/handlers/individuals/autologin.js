@@ -15,16 +15,11 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    request.payload = {
-      email: 'a@a.com',
-      password: 'a@a.com'
-    }
-    global.ABIBAO.services.domain.execute('command', 'individualLoginWithCredentialsCommand', request.payload)
+    global.ABIBAO.services.domain.execute('command', 'individualLoginWithFingerprintCommand', request.params.fingerprint)
       .then(function (credentials) {
         reply(credentials)
       })
       .catch(function (error) {
-        if (error === 'ERROR_BAD_AUTHENTIFICATION') { return reply(Boom.unauthorized('Email address and/or password invalid')) }
         reply(Boom.badRequest(error))
       })
   }

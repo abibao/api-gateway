@@ -7,7 +7,6 @@ var JWT = require('jsonwebtoken')
 
 module.exports = function (urn) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
-
   return new Promise(function (resolve, reject) {
     try {
       self.execute('query', 'individualReadQuery', urn).then(function (individual) {
