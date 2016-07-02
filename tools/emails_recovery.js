@@ -4,6 +4,8 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
+var databaseRethink = 'recemvp'
+
 var Promise = require('bluebird')
 var async = require('async')
 var _ = require('lodash')
@@ -12,7 +14,7 @@ var engine = require('../src/engine')
 var optionsRethink = {
   host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
   port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
-  db: 'recemvp', // nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+  db: databaseRethink,
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
   silent: true
 }
@@ -28,7 +30,7 @@ var optionsMySQL = {
     port: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
     user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
     password: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD'),
-    database: 'analytics_deve' // nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
+    database: 'analytics_deve'
   },
   debug: false
 }
@@ -42,7 +44,7 @@ var stepUser = function (tUser) {
   return new Promise(function (resolve) {
     console.log('... STEP USER ...')
     var payload
-    thinky.r.table('individuals').filter({email: tUser['user_email']})
+    thinky.r.db(databaseRethink).table('individuals').filter({email: tUser['user_email']})
       .then(function (users) {
         var user = {}
         if (users.length === 0) {
@@ -127,7 +129,7 @@ var stepData = function (tUser) {
         } else {
           var gender = genders[0]
           data.answers.ABIBAO_ANSWER_FONDAMENTAL_GENDER = global.ABIBAO.services.domain.getIDfromURN(gender.urn)
-          return thinky.r.table('campaigns_items_choices').filter({prefix: 'ABIBAO_CONST_DPT'})
+          return thinky.r.db(databaseRethink).table('campaigns_items_choices').filter({prefix: 'ABIBAO_CONST_DPT'})
         }
       })
       .then(function (departments) {
@@ -135,9 +137,12 @@ var stepData = function (tUser) {
         if (department) {
           data.answers.ABIBAO_ANSWER_FONDAMENTAL_DEPARTEMENT = department.id
         }
-        return thinky.r.table('campaigns_items_choices').filter({prefix: 'ABIBAO_CONST_CSP'})
+        return thinky.r.db(databaseRethink).table('campaigns_items_choices').filter({prefix: 'ABIBAO_CONST_CSP'})
       })
       .then(function (csps) {
+        if (tData['datas_csp'] === 231) {
+          tData['datas_csp'] = '23b'
+        }
         var csp = _.filter(csps, {'suffix': tData['datas_csp'].toString()})[0]
         if (csp) {
           data.answers.ABIBAO_ANSWER_FONDAMENTAL_CSP = csp.id
@@ -149,7 +154,7 @@ var stepData = function (tUser) {
         if (Object.keys(data.answers).length !== 4) {
           data.complete = false
         }
-        return thinky.r.table('surveys').filter({
+        return thinky.r.db(databaseRethink).table('surveys').filter({
           campaign: '56eb24cfe9b0fbf30250f8c7',
           charity: '56aa131ca533a2a04be325ae',
           company: '56aa131ca533a2a04be325ae',
@@ -157,7 +162,7 @@ var stepData = function (tUser) {
         }).delete()
       })
       .then(function () {
-        return thinky.r.table('surveys').insert(data)
+        return thinky.r.db(databaseRethink).table('surveys').insert(data)
       })
       .then(function () {
         resolve()
@@ -168,7 +173,7 @@ var stepData = function (tUser) {
   })
 }
 
-/* var stepEmail = function (tUser) {
+var stepEmail = function (tUser) {
   return new Promise(function (resolve, reject) {
     if (tUser['user_email'] !== 'vincent@abibao.com') {
       return resolve()
@@ -183,12 +188,11 @@ var stepData = function (tUser) {
       'personalizations': [
         {
           'to': [
-            {'email': tUser['user_email']},
             {'email': 'gperreymond@gmail.com'}
           ],
           'subject': 'Les sondages qui financent des associations - Choisissez votre association !',
           'substitutions': {
-            '%fingerprint%': global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI') + '/?fingerprint=this_is_the_wtf_fingerprint',
+            '%fingerprint%': global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI') + '/login?fingerprint=' + tUser.fingerprint,
             '%individual_login%': tUser['user_email'],
             '%individual_password%': tUser['user_password']
           }
@@ -205,13 +209,15 @@ var stepData = function (tUser) {
     }
     sendgrid.API(request, function (response) {
       if (response.statusCode === 202) {
+        console.log('... sendgrid code=%s', response.statusCode)
         resolve()
       } else {
+        console.log('... sendgrid error code=%s', response.statusCode)
         reject(response)
       }
     })
   })
-} */
+}
 
 console.log('===== START ===============')
 
@@ -220,7 +226,7 @@ engine()
     knex('t_user')
       .select()
       .then(function (tUsers) {
-        usersOld = tUsers
+        usersOld.push(tUsers[0])
         async.mapLimit(usersOld, 50, function (item, next) {
           console.log('%s', item['user_email'])
           item['user_password'] = 'CreateFromNothing'
@@ -230,14 +236,25 @@ engine()
                 user.id = global.ABIBAO.services.domain.getIDfromURN(user.urn)
                 usersNew.push(user)
               }
+              item.urn = user.urn
               item.individual = user.id
               return stepData(item)
             })
-            /*.then(function () {
+            .then(function () {
+              return global.ABIBAO.services.domain.execute('command', 'individualCreateFingerprintTokenCommand', {
+                urn: item.urn,
+                email: item['user_email']
+              })
+            })
+            .then(function (fingerprint) {
+              item.fingerprint = fingerprint
               return stepEmail(item)
-            })*/
+            })
             .then(function () {
               next()
+            })
+            .catch(function (error) {
+              console.log(error)
             })
         }, function () {
           console.log(errorsCSPS)

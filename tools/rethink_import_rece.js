@@ -4,6 +4,8 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
+var databaseRethink = 'recemvp'
+
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
@@ -17,12 +19,11 @@ var optionsRethink = {
 }
 
 var thinky = require('thinky')(optionsRethink)
-var r = thinky.r
 
 var execBatch = function (table) {
   return new Promise(function (resolve, reject) {
     console.log('delete %s', table)
-    r.table(table).delete()
+    thinky.r.db(databaseRethink).table(table).delete()
       .then(function () {
         // insert
         var dir = path.resolve(__dirname, '../.cache/rethinkdb', table)
@@ -31,7 +32,7 @@ var execBatch = function (table) {
           var filepath = path.resolve(dir, file)
           var json = fse.readJsonSync(filepath)
           console.log('...... %s', json.id)
-          r.table(table).insert(json)
+          thinky.r.db(databaseRethink).table(table).insert(json)
             .then(function () {
               done()
             })

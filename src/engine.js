@@ -22,7 +22,7 @@ global.ABIBAO = {
   starttime: new Date(),
   environnement: nconf.get('ABIBAO_API_GATEWAY_ENV'),
   name: 'API GATEWAY',
-  nconf: nconf,
+  nconf,
   services: { },
   events: { },
   constants: {

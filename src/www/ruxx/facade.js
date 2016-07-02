@@ -2,7 +2,7 @@ function Facade () {
   var self = this
   riot.observable(self)
 
-  self.version = '2.6.7'
+  self.version = '2.6.8'
 
   switch (true) {
     case /local/.test(window.location.hostname):
@@ -12,7 +12,7 @@ function Facade () {
       self.baseapi = 'https://api.pprod.abibao.com'
       break
     default:
-      self.baseapi = 'https://api.abibao.com'
+      self.baseapi = 'http://api.abibao.com'
       break
   }
 

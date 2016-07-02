@@ -22,7 +22,7 @@ module.exports = function (payload) {
             return self.execute('command', 'administratorCreateAuthTokenCommand', administrator.urn)
               .then(function (token) {
                 resolve({
-                  token: token,
+                  token,
                   urn: administrator.urn
                 })
               })
