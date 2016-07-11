@@ -10,6 +10,7 @@ var Promise = require('bluebird')
 var async = require('async')
 var _ = require('lodash')
 var engine = require('../src/engine')
+var faker = require('faker')
 
 var optionsRethink = {
   host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
@@ -159,12 +160,7 @@ var stepData = function (tUser) {
           charity: '56aa131ca533a2a04be325ae',
           company: '56aa131ca533a2a04be325ae',
           individual: tUser.individual
-        }).delete()
-      })
-      .then(function () {
-        data.createdAt = thinky.r.now()
-        data.modifiedAt = thinky.r.now()
-        return thinky.r.db(databaseRethink).table('surveys').insert(data)
+        }).update(data)
       })
       .then(function () {
         resolve()
@@ -187,7 +183,7 @@ var stepEmail = function (tUser) {
       'personalizations': [
         {
           'to': [
-            {'email': 'gperreymond@gmail.com'}
+            {'email': tUser['user_email']}
           ],
           'subject': 'Les sondages qui financent des associations - Choisissez votre association !',
           'substitutions': {
@@ -225,10 +221,12 @@ engine()
     knex('t_user')
       .select()
       .then(function (tUsers) {
-        usersOld.push(tUsers[0])
-        async.mapLimit(usersOld, 50, function (item, next) {
+        var usersOld = _.filter(tUsers, function (tUser) {
+          return tUser['user_email'] === 'gperreymond@gmail.com' || tUser['user_email'] === 'contact@abibao.com'
+        })
+        async.mapLimit(usersOld, 1, function (item, next) {
           console.log('%s', item['user_email'])
-          item['user_password'] = 'CreateFromNothing'
+          item['user_password'] = faker.internet.password()
           stepUser(item)
             .then(function (user) {
               if (user) {
@@ -243,22 +241,17 @@ engine()
               })
             })
             .then(function (fingerprint) {
-              console.log(fingerprint)
+              item.fingerprint = fingerprint
               return global.ABIBAO.services.domain.execute('command', 'individualLoginWithFingerprintCommand', fingerprint)
             })
-            /*.then(function () {
-              return global.ABIBAO.services.domain.execute('command', 'individualCreateFingerprintTokenCommand', {
-                urn: item.urn,
-                email: item['user_email']
-              })
-            })*/
-            /*.then(function (fingerprint) {
-              console.log(fingerprint)
-              item.fingerprint = fingerprint
-              return stepEmail(item)
-            })*/
             .then(function (infos) {
-              console.log(infos)
+              item.infos = infos
+              return stepData(item)
+            })
+            .then(function () {
+              return stepEmail(item)
+            })
+            .then(function () {
               next()
             })
             .catch(function (error) {

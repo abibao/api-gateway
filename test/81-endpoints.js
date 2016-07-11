@@ -37,6 +37,7 @@ describe('endpoints story', function () {
       var path = route.path
       var baseapi = /v1/.test(path) === true
       if (baseapi) {
+        console.log(info.uri, path, method)
         var promise = chai.request(info.uri)[method]
         promise(path)
           .send()
