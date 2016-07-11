@@ -4,6 +4,10 @@
 
 - [ ] remove thinky, and use rethinkdb
 
+### 2.6.9
+
+- [x] check updates
+
 ### 2.6.8
 
 - [x] remove CSRF at this point

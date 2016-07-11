@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.6.8",
+  "version": "2.6.9",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "check:updates": "./node_modules/.bin/ncu",
@@ -43,7 +43,7 @@
     "base64-url": "1.2.2",
     "bluebird": "3.4.1",
     "boom": "3.2.2",
-    "bson": "0.4.23",
+    "bson": "0.5.0",
     "bunyan": "1.8.1",
     "bunyan-logstash-tcp": "0.3.4",
     "crumb": "6.0.2",
@@ -53,11 +53,11 @@
     "faker": "3.1.0",
     "fs-extra": "0.30.0",
     "good-bunyan": "0.1.2",
-    "hapi": "13.4.1",
+    "hapi": "13.5.0",
     "hapi-auth-basic": "4.2.0",
     "hapi-auth-jwt2": "7.0.1",
     "hoek": "4.0.1",
-    "inert": "4.0.0",
+    "inert": "4.0.1",
     "iron": "4.0.1",
     "joi": "8.4.2",
     "jsonwebtoken": "7.0.1",
@@ -66,13 +66,13 @@
     "md5": "2.1.0",
     "mysql": "2.11.1",
     "nconf": "0.8.4",
-    "newrelic": "1.28.1",
+    "newrelic": "1.28.2",
     "node-uuid": "1.4.7",
     "recursive-readdir": "2.0.0",
     "request-promise": "3.0.0",
-    "sendgrid": "3.0.5",
+    "sendgrid": "3.0.7",
     "servicebus": "2.0.2",
-    "thinky": "2.3.2",
+    "thinky": "2.3.3",
     "vision": "4.1.0"
   },
   "devDependencies": {
@@ -86,10 +86,10 @@
     "mocha": "2.5.3",
     "mocha-lcov-reporter": "1.2.0",
     "mustache": "2.2.1",
-    "npm-check-updates": "2.6.8",
+    "npm-check-updates": "2.7.0",
     "request-promise": "3.0.0",
     "rethinkdb": "2.3.2",
-    "snyk": "1.16.0",
+    "snyk": "1.17.0",
     "standard": "7.1.2"
   }
 }

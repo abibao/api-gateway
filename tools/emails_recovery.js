@@ -162,6 +162,8 @@ var stepData = function (tUser) {
         }).delete()
       })
       .then(function () {
+        data.createdAt = thinky.r.now()
+        data.modifiedAt = thinky.r.now()
         return thinky.r.db(databaseRethink).table('surveys').insert(data)
       })
       .then(function () {
@@ -175,9 +177,6 @@ var stepData = function (tUser) {
 
 var stepEmail = function (tUser) {
   return new Promise(function (resolve, reject) {
-    if (tUser['user_email'] !== 'vincent@abibao.com') {
-      return resolve()
-    }
     console.log('... STEP EMAIL ...')
     // send email
     var sendgrid = require('sendgrid').SendGrid(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
@@ -238,19 +237,28 @@ engine()
               }
               item.urn = user.urn
               item.individual = user.id
-              return stepData(item)
-            })
-            .then(function () {
               return global.ABIBAO.services.domain.execute('command', 'individualCreateFingerprintTokenCommand', {
                 urn: item.urn,
                 email: item['user_email']
               })
             })
             .then(function (fingerprint) {
+              console.log(fingerprint)
+              return global.ABIBAO.services.domain.execute('command', 'individualLoginWithFingerprintCommand', fingerprint)
+            })
+            /*.then(function () {
+              return global.ABIBAO.services.domain.execute('command', 'individualCreateFingerprintTokenCommand', {
+                urn: item.urn,
+                email: item['user_email']
+              })
+            })*/
+            /*.then(function (fingerprint) {
+              console.log(fingerprint)
               item.fingerprint = fingerprint
               return stepEmail(item)
-            })
-            .then(function () {
+            })*/
+            .then(function (infos) {
+              console.log(infos)
               next()
             })
             .catch(function (error) {
