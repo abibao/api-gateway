@@ -75,7 +75,7 @@ var stepUser = function (tUser) {
             })
         } else {
           console.log('... %s exists', tUser['user_email'])
-          tUser['user_password'] = '--------'
+          tUser['user_password'] = '------------'
           payload = {
             email: tUser['user_email'].toLowerCase()
           }
@@ -186,7 +186,7 @@ var stepEmail = function (tUser) {
           'to': [
             {'email': tUser['user_email']}
           ],
-          'subject': 'Les sondages qui financent des associations - Choisissez votre association !',
+          'subject': '[Oups ... ceci est le bon message] Choisissez votre association !',
           'substitutions': {
             '%fingerprint%': global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI') + '/login?fingerprint=' + tUser.fingerprint,
             '%individual_login%': tUser['user_email'],
@@ -223,10 +223,11 @@ engine()
       .select()
       .then(function (tUsers) {
         var usersOld = _.filter(tUsers, function (tUser) {
-          return tUser['user_email'] === 'gperreymond@gmail.com'
+          return tUser['user_email'] === 'gperreymond@gmail.com' || tUser['user_email'] === 'vincent@abibao.com'
         })
         // usersOld = tUsers
         async.mapLimit(usersOld, 1, function (item, next) {
+          item['user_email'] = item['user_email'].toLowerCase()
           console.log('%s', item['user_email'])
           item['user_password'] = faker.internet.password()
           stepUser(item)
