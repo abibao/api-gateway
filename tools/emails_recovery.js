@@ -4,7 +4,7 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-var databaseRethink = 'recemvp'
+var databaseRethink = nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
 
 var Promise = require('bluebird')
 var async = require('async')
@@ -75,6 +75,7 @@ var stepUser = function (tUser) {
             })
         } else {
           console.log('... %s exists', tUser['user_email'])
+          tUser['user_password'] = '--------'
           payload = {
             email: tUser['user_email'].toLowerCase()
           }
@@ -222,8 +223,9 @@ engine()
       .select()
       .then(function (tUsers) {
         var usersOld = _.filter(tUsers, function (tUser) {
-          return tUser['user_email'] === 'gperreymond@gmail.com' || tUser['user_email'] === 'contact@abibao.com'
+          return tUser['user_email'] === 'gperreymond@gmail.com'
         })
+        // usersOld = tUsers
         async.mapLimit(usersOld, 1, function (item, next) {
           console.log('%s', item['user_email'])
           item['user_password'] = faker.internet.password()
