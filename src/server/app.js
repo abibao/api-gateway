@@ -36,12 +36,7 @@ app.use(compress())
   .use(bodyParser.urlencoded({ extended: true }))
   .configure(hooks())
   .configure(rest())
-  .configure(authentication({
-    tokenEndpoint: '/token',
-    localEndpoint: '/login',
-    header: 'Authorization',
-    cookie: 'RememberMe'
-  }))
+  .configure(authentication())
   .configure(socketio())
   .configure(services)
   .configure(middleware)

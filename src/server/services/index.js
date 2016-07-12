@@ -1,9 +1,11 @@
 'use strict'
 
-const administrators = require('./administrators')
+const authentication = require('./authentication')
+const administrator = require('./administrator')
 
 module.exports = function () {
   const app = this
 
-  app.configure(administrators)
+  app.configure(authentication)
+  app.configure(administrator)
 }

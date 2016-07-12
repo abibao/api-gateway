@@ -1,5 +1,4 @@
 {
   "host": "api.abibao.com",
-  "port": 80,
-  "public": "../../www/"
+  "port": 80
 }

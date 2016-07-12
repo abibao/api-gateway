@@ -19,12 +19,7 @@ function Facade () {
   self.feathers = feathers()
     .configure(feathers.rest(self.baseapi).jquery(jQuery))
     .configure(feathers.hooks())
-    .configure(feathers.authentication({
-      tokenEndpoint: '/token',
-      localEndpoint: '/login',
-      header: 'Authorization',
-      cookie: 'RememberMe'
-    }))
+    .configure(feathers.authentication())
 
   self.debug = debug('abibao:facade')
   self.debugCall = debug('abibao:facade:call')
