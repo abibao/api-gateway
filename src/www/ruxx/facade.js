@@ -2,11 +2,11 @@ function Facade () {
   var self = this
   riot.observable(self)
 
-  self.version = '2.6.8'
+  self.version = '3.0.0'
 
   switch (true) {
     case /local/.test(window.location.hostname):
-      self.baseapi = 'http://localhost:5183'
+      self.baseapi = 'http://localhost:8383'
       break
     case /pprod/.test(window.location.hostname):
       self.baseapi = 'https://api.pprod.abibao.com'
@@ -15,6 +15,16 @@ function Facade () {
       self.baseapi = 'http://api.abibao.com'
       break
   }
+
+  self.feathers = feathers()
+    .configure(feathers.rest(self.baseapi).jquery(jQuery))
+    .configure(feathers.hooks())
+    .configure(feathers.authentication({
+      tokenEndpoint: '/token',
+      localEndpoint: '/login',
+      header: 'Authorization',
+      cookie: 'RememberMe'
+    }))
 
   self.debug = debug('abibao:facade')
   self.debugCall = debug('abibao:facade:call')

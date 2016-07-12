@@ -1,0 +1,13 @@
+{
+  "host": "localhost",
+  "port": 8383,
+  "public": "../../www/",
+  "corsWhitelist": [],
+  "auth": {
+    "token": {
+      "secret": "AUTH_8UR40M2nQ8leURX262xY0OokvfhQunG4"
+    },
+    "local": {},
+    "successRedirect": "/index.html"
+  }
+}
