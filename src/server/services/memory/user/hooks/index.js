@@ -1,14 +1,16 @@
 'use strict'
 
-const globalHooks = require('../../../hooks')
+const globalHooks = require('../../../../hooks')
 const hooks = require('feathers-hooks')
-const auth = require('feathers-authentication').hooks
-
+var auth = require('feathers-authentication')
+// hooks.disable('external')
 exports.before = {
   all: [],
   find: [],
   get: [],
-  create: [],
+  create: [
+    auth.hooks.hashPassword()
+  ],
   update: [],
   patch: [],
   remove: []

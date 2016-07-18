@@ -1,9 +1,16 @@
 # API-GATEWAY
 
+r.db('recemvp').table('individuals').filter({email:'gperreymond@gmail.com'}).update({scope:'administrator'});
+r.db('recemvp').table('individuals').filter({email:'boitaumail@gmail.com'}).update({scope:'administrator'});
+r.db('recemvp').table('individuals').replace(r.row.without('verified'));
+r.db('recemvp').table('individuals').replace(r.row.without('hashedPassword'));
+r.db('recemvp').table('individuals').replace(r.row.without('salt'));
+
 ### 3.0.0
 
 - [x] check updates
 - [x] implements feathers instead of hapi/myself
+- [x] remove user/pass and replace with fingerprint login
 
 ### 2.6.8
 

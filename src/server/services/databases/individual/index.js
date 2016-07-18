@@ -21,22 +21,16 @@ module.exports = function () {
 
   const options = {
     Model: r,
-    name: 'administrators',
+    name: 'individuals',
     paginate: {
       default: 10,
       max: 20
     }
   }
 
-  // Initialize our service with any options it requires
-  app.use('/v1/administrators', service(options))
+  app.use('individuals', service(options))
 
-  // Get our initialize service to that we can bind hooks
-  const administratorsService = app.service('/v1/administrators')
-
-  // Set up our before hooks
-  administratorsService.before(hooks.before)
-
-  // Set up our after hooks
-  administratorsService.after(hooks.after)
+  const Service = app.service('individuals')
+  Service.before(hooks.before)
+  Service.after(hooks.after)
 }
