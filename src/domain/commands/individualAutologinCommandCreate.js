@@ -60,7 +60,7 @@ module.exports = function (payload) {
               ],
               'subject': 'Vérification de votre identité',
               'substitutions': {
-                '%fingerprint%': payload.controlFingerprintUrl + '=' + fingerprint
+                '%fingerprint%': payload.backUrl + '=' + fingerprint
               }
             }
           ],

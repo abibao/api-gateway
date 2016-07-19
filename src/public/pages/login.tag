@@ -1,3 +1,5 @@
+import userService from './../services/user'
+
 import './../components/header.tag'
 
 <login>
@@ -20,19 +22,14 @@ import './../components/header.tag'
 
     self.on('mount', function() {
       console.log('login.tag > mount()')
-      riot.control.trigger(riot.EVENT.USER_AUTHENTICATE)
+      userService.trigger(riot.EVENT.USER_AUTHENTICATE)
     })
 
     self.on('unmount', function() {
       console.log('login.tag > unmount()')
     })
 
-    riot.control.on(riot.EVENT.USER_AUTHENTICATE_SUCCESS, function(user) {
-      console.log('login.tag > USER_AUTHENTICATE_SUCCESS', user)
-      riot.route('homepage')
-    })
-
-    riot.control.on(riot.EVENT.USER_AUTHENTICATE_FAILED, function(error) {
+    userService.on(riot.EVENT.USER_AUTHENTICATE_FAILED, function(error) {
       console.log('login.tag > USER_AUTHENTICATE_FAILED', error)
       self.loading = false
       self.update()
@@ -42,15 +39,23 @@ import './../components/header.tag'
       console.log('login.tag > sendEmailHandler()', self.email.value)
       self.loading = true
       self.update()
-      riot.control.trigger(riot.EVENT.USER_AUTH_SEND_EMAIL, self.email.value)
+      userService.trigger(riot.EVENT.USER_AUTH_SEND_EMAIL, self.email.value)
     }
 
-    riot.control.on(riot.EVENT.USER_AUTH_SEND_EMAIL_SUCCESS, function() {
+    userService.on(riot.EVENT.USER_AUTHENTICATE_SUCCESS, function(user) {
+      console.log('login.tag > USER_AUTHENTICATE_SUCCESS', user)
+      riot.route('homepage')
+    })
+
+
+    userService.on(riot.EVENT.USER_AUTH_SEND_EMAIL_SUCCESS, function() {
+      console.log('login.tag > USER_AUTH_SEND_EMAIL_SUCCESS')
       self.loading = false
       self.update()
     })
 
-    riot.control.on(riot.EVENT.USER_AUTH_SEND_EMAIL_FAILED, function() {
+    userService.on(riot.EVENT.USER_AUTH_SEND_EMAIL_FAILED, function() {
+      console.log('login.tag > USER_AUTH_SEND_EMAIL_FAILED')
       self.loading = false
       self.update()
     })

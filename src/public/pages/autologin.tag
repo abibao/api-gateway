@@ -1,3 +1,5 @@
+import userService from './../services/user'
+
 import './../components/header.tag'
 
 <autologin>
@@ -12,15 +14,15 @@ import './../components/header.tag'
       console.log('autologin.tag > mount()')
       const q = riot.route.query()
       const fingerprint = q.fingerprint
-      riot.control.trigger(riot.EVENT.USER_CONTROL_FINGERPRINT, fingerprint);
+      userService.trigger(riot.EVENT.USER_CONTROL_FINGERPRINT, fingerprint);
     })
 
-    riot.control.on(riot.EVENT.USER_CONTROL_FINGERPRINT_SUCCESS, function(user) {
+    userService.on(riot.EVENT.USER_CONTROL_FINGERPRINT_SUCCESS, function(user) {
       console.log('autologin.tag > USER_CONTROL_FINGERPRINT_SUCCESS', user)
       riot.route('homepage')
     })
 
-    riot.control.on(riot.EVENT.USER_CONTROL_FINGERPRINT_FAILED, function(error) {
+    userService.on(riot.EVENT.USER_CONTROL_FINGERPRINT_FAILED, function(error) {
       console.log('autologin.tag > USER_CONTROL_FINGERPRINT_FAILED', error)
       riot.route('login')
     })

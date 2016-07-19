@@ -10,7 +10,7 @@ module.exports = {
   'public': '../../../build/',
   'corsWhitelist': ['localhost'],
   'auth': {
-    'idField': 'id',
+    'idField': 'urn',
     'token': {
       'secret': nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'),
       'payload': ['urn', 'email']

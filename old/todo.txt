@@ -1,0 +1,5 @@
+r.db('').table('').filter({email:'gperreymond@gmail.com'}).update({scope:'administrator'});
+r.db('').table('').filter({email:'boitaumail@gmail.com'}).update({scope:'administrator'});
+r.db('').table('').replace(r.row.without('verified'));
+r.db('').table('').replace(r.row.without('hashedPassword'));
+r.db('').table('').replace(r.row.without('salt'));

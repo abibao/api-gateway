@@ -1,14 +1,12 @@
-/*global describe:false, it:false*/
 'use strict'
 
 var chai = require('chai')
 var expect = chai.expect
 
-process.env.ABIBAO_API_GATEWAY_EXPOSE_PORT = 8585
 var engine = require('../src/engine')
 
 describe('abibao story', function () {
-  it('should initialize global.ABIBAO on port ' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'), function (done) {
+  it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()
     } else {

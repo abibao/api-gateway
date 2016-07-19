@@ -1,7 +1,19 @@
-version: v1.5.0
+version: v1.5.2
 ignore:
   'npm:minimatch:20160620':
     - recursive-readdir > minimatch:
         reason: None given
         expires: '2016-07-21T08:09:23.587Z'
-patch: {}
+  'npm:negotiator:20160616':
+    - feathers-socketio > socket.io > engine.io > accepts > negotiator:
+        reason: None given
+        expires: '2016-08-18T07:37:14.541Z'
+patch:
+  'npm:minimatch:20160620':
+    - recursive-readdir > minimatch:
+        patched: '2016-07-19T07:36:32.752Z'
+  'npm:ws:20160624':
+    - feathers-socketio > socket.io > socket.io-client > engine.io-client > ws:
+        patched: '2016-07-19T07:36:32.752Z'
+    - feathers-socketio > socket.io > engine.io > ws:
+        patched: '2016-07-19T07:36:32.752Z'

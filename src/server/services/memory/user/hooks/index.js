@@ -2,14 +2,15 @@
 
 const globalHooks = require('../../../../hooks')
 const hooks = require('feathers-hooks')
-var auth = require('feathers-authentication')
+var auth = require('feathers-authentication').hooks
+
 // hooks.disable('external')
 exports.before = {
   all: [],
   find: [],
   get: [],
   create: [
-    auth.hooks.hashPassword()
+    auth.hashPassword()
   ],
   update: [],
   patch: [],
