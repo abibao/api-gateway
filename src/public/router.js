@@ -1,5 +1,6 @@
 import feathers from './feathers'
 
+import './pages/homepage.tag'
 import './pages/login.tag'
 import './pages/autologin.tag'
 
@@ -14,7 +15,7 @@ class Router {
 
   constructor () {
     this._currentView = null
-    this._views = ['login', 'autologin']
+    this._views = ['login', 'autologin', 'homepage']
     this._defaultView = 'login'
 
     riot.route(this._handleRoute.bind(this))

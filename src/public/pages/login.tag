@@ -3,7 +3,7 @@ import './../components/header.tag'
 <login>
 
   <header></header>
-  <div class="page" if={ loading===false && user===false }>
+  <div class="page" if={ loading===false }>
     <div class="card">
       <h1>Vérification de votre identité</h1>
       <input id="email" type="email" placeholder="Saissisez votre email"></input><br/>
@@ -17,46 +17,41 @@ import './../components/header.tag'
     let self = this
 
     self.loading = true
-    self.user = false
 
     self.on('mount', function() {
       console.log('login.tag > mount()')
       riot.control.trigger(riot.EVENT.USER_AUTHENTICATE)
     })
 
-    riot.control.on(riot.EVENT.USER_AUTHENTICATE_FAILED, function(user) {
-      self.loading = false
-      self.user = false
-      self.update()
+    self.on('unmount', function() {
+      console.log('login.tag > unmount()')
     })
 
     riot.control.on(riot.EVENT.USER_AUTHENTICATE_SUCCESS, function(user) {
-      self.user = {
-        email: user.email,
-        urn: user.urn
-      }
+      console.log('login.tag > USER_AUTHENTICATE_SUCCESS', user)
+      riot.route('homepage')
+    })
+
+    riot.control.on(riot.EVENT.USER_AUTHENTICATE_FAILED, function(error) {
+      console.log('login.tag > USER_AUTHENTICATE_FAILED', error)
       self.loading = false
-      console.log(self.user, self.loading)
       self.update()
     })
 
     self.sendEmailHandler = function(e) {
       console.log('login.tag > sendEmailHandler()', self.email.value)
       self.loading = true
-      self.user = false
       self.update()
       riot.control.trigger(riot.EVENT.USER_AUTH_SEND_EMAIL, self.email.value)
     }
 
     riot.control.on(riot.EVENT.USER_AUTH_SEND_EMAIL_SUCCESS, function() {
       self.loading = false
-      self.user = false
       self.update()
     })
 
     riot.control.on(riot.EVENT.USER_AUTH_SEND_EMAIL_FAILED, function() {
       self.loading = false
-      self.user = false
       self.update()
     })
 
