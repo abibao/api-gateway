@@ -27,25 +27,25 @@ import './../components/header.tag'
       userService.trigger(riot.EVENT.USER_AUTHENTICATE)
     })
 
-    /*userService.on(riot.EVENT.USER_AUTHENTICATE_SUCCESS, function(user) {
+    userService.on(riot.EVENT.USER_AUTHENTICATE_SUCCESS, function(user) {
       console.log('homepage.tag > USER_AUTHENTICATE_SUCCESS', user)
       self.loading = false
       self.update()
       individualsService.trigger(riot.EVENT.SERVICE_INDIVIDUALS_FIND)
-    })*/
+    })
 
-    /*userService.on(riot.EVENT.USER_AUTHENTICATE_FAILED, function(error) {
+    userService.on(riot.EVENT.USER_AUTHENTICATE_FAILED, function(error) {
       console.log('homepage.tag > USER_AUTH_SEND_EMAIL_FAILED', error)
       self.loading = false
       riot.route('login')
-    })*/
+    })
 
-    /*userService.on(riot.EVENT.SERVICE_INDIVIDUALS_FIND_SUCCESS, function(individuals) {
+    userService.on(riot.EVENT.SERVICE_INDIVIDUALS_FIND_SUCCESS, function(individuals) {
       console.log('homepage.tag > SERVICE_INDIVIDUALS_FIND_SUCCESS', individuals)
       self.loading = false
       self.individuals = individuals
       self.update()
-    })*/
+    })
 
   </script>
 

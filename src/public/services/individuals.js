@@ -15,9 +15,11 @@ class IndividualsStore {
       service.find()
         .then(function (result) {
           console.log('IndividualsStore', 'SERVICE_INDIVIDUALS_FIND_SUCCESS')
+          return self.trigger(riot.EVENT.SERVICE_INDIVIDUALS_FIND_SUCCESS, result)
         })
         .catch(function (error) {
           console.log('IndividualsStore', 'SERVICE_INDIVIDUALS_FIND_FAILED')
+          return self.trigger(riot.EVENT.SERVICE_INDIVIDUALS_FIND_FAILED, error)
         })
     })
   }

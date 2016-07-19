@@ -14,7 +14,7 @@ class UserStore {
       riot.feathers.authenticate()
         .then(function (result) {
           console.log('UserStore', 'USER_AUTHENTICATE_SUCCESS')
-          return self.trigger(riot.EVENTS.USER_AUTHENTICATE_SUCCESS, result)
+          return self.trigger(riot.EVENT.USER_AUTHENTICATE_SUCCESS, result)
         })
         .catch(function (error) {
           console.log('UserStore', 'USER_AUTHENTICATE_FAILED')
