@@ -40,10 +40,10 @@ import './../components/header.tag'
       riot.route('login')
     })
 
-    userService.on(riot.EVENT.SERVICE_INDIVIDUALS_FIND_SUCCESS, function(individuals) {
-      console.log('homepage.tag > SERVICE_INDIVIDUALS_FIND_SUCCESS', individuals)
+    individualsService.on(riot.EVENT.SERVICE_INDIVIDUALS_FIND_SUCCESS, function(result) {
+      console.log('homepage.tag > SERVICE_INDIVIDUALS_FIND_SUCCESS', result)
       self.loading = false
-      self.individuals = individuals
+      self.individuals = result
       self.update()
     })
 

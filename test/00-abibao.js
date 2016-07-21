@@ -4,7 +4,6 @@
 var chai = require('chai')
 var expect = chai.expect
 
-process.env.ABIBAO_API_GATEWAY_EXPOSE_PORT = 8585
 var engine = require('../src/engine')
 
 describe('abibao story', function () {

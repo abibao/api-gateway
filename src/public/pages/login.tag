@@ -48,14 +48,14 @@ import './../components/header.tag'
     })
 
 
-    userService.on(riot.EVENT.USER_AUTH_SEND_EMAIL_SUCCESS, function() {
-      console.log('login.tag > USER_AUTH_SEND_EMAIL_SUCCESS')
+    userService.on(riot.EVENT.USER_AUTH_SEND_EMAIL_SUCCESS, function(result) {
+      console.log('login.tag > USER_AUTH_SEND_EMAIL_SUCCESS', result)
       self.loading = false
       self.update()
     })
 
-    userService.on(riot.EVENT.USER_AUTH_SEND_EMAIL_FAILED, function() {
-      console.log('login.tag > USER_AUTH_SEND_EMAIL_FAILED')
+    userService.on(riot.EVENT.USER_AUTH_SEND_EMAIL_FAILED, function(error) {
+      console.log('login.tag > USER_AUTH_SEND_EMAIL_FAILED', error)
       self.loading = false
       self.update()
     })

@@ -23,7 +23,7 @@ var thinky = require('thinky')(optionsRethink)
 
 var restoreTable = function (table) {
   return new Promise(function (resolve, reject) {
-    console.log('backup table %s', table)
+    console.log('restore table %s', table)
     thinky.r.db(args.ARG_TO).table(table).delete()
       .then(function () {
         return thinky.r.db(args.ARG_FROM).table(table)
