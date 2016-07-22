@@ -1,20 +1,26 @@
 'use strict'
 
 const auth = require('feathers-authentication').hooks
-const validate = require('./validate')
+const localHooks = require('./local')
 
 exports.before = {
   all: [],
   find: [],
   get: [],
   create: [
-    validate()
+    localHooks.emailAlreadyExists(),
+    localHooks.hasRegisteredEntity(),
+    localHooks.createdAt(),
+    localHooks.modifiedAt(),
+    localHooks.validate()
   ],
   update: [
-    validate()
+    localHooks.modifiedAt(),
+    localHooks.validate()
   ],
   patch: [
-    validate()
+    localHooks.modifiedAt(),
+    localHooks.validate()
   ],
   remove: []
 }
@@ -23,7 +29,9 @@ exports.after = {
   all: [],
   find: [],
   get: [],
-  create: [],
+  create: [
+    localHooks.individualRegisterCommand()
+  ],
   update: [],
   patch: [],
   remove: []

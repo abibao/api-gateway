@@ -22,6 +22,10 @@ var abibao = {
   error: global.ABIBAO.debuggers.error
 }
 
+/* *****
+send / listen for 1:1
+publish / subscribe for 1:N
+***** */
 internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {

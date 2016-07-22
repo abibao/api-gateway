@@ -1,7 +1,5 @@
 'use strict'
 
-const globalHooks = require('../../../../hooks')
-const hooks = require('feathers-hooks')
 var auth = require('feathers-authentication').hooks
 
 // hooks.disable('external')
