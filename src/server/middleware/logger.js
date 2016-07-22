@@ -7,7 +7,7 @@ module.exports = function (app) {
 
   return function (error, req, res, next) {
     if (error) {
-      global.ABIBAO.debuggers.server('Route %s - ERROR %o', req.url, error)
+      global.ABIBAO.debuggers.server('Route %s - ERROR', req.url)
     } else {
       global.ABIBAO.debuggers.server('Route %s', req.url)
     }

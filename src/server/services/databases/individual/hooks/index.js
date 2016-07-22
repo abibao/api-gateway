@@ -1,19 +1,21 @@
 'use strict'
 
-const globalHooks = require('../../../../hooks')
-const hooks = require('feathers-hooks')
 const auth = require('feathers-authentication').hooks
+const validate = require('./validate')
 
 exports.before = {
-  all: [
-    auth.verifyToken(),
-    auth.restrictToAuthenticated()
-  ],
+  all: [],
   find: [],
   get: [],
-  create: [],
-  update: [],
-  patch: [],
+  create: [
+    validate()
+  ],
+  update: [
+    validate()
+  ],
+  patch: [
+    validate()
+  ],
   remove: []
 }
 

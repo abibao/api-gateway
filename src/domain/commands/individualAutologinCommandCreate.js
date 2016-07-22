@@ -75,7 +75,7 @@ module.exports = function (payload) {
         }
         sendgrid.API(request, function (response) {
           if (response.statusCode === 202) {
-            return resolve()
+            return resolve(fingerprint)
           } else {
             return reject(new Error('ERROR_BAD_AUTHENTIFICATION_SENDGRID_ERROR'))
           }

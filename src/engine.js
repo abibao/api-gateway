@@ -78,19 +78,14 @@ var engine = function () {
         abibao.debug('server initialized')
         abibao.debug('end processing')
         global.ABIBAO.uuid = require('node-uuid').v4()
-        global.ABIBAO.services.server.on('listening', function () {
-          abibao.debug('server has just started')
-          global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, {
-            name: global.ABIBAO.name,
-            uuid: global.ABIBAO.uuid,
-            message: 'has just connected into the bus'
-          })
-          resolve()
-        })
+        abibao.debug('server has just started')
         global.ABIBAO.services.server.listen(nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'))
-      })
-      .catch(function (error) {
-        reject(error)
+        global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, {
+          name: global.ABIBAO.name,
+          uuid: global.ABIBAO.uuid,
+          message: 'has just connected into the bus'
+        })
+        resolve()
       })
   })
 }

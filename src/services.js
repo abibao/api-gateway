@@ -16,9 +16,6 @@ module.exports.bus = function () {
       .then(function (item) {
         resolve(item)
       })
-      .catch(function (error) {
-        reject(error)
-      })
   })
 }
 
@@ -28,9 +25,6 @@ module.exports.domain = function () {
       .then(function (item) {
         resolve(item)
       })
-      .catch(function (error) {
-        reject(error)
-      })
   })
 }
 
@@ -39,9 +33,6 @@ module.exports.server = function () {
     require('./server').singleton()
       .then(function (item) {
         resolve(item)
-      })
-      .catch(function (error) {
-        reject(error)
       })
   })
 }

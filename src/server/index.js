@@ -22,14 +22,9 @@ var abibao = {
 internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
-    try {
-      internals.server = require('./app')
-      internals.server.logger = global.ABIBAO.logger
-      resolve()
-    } catch (error) {
-      abibao.error(error)
-      reject(error)
-    }
+    internals.server = require('./app')
+    internals.server.logger = global.ABIBAO.logger
+    resolve()
   })
 }
 
@@ -45,9 +40,7 @@ module.exports.singleton = function () {
         resolve()
       })
       .catch(function (error) {
-        internals.server = false
         abibao.error(error)
-        reject(error)
       })
   })
 }
