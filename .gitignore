@@ -20,6 +20,9 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
+# Documentation directory used by tools like jsdoc
+documentation
+
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 

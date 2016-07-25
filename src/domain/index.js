@@ -1,14 +1,27 @@
 'use strict'
 
 var Promise = require('bluebird')
-
-var _ = require('lodash')
-var async = require('async')
-var path = require('path')
-var fs = require('fs')
-var uuid = require('node-uuid')
+const Hoek = require('hoek')
 
 var internals = {
+  optionsRethink: {
+    host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
+    port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
+    db: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+    authKey: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
+    silent: true
+  },
+  optionsMySQL: {
+    client: 'mysql',
+    connection: {
+      host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
+      port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
+      user: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
+      password: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD'),
+      database: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
+    },
+    debug: false
+  },
   constants: {
     ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
     ABIBAO_CONST_TOKEN_FINGERPRINT: 'fingerprint',
@@ -26,6 +39,10 @@ var internals = {
   domain: false
 }
 
+var _ = require('lodash')
+var Cryptr = require('cryptr')
+var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+
 // use debuggers reference
 var abibao = {
   debug: global.ABIBAO.debuggers.domain,
@@ -37,11 +54,29 @@ internals.initialize = function () {
   return new Promise(function (resolve, reject) {
     try {
       internals.domain.dictionnary = []
+      internals.domain.knex = require('knex')(internals.optionsMySQL)
+      internals.domain.rethinkdb = {
+        r: require('rethinkdb'),
+        conn: false
+      }
+      internals.domain.r
       internals.domain.injector = internals.injector
       internals.domain.execute = internals.execute
+      internals.domain.getIDfromURN = function (urn) {
+        return cryptr.decrypt(_.last(_.split(urn, ':')))
+      }
+      internals.domain.getURNfromID = function (model, id) {
+        return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
+      }
       internals.domain.injector('commands')
         .then(function () {
           return internals.domain.injector('queries')
+        })
+        .then(function () {
+          return internals.domain.rethinkdb.r.connect(internals.optionsRethink)
+        })
+        .then(function (conn) {
+          internals.domain.rethinkdb.conn = conn
         })
         .finally(resolve)
         .catch(reject)
@@ -71,6 +106,11 @@ module.exports.singleton = function () {
   })
 }
 
+var async = require('async')
+var path = require('path')
+var fs = require('fs')
+var uuid = require('node-uuid')
+
 internals.injector = function (type) {
   var self = internals.domain
   return new Promise(function (resolve) {
@@ -81,8 +121,17 @@ internals.injector = function (type) {
       if (item !== 'system') {
         var name = path.basename(item, '.js')
         abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
-        self[name] = require('./' + type + '/' + name)
-        self.dictionnary.push(name)
+        if (type === 'models') {
+          self[name] = require('./' + type + '/' + name)(self.thinky)
+        } else if (type === 'models/mysql') {
+          self[name] = require('./' + type + '/' + name)(self.knex)
+        } else if (type === 'listeners') {
+          self[name] = require('./' + type + '/' + name)
+          self[name]()
+        } else {
+          self[name] = require('./' + type + '/' + name)
+          self.dictionnary.push(name)
+        }
       }
       next(null, true)
     }, function () {
@@ -101,9 +150,11 @@ internals.execute = function (type, promise, params) {
       promise: promise
     }
     abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
-    global.ABIBAO.services.domain[promise](params)
+    var domain = Hoek.clone(global.ABIBAO.services.domain)
+    domain[promise](params)
       .then(function (result) {
         data.exectime = new Date() - starttime
+        data.params = params
         // loggers
         if (global.ABIBAO.environnement === 'prod') {
           global.ABIBAO.logger.info(data)

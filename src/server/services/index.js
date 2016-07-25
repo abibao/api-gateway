@@ -2,7 +2,9 @@
 
 const authentication = require('./authentication')
 const autologin = require('./domains/autologin')
-const individual = require('./databases/individual')
+const individuals = require('./databases/individuals')
+const campaigns = require('./databases/campaigns')
+const entities = require('./databases/entities')
 const user = require('./memory/user')
 
 module.exports = function () {
@@ -10,6 +12,8 @@ module.exports = function () {
 
   app.configure(authentication)
   app.configure(autologin)
-  app.configure(individual)
+  app.configure(individuals)
+  app.configure(campaigns)
+  app.configure(entities)
   app.configure(user)
 }

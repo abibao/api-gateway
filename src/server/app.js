@@ -1,27 +1,27 @@
 'use strict'
 
-var path = require('path')
-var serveStatic = require('feathers').static
-var favicon = require('serve-favicon')
-var compress = require('compression')
-var cors = require('cors')
-var feathers = require('feathers')
-var configuration = require('feathers-configuration')
-var hooks = require('feathers-hooks')
-var rest = require('feathers-rest')
-var bodyParser = require('body-parser')
-var socketio = require('feathers-socketio')
-var middleware = require('./middleware')
-var services = require('./services')
+const path = require('path')
+const serveStatic = require('feathers').static
+const favicon = require('serve-favicon')
+const compress = require('compression')
+const cors = require('cors')
+const feathers = require('feathers')
+const configuration = require('feathers-configuration')
+const hooks = require('feathers-hooks')
+const rest = require('feathers-rest')
+const bodyParser = require('body-parser')
+const socketio = require('feathers-socketio')
+const middleware = require('./middleware')
+const services = require('./services')
 
-var app = feathers()
+const app = feathers()
 
 app.configure(configuration(path.join(__dirname, '../server')))
 
-var whitelist = app.get('corsWhitelist')
-var corsOptions = {
+const whitelist = app.get('corsWhitelist')
+const corsOptions = {
   origin(origin, callback) {
-    var originIsWhitelisted = whitelist.indexOf(origin) !== -1
+    const originIsWhitelisted = whitelist.indexOf(origin) !== -1
     callback(null, originIsWhitelisted)
   }
 }

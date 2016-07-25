@@ -1,8 +1,6 @@
 'use strict'
 
 const Promise = require('bluebird')
-
-const Hoek = require('hoek')
 const nconf = global.ABIBAO.nconf
 
 module.exports = function (individual) {

@@ -11,6 +11,6 @@ class Service {
 
 module.exports = function () {
   const app = this
-
-  app.use('autologin', new Service())
+  app.use('/v1/autologin', new Service())
+  const service = app.service('/v1/autologin')
 }
