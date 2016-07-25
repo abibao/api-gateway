@@ -37,7 +37,11 @@ module.exports = function (params) {
         }
       })
       .catch(function (error) {
-        reject(error)
+        if (error.type === 'FeathersError') {
+          reject(error)
+        } else {
+          reject(new errors.GeneralError(error))
+        }
       })
   })
 }

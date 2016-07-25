@@ -23,7 +23,11 @@ module.exports = function (params) {
         resolve(result)
       })
       .catch(function (error) {
-        reject(error)
+        if (error.type === 'FeathersError') {
+          reject(error)
+        } else {
+          reject(new errors.GeneralError(error))
+        }
       })
   })
 }
