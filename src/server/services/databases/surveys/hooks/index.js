@@ -15,7 +15,9 @@ exports.before = {
 
 exports.after = {
   all: [],
-  find: [],
+  find: [
+    hooks.remove('answers')
+  ],
   get: [],
   create: [],
   update: [],

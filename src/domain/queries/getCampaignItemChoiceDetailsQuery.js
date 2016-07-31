@@ -4,12 +4,11 @@ const GetQueryHandler = require('./../handlers/GetQueryHandler')
 
 module.exports = function (params) {
   let query = new GetQueryHandler({
-    plurial: 'entities',
-    singular: 'entity',
+    plurial: 'campaigns_items_choices',
+    singular: 'campaign_item_choice',
     getIDfromURN: ['urn'],
-    getURNfromID: [
-      { key: 'id', value: 'entity' }
-    ],
+    getURNfromID: [],
+    populate: [],
     params: params
   })
   return query.execute(params)

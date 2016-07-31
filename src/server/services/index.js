@@ -5,7 +5,9 @@ const autologin = require('./domains/autologin')
 const individuals = require('./databases/individuals')
 const campaigns = require('./databases/campaigns')
 const campaignItems = require('./databases/campaign-items')
+const campaignItemChoices = require('./databases/campaign-item-choices')
 const entities = require('./databases/entities')
+const surveys = require('./databases/surveys')
 const user = require('./memory/user')
 
 module.exports = function () {
@@ -16,6 +18,8 @@ module.exports = function () {
   app.configure(individuals)
   app.configure(campaigns)
   app.configure(campaignItems)
+  app.configure(campaignItemChoices)
   app.configure(entities)
+  app.configure(surveys)
   app.configure(user)
 }
