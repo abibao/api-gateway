@@ -11,6 +11,6 @@ module.exports = function (individual) {
       'text': '[' + new Date() + '] - [' + individual.email + '] has just registered into abibao',
       'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
     })
-    resolve()
+    resolve({command: 'webhookSlackIndividualCreateCommand', status: 'ok'})
   })
 }

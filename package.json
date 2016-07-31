@@ -31,7 +31,7 @@
   },
   "homepage": "https://gitlab.com/abibao/api-gateway#README",
   "engines": {
-    "node": "=5.12"
+    "node": ">=6.3"
   },
   "dependencies": {
     "async": "2.0.1",
@@ -67,7 +67,7 @@
     "newrelic": "1.28.3",
     "node-uuid": "1.4.7",
     "recursive-readdir": "2.0.0",
-    "request-promise": "4.0.2",
+    "request-promise": "4.1.0",
     "rethinkdb": "2.3.2",
     "sendgrid": "3.0.11",
     "serve-favicon": "2.3.0",
@@ -78,6 +78,7 @@
     "babel": "6.5.2",
     "babel-core": "6.11.4",
     "babel-loader": "6.2.4",
+    "babel-preset-es2015": "^6.9.0",
     "chai": "3.5.0",
     "chai-http": "3.0.0",
     "cli-color": "1.1.0",
@@ -97,7 +98,7 @@
     "postcss-import": "8.1.2",
     "postcss-loader": "0.9.1",
     "postcss-nested": "1.0.0",
-    "request-promise": "4.0.2",
+    "request-promise": "4.1.0",
     "riot": "2.5.0",
     "riotjs-loader": "3.0.0",
     "snyk": "1.17.5",

@@ -156,7 +156,7 @@ internals.execute = function (type, promise, params) {
         data.exectime = new Date() - starttime
         data.params = params
         // loggers
-        if (global.ABIBAO.environnement === 'prod') {
+        if (global.ABIBAO.environnement === 'prod' || global.ABIBAO.environnement === 'deve') {
           global.ABIBAO.logger.info(data)
         }
         // debuggers
@@ -168,7 +168,7 @@ internals.execute = function (type, promise, params) {
         data.exectime = new Date() - starttime
         data.error = error
         // loggers
-        if (global.ABIBAO.environnement === 'prod') {
+        if (global.ABIBAO.environnement === 'prod' || global.ABIBAO.environnement === 'deve') {
           global.ABIBAO.logger.error(data)
         }
         // debuggers

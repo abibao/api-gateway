@@ -21,8 +21,8 @@ class Service {
 
 module.exports = function () {
   const app = this
-  app.use('/v1/entities', new Service())
-  const service = app.service('/v1/entities')
+  app.use('v1/entities', new Service())
+  const service = app.service('v1/entities')
   service.before(hooks.before)
   service.after(hooks.after)
 }

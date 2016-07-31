@@ -8,7 +8,8 @@ var internals = {
   },
   constants: { },
   events: {
-    BUS_EVENT_WEBHOOK_SLACK: 'BUS_EVENT_WEBHOOK_SLACK' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
+    BUS_EVENT_WEBHOOK_SLACK: 'BUS_EVENT_WEBHOOK_SLACK' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
+    BUS_EVENT_SEND_EMAIL_FOR_AUTOLOGIN_WITH_FINGERPRINT: 'BUS_EVENT_SEND_EMAIL_FOR_AUTOLOGIN_WITH_FINGERPRINT' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
   },
   bus: false
 }
@@ -29,6 +30,7 @@ internals.initialize = function () {
     try {
       internals.bus = require('servicebus').bus(internals.options)
       internals.bus.listen(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhookSlackEventHandler'))
+      internals.bus.listen(internals.events.BUS_EVENT_SEND_EMAIL_FOR_AUTOLOGIN_WITH_FINGERPRINT, require('./handlers/sendEmailForAutologinWithFingerprintEventHandler'))
       resolve()
     } catch (error) {
       abibao.error(error)

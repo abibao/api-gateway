@@ -24,7 +24,7 @@ class UserStore {
 
     self.on(riot.EVENT.USER_AUTH_SEND_EMAIL, function (email) {
       riot.feathers.logout()
-      var service = riot.feathers.service('autologin')
+      var service = riot.feathers.service('v1/autologin')
       service.create({email, scope: 'administrator', backUrl: 'http://localhost:8484/#autologin?fingerprint'})
         .then(function (result) {
           return self.trigger(riot.EVENT.USER_AUTH_SEND_EMAIL_SUCCESS, result)
@@ -36,7 +36,7 @@ class UserStore {
 
     self.on(riot.EVENT.USER_CONTROL_FINGERPRINT, function (fingerprint) {
       riot.feathers.logout()
-      var service = riot.feathers.service('autologin')
+      var service = riot.feathers.service('v1/autologin')
       service.get(fingerprint)
         .then(function (result) {
           riot.feathers.authenticate({ type: 'token', token: result.token })
