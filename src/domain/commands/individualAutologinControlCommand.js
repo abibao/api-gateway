@@ -36,7 +36,8 @@ module.exports = function (sealed) {
           return {
             urn: individuals.data[0].id,
             email: unsealed.email,
-            password: unsealed.password
+            password: unsealed.password,
+            roles: unsealed.roles
           }
         })
         .then(function (result) {

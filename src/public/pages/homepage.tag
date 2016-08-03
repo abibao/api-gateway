@@ -9,6 +9,7 @@ import './../components/header.tag'
   <div class="page" if={ loading===false }>
     <div class="card">
       <h2>individuals: { individuals.total }</h2>
+      <h2>surveys: { surveys.total }</h2>
     </div>
   </div>
 
@@ -18,6 +19,10 @@ import './../components/header.tag'
 
     self.loading = true
     self.individuals = {
+      total: 0,
+      data: []
+    };
+    self.surveys = {
       total: 0,
       data: []
     };

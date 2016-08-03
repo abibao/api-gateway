@@ -149,6 +149,7 @@ internals.execute = function (type, promise, params) {
       type: type,
       promise: promise
     }
+    delete params.req
     abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
     var domain = Hoek.clone(global.ABIBAO.services.domain)
     domain[promise](params)

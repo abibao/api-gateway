@@ -6,7 +6,8 @@ module.exports = function (message) {
   const data = {
     action: global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_EMAIL_VERIFICATION,
     email: message.user.email,
-    password: message.user.password
+    password: message.user.password,
+    roles: message.user.roles
   }
   global.ABIBAO.services.domain.execute('command', 'fingerprintTokenCreateCommand', data)
     .then(function (result) {
