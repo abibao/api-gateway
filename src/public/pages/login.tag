@@ -95,6 +95,7 @@ import './../components/header.tag'
       color: #555459;
       box-shadow: none;
       height: auto;
+      margin-bottom: 1rem;
     }
     input[type="email"]:focus {
       border: 1px solid #5da2c7;

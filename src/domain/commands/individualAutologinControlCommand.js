@@ -1,15 +1,14 @@
 'use strict'
 
-var rp = require('request-promise')
-var Promise = require('bluebird')
+const Promise = require('bluebird')
 
-var Hoek = require('hoek')
-var Iron = require('iron')
-var Base64 = require('base64-url')
-var _ = require('lodash')
+const Hoek = require('hoek')
+const Iron = require('iron')
+const Base64 = require('base64-url')
+const _ = require('lodash')
 
 module.exports = function (sealed) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  const self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
     sealed = Base64.decode(sealed)
     Iron.unseal(sealed, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), Iron.defaults, function (err, unsealed) {
@@ -30,27 +29,18 @@ module.exports = function (sealed) {
           break
       }
       // get individual
-      return self.execute('query', 'individualFilterQuery', {email: unsealed.email})
+      return self.execute('query', 'findIndividualsQuery', {query: {email: unsealed.email}})
         .then(function (individuals) {
           if (individuals.length === 0) { throw new Error('ERROR_BAD_AUTHENTIFICATION') }
           if (individuals.length > 1) { throw new Error(new Error('Too many emails, contact an individual')) }
-          // all done then reply token
-          var options = {
-            method: 'POST',
-            uri: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_URI') + '/auth/local',
-            body: {
-              email: unsealed.email,
-              password: unsealed.password
-            },
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            json: true
+          return {
+            urn: individuals.data[0].id,
+            email: unsealed.email,
+            password: unsealed.password
           }
-          return rp(options)
         })
         .then(function (result) {
-          resolve(result)
+          resolve({command: 'individualAutologinControlCommand', status: 'ok', data: {user: result}})
         })
         .catch(function (error) {
           reject(error)
