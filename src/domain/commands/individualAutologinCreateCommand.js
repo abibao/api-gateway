@@ -12,7 +12,6 @@ module.exports = function (payload) {
     let individual
     if (!payload) { return reject(new errors.BadRequest('ERROR_BAD_AUTHENTIFICATION_PAYLOAD_NOT_FOUND')) }
     if (!payload.backUrl) { return reject(new errors.BadRequest('ERROR_BAD_AUTHENTIFICATION_BACKURL_NOT_FOUND')) }
-    if (!payload.scope) { return reject(new errors.BadRequest('ERROR_BAD_AUTHENTIFICATION_SCOPE_NOT_FOUND')) }
     if (!payload.email) { return reject(new errors.BadRequest('ERROR_BAD_AUTHENTIFICATION_EMAIL_NOT_FOUND')) }
     // email to lowercase
     payload.email = payload.email.toLowerCase()
@@ -22,14 +21,13 @@ module.exports = function (payload) {
         if (individuals.length === 0) { return reject(new errors.BadRequest('ERROR_BAD_AUTHENTIFICATION_EMAIL_NOT_FOUND')) }
         if (individuals.length > 1) { return reject(new errors.BadRequest('ERROR_BAD_AUTHENTIFICATION_EMAIL_DUPLICATE')) }
         individual = individuals.data[0]
-        if (individual.scope !== payload.scope) { return reject(new errors.BadRequest('ERROR_BAD_AUTHENTIFICATION_BAD_SCOPE')) }
         return individual
       })
       // user in memory or not ?
       .then(function (individual) {
         let roles = []
-        roles.push(payload.scope)
-        if (payload.scope === 'administrator') roles.push('individual')
+        roles.push(individual.scope)
+        if (individual.scope === 'administrator') roles.push('individual')
         let user = {
           urn: individual.id,
           email: individual.email,

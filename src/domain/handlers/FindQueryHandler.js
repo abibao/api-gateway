@@ -32,6 +32,10 @@ class FindQuerySystem {
       r.table(self.options.plurial).filter(query).count().run(conn)
         .then(function (total) {
           result.total = total
+          if (filters.$limit === 0) {
+            filters.$skip = 0
+            filters.$limit = total
+          }
           result.skip = filters.$skip
           result.limit = filters.$limit
           return r.table(self.options.plurial).filter(query).orderBy(filters.$sort).skip(filters.$skip).limit(filters.$limit).run(conn)

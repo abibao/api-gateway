@@ -22,7 +22,6 @@ class Service {
         })
         .then(function (result) {
           if (result.length === 0) {
-            console.log(dataUser)
             return app.service('users').create({
               urn: dataUser.urn,
               email: dataUser.email,
