@@ -9,6 +9,7 @@ const campaignItemChoices = require('./databases/campaign-item-choices')
 const entities = require('./databases/entities')
 const surveys = require('./databases/surveys')
 const user = require('./memory/user')
+const authSurvey = require('./domains/auth/survey')
 
 module.exports = function () {
   const app = this
@@ -22,4 +23,5 @@ module.exports = function () {
   app.configure(entities)
   app.configure(surveys)
   app.configure(user)
+  app.configure(authSurvey)
 }

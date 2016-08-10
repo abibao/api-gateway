@@ -31,6 +31,7 @@ module.exports = function (params) {
       .then(function (result) {
         let final = Hoek.clone(result)
         let queries = []
+        if (result.answers === null) { result.answers = {} }
         const answers = Object.keys(result.answers)
         _.map(answers, function (key) {
           try {
@@ -54,6 +55,7 @@ module.exports = function (params) {
               next()
             })
         }, function () {
+          if (final.answers === null) { final.answers = {} }
           resolve(final)
         })
       })

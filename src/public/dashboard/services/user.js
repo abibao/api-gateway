@@ -45,16 +45,6 @@ class UserStore {
           return self.trigger(riot.EVENT.USER_CONTROL_FINGERPRINT_FAILED, error)
         })
     })
-
-  /* self.on(riot.EVENT.USER_GLOBAL_INFORMATIONS, function () {
-    var service = riot.feathers.service('v1/auth/informations')
-      .then(function (result) {
-        return self.trigger(riot.EVENT.USER_GLOBAL_INFORMATIONS_SUCCESS, result)
-      })
-      .catch(function (error) {
-        return self.trigger(riot.EVENT.USER_GLOBAL_INFORMATIONS_FAILED, error)
-      })
-  }) */
   }
 
 }
