@@ -5,6 +5,7 @@
 - [x] check updates
 - [x] implements feathers instead of hapi
 - [x] remove user/pass and replace with fingerprint login
+- [x] riotjs for frontend
 
 ### 2.6.8
 

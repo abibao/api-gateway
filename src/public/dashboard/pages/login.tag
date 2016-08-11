@@ -4,13 +4,18 @@ import './../components/s-header.tag'
 
 <login>
 
-  <s-header></s-header>
-  <div class="page" if={ loading===false }>
-    <div class="card">
-      <h1>Vérification de votre identité</h1>
-      <input id="email" type="email" placeholder="Saissisez votre email"></input><br/>
-      <button onclick={ sendEmailHandler } type="submit">Envoyer</button>
-      <p>Pour valider votre identité nous allons vous envoyer un lien par email, simple et efficace.</p>
+  <div class="valign-wrapper">
+    <div class="container">
+      <div class="card" if={ loading===false }>
+        <div class="col title s12 blue lighten-abibao">
+          <h4 class="white-text">Vérification de votre identité</h4>
+          <p class="white-text">Pour valider votre identité nous allons vous envoyer un lien par email, simple et efficace.</p>
+        </div>
+        <div class="col content s12 grey lighten-abibao">
+          <input id="email" type="email" placeholder="Saissisez votre email"></input>
+          <a onclick={ sendEmailHandler } class="waves-effect waves-light btn-large white blue-text text-lighten-abibao">Envoyer</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -55,64 +60,31 @@ import './../components/s-header.tag'
   </script>
 
   <style scoped>
-    .page {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      margin-top: 180px;
+    .valign-wrapper {
+      height: 100%;
     }
-    .card {
-      background-color: #fff;
-      border-radius: .25rem;
-      box-shadow: 0 1px 0 rgba(0,0,0,.25);
-      padding: 2rem 2rem 1rem;
-      margin: 0;
-      position: relative;
-      border: 1px solid #e8e8e8;
-      display: flex;
-      flex-direction: column;
-      width: 500px;
+    .container {
+      width: 650px;
     }
-    h1, p {
-      color: #555459;
-    }
-    input[type="email"] {
-      border: 1px solid #c5c5c5;
-      font-family: Lato;
-      font-size: 1.25rem;
-      line-height: normal;
-      padding: .75rem;
-      border-radius: .25rem;
-      color: #555459;
-      box-shadow: none;
-      height: auto;
-      margin-bottom: 1rem;
-    }
-    input[type="email"]:focus {
-      border: 1px solid #5da2c7;
-    }
-    button {
-      width: 250px;
-      background:#3aa3e3;
-      color:#ffffff;
-      font-family: Lato;
-      font-size: 1.25rem;
-      line-height: normal;
-      padding: .75rem;
-      cursor: pointer;
-      text-shadow: 0 1px 1px rgba(0,0,0,.1);
-      border: none;
-      border-radius: .25rem;
-      box-shadow: none;
-      position: relative;
-      display: inline-block;
-      vertical-align: bottom;
+    .col.title {
+      padding: 1rem;
       text-align: center;
-      white-space: nowrap;
-      margin: 0;
-      -webkit-appearance: none;
-      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 0;
+    }
+    .col.title p {
+      margin-top: -1rem;
+    }
+    .col.content input[type=email] {
+      border-bottom: 1px solid #ffffff;
+      background: #ffffff;
+      padding: 0.25rem;
+    }
+    .col.content input[type=email]:focus {
+      border-bottom: 1px solid #5da2c7;
+      box-shadow: 0 1px 0 0 #5da2c7;
+    }
+    .col.content {
+      padding: 2rem;
     }
   </style>
 
