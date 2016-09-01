@@ -1,7 +1,10 @@
-version: v1.5.0
+version: v1.5.2
 ignore:
   'npm:minimatch:20160620':
     - recursive-readdir > minimatch:
         reason: None given
         expires: '2016-07-21T08:09:23.587Z'
-patch: {}
+patch:
+  'npm:minimatch:20160620':
+    - recursive-readdir > minimatch:
+        patched: '2016-09-01T12:43:32.820Z'

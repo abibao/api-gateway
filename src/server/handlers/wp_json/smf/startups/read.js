@@ -13,7 +13,7 @@ module.exports = {
   auth: false,
   jsonp: 'callback',
   handler(request, reply) {
-    global.ABIBAO.services.domain.execute('query', 'wpSMFStartupReadQuery', request.params.node)
+    global.ABIBAO.services.domain.execute('query', 'wpSMFStartupReadQuery', request.params.wpid)
       .then(function (startup) {
         reply(startup)
       })

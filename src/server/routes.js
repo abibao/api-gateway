@@ -30,7 +30,7 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/auth/surveys/{urn}/answers', config: require('./handlers/individuals/auth/surveys/answer') },
 
   // wordpress
-  { method: 'GET', path: '/v1/wp_json/smf/startups/{urn}', config: require('./handlers/wp_json/smf/startups/read') },
+  { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}', config: require('./handlers/wp_json/smf/startups/read') },
 
   // administrators
   { method: 'POST', path: '/v1/administrators/login', config: require('./handlers/administrators/login') },
