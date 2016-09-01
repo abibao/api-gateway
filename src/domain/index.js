@@ -122,22 +122,26 @@ internals.injector = function (type) {
     // custom
     var files = fs.readdirSync(path.resolve(__dirname, type))
     async.mapSeries(files, function (item, next) {
-      if (item !== 'system') {
+      if (item !== 'system' && item !== 'mysql') {
         var name = path.basename(item, '.js')
         abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
         if (type === 'models') {
           self[name] = require('./' + type + '/' + name)(self.thinky)
+          next(null, true)
         } else if (type === 'models/mysql') {
           self[name] = require('./' + type + '/' + name)(self.knex)
-        } else if (type === 'listeners') {
-          self[name] = require('./' + type + '/' + name)
           self[name]()
+            .then(function () {
+              next(null, true)
+            })
         } else {
           self[name] = require('./' + type + '/' + name)
-          self.dictionnary.push(name)
+          next(null, true)
         }
+      } else {
+        // hack to not include subdirectories
+        next(null, true)
       }
-      next(null, true)
     }, function () {
       resolve()
     })

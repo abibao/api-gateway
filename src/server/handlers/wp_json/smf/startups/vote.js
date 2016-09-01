@@ -6,9 +6,9 @@ module.exports = {
   auth: false,
   jsonp: 'callback',
   handler(request, reply) {
-    global.ABIBAO.services.domain.execute('query', 'wpSMFStartupReadQuery', request.params.wpid)
-      .then(function (startup) {
-        reply(startup)
+    global.ABIBAO.services.domain.execute('query', 'wpSMFMakeTheVoteCommand', request.payload)
+      .then(function (result) {
+        reply(result)
       })
       .catch(function (error) {
         reply(Boom.badRequest(error))

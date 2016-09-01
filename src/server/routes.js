@@ -29,8 +29,9 @@ exports.endpoints = [
   { method: 'GET', path: '/v1/auth/surveys/{urn}', config: require('./handlers/individuals/auth/surveys/read') },
   { method: 'POST', path: '/v1/auth/surveys/{urn}/answers', config: require('./handlers/individuals/auth/surveys/answer') },
 
-  // wordpress
+  // wordpress > smf
   { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}', config: require('./handlers/wp_json/smf/startups/read') },
+  { method: 'POST', path: '/v1/wp_json/smf/startups/vote', config: require('./handlers/wp_json/smf/startups/vote') },
 
   // administrators
   { method: 'POST', path: '/v1/administrators/login', config: require('./handlers/administrators/login') },
