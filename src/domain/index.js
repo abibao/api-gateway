@@ -129,11 +129,8 @@ internals.injector = function (type) {
           self[name] = require('./' + type + '/' + name)(self.thinky)
           next(null, true)
         } else if (type === 'models/mysql') {
-          self[name] = require('./' + type + '/' + name)(self.knex)
-          self[name]()
-            .then(function () {
-              next(null, true)
-            })
+          self[name] = require('./' + type + '/' + name)
+          next(null, true)
         } else {
           self[name] = require('./' + type + '/' + name)
           next(null, true)
