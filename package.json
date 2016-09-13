@@ -69,6 +69,7 @@
     "newrelic": "1.30.0",
     "node-uuid": "1.4.7",
     "recursive-readdir": "2.0.0",
+    "request": "2.74.0",
     "request-promise": "4.1.1",
     "sendgrid": "3.0.7",
     "servicebus": "2.0.3",
