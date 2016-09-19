@@ -11,7 +11,7 @@ module.exports = function (payload) {
   return new Promise(function (resolve, reject) {
     payload.id = new ObjectId().toString()
     payload.createdAt = Date.now()
-    var model = new self.AdministratorModel(payload)
+    var model = new self.AdministratorModel(JSON.parse(JSON.stringify(payload)))
     model.save()
       .then(function (created) {
         delete created.id

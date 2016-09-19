@@ -151,8 +151,9 @@ internals.execute = function (type, promise, params) {
     var data = {
       uuid: uuid.v1(),
       environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
-      type,
-    promise}
+      type: type,
+      promise: promise
+    }
     abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
     global.ABIBAO.services.domain[promise](params)
       .then(function (result) {

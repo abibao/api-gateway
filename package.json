@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.5",
+  "version": "2.9.501",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "check:updates": "./node_modules/.bin/ncu",
@@ -13,8 +13,6 @@
     "tools:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
     "tools:emails:recovery": "clear && node tools/emails_recovery.js",
     "crons": "./npm-scripts/crons.sh",
-    "security:wizard": "clear && ./node_modules/.bin/snyk wizard",
-    "security:protect": "clear && ./node_modules/.bin/snyk protect",
     "test:security": "clear && ./node_modules/.bin/snyk test",
     "test:coverage": "clear && ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec",
     "test:all": "./npm-scripts/test-all.sh",
@@ -36,7 +34,7 @@
   },
   "homepage": "https://gitlab.com/abibao/api-gateway#README",
   "engines": {
-    "node": ">=6"
+    "node": "~6"
   },
   "dependencies": {
     "async": "2.0.1",
@@ -90,7 +88,6 @@
     "npm-check-updates": "2.8.0",
     "request-promise": "4.1.1",
     "rethinkdb": "2.3.3",
-    "snyk": "1.19.1",
     "standard": "8.1.0"
   }
 }

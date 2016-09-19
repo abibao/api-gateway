@@ -14,6 +14,8 @@ module.exports = function (message) {
     json: true
   }
 
+  global.ABIBAO.debuggers.bus('An individual has just been created [%s]', message.email)
+
   if (global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV') === 'prod') {
     rp(options)
       .then(function () {
