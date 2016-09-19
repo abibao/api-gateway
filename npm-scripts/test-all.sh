@@ -8,6 +8,4 @@ node_modules/.bin/istanbul cover node_modules/.bin/_mocha --report lcovonly -- -
 cat coverage/lcov.info | node_modules/.bin/codacy-coverage
 rm -rf coverage
 
-node_modules/.bin/snyk test
-node_modules/.bin/snyk monitor
 node_modules/.bin/ncu

@@ -40,7 +40,6 @@ module.exports = function (payload) {
               'text': '[' + new Date() + '] - [' + individual.email + '] has just registered into abibao',
               'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
             })
-            // update SMF vote for this email if he has already voted
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, {
               'email': individual.email
             })
