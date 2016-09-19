@@ -1,3 +1,4 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
@@ -84,13 +85,14 @@ describe('individual story', function () {
         expect(result).to.be.a('string')
         individualFake.fingerprint = result
         done()
-      }).catch(function (error) {
-      done(error)
-    })
+      })
+      .catch(function (error) {
+        done(error)
+      })
   })
   it('should not login with fingerprint (error)', function (done) {
     global.ABIBAO.services.domain.execute('command', 'individualLoginWithFingerprintCommand', 'Winter is coming!')
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })

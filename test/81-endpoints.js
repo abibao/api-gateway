@@ -1,8 +1,8 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
 var chaiHttp = require('chai-http')
-var should = chai.should()
 var expect = chai.expect
 var async = require('async')
 
@@ -37,11 +37,11 @@ describe('endpoints story', function () {
       var path = route.path
       var baseapi = /v1/.test(path) === true
       if (baseapi) {
-        console.log(info.uri, path, method)
         var promise = chai.request(info.uri)[method]
         promise(path)
           .send()
           .end(function (err, res) {
+            if (err) { return next(err) }
             expect(res).to.have.property('status')
             var request = {}
             request.params = {

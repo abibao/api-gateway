@@ -22,36 +22,36 @@ module.exports = function (payload) {
         payload.converted = false
         // the show must go on!
         self.SmfVotesSQLModel()
-          .then(function() {
+          .then(function () {
             // checks email exists in abibao?
             return self.execute('query', 'individualFilterQuery', {email: payload.email})
           })
           .then(function (individuals) {
-            if (individuals.length===1) {
+            if (individuals.length === 1) {
               payload.points = 3
               payload.converted = true
               var individual = individuals[0]
               payload.charity_id = self.getIDfromURN(individual.urnCharity)
               return self.execute('query', 'entityReadQuery', individual.urnCharity)
-                .then(function(entity) {
+                .then(function (entity) {
                   payload.charity_name = entity.name
                   // checks email exists in smf_votes?
-                  return self.knex('smf_votes').where({email:payload.email})
+                  return self.knex('smf_votes').where({email: payload.email})
                 })
             } else {
               // checks email exists in smf_votes?
-              return self.knex('smf_votes').where({email:payload.email})
+              return self.knex('smf_votes').where({email: payload.email})
             }
           })
-          .then(function(rows) {
-            if (rows.length>0) {
+          .then(function (rows) {
+            if (rows.length > 0) {
               return reject('Email already exists in database.')
             } else {
               // checks startup exists ?
               return self.execute('query', 'wpSMFStartupReadQuery', payload.startup)
             }
           })
-          .then(function(startup) {
+          .then(function (startup) {
             // all ok we insert the new entry
             var data = {
               email: payload.email,
@@ -66,7 +66,7 @@ module.exports = function (payload) {
           })
           .then(function () {
             // return the entry for the specif email in payload
-            return self.knex('smf_votes').where({email:payload.email})
+            return self.knex('smf_votes').where({email: payload.email})
           })
           .then(function (vote) {
             resolve(vote)

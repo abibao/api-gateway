@@ -7,8 +7,8 @@ var Hoek = require('hoek')
 module.exports = function (urn) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
-    try {
-      self.SurveyModel.get(self.getIDfromURN(urn)).run().then(function (model) {
+    self.SurveyModel.get(self.getIDfromURN(urn)).run()
+      .then(function (model) {
         delete model.id
         delete model.company
         delete model.charity
@@ -19,8 +19,5 @@ module.exports = function (urn) {
       .catch(function (error) {
         reject(error)
       })
-    } catch (e) {
-      reject(e)
-    }
   })
 }
