@@ -31,20 +31,9 @@ describe('servicebus story', function () {
     })
     done()
   })
-  it('should not send BUS_EVENT_WEBHOOK_SLACK', function (done) {
-    webhookSlack({
-      channel: '#cast-members-only',
-      username: 'IndividualRegisterCommand',
-      text: '[' + new Date() + '] - [test@gmail.com] has just registered into abibao',
-      webhook: 'http://localhost'
-    })
-    done()
-  })
   it('should send BUS_EVENT_WEBHOOK_SLACK', function (done) {
     webhookSlack({
-      channel: '#cast-members-only',
-      username: 'IndividualRegisterCommand',
-      text: '[' + new Date() + '] - [test@abibao.com] has just registered into abibao',
+      text: '[' + new Date() + '] - mocha has just send message to slack',
       webhook: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
     })
     done()

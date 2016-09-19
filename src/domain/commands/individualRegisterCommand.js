@@ -36,7 +36,6 @@ module.exports = function (payload) {
           .then(function (individual) {
             // informations posted on slack
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
-              'channel': '#cast-members-only',
               'username': 'IndividualRegisterCommand',
               'text': '[' + new Date() + '] - [' + individual.email + '] has just registered into abibao',
               'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')

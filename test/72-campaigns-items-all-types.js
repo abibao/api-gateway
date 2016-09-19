@@ -1,3 +1,4 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
@@ -38,7 +39,7 @@ describe('handlers/campaigns-items-all-types', function () {
       })
   })
   // DROPDOWN
-  it('should create componentDropdown with fake data (CQRS)', function (done) {
+  it('should create componentDropdown with fake data', function (done) {
     campaignItemFake = {
       campaign: campaignFake.urn,
       label: faker.lorem.sentence()
