@@ -7,8 +7,9 @@ var expect = chai.expect
 var engine = require('../src/engine')
 var webhookSlack = require('../src/bus/handlers/webhook_slack')
 var analyticsComputeAnswer = require('../src/bus/handlers/analytics_compute_answer')
+var analyticsComputeUser = require('../src/bus/handlers/analytics_compute_user')
 
-describe('servicebus story', function () {
+describe.only('servicebus story', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()
@@ -41,5 +42,13 @@ describe('servicebus story', function () {
   it('should send BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', function (done) {
     analyticsComputeAnswer({})
     done()
+  })
+  it('should send BUS_EVENT_ANALYTICS_COMPUTE_USER', function (done) {
+    global.ABIBAO.services.domain.execute('query', 'individualFilterQuery', { email: 'gperreymond@gmail.com' })
+      .then(function (individuals) {
+        analyticsComputeUser(individuals[0])
+        done()
+      })
+      .catch(done)
   })
 })

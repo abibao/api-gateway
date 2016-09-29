@@ -28,12 +28,10 @@ module.exports = function (message) {
         .delete()
         .then(function () {
           return global.ABIBAO.services.domain.knex('answers').insert(result.data)
-            .then(function (inserted) {
-              global.ABIBAO.debuggers.bus(inserted)
-            })
         })
-        .catch(function (error) {
-          global.ABIBAO.debuggers.error(error)
+        .then(function (inserted) {
+          global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', inserted)
+          return null
         })
     })
 }

@@ -43,6 +43,7 @@ module.exports = function (payload) {
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, {
               'email': individual.email
             })
+            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
             resolve(individual)
           })
       })
