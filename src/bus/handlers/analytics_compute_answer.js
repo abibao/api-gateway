@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = function (message) {
+module.exports = function (message, callback) {
   // construct data to insert
   global.ABIBAO.services.domain.thinky.r.table('surveys')
     .get(message.survey)
@@ -31,7 +31,8 @@ module.exports = function (message) {
         })
         .then(function (inserted) {
           global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', inserted)
-          return null
+          // callback used for tests
+          if (callback) { callback() }
         })
     })
 }

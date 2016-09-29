@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = function (individual) {
+module.exports = function (individual, callback) {
   // construct user to insert
   individual.id = global.ABIBAO.services.domain.getIDfromURN(individual.urn)
   global.ABIBAO.services.domain.thinky.r.table('surveys')
@@ -18,6 +18,8 @@ module.exports = function (individual) {
       'ABIBAO_ANSWER_FONDAMENTAL_GENDER')
     .then(function (result) {
       console.log('BUS_EVENT_ANALYTICS_COMPUTE_USER', result)
+      // callback used for tests
+      if (callback) { callback() }
     })
 }
 /** console.log(result)

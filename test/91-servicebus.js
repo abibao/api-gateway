@@ -1,15 +1,17 @@
 /* global describe:false, it:false */
 'use strict'
 
+var Promise = require('bluebird')
+
 var chai = require('chai')
 var expect = chai.expect
 
 var engine = require('../src/engine')
 var webhookSlack = require('../src/bus/handlers/webhook_slack')
-var analyticsComputeAnswer = require('../src/bus/handlers/analytics_compute_answer')
-var analyticsComputeUser = require('../src/bus/handlers/analytics_compute_user')
+var analyticsComputeAnswerAsync = Promise.promisify(require('../src/bus/handlers/analytics_compute_answer'), function () {})
+var analyticsComputeUserAsync = Promise.promisify(require('../src/bus/handlers/analytics_compute_user'), function () {})
 
-describe.only('servicebus story', function () {
+describe('servicebus story', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()
@@ -39,15 +41,13 @@ describe.only('servicebus story', function () {
     })
     done()
   })
-  it('should send BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', function (done) {
-    analyticsComputeAnswer({})
-    done()
-  })
+  /*it('should send BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', function (done) {
+    analyticsComputeAnswerAsync().then(done).catch(done)
+  })*/
   it('should send BUS_EVENT_ANALYTICS_COMPUTE_USER', function (done) {
     global.ABIBAO.services.domain.execute('query', 'individualFilterQuery', { email: 'gperreymond@gmail.com' })
       .then(function (individuals) {
-        analyticsComputeUser(individuals[0])
-        done()
+        analyticsComputeUserAsync(individuals[0]).then(done).catch(done)
       })
       .catch(done)
   })
