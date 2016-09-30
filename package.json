@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.504",
+  "version": "2.9.505",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "check:updates": "./node_modules/.bin/ncu",
