@@ -1,7 +1,5 @@
 'use strict'
 
-var Promise = require('bluebird')
-
 module.exports = function () {
   return global.ABIBAO.services.domain.knex.schema.createTableIfNotExists('users', function (table) {
     table.increments('id')
