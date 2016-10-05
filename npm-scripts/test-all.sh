@@ -2,7 +2,7 @@
 
 clear
 
-node_modules/.bin/standard "src/server/**/*.js" "src/bus/**/*.js" "src/domain/**/*.js"
+npm run standard:snazzy
 
 export CODACY_PROJECT_TOKEN=3862e173a5284d0984ee3bb50d6a8f24
 rm -rf coverage
