@@ -12,7 +12,7 @@ var administratorFake = {
   password: faker.name.lastName().toLowerCase()
 }
 
-describe.only('administrator story', function () {
+describe('administrator story', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()

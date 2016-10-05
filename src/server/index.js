@@ -2,6 +2,9 @@
 
 var Promise = require('bluebird')
 var Boom = require('boom')
+var YAML = require('yamljs')
+var path = require('path')
+var _ = require('lodash')
 
 var internals = {
   options: {
@@ -23,12 +26,12 @@ var abibao = {
 var uuid = require('node-uuid')
 var async = require('async')
 var Hapi = require('hapi')
-var Routes = require('./routes')
 
 internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
     try {
+      // new hapi
       internals.server = new Hapi.Server({
         debug: false,
         connections: {
@@ -37,6 +40,56 @@ internals.initialize = function () {
           }
         }
       })
+      // inject endpoints
+      var routes = []
+      _.merge(routes, YAML.load(path.resolve(__dirname, 'configuration/routes/stats.yml')).routes)
+      var endpoints = []
+      _.map(routes, function (route) {
+        abibao.debug('inject route %o', route)
+        // init
+        var endpoint = {}
+        endpoint.method = route.method
+        endpoint.path = route.path
+        endpoint.config = {}
+        // config
+        endpoint.config.jsonp = route.jsonp
+        // --- auth ot not to auth
+        if (global.ABIBAO.environnement === 'prod') {
+          endpoint.config.auth = route.auth
+        } else {
+          endpoint.config.auth = false
+        }
+        // --- validate
+        var validate = route.validate || false
+        if (validate) {
+          endpoint.config.validate = {}
+          if (validate.params) {
+            endpoint.config.validate.params = require(path.resolve(__dirname, 'configuration/routes/stats.js'))[validate.params]
+          }
+          if (validate.payload) {
+          }
+        }
+        // --- handler
+        switch (route.handler.type) {
+          case 'cqrs':
+            endpoint.config.handler = function (request, reply) {
+              var params = route.handler.params || false
+              if (params !== false) {params = request[params]}
+              global.ABIBAO.services.domain.execute(route.handler.method, route.handler.name, params)
+                .then(function (json) {
+                  reply(json)
+                })
+                .catch(function (error) {
+                  reply(Boom.badRequest(error))
+                })
+            }
+            break
+          default:
+
+        }
+        endpoints.push(endpoint)
+      })
+      // start hapi
       internals.server.logger = global.ABIBAO.logger
       internals.server.connection(internals.options)
       internals.server.on('response', function (request) {
@@ -65,7 +118,7 @@ internals.initialize = function () {
       }, function (err, results) {
         if (err) { return reject(err) }
         abibao.debug('plugins %o', results)
-        internals.server.route(Routes.endpoints)
+        internals.server.route(endpoints)
         resolve()
       })
     } catch (error) {
@@ -75,36 +128,12 @@ internals.initialize = function () {
   })
 }
 
-internals.commandHandler = function (reply, name, params) {
-  abibao.debug('hapi handler command=%s', name)
-  global.ABIBAO.services.domain.execute('command', name, params)
-    .then(function (json) {
-      reply(json)
-    })
-    .catch(function (error) {
-      reply(Boom.badRequest(error))
-    })
-}
-
-internals.queryHandler = function (reply, name, params) {
-  abibao.debug('hapi handler query=%s', name)
-  global.ABIBAO.services.domain.execute('query', name, params)
-    .then(function (json) {
-      reply(json)
-    })
-    .catch(function (error) {
-      reply(Boom.badRequest(error))
-    })
-}
-
 module.exports.singleton = function () {
   return new Promise(function (resolve, reject) {
     if (internals.server !== false) { resolve() }
     internals.server = { }
     internals.initialize()
       .then(function () {
-        internals.server.commandHandler = internals.commandHandler
-        internals.server.queryHandler = internals.queryHandler
         global.ABIBAO.services.server = internals.server
         global.ABIBAO.events.ServerEvent = internals.events
         global.ABIBAO.constants.ServerConstant = internals.constants
