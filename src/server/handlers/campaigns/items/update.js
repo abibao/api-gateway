@@ -8,7 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -22,15 +21,15 @@ module.exports = {
       image: Joi.string().allow(''),
       position: Joi.number().min(0),
       // componentLongText && componentShortText
-      maxLength: Joi.number().description('componentLongText <br> componentShortText'),
+      maxLength: Joi.number(),
       // componentMultipleChoice
-      multipleSelections: Joi.boolean().description('componentMultipleChoice'),
-      randomize: Joi.boolean().description('componentMultipleChoice'),
-      addCustomOption: Joi.boolean().description('componentMultipleChoice'),
-      alignment: Joi.string().valid(['vertical', 'horizontal']).description('componentMultipleChoice'),
+      multipleSelections: Joi.boolean(),
+      randomize: Joi.boolean(),
+      addCustomOption: Joi.boolean(),
+      alignment: Joi.string().valid(['vertical', 'horizontal']),
       // componentNumber
-      minimum: Joi.number().description('componentNumber'),
-      maximum: Joi.number().description('componentNumber'),
+      minimum: Joi.number(),
+      maximum: Joi.number(),
       // abibao
       tags: Joi.string().allow('')
     }

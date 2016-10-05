@@ -8,9 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Ajoute un composant YesNo à un sondage donné',
-  notes: 'Ajoute un composant YesNo à un sondage donné',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -25,7 +22,7 @@ module.exports = {
       image: Joi.string().default(''),
       // component specific
       // abibao
-      label: Joi.string().required().description('Le nom de la variable où sera stockée la réponse'),
+      label: Joi.string().required(),
       tags: Joi.string()
     }
   },
