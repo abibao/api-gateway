@@ -8,5 +8,4 @@ engine()
   })
   .catch(function () {
     global.ABIBAO.debuggers.error('engine is not running')
-    process.exit(-1)
   })

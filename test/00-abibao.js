@@ -9,7 +9,7 @@ var _ = require('lodash')
 
 var engine = require('../src/engine')
 
-describe('abibao story', function () {
+describe.only('abibao story', function () {
   before(function () {
     var patternPath = path.resolve(__dirname, '../src/server/handlers')
     patternPath += '/**/*.js'
@@ -18,7 +18,10 @@ describe('abibao story', function () {
       dot: true,
       ignore: ['index.js']
     })
-    _.map(patternFiles, function (filepath) {})
+    _.map(patternFiles, function (filepath) {
+      var mock = require(filepath).mock
+      if (mock) { console.log(mock) }
+    })
   })
 
   it('should initialize global.ABIBAO', function (done) {
