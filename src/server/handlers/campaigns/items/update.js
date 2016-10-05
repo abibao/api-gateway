@@ -36,7 +36,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     request.payload.urn = request.params.urn
     global.ABIBAO.services.domain.execute('command', 'campaignItemUpdateCommand', request.payload)
       .then(function (campaignItem) {

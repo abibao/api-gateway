@@ -31,8 +31,13 @@ module.exports = function (message) {
           .then(function () {
             return global.ABIBAO.services.domain.knex('answers').insert(result.data)
           })
-          .then(function (inserted) {
-            global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', inserted)
+          .then(function () {
+            global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', result.data.email)
+            // update user
+            global.ABIBAO.services.domain.thinky.r.table('individuals').get(result.data.email)
+            .then(function (individual) {
+              global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
+            })
             resolve()
           })
       })

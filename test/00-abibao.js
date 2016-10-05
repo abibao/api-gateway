@@ -9,7 +9,7 @@ var _ = require('lodash')
 
 var engine = require('../src/engine')
 
-describe.only('abibao story', function () {
+describe('abibao story', function () {
   before(function () {
     var patternPath = path.resolve(__dirname, '../src/server/handlers')
     patternPath += '/**/*.js'

@@ -42,7 +42,7 @@ describe('servicebus story', function () {
   it('should send BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', function (done) {
     analyticsComputeAnswer({
       survey: '5728fc583dea810500da78d6',
-      label: 'ABIBAO_ANSWER_FONDAMENTAL_AGE@gmail.com',
+      label: 'ABIBAO_ANSWER_FONDAMENTAL_AGE',
       answer: '1970',
       isURN: false
     }).then(done).catch(done)

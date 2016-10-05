@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.7",
+  "version": "2.9.8",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
@@ -12,6 +12,7 @@
     "tools:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
     "tools:emails:recovery": "clear && node tools/emails_recovery.js",
     "crons": "./npm-scripts/crons.sh",
+    "standard:fix": "./node_modules/.bin/standard --fix src/server/**/*.js src/bus/**/*.js src/domain/**/*.js",
     "test:security": "clear && ./node_modules/.bin/snyk test",
     "test:coverage": "clear && ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec",
     "test:all": "./npm-scripts/test-all.sh",

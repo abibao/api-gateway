@@ -11,7 +11,7 @@ module.exports = {
   description: 'Retourne toutes les campagnes',
   notes: 'Retourne toutes les campagnes',
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'campaignFilterQuery', {})
       .then(function (campaigns) {
         reply(campaigns)

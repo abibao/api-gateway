@@ -17,7 +17,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'entityReadQuery', request.params.urn)
       .then(function (entity) {
         reply(entity)

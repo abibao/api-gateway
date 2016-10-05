@@ -14,7 +14,6 @@ module.exports = function (message) {
       body: payload,
       json: true
     }
-    global.ABIBAO.debuggers.bus('post message to slack', message)
     rp(options)
       .then(function () {
         global.ABIBAO.debuggers.bus('BUS_EVENT_WEBHOOK_SLACK "%s" has been posted', message.text)

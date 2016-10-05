@@ -4,6 +4,7 @@ var Promise = require('bluebird')
 
 module.exports = function (individual) {
   return new Promise(function (resolve, reject) {
+    global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 1) email=', individual.email)
     // construct user to insert
     individual.id = global.ABIBAO.services.domain.getIDfromURN(individual.urn)
     individual.charity = global.ABIBAO.services.domain.getIDfromURN(individual.urnCharity)
@@ -21,14 +22,28 @@ module.exports = function (individual) {
         'ABIBAO_ANSWER_FONDAMENTAL_DEPARTEMENT',
         'ABIBAO_ANSWER_FONDAMENTAL_GENDER')
       .then(function (item) {
-        return Promise.all([
-          global.ABIBAO.services.domain.thinky.r.table('entities').get(individual.charity),
-          global.ABIBAO.services.domain.thinky.r.table('entities').get(individual.hasRegisteredEntity),
-          global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(item.ABIBAO_ANSWER_FONDAMENTAL_CSP),
-          global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(item.ABIBAO_ANSWER_FONDAMENTAL_DEPARTEMENT),
-          global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(item.ABIBAO_ANSWER_FONDAMENTAL_GENDER),
-          global.ABIBAO.services.domain.thinky.r.now()
-        ])
+        var p = new Promise(function (resolve) {
+          resolve({text: null})
+        })
+        var promises = []
+        promises.push(global.ABIBAO.services.domain.thinky.r.table('entities').get(individual.charity))
+        promises.push(global.ABIBAO.services.domain.thinky.r.table('entities').get(individual.hasRegisteredEntity))
+        if (item.ABIBAO_ANSWER_FONDAMENTAL_CSP) {
+          promises.push(global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(item.ABIBAO_ANSWER_FONDAMENTAL_CSP))
+        } else {
+          promises.push(p)
+        }
+        if (item.ABIBAO_ANSWER_FONDAMENTAL_CSP) {
+          promises.push(global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(item.ABIBAO_ANSWER_FONDAMENTAL_CSP))
+        } else {
+          promises.push(p)
+        }
+        if (item.ABIBAO_ANSWER_FONDAMENTAL_GENDER) {
+          promises.push(global.ABIBAO.services.domain.thinky.r.table('campaigns_items_choices').get(item.ABIBAO_ANSWER_FONDAMENTAL_GENDER))
+        } else {
+          promises.push(p)
+        }
+        return Promise.all(promises)
           .then(function (result) {
             var data = {
               email: individual.email || null,
@@ -45,6 +60,7 @@ module.exports = function (individual) {
             if (data.age !== null) {
               data.age = parseInt(data.age)
             }
+            global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 2) email=', individual.email)
             // insert/update in mysql
             return global.ABIBAO.services.domain.knex('users')
               .where('email', data.email)
@@ -53,11 +69,14 @@ module.exports = function (individual) {
                 return global.ABIBAO.services.domain.knex('users').insert(data)
               })
               .then(function (inserted) {
-                global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER', inserted)
+                global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 3) email=', individual.email)
                 resolve()
               })
           })
       })
-      .catch(reject)
+      .catch(function (error) {
+        global.ABIBAO.debuggers.error(error)
+        reject(error)
+      })
   })
 }

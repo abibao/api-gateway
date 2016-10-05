@@ -24,7 +24,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     request.payload.survey = request.params.urn
     request.payload.credentials = request.auth.credentials
     global.ABIBAO.services.domain.execute('command', 'individualSurveyAnswerCommand', request.payload)

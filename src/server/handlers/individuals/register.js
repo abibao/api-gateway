@@ -20,7 +20,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('command', 'individualRegisterCommand', request.payload)
       .then(function (individual) {
         reply(individual)

@@ -8,7 +8,7 @@ module.exports = {
     scope: ['administrator']
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'statsIndividualsGenders', request.payload)
       .then(function (stats) {
         reply(stats)
