@@ -1,3 +1,4 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
@@ -70,25 +71,25 @@ describe('survey auto test', function () {
   })
   it('should not create', function (done) {
     global.ABIBAO.services.domain.execute('command', 'surveyCreateCommand', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })
   it('should not read', function (done) {
     global.ABIBAO.services.domain.execute('query', 'surveyReadQuery', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })
   it('should not update', function (done) {
     global.ABIBAO.services.domain.execute('command', 'surveyUpdateCommand', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })
   it('should not delete', function (done) {
     global.ABIBAO.services.domain.execute('command', 'surveyDeleteCommand', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })

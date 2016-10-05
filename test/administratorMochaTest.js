@@ -1,3 +1,4 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
@@ -70,25 +71,25 @@ describe('administrator auto test', function () {
   })
   it('should not create', function (done) {
     global.ABIBAO.services.domain.execute('command', 'administratorCreateCommand', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })
   it('should not read', function (done) {
     global.ABIBAO.services.domain.execute('query', 'administratorReadQuery', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })
   it('should not update', function (done) {
     global.ABIBAO.services.domain.execute('command', 'administratorUpdateCommand', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })
   it('should not delete', function (done) {
     global.ABIBAO.services.domain.execute('command', 'administratorDeleteCommand', {})
-      .catch(function (error) {
+      .catch(function () {
         done()
       })
   })

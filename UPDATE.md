@@ -1,8 +1,9 @@
 # API-GATEWAY
 
-### TODO
+### 3.0.0
 
-- [ ] remove thinky, and use rethinkdb
+- [x] check updates
+- [x] implements feathers instead of hapi/myself
 
 ### 2.6.8
 

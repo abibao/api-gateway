@@ -1,7 +1,7 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
-var should = chai.should()
 var expect = chai.expect
 
 var engine = require('../src/engine')

@@ -1,3 +1,4 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
@@ -11,7 +12,7 @@ var administratorFake = {
   password: faker.name.lastName().toLowerCase()
 }
 
-describe('administrator story', function () {
+describe.only('administrator story', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()

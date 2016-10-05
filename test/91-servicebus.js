@@ -1,3 +1,4 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
@@ -6,6 +7,7 @@ var expect = chai.expect
 var engine = require('../src/engine')
 var webhookSlack = require('../src/bus/handlers/webhook_slack')
 var analyticsComputeAnswer = require('../src/bus/handlers/analytics_compute_answer')
+var analyticsComputeUser = require('../src/bus/handlers/analytics_compute_user')
 
 describe('servicebus story', function () {
   it('should initialize global.ABIBAO', function (done) {
@@ -30,26 +32,26 @@ describe('servicebus story', function () {
     })
     done()
   })
-  it('should not send BUS_EVENT_WEBHOOK_SLACK', function (done) {
-    webhookSlack({
-      channel: '#cast-members-only',
-      username: 'IndividualRegisterCommand',
-      text: '[' + new Date() + '] - [test@gmail.com] has just registered into abibao',
-      webhook: 'http://localhost'
-    })
-    done()
-  })
   it('should send BUS_EVENT_WEBHOOK_SLACK', function (done) {
     webhookSlack({
-      channel: '#cast-members-only',
-      username: 'IndividualRegisterCommand',
-      text: '[' + new Date() + '] - [test@abibao.com] has just registered into abibao',
+      text: '[' + new Date() + '] - mocha has just send message to slack',
       webhook: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
     })
     done()
   })
   it('should send BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', function (done) {
-    analyticsComputeAnswer({})
-    done()
+    analyticsComputeAnswer({
+      survey: '5728fc583dea810500da78d6',
+      label: 'ABIBAO_ANSWER_FONDAMENTAL_AGE@gmail.com',
+      answer: '1970',
+      isURN: false
+    }).then(done).catch(done)
+  })
+  it('should send BUS_EVENT_ANALYTICS_COMPUTE_USER', function (done) {
+    global.ABIBAO.services.domain.execute('query', 'individualFilterQuery', {
+      email: 'gperreymond@gmail.com'
+    }).then(function (individuals) {
+      return analyticsComputeUser(individuals[0]).then(done)
+    }).catch(done)
   })
 })

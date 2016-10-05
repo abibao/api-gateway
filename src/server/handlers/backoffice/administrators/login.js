@@ -1,7 +1,6 @@
 'use strict'
 
 var Joi = require('joi')
-var Boom = require('boom')
 
 module.exports = {
   auth: false,
@@ -16,12 +15,6 @@ module.exports = {
   },
   jsonp: 'callback',
   handler(request, reply) {
-    global.ABIBAO.services.domain.execute('command', 'administratorLoginWithCredentialsCommand', request.payload)
-      .then(function (credentials) {
-        reply(credentials)
-      })
-      .catch(function (error) {
-        reply(Boom.badRequest(error))
-      })
+    global.ABIBAO.services.server.commandHandler(reply, 'administratorLoginWithCredentialsCommand', request.payload)
   }
 }

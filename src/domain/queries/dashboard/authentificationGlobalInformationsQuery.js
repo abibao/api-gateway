@@ -128,37 +128,33 @@ var surveysCompletedHandler = function (values) {
 module.exports = function (credentials) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
-    try {
-      if (_.isUndefined(credentials.action)) { return reject(new Error('Action is undefined')) }
-      if (credentials.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME) { return reject(new Error('Action is unauthorized')) }
-      if (credentials.scope !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL) { return reject(new Error('Scope is unauthorized')) }
-      credentials.id = self.getIDfromURN(credentials.urn)
+    if (_.isUndefined(credentials.action)) { return reject(new Error('Action is undefined')) }
+    if (credentials.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME) { return reject(new Error('Action is unauthorized')) }
+    if (credentials.scope !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_USER_SCOPE_INDIVIDUAL) { return reject(new Error('Scope is unauthorized')) }
+    credentials.id = self.getIDfromURN(credentials.urn)
 
-      waterfall([
-        function (callback) {
-          callback(null, {credentials})
-        },
-        waterIndividual,
-        waterCurrentCharity,
-        waterCharitiesHistory,
-        waterIndividualSurveys
-      ], function (error, waterfallResults) {
-        if (error) { return reject(error) }
-        // construt the final result
-        var finalResult = {
-          urn: waterfallResults.individual.urn,
-          email: waterfallResults.individual.email,
-          charitiesHistory: waterfallResults.charitiesHistory,
-          abibaoCompleted: abibaoCompletedHandler(waterfallResults.abibaoCompleted),
-          abibaoInProgress: abibaoInProgressHandler(waterfallResults.abibaoInProgress),
-          surveysInProgress: surveysInProgressHandler(waterfallResults.surveysInProgress),
-          surveysCompleted: surveysCompletedHandler(waterfallResults.surveysCompleted),
-          currentCharity: (waterfallResults.currentCharity.type === 'none') ? '' : waterfallResults.currentCharity.urn
-        }
-        resolve(finalResult)
-      })
-    } catch (e) {
-      reject(e)
-    }
+    waterfall([
+      function (callback) {
+        callback(null, {credentials})
+      },
+      waterIndividual,
+      waterCurrentCharity,
+      waterCharitiesHistory,
+      waterIndividualSurveys
+    ], function (error, waterfallResults) {
+      if (error) { return reject(error) }
+      // construt the final result
+      var finalResult = {
+        urn: waterfallResults.individual.urn,
+        email: waterfallResults.individual.email,
+        charitiesHistory: waterfallResults.charitiesHistory,
+        abibaoCompleted: abibaoCompletedHandler(waterfallResults.abibaoCompleted),
+        abibaoInProgress: abibaoInProgressHandler(waterfallResults.abibaoInProgress),
+        surveysInProgress: surveysInProgressHandler(waterfallResults.surveysInProgress),
+        surveysCompleted: surveysCompletedHandler(waterfallResults.surveysCompleted),
+        currentCharity: (waterfallResults.currentCharity.type === 'none') ? '' : waterfallResults.currentCharity.urn
+      }
+      resolve(finalResult)
+    })
   })
 }

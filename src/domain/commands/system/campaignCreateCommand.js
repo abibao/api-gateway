@@ -9,11 +9,11 @@ var ObjectId = bson.ObjectId
 module.exports = function (payload) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
-    try {
-      payload.id = new ObjectId().toString()
-      payload.createdAt = Date.now()
-      var model = new self.CampaignModel(payload)
-      model.save().then(function (created) {
+    payload.id = new ObjectId().toString()
+    payload.createdAt = Date.now()
+    var model = new self.CampaignModel(JSON.parse(JSON.stringify(payload)))
+    model.save()
+      .then(function (created) {
         delete created.id
         delete created.company
         delete created.charity
@@ -24,8 +24,5 @@ module.exports = function (payload) {
       .catch(function (error) {
         reject(error)
       })
-    } catch (e) {
-      reject(e)
-    }
   })
 }

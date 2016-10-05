@@ -1,8 +1,8 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
 var chaiHttp = require('chai-http')
-var should = chai.should()
 var expect = chai.expect
 var async = require('async')
 
@@ -41,6 +41,7 @@ describe('endpoints story', function () {
         promise(path)
           .send()
           .end(function (err, res) {
+            if (err) { return next(err) }
             expect(res).to.have.property('status')
             var request = {}
             request.params = {

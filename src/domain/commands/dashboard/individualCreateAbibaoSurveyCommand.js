@@ -11,9 +11,9 @@ module.exports = function (data) {
   var email = data.email
   var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
-    try {
-      // get abibao entity
-      self.execute('query', 'entityFilterQuery', {type: 'abibao'}).then(function (entities) {
+    // get abibao entity
+    self.execute('query', 'entityFilterQuery', {type: 'abibao'})
+      .then(function (entities) {
         var entity = entities[0]
         entity.id = self.getIDfromURN(entity.urn)
         // get the campaign with the requested position
@@ -32,24 +32,21 @@ module.exports = function (data) {
                 answers: {}
               }
               // create the new survey
-              return self.execute('command', 'surveyCreateCommand', data).then(function () {
-                // informations posted on slack
-                global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
-                  'channel': '#cast-members-only',
-                  'username': 'IndividualCreateAbibaoSurveyCommand',
-                  'text': '[' + new Date() + '] - [' + email + '] can access abibao surveys (' + position + ')',
-                  'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+              return self.execute('command', 'surveyCreateCommand', data)
+                .then(function () {
+                  // informations posted on slack
+                  global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
+                    'username': 'IndividualCreateAbibaoSurveyCommand',
+                    'text': '[' + new Date() + '] - [' + email + '] can access abibao surveys (' + position + ')',
+                    'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+                  })
+                  resolve()
                 })
-                resolve()
-              })
             })
         })
       })
-        .catch(function (error) {
-          reject(error)
-        })
-    } catch (e) {
-      reject(e)
-    }
+      .catch(function (error) {
+        reject(error)
+      })
   })
 }

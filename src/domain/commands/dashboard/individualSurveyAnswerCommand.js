@@ -37,7 +37,8 @@ module.exports = function (payload) {
                   survey: self.getIDfromURN(survey.urn),
                   label: payload.label,
                   answer: _answer,
-                isURN})
+                  isURN: isURN
+                })
               })
             } else {
               if (regex.exec(payload.answer) !== null) {

@@ -29,9 +29,13 @@ exports.endpoints = [
   { method: 'GET', path: '/v1/auth/surveys/{urn}', config: require('./handlers/individuals/auth/surveys/read') },
   { method: 'POST', path: '/v1/auth/surveys/{urn}/answers', config: require('./handlers/individuals/auth/surveys/answer') },
 
+  // wordpress > smf
+  { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}', config: require('./handlers/smf/startups/read') },
+  { method: 'POST', path: '/v1/wp_json/smf/startups/vote', config: require('./handlers/smf/startups/vote') },
+
   // administrators
-  { method: 'POST', path: '/v1/administrators/login', config: require('./handlers/administrators/login') },
-  { method: 'POST', path: '/v1/administrators/register', config: require('./handlers/administrators/register') },
+  { method: 'POST', path: '/v1/administrators/login', config: require('./handlers/backoffice/administrators/login') },
+  { method: 'POST', path: '/v1/administrators/register', config: require('./handlers/backoffice/administrators/register') },
 
   // entities
   { method: 'GET', path: '/v1/entities/charity', config: require('./handlers/entities/charity') },

@@ -1,6 +1,7 @@
 'use strict'
 
 var Promise = require('bluebird')
+var glob = require('glob')
 
 var internals = {
   optionsRethink: {
@@ -68,19 +69,13 @@ internals.initialize = function () {
       }
       internals.domain.injector('commands')
         .then(function () {
-          return internals.domain.injector('commands/system')
-        })
-        .then(function () {
           return internals.domain.injector('queries')
         })
         .then(function () {
-          return internals.domain.injector('queries/system')
-        })
-        .then(function () {
-          return internals.domain.injector('models')
-        })
-        .then(function () {
           return internals.domain.injector('models/mysql')
+        })
+        .then(function () {
+          return internals.domain.injector('models/rethinkdb')
         })
         .finally(resolve)
         .catch(reject)
@@ -112,30 +107,27 @@ module.exports.singleton = function () {
 
 var async = require('async')
 var path = require('path')
-var fs = require('fs')
 var uuid = require('node-uuid')
 
 internals.injector = function (type) {
   var self = internals.domain
   return new Promise(function (resolve) {
-    abibao.debug('[' + type + ']')
-    // custom
-    var files = fs.readdirSync(path.resolve(__dirname, type))
-    async.mapSeries(files, function (item, next) {
-      if (item !== 'system') {
-        var name = path.basename(item, '.js')
-        abibao.debug('>>> [' + _.upperFirst(name) + '] has just being injected')
-        if (type === 'models') {
-          self[name] = require('./' + type + '/' + name)(self.thinky)
-        } else if (type === 'models/mysql') {
-          self[name] = require('./' + type + '/' + name)(self.knex)
-        } else if (type === 'listeners') {
-          self[name] = require('./' + type + '/' + name)
-          self[name]()
-        } else {
-          self[name] = require('./' + type + '/' + name)
-          self.dictionnary.push(name)
-        }
+    abibao.debug('[' + _.upperFirst(_.camelCase(type)) + ']')
+    var patternPath = path.resolve(__dirname, type) + '/**/*.js'
+    var patternFiles = glob.sync(patternPath, {
+      nodir: true,
+      dot: true,
+      ignore: ['index.js']
+    })
+    async.mapSeries(patternFiles, function (file, next) {
+      var name = path.basename(file, '.js')
+      abibao.debug('>>> [' + _.upperFirst(_.camelCase(name)) + '] has just being injected')
+      switch (type) {
+        case 'models/rethinkdb':
+          self[name] = require(file)(self.thinky)
+          break
+        default:
+          self[name] = require(file)
       }
       next(null, true)
     }, function () {
@@ -150,8 +142,9 @@ internals.execute = function (type, promise, params) {
     var data = {
       uuid: uuid.v1(),
       environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
-      type,
-    promise}
+      type: type,
+      promise: promise
+    }
     abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
     global.ABIBAO.services.domain[promise](params)
       .then(function (result) {
