@@ -11,7 +11,7 @@ module.exports = {
   description: 'Retourne toutes les entités de type associations',
   notes: 'Retourne toutes les entités de type associations',
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'charityRandomListQuery', {type: 'charity'})
       .then(function (entities) {
         reply(entities)

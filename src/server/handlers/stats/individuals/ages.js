@@ -14,7 +14,7 @@ module.exports = {
       gender: Joi.string().required()
     }
   },
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'statsIndividualsAges', request.params.gender)
       .then(function (stats) {
         reply(stats)

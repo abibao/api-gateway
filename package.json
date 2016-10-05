@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.7",
+  "version": "2.9.8",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
@@ -12,10 +12,22 @@
     "tools:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
     "tools:emails:recovery": "clear && node tools/emails_recovery.js",
     "crons": "./npm-scripts/crons.sh",
+    "standard:fix": "./node_modules/.bin/standard --fix",
+    "standard:snazzy": "./node_modules/.bin/standard --verbose | snazzy",
+    "test": "clear && npm run test:coverage",
     "test:security": "clear && ./node_modules/.bin/snyk test",
     "test:coverage": "clear && ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec",
     "test:all": "./npm-scripts/test-all.sh",
     "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
+  },
+  "standard": {
+    "ignore": [
+      "bin/**",
+      "npm-scripts/**",
+      "test/**",
+      "tools/**",
+      "src/www/**"
+    ]
   },
   "repository": {
     "type": "git",
@@ -89,6 +101,7 @@
     "mustache": "2.2.1",
     "request-promise": "4.1.1",
     "rethinkdb": "2.3.3",
+    "snazzy": "5.0.0",
     "standard": "8.3.0"
   }
 }

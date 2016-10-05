@@ -9,7 +9,7 @@ module.exports = {
   },
   tags: ['api', '1.3) administrator'],
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'entityFilterQuery', {})
       .then(function (entities) {
         reply(entities)

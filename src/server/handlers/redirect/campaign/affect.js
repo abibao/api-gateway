@@ -11,7 +11,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('command', 'individualAssignCampaignAbibaoAutoCommand', request.params.sealed)
       .then(function () {
         reply.redirect(global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI'))
