@@ -1,8 +1,8 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
 var expect = chai.expect
-var faker = require('faker')
 
 var engine = require('../src/engine')
 

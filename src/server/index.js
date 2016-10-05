@@ -1,6 +1,7 @@
 'use strict'
 
 var Promise = require('bluebird')
+var Boom = require('boom')
 
 var internals = {
   options: {
@@ -23,18 +24,6 @@ var uuid = require('node-uuid')
 var async = require('async')
 var Hapi = require('hapi')
 var Routes = require('./routes')
-
-/* {
-  connections: {
-    routes: {
-      cors: {
-        origin: ['*://*.abibao.com:*'],
-        additionalHeaders: ['Accept-language', 'X-CSRF-Token'],
-        credentials: true
-      }
-    }
-  }
-} */
 
 internals.initialize = function () {
   abibao.debug('start initializing')
@@ -86,12 +75,36 @@ internals.initialize = function () {
   })
 }
 
+internals.commandHandler = function (reply, name, params) {
+  abibao.debug('hapi handler command=%s', name)
+  global.ABIBAO.services.domain.execute('command', name, params)
+    .then(function (json) {
+      reply(json)
+    })
+    .catch(function (error) {
+      reply(Boom.badRequest(error))
+    })
+}
+
+internals.queryHandler = function (reply, name, params) {
+  abibao.debug('hapi handler query=%s', name)
+  global.ABIBAO.services.domain.execute('query', name, params)
+    .then(function (json) {
+      reply(json)
+    })
+    .catch(function (error) {
+      reply(Boom.badRequest(error))
+    })
+}
+
 module.exports.singleton = function () {
   return new Promise(function (resolve, reject) {
     if (internals.server !== false) { resolve() }
     internals.server = { }
     internals.initialize()
       .then(function () {
+        internals.server.commandHandler = internals.commandHandler
+        internals.server.queryHandler = internals.queryHandler
         global.ABIBAO.services.server = internals.server
         global.ABIBAO.events.ServerEvent = internals.events
         global.ABIBAO.constants.ServerConstant = internals.constants
