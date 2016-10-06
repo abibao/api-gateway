@@ -8,9 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', '1.2) individual'],
-  description: 'Répond à une question d"un sondage donné',
-  notes: 'Répond à une question d"un sondage donné',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -24,7 +21,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler (request, reply) {
+  handler(request, reply) {
     request.payload.survey = request.params.urn
     request.payload.credentials = request.auth.credentials
     global.ABIBAO.services.domain.execute('command', 'individualSurveyAnswerCommand', request.payload)

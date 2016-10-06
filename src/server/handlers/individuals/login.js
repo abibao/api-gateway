@@ -5,9 +5,6 @@ var Boom = require('boom')
 
 module.exports = {
   auth: false,
-  tags: ['api', '1.1) not authentified'],
-  description: 'Authentifie un individu sur abibao',
-  notes: 'Authentifie un individu sur abibao',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -18,7 +15,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler (request, reply) {
+  handler(request, reply) {
     global.ABIBAO.services.domain.execute('command', 'individualLoginWithCredentialsCommand', request.payload)
       .then(function (credentials) {
         reply(credentials)

@@ -8,9 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Modifie une campagne au sein de Abibao',
-  notes: 'Modifie une campagne au sein de Abibao',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -30,7 +27,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler (request, reply) {
+  handler(request, reply) {
     request.payload.urn = request.params.urn
     global.ABIBAO.services.domain.execute('command', 'campaignUpdateCommand', request.payload)
       .then(function (campaign) {

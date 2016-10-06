@@ -8,14 +8,13 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
   validate: {
     params: {
       urn: Joi.string().required()
     }
   },
   jsonp: 'callback',
-  handler (request, reply) {
+  handler(request, reply) {
     global.ABIBAO.services.domain.execute('query', 'entityListCampaignsQuery', request.params.urn)
       .then(function (campaigns) {
         reply(campaigns)

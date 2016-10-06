@@ -13,7 +13,7 @@ module.exports = function (payload) {
         email: Joi.string().email().required(),
         startup: Joi.number().integer().min(0).required()
       })
-      Joi.validate(payload, schema, function (err, value) {
+      Joi.validate(payload, schema, function (err) {
         // bad validation
         if (err) { throw new Error(err) }
         // default
@@ -21,7 +21,7 @@ module.exports = function (payload) {
         payload.points = 1
         payload.converted = false
         // the show must go on!
-        self.SmfVotesSQLModel()
+        self.VoteSMFModel()
           .then(function () {
             // checks email exists in abibao?
             return self.execute('query', 'individualFilterQuery', {email: payload.email})
@@ -31,10 +31,10 @@ module.exports = function (payload) {
               payload.points = 3
               payload.converted = true
               var individual = individuals[0]
-              payload.charity_id = self.getIDfromURN(individual.urnCharity)
+              payload['charity_id'] = self.getIDfromURN(individual.urnCharity)
               return self.execute('query', 'entityReadQuery', individual.urnCharity)
                 .then(function (entity) {
-                  payload.charity_name = entity.name
+                  payload['charity_name'] = entity.name
                   // checks email exists in smf_votes?
                   return self.knex('smf_votes').where({email: payload.email})
                 })
@@ -55,10 +55,10 @@ module.exports = function (payload) {
             // all ok we insert the new entry
             var data = {
               email: payload.email,
-              startup_id: payload.startup,
-              startup_name: startup.title,
-              charity_id: payload.charity_id,
-              charity_name: payload.charity_name,
+              'startup_id': payload.startup,
+              'startup_name': startup.title,
+              'charity_id': payload.charity_id,
+              'charity_name': payload.charity_name,
               converted: payload.converted,
               points: payload.points
             }

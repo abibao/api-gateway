@@ -8,7 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', '1.2) individual'],
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -18,7 +17,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler (request, reply) {
+  handler(request, reply) {
     request.payload.credentials = request.auth.credentials
     global.ABIBAO.services.domain.execute('command', 'individualUpdateCharityCommand', request.payload)
       .then(function (individual) {

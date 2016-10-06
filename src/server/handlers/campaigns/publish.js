@@ -8,7 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },
@@ -23,7 +22,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler (request, reply) {
+  handler(request, reply) {
     request.payload.urn = request.params.urn
     global.ABIBAO.services.domain.execute('command', 'campaignPublishCommand', request.payload)
       .then(function (result) {
