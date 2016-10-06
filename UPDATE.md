@@ -1,10 +1,5 @@
 # API-GATEWAY
 
-### 3.0.0
-
-- [x] check updates
-- [x] implements feathers instead of hapi/myself
-
 ### 2.6.8
 
 - [x] remove CSRF at this point

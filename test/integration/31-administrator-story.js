@@ -5,7 +5,7 @@ var chai = require('chai')
 var expect = chai.expect
 var faker = require('faker')
 
-var engine = require('../src/engine')
+var engine = require('../../src/engine')
 
 var administratorFake = {
   email: faker.internet.email().toLowerCase(),

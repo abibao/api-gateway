@@ -4,10 +4,10 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../src/engine')
-var webhookSlack = require('../src/bus/handlers/webhook_slack')
-var analyticsComputeAnswer = require('../src/bus/handlers/analytics_compute_answer')
-var analyticsComputeUser = require('../src/bus/handlers/analytics_compute_user')
+var engine = require('../../src/engine')
+var webhookSlack = require('../../src/bus/handlers/webhook_slack')
+var analyticsComputeAnswer = require('../../src/bus/handlers/analytics_compute_answer')
+var analyticsComputeUser = require('../../src/bus/handlers/analytics_compute_user')
 
 describe('servicebus story', function () {
   it('should initialize global.ABIBAO', function (done) {

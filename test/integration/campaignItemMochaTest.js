@@ -4,10 +4,10 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../src/engine')
+var engine = require('../../src/engine')
 var data = null
 
-describe('administrator auto test', function () {
+describe('campaignitem auto test', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()
@@ -24,14 +24,14 @@ describe('administrator auto test', function () {
   })
   it('should initialize fake data', function (done) {
     expect(global.ABIBAO.uuid).to.be.a('string')
-    expect(global.ABIBAO.services.domain.AdministratorModel).to.be.not.undefined
-    expect(global.ABIBAO.services.domain.AdministratorModel).to.be.not.null
-    var Model = global.ABIBAO.services.domain.AdministratorModel
+    expect(global.ABIBAO.services.domain.CampaignItemModel).to.be.not.undefined
+    expect(global.ABIBAO.services.domain.CampaignItemModel).to.be.not.null
+    var Model = global.ABIBAO.services.domain.CampaignItemModel
     data = new Model({}).getFakeData()
     done()
   })
   it('should create', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'administratorCreateCommand', data)
+    global.ABIBAO.services.domain.execute('command', 'campaignItemCreateCommand', data)
       .then(function (create) {
         data = create
         done()
@@ -41,7 +41,7 @@ describe('administrator auto test', function () {
       })
   })
   it('should read', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'administratorReadQuery', data.urn)
+    global.ABIBAO.services.domain.execute('query', 'campaignItemReadQuery', data.urn)
       .then(function (read) {
         data = read
         done()
@@ -51,7 +51,7 @@ describe('administrator auto test', function () {
       })
   })
   it('should update', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'administratorUpdateCommand', data)
+    global.ABIBAO.services.domain.execute('command', 'campaignItemUpdateCommand', data)
       .then(function (update) {
         data = update
         done()
@@ -61,7 +61,7 @@ describe('administrator auto test', function () {
       })
   })
   it('should delete', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'administratorDeleteCommand', data.urn)
+    global.ABIBAO.services.domain.execute('command', 'campaignItemDeleteCommand', data.urn)
       .then(function () {
         done()
       })
@@ -70,25 +70,25 @@ describe('administrator auto test', function () {
       })
   })
   it('should not create', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'administratorCreateCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'campaignItemCreateCommand', {})
       .catch(function () {
         done()
       })
   })
   it('should not read', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'administratorReadQuery', {})
+    global.ABIBAO.services.domain.execute('query', 'campaignItemReadQuery', {})
       .catch(function () {
         done()
       })
   })
   it('should not update', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'administratorUpdateCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'campaignItemUpdateCommand', {})
       .catch(function () {
         done()
       })
   })
   it('should not delete', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'administratorDeleteCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'campaignItemDeleteCommand', {})
       .catch(function () {
         done()
       })

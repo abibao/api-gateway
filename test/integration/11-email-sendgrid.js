@@ -4,7 +4,7 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../src/engine')
+var engine = require('../../src/engine')
 
 describe('sendgrid story', function () {
   it('should initialize global.ABIBAO', function (done) {

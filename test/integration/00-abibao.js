@@ -7,7 +7,7 @@ var glob = require('glob')
 var path = require('path')
 var _ = require('lodash')
 
-var engine = require('../src/engine')
+var engine = require('../../src/engine')
 
 describe('abibao story', function () {
   before(function () {

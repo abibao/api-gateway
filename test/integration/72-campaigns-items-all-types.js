@@ -6,7 +6,7 @@ var chaiHttp = require('chai-http')
 var expect = chai.expect
 var faker = require('faker')
 
-var engine = require('../src/engine')
+var engine = require('../../src/engine')
 
 chai.use(chaiHttp)
 

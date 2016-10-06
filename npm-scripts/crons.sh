@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -a
 clear
 
 node tools/rethink_backup.js

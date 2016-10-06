@@ -4,10 +4,10 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../src/engine')
+var engine = require('../../src/engine')
 var data = null
 
-describe('individual auto test', function () {
+describe('administrator auto test', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()
@@ -24,14 +24,14 @@ describe('individual auto test', function () {
   })
   it('should initialize fake data', function (done) {
     expect(global.ABIBAO.uuid).to.be.a('string')
-    expect(global.ABIBAO.services.domain.IndividualModel).to.be.not.undefined
-    expect(global.ABIBAO.services.domain.IndividualModel).to.be.not.null
-    var Model = global.ABIBAO.services.domain.IndividualModel
+    expect(global.ABIBAO.services.domain.AdministratorModel).to.be.not.undefined
+    expect(global.ABIBAO.services.domain.AdministratorModel).to.be.not.null
+    var Model = global.ABIBAO.services.domain.AdministratorModel
     data = new Model({}).getFakeData()
     done()
   })
   it('should create', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'individualCreateCommand', data)
+    global.ABIBAO.services.domain.execute('command', 'administratorCreateCommand', data)
       .then(function (create) {
         data = create
         done()
@@ -41,7 +41,7 @@ describe('individual auto test', function () {
       })
   })
   it('should read', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'individualReadQuery', data.urn)
+    global.ABIBAO.services.domain.execute('query', 'administratorReadQuery', data.urn)
       .then(function (read) {
         data = read
         done()
@@ -51,7 +51,7 @@ describe('individual auto test', function () {
       })
   })
   it('should update', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'individualUpdateCommand', data)
+    global.ABIBAO.services.domain.execute('command', 'administratorUpdateCommand', data)
       .then(function (update) {
         data = update
         done()
@@ -61,7 +61,7 @@ describe('individual auto test', function () {
       })
   })
   it('should delete', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'individualDeleteCommand', data.urn)
+    global.ABIBAO.services.domain.execute('command', 'administratorDeleteCommand', data.urn)
       .then(function () {
         done()
       })
@@ -70,25 +70,25 @@ describe('individual auto test', function () {
       })
   })
   it('should not create', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'individualCreateCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'administratorCreateCommand', {})
       .catch(function () {
         done()
       })
   })
   it('should not read', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'individualReadQuery', {})
+    global.ABIBAO.services.domain.execute('query', 'administratorReadQuery', {})
       .catch(function () {
         done()
       })
   })
   it('should not update', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'individualUpdateCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'administratorUpdateCommand', {})
       .catch(function () {
         done()
       })
   })
   it('should not delete', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'individualDeleteCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'administratorDeleteCommand', {})
       .catch(function () {
         done()
       })

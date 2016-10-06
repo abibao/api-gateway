@@ -4,21 +4,20 @@
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
-    "tools:rethinkdb:import:rece": "clear && node tools/rethink_import_rece.js",
-    "tools:rethinkdb:backup": "clear && node tools/rethink_backup.js",
-    "tools:mysql:create:answers": "clear && node tools/mysql_create_answers.js",
-    "tools:mysql:insert:answers": "clear && node tools/mysql_insert_answers.js",
-    "tools:mysql:create:users": "clear && node tools/mysql_create_users.js",
-    "tools:mysql:insert:users": "clear && node tools/mysql_insert_users.js",
-    "tools:emails:recovery": "clear && node tools/emails_recovery.js",
-    "crons": "./npm-scripts/crons.sh",
-    "standard:fix": "./node_modules/.bin/standard --fix",
-    "standard:snazzy": "./node_modules/.bin/standard --verbose | snazzy",
-    "test": "clear && npm run test:coverage",
-    "test:security": "clear && ./node_modules/.bin/snyk test",
-    "test:coverage": "clear && ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --timeout 15000 -R spec",
-    "test:all": "./npm-scripts/test-all.sh",
-    "start": "clear && DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
+    "tools:rethinkdb:import:rece": "node tools/rethink_import_rece.js",
+    "tools:rethinkdb:backup": "node tools/rethink_backup.js",
+    "tools:mysql:create:answers": "node tools/mysql_create_answers.js",
+    "tools:mysql:insert:answers": "node tools/mysql_insert_answers.js",
+    "tools:mysql:create:users": "node tools/mysql_create_users.js",
+    "tools:mysql:insert:users": "node tools/mysql_insert_users.js",
+    "tools:emails:recovery": "node tools/emails_recovery.js",
+    "crons": "npm-scripts/crons.sh",
+    "standard:fix": "node_modules/.bin/standard --fix",
+    "test": "npm-scripts/test-all.sh",
+    "test:standard": "node_modules/.bin/standard --verbose | snazzy",
+    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 15000 --recursive -R spec",
+    "test:security": "node_modules/.bin/snyk test",
+    "start": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
   "standard": {
     "ignore": [
@@ -102,6 +101,7 @@
     "request-promise": "4.1.1",
     "rethinkdb": "2.3.3",
     "snazzy": "5.0.0",
+    "snyk": "^1.19.1",
     "standard": "8.3.0"
   }
 }

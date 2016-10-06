@@ -4,10 +4,10 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../src/engine')
+var engine = require('../../src/engine')
 var data = null
 
-describe('entity auto test', function () {
+describe('survey auto test', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.uuid) {
       done()
@@ -24,14 +24,14 @@ describe('entity auto test', function () {
   })
   it('should initialize fake data', function (done) {
     expect(global.ABIBAO.uuid).to.be.a('string')
-    expect(global.ABIBAO.services.domain.EntityModel).to.be.not.undefined
-    expect(global.ABIBAO.services.domain.EntityModel).to.be.not.null
-    var Model = global.ABIBAO.services.domain.EntityModel
+    expect(global.ABIBAO.services.domain.SurveyModel).to.be.not.undefined
+    expect(global.ABIBAO.services.domain.SurveyModel).to.be.not.null
+    var Model = global.ABIBAO.services.domain.SurveyModel
     data = new Model({}).getFakeData()
     done()
   })
   it('should create', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'entityCreateCommand', data)
+    global.ABIBAO.services.domain.execute('command', 'surveyCreateCommand', data)
       .then(function (create) {
         data = create
         done()
@@ -41,7 +41,7 @@ describe('entity auto test', function () {
       })
   })
   it('should read', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'entityReadQuery', data.urn)
+    global.ABIBAO.services.domain.execute('query', 'surveyReadQuery', data.urn)
       .then(function (read) {
         data = read
         done()
@@ -51,7 +51,7 @@ describe('entity auto test', function () {
       })
   })
   it('should update', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'entityUpdateCommand', data)
+    global.ABIBAO.services.domain.execute('command', 'surveyUpdateCommand', data)
       .then(function (update) {
         data = update
         done()
@@ -61,7 +61,7 @@ describe('entity auto test', function () {
       })
   })
   it('should delete', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'entityDeleteCommand', data.urn)
+    global.ABIBAO.services.domain.execute('command', 'surveyDeleteCommand', data.urn)
       .then(function () {
         done()
       })
@@ -70,25 +70,25 @@ describe('entity auto test', function () {
       })
   })
   it('should not create', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'entityCreateCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'surveyCreateCommand', {})
       .catch(function () {
         done()
       })
   })
   it('should not read', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'entityReadQuery', {})
+    global.ABIBAO.services.domain.execute('query', 'surveyReadQuery', {})
       .catch(function () {
         done()
       })
   })
   it('should not update', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'entityUpdateCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'surveyUpdateCommand', {})
       .catch(function () {
         done()
       })
   })
   it('should not delete', function (done) {
-    global.ABIBAO.services.domain.execute('command', 'entityDeleteCommand', {})
+    global.ABIBAO.services.domain.execute('command', 'surveyDeleteCommand', {})
       .catch(function () {
         done()
       })
