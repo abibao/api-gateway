@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.8",
+  "version": "2.9.901",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
@@ -12,10 +12,12 @@
     "tools:mysql:insert:users": "node tools/mysql_insert_users.js",
     "tools:emails:recovery": "node tools/emails_recovery.js",
     "crons": "npm-scripts/crons.sh",
+    "standard:control": "node_modules/.bin/standard | snazzy",
     "standard:fix": "node_modules/.bin/standard --fix",
     "test": "npm-scripts/test-all.sh",
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 15000 --recursive -R spec",
+    "test:unit": "node_modules/.bin/_mocha --timeout 15000 --recursive test/unit",
     "test:security": "node_modules/.bin/snyk test",
     "start": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
@@ -23,8 +25,8 @@
     "ignore": [
       "bin/**",
       "npm-scripts/**",
-      "test/**",
       "tools/**",
+      "test/**",
       "src/www/**"
     ]
   },
@@ -72,17 +74,14 @@
     "knex": "0.12.2",
     "lodash": "4.16.3",
     "md5": "2.2.1",
-    "mocha": "3.1.0",
     "mysql": "2.11.1",
     "nconf": "0.8.4",
     "newrelic": "1.30.5",
     "node-uuid": "1.4.7",
-    "recursive-readdir": "2.1.0",
     "request": "2.75.0",
     "request-promise": "4.1.1",
     "sendgrid": "3.0.7",
     "servicebus": "2.0.5",
-    "standard": "8.3.0",
     "thinky": "2.3.7",
     "vision": "4.1.0",
     "wpapi": "0.11.0"
@@ -101,7 +100,7 @@
     "request-promise": "4.1.1",
     "rethinkdb": "2.3.3",
     "snazzy": "5.0.0",
-    "snyk": "^1.19.1",
+    "snyk": "1.19.1",
     "standard": "8.3.0"
   }
 }

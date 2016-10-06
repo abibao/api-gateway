@@ -1,7 +1,6 @@
 'use strict'
 
 var Promise = require('bluebird')
-
 var Hoek = require('hoek')
 
 module.exports = function (payload) {
@@ -12,12 +11,8 @@ module.exports = function (payload) {
     self.execute('command', 'campaignItemChoiceCreateCommand', payload)
       .then(function (choice) {
         return self.execute('query', 'campaignItemChoiceReadQuery', choice.urn)
-          .then(function (choice) {
-            resolve(choice)
-          })
       })
-      .catch(function (error) {
-        reject(error)
-      })
+      .then(resolve)
+      .catch(reject)
   })
 }

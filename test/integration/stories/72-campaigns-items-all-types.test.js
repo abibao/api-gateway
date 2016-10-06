@@ -3,31 +3,14 @@
 
 var chai = require('chai')
 var chaiHttp = require('chai-http')
-var expect = chai.expect
 var faker = require('faker')
-
-var engine = require('../../src/engine')
 
 chai.use(chaiHttp)
 
 var campaignFake = {}
 var campaignItemFake = {}
 
-describe('handlers/campaigns-items-all-types', function () {
-  it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO.uuid) {
-      done()
-    } else {
-      engine()
-        .then(function () {
-          expect(global.ABIBAO.uuid).to.be.a('string')
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    }
-  })
+describe('[integration] handlers/campaigns-items-all-types', function () {
   it('should success get campaign (prepare)', function (done) {
     global.ABIBAO.services.domain.execute('query', 'campaignFilterQuery', {})
       .then(function (campaigns) {

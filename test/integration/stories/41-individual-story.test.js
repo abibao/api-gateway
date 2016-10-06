@@ -5,28 +5,12 @@ var chai = require('chai')
 var expect = chai.expect
 var faker = require('faker')
 
-var engine = require('../../src/engine')
-
 var individualFake = {
   email: faker.internet.email().toLowerCase(),
   password: faker.name.lastName().toLowerCase()
 }
 
-describe('individual story', function () {
-  it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO.uuid) {
-      done()
-    } else {
-      engine()
-        .then(function () {
-          expect(global.ABIBAO.uuid).to.be.a('string')
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    }
-  })
+describe('[integration] individual story', function () {
   it('should not register', function (done) {
     global.ABIBAO.services.domain.execute('command', 'individualRegisterCommand', {
       email: individualFake.email,

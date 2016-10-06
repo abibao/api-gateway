@@ -4,23 +4,7 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../../src/engine')
-
-describe('sendgrid story', function () {
-  it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO.uuid) {
-      done()
-    } else {
-      engine()
-        .then(function () {
-          expect(global.ABIBAO.uuid).to.be.a('string')
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    }
-  })
+describe('[integration] sendgrid story', function () {
   it('should send a simple email with our api key', function (done) {
     var sendgrid = require('sendgrid').SendGrid(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
     var request = sendgrid.emptyRequest()

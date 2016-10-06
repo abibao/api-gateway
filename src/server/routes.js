@@ -5,7 +5,7 @@ var normalize = require('path').normalize
 
 exports.endpoints = [
 
-  // get CSRF cookie
+  // server is alive
   { method: 'GET', path: '/v1/alive', config: require('./handlers/alive') },
 
   // stats

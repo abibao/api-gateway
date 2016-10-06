@@ -4,24 +4,9 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../../src/engine')
 var data = null
 
-describe('administrator auto test', function () {
-  it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO.uuid) {
-      done()
-    } else {
-      engine()
-        .then(function () {
-          expect(global.ABIBAO.uuid).to.be.a('string')
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    }
-  })
+describe('[integration] administrator auto test', function () {
   it('should initialize fake data', function (done) {
     expect(global.ABIBAO.uuid).to.be.a('string')
     expect(global.ABIBAO.services.domain.AdministratorModel).to.be.not.undefined

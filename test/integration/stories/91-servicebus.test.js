@@ -4,26 +4,11 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../../src/engine')
-var webhookSlack = require('../../src/bus/handlers/webhook_slack')
-var analyticsComputeAnswer = require('../../src/bus/handlers/analytics_compute_answer')
-var analyticsComputeUser = require('../../src/bus/handlers/analytics_compute_user')
+var webhookSlack = require('../../../src/bus/handlers/webhook_slack')
+var analyticsComputeAnswer = require('../../../src/bus/handlers/analytics_compute_answer')
+var analyticsComputeUser = require('../../../src/bus/handlers/analytics_compute_user')
 
-describe('servicebus story', function () {
-  it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO.uuid) {
-      done()
-    } else {
-      engine()
-        .then(function () {
-          expect(global.ABIBAO.uuid).to.be.a('string')
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    }
-  })
+describe('[integration] servicebus story', function () {
   it('should subscribe BUS_EVENT_IS_ALIVE', function (done) {
     global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, {
       name: global.ABIBAO.name,
