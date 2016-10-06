@@ -25,7 +25,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('command', 'campaignCreateWithCompanyCommand', request.payload)
       .then(function (campaign) {
         reply(campaign)

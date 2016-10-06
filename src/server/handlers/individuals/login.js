@@ -15,7 +15,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('command', 'individualLoginWithCredentialsCommand', request.payload)
       .then(function (credentials) {
         reply(credentials)
