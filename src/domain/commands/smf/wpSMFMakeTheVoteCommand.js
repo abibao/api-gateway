@@ -10,6 +10,7 @@ module.exports = function (payload) {
     try {
       // validate payload
       var schema = Joi.object().keys({
+        node: Joi.number().integer().min(0).required(),
         email: Joi.string().email().required(),
         startup: Joi.number().integer().min(0).required()
       })
@@ -69,7 +70,7 @@ module.exports = function (payload) {
             return self.knex('smf_votes').where({email: payload.email})
           })
           .then(function (vote) {
-            resolve(vote)
+            resolve(vote[0])
           })
           .catch(function (error) {
             reject(error)
