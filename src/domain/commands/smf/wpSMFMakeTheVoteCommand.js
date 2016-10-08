@@ -57,8 +57,8 @@ module.exports = function (payload) {
             email: payload.email,
             'startup_id': payload.startup,
             'startup_name': startup.title,
-            'charity_id': payload.charity_id,
-            'charity_name': payload.charity_name,
+            'charity_id': payload['charity_id'],
+            'charity_name': payload['charity_name'],
             converted: payload.converted,
             points: payload.points
           }

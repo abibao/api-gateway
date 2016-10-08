@@ -44,7 +44,7 @@ internals.initialize = function () {
 }
 
 module.exports.singleton = function () {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     if (internals.bus !== false) { resolve() }
     internals.bus = { }
     internals.initialize()

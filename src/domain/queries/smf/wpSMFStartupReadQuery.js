@@ -17,7 +17,7 @@ module.exports = function (wpid) {
             title: result.title.rendered,
             link: result.link,
             content: result.content.rendered,
-            media: result.featured_media
+            media: result['featured_media']
           }
           return finalResult.media
         })
@@ -25,7 +25,7 @@ module.exports = function (wpid) {
           return wp.media().auth().id(media)
         })
         .then(function (result) {
-          finalResult.media = result.media_details
+          finalResult.media = result['media_details']
           resolve(finalResult)
         })
         .catch(reject)
