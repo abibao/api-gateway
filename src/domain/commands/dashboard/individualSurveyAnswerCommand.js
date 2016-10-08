@@ -21,7 +21,9 @@ module.exports = function (payload) {
           waterfall.survey.answers[payload.label] = survey.formatAnswer(survey.type, payload.answer)
           waterfall.survey.complete = _.keys(waterfall.survey.answers).length === waterfall.items.length
           return self.execute('command', 'surveyUpdateCommand', waterfall.survey).then(function (updated) {
-            // event for analytics
+            // next tick on request
+            resolve({complete: updated.complete})
+            // events on bus
             var regex = /^(urn:abibao:database:)/
             var _answer
             var isURN = false
@@ -63,7 +65,6 @@ module.exports = function (payload) {
                 urnCompany: waterfall.survey.urnCompany
               })
             }
-            resolve({complete: updated.complete})
           })
         })
       })

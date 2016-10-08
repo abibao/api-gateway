@@ -16,6 +16,7 @@ module.exports = function (payload) {
           delete updated.campaign
           delete updated.item
           resolve(updated)
+          global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, updated)
         })
       })
       .catch(function (error) {
