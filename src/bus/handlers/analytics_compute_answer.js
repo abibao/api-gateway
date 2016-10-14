@@ -37,7 +37,7 @@ module.exports = function (message) {
             global.ABIBAO.services.domain.execute('query', 'individualFilterQuery', {email: result.data.email})
             .then(function (individuals) {
               var individual = individuals[0]
-              global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
+              global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
             })
             resolve()
           })

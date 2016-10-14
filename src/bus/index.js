@@ -1,10 +1,5 @@
 'use strict'
 
-/* *****
-send / listen for 1:1
-publish / subscribe for 1:N
-***** */
-
 var Promise = require('bluebird')
 
 var internals = {
@@ -31,20 +26,20 @@ var abibao = {
 
 internals.initialize = function () {
   abibao.debug('start initializing')
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     internals.bus = require('servicebus').bus(internals.options)
     internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
-    internals.bus.listen(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
-    internals.bus.listen(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
-    internals.bus.listen(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
-    internals.bus.listen(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
-    internals.bus.listen(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
+    internals.bus.subscribe(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
+    internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
+    internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
+    internals.bus.subscribe(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
+    internals.bus.subscribe(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
     resolve()
   })
 }
 
 module.exports.singleton = function () {
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     if (internals.bus !== false) { resolve() }
     internals.bus = { }
     internals.initialize()
