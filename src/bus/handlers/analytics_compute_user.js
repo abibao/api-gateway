@@ -5,6 +5,7 @@ var Promise = require('bluebird')
 module.exports = function (individual) {
   return new Promise(function (resolve, reject) {
     global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 1) email=', individual.email)
+    var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
     // construct user to insert
     individual.id = global.ABIBAO.services.domain.getIDfromURN(individual.urn)
     individual.charity = global.ABIBAO.services.domain.getIDfromURN(individual.urnCharity)
@@ -62,11 +63,11 @@ module.exports = function (individual) {
             }
             global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 2) email=', individual.email)
             // insert/update in mysql
-            return global.ABIBAO.services.domain.knex('users')
+            return global.ABIBAO.services.domain.knex(database + 'users')
               .where('email', data.email)
               .delete()
               .then(function () {
-                return global.ABIBAO.services.domain.knex('users').insert(data)
+                return global.ABIBAO.services.domain.knex(database + 'users').insert(data)
               })
               .then(function (inserted) {
                 global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 3) email=', individual.email)

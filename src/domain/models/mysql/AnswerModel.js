@@ -1,7 +1,8 @@
 'use strict'
 
 module.exports = function () {
-  return global.ABIBAO.services.domain.knex.schema.createTableIfNotExists('answers', function (table) {
+  var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
+  return global.ABIBAO.services.domain.knex.schema.withSchema(database).createTableIfNotExists('answers', function (table) {
     table.increments('id')
     table.string('email')
     table.string('campaign_id')

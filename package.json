@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.921",
+  "version": "2.9.922",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
@@ -23,6 +23,7 @@
   },
   "standard": {
     "globals": [
+      "beforeEach",
       "describe",
       "it"
     ],
@@ -82,7 +83,7 @@
     "rabbit.js": "0.4.4",
     "request": "2.75.0",
     "request-promise": "4.1.1",
-    "rethinkdbdash": "^2.3.23",
+    "rethinkdbdash": "2.3.23",
     "sendgrid": "4.7.0",
     "servicebus": "2.0.5",
     "thinky": "2.3.7",
@@ -99,7 +100,7 @@
     "js-object-pretty-print": "0.2.0",
     "mocha": "3.1.2",
     "mocha-lcov-reporter": "1.2.0",
-    "mocha-standard": "^1.0.0",
+    "mocha-standard": "1.0.0",
     "mustache": "2.2.1",
     "request-promise": "4.1.1",
     "rethinkdb": "2.3.3",

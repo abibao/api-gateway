@@ -1,7 +1,8 @@
 'use strict'
 
 module.exports = function () {
-  return global.ABIBAO.services.domain.knex.schema.createTableIfNotExists('users', function (table) {
+  var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
+  return global.ABIBAO.services.domain.knex.schema.withSchema(database).createTableIfNotExists('users', function (table) {
     table.increments('id')
     table.string('email')
     table.string('charity')
@@ -11,6 +12,6 @@ module.exports = function () {
     table.string('department')
     table.string('gender')
     table.timestamp('modifiedAt')
-    table.timestamp('createdAt')
+    table.timestamp('createdAt').defaultTo(global.ABIBAO.services.domain.knex.fn.now())
   })
 }

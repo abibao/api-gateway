@@ -6,6 +6,7 @@ var Joi = require('joi')
 
 module.exports = function (payload) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
+  var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
   return new Promise(function (resolve, reject) {
     // validate payload
     var schema = Joi.object().keys({
@@ -21,11 +22,7 @@ module.exports = function (payload) {
       payload.points = 1
       payload.converted = false
       // the show must go on!
-      self.VoteSMFModel()
-        .then(function () {
-          // checks email exists in abibao?
-          return self.execute('query', 'individualFilterQuery', {email: payload.email})
-        })
+      self.execute('query', 'individualFilterQuery', {email: payload.email})
         .then(function (individuals) {
           if (individuals.length === 1) {
             payload.points = 3
@@ -36,11 +33,11 @@ module.exports = function (payload) {
               .then(function (entity) {
                 payload['charity_name'] = entity.name
                 // checks email exists in smf_votes?
-                return self.knex('smf_votes').where({email: payload.email})
+                return self.knex(database + '.smf_votes').where({email: payload.email})
               })
           } else {
             // checks email exists in smf_votes?
-            return self.knex('smf_votes').where({email: payload.email})
+            return self.knex(database + '.smf_votes').where({email: payload.email})
           }
         })
         .then(function (rows) {
@@ -62,11 +59,11 @@ module.exports = function (payload) {
             converted: payload.converted,
             points: payload.points
           }
-          return self.knex('smf_votes').insert(data)
+          return self.knex(database + '.smf_votes').insert(data)
         })
         .then(function () {
           // return the entry for the specif email in payload
-          return self.knex('smf_votes').where({email: payload.email})
+          return self.knex(database + '.smf_votes').where({email: payload.email})
         })
         .then(function (vote) {
           resolve(vote[0])

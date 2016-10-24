@@ -7,6 +7,7 @@ var Joi = require('joi')
 module.exports = function (payload) {
   return new Promise(function (resolve, reject) {
     var self = Hoek.clone(global.ABIBAO.services.domain)
+    var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
     // validate payload
     var schema = Joi.object().keys({
       email: Joi.string().email().required()
@@ -17,7 +18,7 @@ module.exports = function (payload) {
       if (err) { throw new Error(err) }
       // default
       payload.email = payload.email.toLowerCase()
-      self.knex('smf_votes')
+      self.knex(database + '.smf_votes')
         .where({email: payload.email})
         .then(function (result) {
           if (result.length === 1) {
@@ -26,7 +27,7 @@ module.exports = function (payload) {
           }
         })
         .then(function () {
-          return self.knex('smf_votes').where({email: payload.email}).delete()
+          return self.knex(database + '.smf_votes').where({email: payload.email}).delete()
         })
         .then(function () {
           var message = {

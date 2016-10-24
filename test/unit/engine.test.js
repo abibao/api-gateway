@@ -13,13 +13,10 @@ describe('[unit] start global engine', function () {
       engine()
         .then(function () {
           expect(global.ABIBAO.uuid).to.be.a('string')
+          expect(global.ABIBAO.running).to.be.eq(true)
           done()
         })
         .catch(done)
     }
-  })
-  it('should verify that engine is running', function (done) {
-    expect(global.ABIBAO.running).to.be.eq(true)
-    done()
   })
 })

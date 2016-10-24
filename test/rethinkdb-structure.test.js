@@ -7,16 +7,6 @@ var engine = require('../src/engine')
 var r = require('../src/lib/rethinkdb').r
 
 describe('rethinkdb structure', function () {
-  it('should create database if not exists', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.dbCreate(db)
-      .then(() => {
-        done()
-      })
-      .catch(() => {
-        done()
-      })
-  })
   it('should create table entities', function (done) {
     const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
     r.db('mvp_deve').tableList().contains('entities')

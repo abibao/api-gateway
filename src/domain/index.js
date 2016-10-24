@@ -19,8 +19,7 @@ var internals = {
       host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
       port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
       user: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-      password: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD'),
-      database: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
+      password: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD')
     },
     debug: false
   },
@@ -54,37 +53,26 @@ var abibao = {
 internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
-    try {
-      internals.domain.dictionnary = []
-      internals.domain.knex = require('knex')(internals.optionsMySQL)
-      internals.domain.thinky = require('thinky')(internals.optionsRethink)
-      internals.domain.ThinkyErrors = internals.domain.thinky.Errors
-      internals.domain.Query = internals.domain.thinky.Query
-      internals.domain.r = internals.domain.thinky.r
-      internals.domain.injector = internals.injector
-      internals.domain.execute = internals.execute
-      internals.domain.getIDfromURN = function (urn) {
-        return cryptr.decrypt(_.last(_.split(urn, ':')))
-      }
-      internals.domain.getURNfromID = function (id, model) {
-        return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
-      }
-      internals.domain.injector('commands')
-        .then(function () {
-          return internals.domain.injector('queries')
-        })
-        .then(function () {
-          return internals.domain.injector('models/mysql')
-        })
-        .then(function () {
-          return internals.domain.injector('models/rethinkdb')
-        })
-        .finally(resolve)
-        .catch(reject)
-    } catch (error) {
-      abibao.error(error)
-      reject(error)
+    internals.domain.dictionnary = []
+    internals.domain.knex = require('knex')(internals.optionsMySQL)
+    internals.domain.thinky = require('thinky')(internals.optionsRethink)
+    internals.domain.ThinkyErrors = internals.domain.thinky.Errors
+    internals.domain.Query = internals.domain.thinky.Query
+    internals.domain.r = internals.domain.thinky.r
+    internals.domain.injector = internals.injector
+    internals.domain.execute = internals.execute
+    internals.domain.getIDfromURN = function (urn) {
+      return cryptr.decrypt(_.last(_.split(urn, ':')))
     }
+    internals.domain.getURNfromID = function (id, model) {
+      return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
+    }
+    Promise.all([
+      internals.domain.injector('commands'),
+      internals.domain.injector('queries'),
+      internals.domain.injector('models/mysql'),
+      internals.domain.injector('models/rethinkdb')
+    ]).then(resolve).catch(reject)
   })
 }
 
@@ -97,7 +85,11 @@ module.exports.singleton = function () {
         global.ABIBAO.services.domain = internals.domain
         global.ABIBAO.events.DomainEvent = internals.events
         global.ABIBAO.constants.DomainConstant = internals.constants
-        resolve()
+        Promise.all([
+          global.ABIBAO.services.domain.AnswerModel(),
+          global.ABIBAO.services.domain.UserModel(),
+          global.ABIBAO.services.domain.VoteSMFModel()
+        ]).then(resolve).catch(reject)
       })
       .catch(function (error) {
         internals.domain = false
