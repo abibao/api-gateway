@@ -15,7 +15,7 @@ describe('[ingegration] SMF complete sequence', function () {
       email: individualFake.email,
       node: 28,
       startup: 28
-    }).then(function(result) {
+    }).then(function (result) {
       expect(result).to.be.an('object')
       expect(result).to.have.property('points')
       expect(result).to.have.property('converted')
@@ -41,7 +41,7 @@ describe('[ingegration] SMF complete sequence', function () {
   it('should update smf vote for this email', function (done) {
     global.ABIBAO.services.domain.execute('command', 'wpSMFUpdateTheVoteCommand', {
       email: individualFake.email
-    }).then(function(result) {
+    }).then(function (result) {
       expect(result).to.be.an('object')
       expect(result).to.have.property('points')
       expect(result).to.have.property('converted')

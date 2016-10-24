@@ -1,7 +1,5 @@
 'use strict'
 
-const Promise = require('bluebird')
-
 const rethink = require('rethinkdbdash')
 
 // load environnement configuration
