@@ -38,7 +38,6 @@ var optionsMySQL = {
 var knex = require('knex')(optionsMySQL)
 
 var usersNew = []
-var usersOld = []
 var errorsCSPS = []
 
 var stepUser = function (tUser) {

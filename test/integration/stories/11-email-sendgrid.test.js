@@ -1,4 +1,3 @@
-/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
@@ -6,7 +5,7 @@ var expect = chai.expect
 
 describe('[integration] sendgrid story', function () {
   it('should send a simple email with our api key', function (done) {
-    var sendgrid = require('sendgrid').SendGrid(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
+    var sendgrid = require('sendgrid')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
     var request = sendgrid.emptyRequest()
     request.method = 'POST'
     request.path = '/v3/mail/send'
@@ -27,12 +26,13 @@ describe('[integration] sendgrid story', function () {
         }
       ]
     }
-    sendgrid.API(request, function (response) {
+    sendgrid.API(request, function (error, response) {
+      expect(error).to.be.null
       expect(response.statusCode).to.equal(202)
       done()
     })
   })
-  it('should succes individualSendEmailAbibaoAffectCampaignsAuto', function (done) {
+  it('should success individualSendEmailAbibaoAffectCampaignsAuto', function (done) {
     global.ABIBAO.services.domain.execute('command', 'individualSendEmailAbibaoAffectCampaignsAuto', {
       email: 'gperreymond@gmail.com',
       urnIndividual: 'individual.urn',

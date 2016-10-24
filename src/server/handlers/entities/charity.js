@@ -8,7 +8,7 @@ module.exports = {
     scope: ['individual']
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'charityRandomListQuery', {type: 'charity'})
       .then(function (entities) {
         reply(entities)

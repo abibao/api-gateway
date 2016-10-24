@@ -34,7 +34,7 @@ var isURN = function (value) {
   try {
     fse.accessSync(path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', value + '.json'))
     return true
-  } catch(e) {
+  } catch (e) {
     return false
   }
 }

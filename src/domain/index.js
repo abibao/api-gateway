@@ -8,6 +8,8 @@ var internals = {
     host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
     port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
     db: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+    user: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
+    password: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
     authKey: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
     silent: true
   },

@@ -22,7 +22,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('command', 'campaignItemChoiceCreateWithCampaignAssignCommand', request.payload)
       .then(function (choice) {
         reply(choice)

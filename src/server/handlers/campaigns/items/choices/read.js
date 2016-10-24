@@ -14,7 +14,7 @@ module.exports = {
     }
   },
   jsonp: 'callback',
-  handler(request, reply) {
+  handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'campaignItemChoiceReadQuery', request.params.urn)
       .then(function (choice) {
         reply(choice)

@@ -1,17 +1,17 @@
 'use strict'
 
 // Promise
-var Promise = require('bluebird'),
-  promisifyAll = Promise.promisifyAll
+var Promise = require('bluebird')
+var promisifyAll = Promise.promisifyAll
 
 // declare internal libraries
-var fs = promisifyAll(require('fs')),
-  readFile = fs.readFileAsync,
-  writeFile = fs.writeFileAsync
+var fs = promisifyAll(require('fs'))
+var readFile = fs.readFileAsync
+var writeFile = fs.writeFileAsync
 
 // declare external libraries
-var Mustache = require('mustache'),
-  render = Mustache.render
+var Mustache = require('mustache')
+var render = Mustache.render
 
 // declare project libraries
 var notice = require('./../console').notice

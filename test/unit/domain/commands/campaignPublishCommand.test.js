@@ -1,7 +1,4 @@
-/* global describe:false, it:false */
 'use strict'
-
-var chai = require('chai')
 
 describe('[unit] CQRS campaignPublishCommand', function () {
   it('should mock (resolve)', function (done) {

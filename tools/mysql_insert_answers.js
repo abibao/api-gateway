@@ -30,6 +30,9 @@ var cacheDir = path.resolve(__dirname, '../.cache/mysql/answers')
 var answers = []
 
 recursive(cacheDir, function (err, files) {
+  if (err) {
+    console.log(err)
+  }
   console.log('number of files: %s', files.length)
   async.map(files, function (file) {
     answers.push(fse.readJsonSync(file))

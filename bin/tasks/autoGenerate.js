@@ -82,7 +82,7 @@ module.exports = function () {
       warning('END sequence')
       warning('***********************************************************************')
     })
-  } catch(e) {
+  } catch (e) {
     error(e)
     return process.exit(1)
   }
