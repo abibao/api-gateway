@@ -1,8 +1,8 @@
 'use strict'
 
 var Promise = require('bluebird')
-
 var Hoek = require('hoek')
+
 var nconf = global.ABIBAO.nconf
 
 module.exports = function (payload) {
@@ -34,17 +34,19 @@ module.exports = function (payload) {
       .then(function (payload) {
         return self.execute('command', 'individualCreateCommand', payload)
           .then(function (individual) {
-            // informations posted on slack
-            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
+            // next tick on request
+            resolve(individual)
+            // events on bus
+            // ... post informations on slack
+            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
               'username': 'IndividualRegisterCommand',
               'text': '[' + new Date() + '] - [' + individual.email + '] has just registered into abibao',
               'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
             })
-            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, {
-              'email': individual.email
-            })
-            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
-            resolve(individual)
+            // ... update smf vote
+            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, individual)
+            // ... compute user in mysql
+            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
           })
       })
       .catch(function (error) {

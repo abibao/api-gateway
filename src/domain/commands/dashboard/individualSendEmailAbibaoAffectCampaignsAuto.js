@@ -15,6 +15,7 @@ module.exports = function (message) {
       sealed = Base64.encode(result)
       global.ABIBAO.debuggers.domain('sealed=%s', sealed)
       // send email
+<<<<<<< HEAD
       var sendgrid = require('sendgrid')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
       var request = sendgrid.emptyRequest()
       request.method = 'POST'
@@ -44,13 +45,48 @@ module.exports = function (message) {
         if (error) {
           reject(error)
         } else {
+=======
+      var sg = require('sendgrid')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
+      var request = sg.emptyRequest({
+        method: 'POST',
+        path: '/v3/mail/send',
+        body: {
+          'personalizations': [
+            {
+              'to': [
+                { 'email': message.email }
+              ],
+              'subject': "Regardez comme il est facile d'aider une association.",
+              'substitutions': {
+                '%urn_survey%': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_URI') + '/redirect/campaign/affect/' + sealed
+              }
+            }
+          ],
+          'from': { 'email': 'bonjour@abibao.com', 'name': 'Abibao' },
+          'content': [
+            {
+              'type': 'text/html',
+              'value': ' '
+            }
+          ],
+          'template_id': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_TEMPLATE_ABIBAO_AFFECT_CAMPAIGNS_AUTO')
+        }
+      })
+      sg.API(request)
+        .then(response => {
+>>>>>>> 162b2639c3f2554f3565681b12f873c7e8d7d424
           if (response.statusCode === 202) {
             resolve()
           } else {
             reject(response)
           }
+<<<<<<< HEAD
         }
       })
+=======
+        })
+        .catch(reject)
+>>>>>>> 162b2639c3f2554f3565681b12f873c7e8d7d424
     })
   })
 }

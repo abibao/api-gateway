@@ -34,13 +34,13 @@ module.exports = function (data) {
               // create the new survey
               return self.execute('command', 'surveyCreateCommand', data)
                 .then(function () {
+                  resolve()
                   // informations posted on slack
-                  global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
+                  global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
                     'username': 'IndividualCreateAbibaoSurveyCommand',
                     'text': '[' + new Date() + '] - [' + email + '] can access abibao surveys (' + position + ')',
                     'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
                   })
-                  resolve()
                 })
             })
         })
