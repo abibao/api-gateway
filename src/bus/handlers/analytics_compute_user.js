@@ -54,8 +54,7 @@ module.exports = function (individual) {
               csp: result[2].text || null,
               department: result[3].text || null,
               gender: result[4].text || null,
-              createdAt: individual.createdAt,
-              modifiedAt: result[5]
+              createdAt: new Date(individual.createdAt)
             }
             // consolidate data
             if (data.age !== null) {
@@ -63,11 +62,11 @@ module.exports = function (individual) {
             }
             global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 2) email=', individual.email)
             // insert/update in mysql
-            return global.ABIBAO.services.domain.knex(database + 'users')
+            return global.ABIBAO.services.domain.knex(database + '.users')
               .where('email', data.email)
               .delete()
               .then(function () {
-                return global.ABIBAO.services.domain.knex(database + 'users').insert(data)
+                return global.ABIBAO.services.domain.knex(database + '.users').insert(data)
               })
               .then(function (inserted) {
                 global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_USER 3) email=', individual.email)

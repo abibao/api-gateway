@@ -24,18 +24,28 @@ module.exports = function (payload) {
           if (result.length === 1) {
             vote = result[0]
             return vote
+          } else {
+            return false
           }
         })
-        .then(function () {
-          return self.knex(database + '.smf_votes').where({email: payload.email}).delete()
-        })
-        .then(function () {
-          var message = {
-            email: payload.email,
-            node: vote['startup_id'],
-            startup: vote['startup_id']
+        .then(function (result) {
+          if (result !== false) {
+            return self.knex(database + '.smf_votes').where({email: payload.email}).delete()
+          } else {
+            return false
           }
-          return self.execute('command,', 'wpSMFMakeTheVoteCommand', message)
+        })
+        .then(function (result) {
+          if (result !== false) {
+            var message = {
+              email: payload.email,
+              node: vote['startup_id'],
+              startup: vote['startup_id']
+            }
+            return self.execute('command,', 'wpSMFMakeTheVoteCommand', message)
+          } else {
+            return false
+          }
         })
         .then(resolve)
         .catch(reject)

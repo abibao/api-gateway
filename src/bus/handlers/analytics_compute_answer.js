@@ -24,13 +24,13 @@ module.exports = function (message) {
       })
       .then(function (result) {
         // now insert data in MySQL
-        return global.ABIBAO.services.domain.knex(database + 'answers')
+        return global.ABIBAO.services.domain.knex(database + '.answers')
           .where('email', result.data.email)
           .where('campaign_id', result.data['campaign_id'])
           .where('question', result.data.question)
           .delete()
           .then(function () {
-            return global.ABIBAO.services.domain.knex(database + 'answers').insert(result.data)
+            return global.ABIBAO.services.domain.knex(database + '.answers').insert(result.data)
           })
           .then(function () {
             global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', result.data.email)
