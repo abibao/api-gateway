@@ -3,9 +3,9 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../../src/engine')
+var engine = require('../src/engine')
 
-describe('[unit] start global engine', function () {
+describe('engine structure', function () {
   it('should initialize global.ABIBAO', function (done) {
     if (global.ABIBAO.running === true) {
       done()
@@ -18,5 +18,12 @@ describe('[unit] start global engine', function () {
         })
         .catch(done)
     }
+  })
+  it('should test the creation of an urn and the reversing', function (done) {
+    var urn = global.ABIBAO.services.domain.getURNfromID('1234567890', 'npmtest')
+    expect(urn).to.be.a('string')
+    var id = global.ABIBAO.services.domain.getIDfromURN(urn)
+    expect(id).to.be.a('string').to.be.eq('1234567890')
+    done()
   })
 })

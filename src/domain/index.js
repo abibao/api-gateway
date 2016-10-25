@@ -71,7 +71,10 @@ internals.initialize = function () {
       internals.domain.injector('commands'),
       internals.domain.injector('queries'),
       internals.domain.injector('models/mysql'),
-      internals.domain.injector('models/rethinkdb')
+      internals.domain.injector('models/rethinkdb'),
+      internals.domain.AnswerModel(internals.domain.knex, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')),
+      internals.domain.UserModel(internals.domain.knex, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')),
+      internals.domain.VoteSMFModel(internals.domain.knex, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE'))
     ]).then(resolve).catch(reject)
   })
 }
@@ -85,11 +88,7 @@ module.exports.singleton = function () {
         global.ABIBAO.services.domain = internals.domain
         global.ABIBAO.events.DomainEvent = internals.events
         global.ABIBAO.constants.DomainConstant = internals.constants
-        Promise.all([
-          global.ABIBAO.services.domain.AnswerModel(),
-          global.ABIBAO.services.domain.UserModel(),
-          global.ABIBAO.services.domain.VoteSMFModel()
-        ]).then(resolve).catch(reject)
+        resolve()
       })
       .catch(function (error) {
         internals.domain = false

@@ -1,23 +1,38 @@
 'use strict'
 
-var chai = require('chai')
-var expect = chai.expect
+// load environnement configuration
+var config = require('nconf')
+config.argv().env().file({ file: 'nconf-deve.json' })
 
-var engine = require('../src/engine')
 var r = require('../src/lib/rethinkdb').r
+var database = config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
 
 describe('rethinkdb structure', function () {
-  it('should create table entities', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db('mvp_deve').tableList().contains('entities')
+  it('should create database', function (done) {
+    r.dbList().contains(database)
       .then((exists) => {
         if (exists === true) {
-          r.db(db).table('entities').delete()
+          done()
+        } else {
+          r.dbCreate(database)
+            .then(() => {
+              done()
+            })
+            .catch(done)
+        }
+      })
+      .catch(done)
+  })
+  it('should create table entities', function (done) {
+    r.db(database).tableList().contains('entities')
+      .then((exists) => {
+        if (exists === true) {
+          r.db(database).table('entities').delete()
             .then(() => {
               done()
             }).catch(done)
         } else {
-          r.db(db).tableCreate('entities')
+          r.db(database).tableCreate('entities')
             .then(() => {
               done()
             }).catch(done)
@@ -26,16 +41,15 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create table campaigns', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db('mvp_deve').tableList().contains('campaigns')
+    r.db(database).tableList().contains('campaigns')
       .then((exists) => {
         if (exists === true) {
-          r.db(db).table('campaigns').delete()
+          r.db(database).table('campaigns').delete()
             .then(() => {
               done()
             }).catch(done)
         } else {
-          r.db(db).tableCreate('campaigns')
+          r.db(database).tableCreate('campaigns')
             .then(() => {
               done()
             }).catch(done)
@@ -44,16 +58,15 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create table campaigns_items', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db('mvp_deve').tableList().contains('campaigns_items')
+    r.db(database).tableList().contains('campaigns_items')
       .then((exists) => {
         if (exists === true) {
-          r.db(db).table('campaigns_items').delete()
+          r.db(database).table('campaigns_items').delete()
             .then(() => {
               done()
             }).catch(done)
         } else {
-          r.db(db).tableCreate('campaigns_items')
+          r.db(database).tableCreate('campaigns_items')
             .then(() => {
               done()
             }).catch(done)
@@ -62,16 +75,15 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create table campaigns_items_choices', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db('mvp_deve').tableList().contains('campaigns_items_choices')
+    r.db(database).tableList().contains('campaigns_items_choices')
       .then((exists) => {
         if (exists === true) {
-          r.db(db).table('campaigns_items_choices').delete()
+          r.db(database).table('campaigns_items_choices').delete()
             .then(() => {
               done()
             }).catch(done)
         } else {
-          r.db(db).tableCreate('campaigns_items_choices')
+          r.db(database).tableCreate('campaigns_items_choices')
             .then(() => {
               done()
             }).catch(done)
@@ -81,8 +93,7 @@ describe('rethinkdb structure', function () {
   })
 
   it('should create entity none', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db(db).table('entities')
+    r.db(database).table('entities')
       .insert({
         'avatar': 'images/avatars/default.png',
         'contact': 'none@abibao.com',
@@ -105,8 +116,7 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create abibao entity', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db(db).table('entities')
+    r.db(database).table('entities')
       .insert({
         'avatar': 'images/avatars/default.png',
         'contact': 'team@abibao.com',
@@ -180,8 +190,7 @@ describe('rethinkdb structure', function () {
       'screenThankYouContent': '',
       'screenWelcomeContent': ''
     }]
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db(db).table('campaigns')
+    r.db(database).table('campaigns')
       .insert(campaignsList)
       .then(() => {
         done()
@@ -189,8 +198,7 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create one campaign_item', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db(db).table('campaigns_items')
+    r.db(database).table('campaigns_items')
       .insert({
         'addCustomOption': true,
         'alignment': 'horizontal',
@@ -215,8 +223,7 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create one campaign_item_choice', function (done) {
-    const db = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-    r.db(db).table('campaigns_items_choices')
+    r.db(database).table('campaigns_items_choices')
       .insert({
         'campaign': '56eb2501e9b0fbf30250f8c8',
         'createdAt': r.now(),
@@ -232,21 +239,5 @@ describe('rethinkdb structure', function () {
         done()
       })
       .catch(done)
-  })
-  it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO.running === true) {
-      done()
-    } else {
-      engine()
-        .then(function () {
-          expect(global.ABIBAO.uuid).to.be.a('string')
-          done()
-        })
-        .catch(done)
-    }
-  })
-  it('should verify that engine is running', function (done) {
-    expect(global.ABIBAO.running).to.be.eq(true)
-    done()
   })
 })
