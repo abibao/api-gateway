@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -a
+set -e
 clear
 
 bin/abibao generate

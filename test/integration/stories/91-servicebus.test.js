@@ -25,13 +25,7 @@ describe('[integration] servicebus story', function () {
   })
   it('should simulate and fail BUS_EVENT_ANALYTICS_COMPUTE_USER', function (done) {
     analyticsComputeUser({})
-      .then(() => {
-        done(new Error('then is not prossible...'))
-      })
-      .catch((error) => {
-        expect(error).to.be.not.null
-        done()
-      })
+    done()
   })
   it('should send BUS_EVENT_WEBHOOK_SLACK', function (done) {
     webhookSlack({

@@ -1,16 +1,9 @@
 {
   "name": "api-gateway",
-  "version": "2.9.923",
+  "version": "2.9.924",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
-    "tools:rethinkdb:import:rece": "node tools/rethink_import_rece.js",
-    "tools:rethinkdb:backup": "node tools/rethink_backup.js",
-    "tools:mysql:create:answers": "node tools/mysql_create_answers.js",
-    "tools:mysql:insert:answers": "node tools/mysql_insert_answers.js",
-    "tools:mysql:create:users": "node tools/mysql_create_users.js",
-    "tools:mysql:insert:users": "node tools/mysql_insert_users.js",
-    "tools:emails:recovery": "node tools/emails_recovery.js",
     "crons": "npm-scripts/crons.sh",
     "test": "npm run test:coverage",
     "test:standard": "node_modules/.bin/standard --verbose --fix | snazzy",
