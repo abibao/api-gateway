@@ -4,8 +4,6 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-prod.json' })
 
-var databaseRethink = nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
@@ -19,11 +17,10 @@ var optionsRethink = {
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
   silent: true
 }
-
-var thinky = require('thinky')(optionsRethink)
+var r = require('thinky')(optionsRethink).r
 
 var execReQL = function (table, skip, limit, callback) {
-  thinky.r.db(databaseRethink).table(table).skip(skip).limit(limit)
+  r.table(table).skip(skip).limit(limit)
     .then(function (result) {
       var items = result
       console.log('table: %s skip=%s limit=%s (%s)', table, skip, limit, items.length)
@@ -36,7 +33,7 @@ var execReQL = function (table, skip, limit, callback) {
         next()
       }, function (err) {
         if (err) { return callback() }
-        thinky.r.db(databaseRethink).table(table).count().then(function (count) {
+        r.table(table).count().then(function (count) {
           if (skip + limit < count) {
             execReQL(table, skip + limit, limit, callback)
           } else {

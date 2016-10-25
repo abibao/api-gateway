@@ -4,8 +4,6 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-var databaseRethink = nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
@@ -19,13 +17,12 @@ var optionsRethink = {
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
   silent: true
 }
-
-var thinky = require('thinky')(optionsRethink)
+var r = require('thinky')(optionsRethink).r
 
 var execBatch = function (table) {
   return new Promise(function (resolve, reject) {
     console.log('delete %s', table)
-    thinky.r.db(databaseRethink).table(table).delete()
+    r.table(table).delete()
       .then(function () {
         // insert
         var dir = path.resolve(__dirname, '../.cache/rethinkdb', table)
@@ -34,7 +31,7 @@ var execBatch = function (table) {
           var filepath = path.resolve(dir, file)
           var json = fse.readJsonSync(filepath)
           console.log('...... %s', json.id)
-          thinky.r.db(databaseRethink).table(table).insert(json)
+          r.table(table).insert(json)
             .then(function () {
               done()
             })

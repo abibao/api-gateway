@@ -51,9 +51,6 @@ global.ABIBAO = {
   })
 }
 
-// use new relic agent
-require('newrelic')
-
 // use debuggers reference
 var abibao = {
   debug: global.ABIBAO.debuggers.application,

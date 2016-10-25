@@ -4,8 +4,6 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-var databaseRethink = 'prodmvp'
-
 var _ = require('lodash')
 var async = require('async')
 var path = require('path')
@@ -14,11 +12,13 @@ var fse = require('fs-extra')
 var optionsRethink = {
   host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
   port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
-  db: databaseRethink,
+  db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+  user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
+  password: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
   silent: true
 }
-var thinky = require('thinky')(optionsRethink)
+var r = require('thinky')(optionsRethink).r
 
 console.log('===== PREPARE ===============')
 var cacheDir = path.resolve(__dirname, '../.cache/mysql/answers')
@@ -42,19 +42,19 @@ var isURN = function (value) {
 var busSend = function (dirpath, message, callback) {
   console.log('..... rethink')
   var filepath = path.resolve(dirpath, message.label + '__' + message.answer + '.json')
-  thinky.r.db(databaseRethink).table('surveys')
+  r.table('surveys')
     .get(message.survey)
     .merge(function (item) {
       return {
         data: {
-          email: thinky.r.db(databaseRethink).table('individuals').get(item('individual'))('email'),
+          email: r.table('individuals').get(item('individual'))('email'),
           'charity_id': item('charity'),
-          'charity_name': thinky.r.db(databaseRethink).table('entities').get(item('charity'))('name'),
+          'charity_name': r.table('entities').get(item('charity'))('name'),
           'campaign_id': item('campaign'),
-          'campaign_name': thinky.r.db(databaseRethink).table('campaigns').get(item('campaign'))('name'),
+          'campaign_name': r.table('campaigns').get(item('campaign'))('name'),
           question: message.label,
           answer: message.answer,
-          'answer_text': (message.isURN === true) ? thinky.r.db(databaseRethink).table('campaigns_items_choices').get(message.answer)('text') : message.answer,
+          'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
           createdAt: item('createdAt')
         }
       }
