@@ -1,14 +1,10 @@
 'use strict'
 
-/*
-{ method: 'POST', path: '/v1/administrators/login', config: require('./handlers/backoffice/administrators/login') }
-{ method: 'POST', path: '/v1/administrators/register', config: require('./handlers/backoffice/administrators/register') }
-*/
-
 var Promise = require('bluebird')
 
 var chai = require('chai')
 var expect = chai.expect
+var stub = require('sinon').stub
 
 function inject (options) {
   return new Promise(function (resolve, reject) {
@@ -16,7 +12,16 @@ function inject (options) {
   })
 }
 
-describe('[unit] backoffice/administrators routes', function () {
+before(function (done) {
+  Promise.all([
+    require('../../../../../mock-abibao').server(),
+    require('../../../../../mock-abibao').domain()
+  ]).then(() => {
+    done()
+  })
+})
+
+describe.only('[unit] server administrators login', function () {
   it('should not register (error 401)', function (done) {
     inject({
       headers: {
@@ -33,7 +38,10 @@ describe('[unit] backoffice/administrators routes', function () {
       })
       .catch(done)
   })
-  it('should not login (error 400)', function (done) {
+  it('should not login because no credentials', function (done) {
+    var handler = stub(global.ABIBAO.services.domain, 'administratorLoginWithCredentialsCommand')
+    handler.returns(1)
+    console.log(global.ABIBAO.services.domain.execute)
     inject({
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -49,7 +57,7 @@ describe('[unit] backoffice/administrators routes', function () {
       })
       .catch(done)
   })
-  it('should not login (error 400)', function (done) {
+  it('should not login because false credentials', function (done) {
     inject({
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

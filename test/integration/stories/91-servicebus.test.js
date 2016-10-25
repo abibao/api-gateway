@@ -25,13 +25,18 @@ describe('[integration] servicebus story', function () {
   })
   it('should simulate and fail BUS_EVENT_ANALYTICS_COMPUTE_USER', function (done) {
     analyticsComputeUser({})
-    done()
+    .catch((error) => {
+      expect(error).to.be.not.null
+      done()
+    })
   })
   it('should send BUS_EVENT_WEBHOOK_SLACK', function (done) {
     webhookSlack({
       text: '[' + new Date() + '] - mocha has just send message to slack',
       webhook: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
     })
-    done()
+    .then(() => {
+      done()
+    })
   })
 })

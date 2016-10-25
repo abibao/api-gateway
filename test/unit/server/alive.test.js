@@ -1,9 +1,5 @@
 'use strict'
 
-/*
-{ method: 'GET', path: '/v1/alive', config: require('./handlers/alive') }
-*/
-
 var Promise = require('bluebird')
 
 var chai = require('chai')
@@ -14,6 +10,15 @@ function inject (options) {
     global.ABIBAO.services.server.inject(options, resolve)
   })
 }
+
+before(function (done) {
+  Promise.all([
+    require('../../mock-abibao').server(),
+    require('../../mock-abibao').domain()
+  ]).then(() => {
+    done()
+  })
+})
 
 describe('[unit] alive route', function () {
   it('should be alive', function (done) {

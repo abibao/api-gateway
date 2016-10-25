@@ -6,8 +6,18 @@ var _ = require('lodash')
 var knex = require('./../../../connections/knex-analytics')
 var r = require('./../../../connections/rethink-mvp')
 
+var validate = function (individual) {
+  return new Promise(function (resolve, reject) {
+    if (!individual.email) { reject(new Error('email is mandatory')) }
+    if (!individual.urn) { reject(new Error('urn is mandatory')) }
+    if (!individual.urnCharity) { reject(new Error('urnCharity is mandatory')) }
+    resolve()
+  })
+}
+
 module.exports = function (individual) {
   return new Promise(function (resolve, reject) {
+    validate(individual).catch(reject)
     global.ABIBAO.debuggers.domain('[%s] step 1: check surveys base answers', individual.email)
     individual.id = global.ABIBAO.services.domain.getIDfromURN(individual.urn)
     individual.charity = global.ABIBAO.services.domain.getIDfromURN(individual.urnCharity)

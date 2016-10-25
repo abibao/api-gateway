@@ -15,6 +15,10 @@ function inject (options) {
   })
 }
 
+before(function (done) {
+  require('../../mock-abibao').server().then(done)
+})
+
 describe('[unit] dashboard/auth routes', function () {
   it('should not login (error 400)', function (done) {
     inject({
