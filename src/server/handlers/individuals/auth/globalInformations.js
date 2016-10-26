@@ -7,7 +7,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', '1.2) individual'],
   jsonp: 'callback',
   handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'authentificationGlobalInformationsQuery', request.auth.credentials)

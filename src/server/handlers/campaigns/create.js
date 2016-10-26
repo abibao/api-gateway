@@ -8,9 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Ajoute une campagne, affectée à une compagnie donnée',
-  notes: 'Ajoute une campagne, affectée à une compagnie donnée',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },

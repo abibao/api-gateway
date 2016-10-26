@@ -1,26 +1,12 @@
+/* global describe:false, it:false */
 'use strict'
 
 var chai = require('chai')
 var expect = chai.expect
 
-var engine = require('../src/engine')
 var data = null
 
 describe('{{JS_DESCRIBE_NAME}}', function () {
-  it('should initialize global.ABIBAO', function (done) {
-    if (global.ABIBAO.uuid) {
-      done()
-    } else {
-      engine()
-        .then(function () {
-          expect(global.ABIBAO.uuid).to.be.a('string')
-          done()
-        })
-        .catch(function (error) {
-          done(error)
-        })
-    }
-  })
   it('should initialize fake data', function (done) {
     expect(global.ABIBAO.uuid).to.be.a('string')
     expect(global.ABIBAO.services.domain.{{JS_MODEL_NAME}}).to.be.not.undefined

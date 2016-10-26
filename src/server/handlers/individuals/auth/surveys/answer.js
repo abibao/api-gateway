@@ -8,9 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', '1.2) individual'],
-  description: 'Répond à une question d"un sondage donné',
-  notes: 'Répond à une question d"un sondage donné',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },

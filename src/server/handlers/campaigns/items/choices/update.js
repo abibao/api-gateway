@@ -8,9 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Modifie un choix donné',
-  notes: 'Modifie un choix donné',
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },

@@ -8,9 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
-  description: 'Retourne une entité donnée',
-  notes: 'Retourne une entité donnée',
   validate: {
     params: {
       urn: Joi.string().required()

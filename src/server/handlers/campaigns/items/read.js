@@ -8,7 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
   validate: {
     params: {
       urn: Joi.string().required()

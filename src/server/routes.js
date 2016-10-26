@@ -5,7 +5,7 @@ var normalize = require('path').normalize
 
 exports.endpoints = [
 
-  // get CSRF cookie
+  // server is alive
   { method: 'GET', path: '/v1/alive', config: require('./handlers/alive') },
 
   // stats
@@ -31,7 +31,7 @@ exports.endpoints = [
 
   // wordpress > smf
   { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}', config: require('./handlers/smf/startups/read') },
-  { method: 'POST', path: '/v1/wp_json/smf/startups/vote', config: require('./handlers/smf/startups/vote') },
+  { method: 'POST', path: '/v1/wp_json/smf/startups/{wpid}/vote', config: require('./handlers/smf/startups/vote') },
 
   // administrators
   { method: 'POST', path: '/v1/administrators/login', config: require('./handlers/backoffice/administrators/login') },

@@ -11,11 +11,13 @@ var fse = require('fs-extra')
 var optionsRethink = {
   host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
   port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
-  db: 'prodmvp', // nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+  db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+  user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
+  password: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
   silent: true
 }
-var thinky = require('thinky')(optionsRethink)
+var r = require('thinky')(optionsRethink).r
 
 console.log('===== PREPARE ===============')
 var cacheDir = path.resolve(__dirname, '../.cache/mysql/users')
@@ -29,7 +31,7 @@ var files = fse.readdirSync(dir)
 
 var busSend = function (individual, callback) {
   console.log('..... rethink')
-  thinky.r.db('prodmvp').table('surveys')
+  r.table('surveys')
     .filter({individual: individual.id})
     .map(function (item) {
       return item('answers')

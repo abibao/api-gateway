@@ -4,9 +4,9 @@
 var path = require('path')
 
 // declare external libraries
-var _ = require('lodash'),
-  normalize = path.normalize,
-  resolve = path.resolve
+var _ = require('lodash')
+var normalize = path.normalize
+var resolve = path.resolve
 
 // declare project libraries
 var mustachePromise = require('./mustache')

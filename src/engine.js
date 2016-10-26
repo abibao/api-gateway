@@ -21,6 +21,7 @@ nconf.argv().env().file({ file: 'nconf-deve.json' })
 global.ABIBAO = {
   starttime: new Date(),
   environnement: nconf.get('ABIBAO_API_GATEWAY_ENV'),
+  running: false,
   name: 'API GATEWAY',
   nconf,
   services: { },
@@ -50,9 +51,6 @@ global.ABIBAO = {
   })
 }
 
-// use new relic agent
-require('newrelic')
-
 // use debuggers reference
 var abibao = {
   debug: global.ABIBAO.debuggers.application,
@@ -64,6 +62,7 @@ abibao.debug('start processing')
 var engine = function () {
   return new Promise(function (resolve, reject) {
     // start all services
+    global.ABIBAO.running = false
     var services = require('./services')
     services.bus()
       .then(function () {
@@ -86,10 +85,12 @@ var engine = function () {
             uuid: global.ABIBAO.uuid,
             message: 'has just connected into the bus'
           })
+          global.ABIBAO.running = true
           resolve()
         })
       })
       .catch(function (error) {
+        global.ABIBAO.running = false
         reject(error)
       })
   })

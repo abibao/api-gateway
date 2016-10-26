@@ -8,7 +8,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['individual']
   },
-  tags: ['api', '1.2) individual'],
   payload: {
     allow: 'application/x-www-form-urlencoded'
   },

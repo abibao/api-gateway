@@ -1,0 +1,31 @@
+machine:
+
+  timezone:
+    Europe/Paris
+
+  node:
+    version: 6.7.0
+
+  services:
+    - docker
+
+dependencies:
+
+  pre:
+    - sudo service mysql stop
+    - sudo service postgresql stop
+
+  cache_directories:
+    - node_modules
+
+  override:
+    - sh ./docker-scripts/ci-bootstrap-container.sh "mysql" "test_mysql" "-p 3306:3306 -e MYSQL_ROOT_PASSWORD=none" "library/mysql:5"
+    - sh ./docker-scripts/ci-bootstrap-container.sh "rabbitmq" "test_rabbitmq" "-p 5672:5672 -p 15672:15672" "library/rabbitmq:management"
+    - sh ./docker-scripts/ci-bootstrap-container.sh "rethinkdb" "test_rethinkdb" "-p 29015:29015 -p 28015:28015 -p 8080:8080" "library/rethinkdb"
+
+test:
+
+  override:
+    - npm install
+    - npm prune
+    - npm test

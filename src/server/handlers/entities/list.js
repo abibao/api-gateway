@@ -7,7 +7,6 @@ module.exports = {
     strategy: 'jwt',
     scope: ['administrator']
   },
-  tags: ['api', '1.3) administrator'],
   jsonp: 'callback',
   handler (request, reply) {
     global.ABIBAO.services.domain.execute('query', 'entityFilterQuery', {})

@@ -8,13 +8,9 @@ var AuthProvision = function (server, callback) {
     {register: Basic},
     {register: AuthJWT}
   ],
-    function (err) {
-      if (err) { return callback(err) }
-      server.auth.strategy('basic', 'basic', {
-        validateFunc: require('./libs/auth_basic_validate.js')
-      })
+    function () {
       server.auth.strategy('jwt', 'jwt', {
-        key: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY') || 'JWT_KEY',
+        key: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'),
         validateFunc: require('./libs/auth_jwt_validate.js'),
         verifyOptions: { algorithms: ['HS256'] }
       })

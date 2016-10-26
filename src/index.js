@@ -1,5 +1,8 @@
 'use strict'
 
+// use new relic agent
+require('newrelic')
+
 var engine = require('./engine')
 
 engine()
