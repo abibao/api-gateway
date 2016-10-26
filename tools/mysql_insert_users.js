@@ -2,7 +2,7 @@
 
 // load environnement configuration
 var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+nconf.argv().env().file({ file: 'nconf-prod.json' })
 
 var async = require('async')
 var path = require('path')
@@ -12,6 +12,9 @@ var mapLimit = require('promise-maplimit')
 
 var optionsMySQL = {
   client: 'mysql',
+  pool: {
+    max: 10000
+  },
   connection: {
     host: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
     port: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
