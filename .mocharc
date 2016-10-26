@@ -3,7 +3,5 @@
 --recursive test/standard.test.js
 --recursive test/rethinkdb-structure.test
 --recursive test/mysql-structure.test
---recursive test/engine-initialize.test
 --recursive test/unit
---recursive test/integration
 --recursive test/coverage-max.test.js

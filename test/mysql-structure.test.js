@@ -23,8 +23,7 @@ var VoteSMFModel = require('../src/domain/models/mysql/VoteSMFModel')
 
 describe('mysql structure', function () {
   it('should create schema if not exists', function (done) {
-    var SCHEMA = config.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
-    knex.raw('CREATE SCHEMA IF NOT EXISTS `' + SCHEMA + '` DEFAULT CHARACTER SET utf8;')
+    knex.raw('CREATE SCHEMA IF NOT EXISTS `' + database + '` DEFAULT CHARACTER SET utf8;')
       .then(() => {
         done()
       }).catch(done)
