@@ -29,22 +29,26 @@ var abibao = {
 
 internals.initialize = function () {
   abibao.debug('start initializing')
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     var url = 'amqp://'
     if (internals.options.user && internals.options.pass) {
       url = url + internals.options.user + ':' + internals.options.pass + '@'
     }
-    url = url + internals.options.host + ':' + internals.options.port
+    url = url + internals.options.host + ':' + internals.options.port + '/ffff'
     abibao.debug('rabbitmq url=%s', url)
-    console.log(url)
     internals.bus = require('servicebus').bus({url})
-    internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
-    resolve()
+    internals.bus.on('error', (error) => {
+      reject(error)
+    })
+    internals.bus.on('ready', (error) => {
+      internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
+      resolve()
+    })
   })
 }
 

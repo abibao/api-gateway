@@ -64,17 +64,17 @@ var engine = function () {
     // start all services
     global.ABIBAO.running = false
     var services = require('./services')
-    services.bus()
-      .then(function () {
-        abibao.debug('bus initialized')
-        return services.domain()
-      })
+    services.domain()
       .then(function () {
         abibao.debug('domain initialized')
         return services.server()
       })
       .then(function () {
         abibao.debug('server initialized')
+        return services.bus()
+      })
+      .then(function () {
+        abibao.debug('bus initialized')
         abibao.debug('end processing')
         global.ABIBAO.uuid = require('node-uuid').v4()
         global.ABIBAO.services.server.start(function (error) {
