@@ -2,12 +2,13 @@
 
 // load environnement configuration
 var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+nconf.argv().env().file({ file: 'nconf-prod.json' })
 
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
 var glob = require('glob')
+var mapLimit = require('promise-maplimit')
 
 var optionsMySQL = {
   client: 'mysql',
@@ -39,14 +40,16 @@ console.log('number of files: %s', files.length)
 async.map(files, function (file) {
   var data = fse.readJsonSync(file)
   data.createdAt = new Date(data.createdAt)
-  answers.push(data)
+  answers.push(knex('answers').insert(data))
 })
 console.log('number of answers: %s', answers.length)
 
 knex('answers')
   .delete()
   .then(() => {
-    return knex('answers').insert(answers)
+    return mapLimit(answers, 100, function (item, index, array) {
+      console.log('... ', files[index])
+    })
   })
   .then(() => {
     console.log('===== END ===============')

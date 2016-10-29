@@ -35,6 +35,57 @@ describe('rethinkdb structure', function () {
       })
       .catch(done)
   })
+  it('should create table surveys', function (done) {
+    r.db(database).tableList().contains('surveys')
+      .then((exists) => {
+        if (exists === true) {
+          r.db(database).table('surveys').delete()
+            .then(() => {
+              done()
+            }).catch(done)
+        } else {
+          r.db(database).tableCreate('surveys')
+            .then(() => {
+              done()
+            }).catch(done)
+        }
+      })
+      .catch(done)
+  })
+  it('should create table administrators', function (done) {
+    r.db(database).tableList().contains('administrators')
+      .then((exists) => {
+        if (exists === true) {
+          r.db(database).table('administrators').delete()
+            .then(() => {
+              done()
+            }).catch(done)
+        } else {
+          r.db(database).tableCreate('administrators')
+            .then(() => {
+              done()
+            }).catch(done)
+        }
+      })
+      .catch(done)
+  })
+  it('should create table individuals', function (done) {
+    r.db(database).tableList().contains('individuals')
+      .then((exists) => {
+        if (exists === true) {
+          r.db(database).table('individuals').delete()
+            .then(() => {
+              done()
+            }).catch(done)
+        } else {
+          r.db(database).tableCreate('individuals')
+            .then(() => {
+              done()
+            }).catch(done)
+        }
+      })
+      .catch(done)
+  })
   it('should create table entities', function (done) {
     r.db(database).tableList().contains('entities')
       .then((exists) => {

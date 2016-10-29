@@ -1,16 +1,12 @@
 'use strict'
 
 var Promise = require('bluebird')
+var Querystring = require('querystring')
+var Boom = require('boom')
 
+var sinon = require('sinon')
 var chai = require('chai')
 var expect = chai.expect
-var stub = require('sinon').stub
-
-function inject (options) {
-  return new Promise(function (resolve, reject) {
-    global.ABIBAO.services.server.inject(options, resolve)
-  })
-}
 
 before(function (done) {
   Promise.all([
@@ -21,59 +17,115 @@ before(function (done) {
   })
 })
 
-describe('[unit] server administrators login', function () {
-  it('should not register (error 401)', function (done) {
-    inject({
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      method: 'POST',
-      url: '/v1/administrators/register'
-    })
-      .then(function (response) {
-        expect(response).to.be.an('object')
-        expect(response.statusCode).to.be.a('number')
-        expect(response.statusCode).to.equal(401)
-        done()
-      })
-      .catch(done)
-  })
-  it('should not login because no credentials', function (done) {
-    var handler = stub(global.ABIBAO.services.domain, 'administratorLoginWithCredentialsCommand')
-    handler.returns(1)
-    inject({
+var stub
+
+describe('[unit] server /v1/administrators/login', function () {
+  it('should not login because email is mandatory', function (done) {
+    var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
       url: '/v1/administrators/login'
+    }
+    global.ABIBAO.services.server.inject(req, res => {
+      expect(res).to.be.an('object')
+      expect(res.result).to.be.an('object')
+      expect(res.result.statusCode).to.be.a('number').to.equal(400)
+      expect(res.result.message).to.be.a('string').to.equal('child "email" fails because ["email" is required]')
+      done()
     })
-      .then(function (response) {
-        expect(response).to.be.an('object')
-        expect(response.statusCode).to.be.a('number')
-        expect(response.statusCode).to.equal(400)
-        done()
-      })
-      .catch(done)
   })
-  it('should not login because false credentials', function (done) {
-    inject({
+  it('should not login because email has not a valid format', function (done) {
+    var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
       url: '/v1/administrators/login',
-      payload: JSON.stringify({
-        email: 'nobody@abibao.com',
-        password: 'nobody'
+      payload: Querystring.stringify({
+        email: 'nobody'
+      })
+    }
+    global.ABIBAO.services.server.inject(req, res => {
+      expect(res).to.be.an('object')
+      expect(res.result).to.be.an('object')
+      expect(res.result.statusCode).to.be.a('number').to.equal(400)
+      expect(res.result.message).to.be.a('string').to.equal('child "email" fails because ["email" must be a valid email]')
+      done()
+    })
+  })
+  it('should not login because password is mandatory', function (done) {
+    var req = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      method: 'POST',
+      url: '/v1/administrators/login',
+      payload: Querystring.stringify({
+        email: 'nobody@abibao.com'
+      })
+    }
+    global.ABIBAO.services.server.inject(req, res => {
+      expect(res).to.be.an('object')
+      expect(res.result).to.be.an('object')
+      expect(res.result.statusCode).to.be.a('number').to.equal(400)
+      expect(res.result.message).to.be.a('string').to.equal('child "password" fails because ["password" is required]')
+      done()
+    })
+  })
+  it('should not login and return a boom error', function (done) {
+    stub = sinon.stub(global.ABIBAO.services.domain, 'execute', function (type, promise, params) {
+      return new Promise(function (resolve, reject) {
+        reject(Boom.badRequest())
       })
     })
-      .then(function (response) {
-        expect(response).to.be.an('object')
-        expect(response.statusCode).to.be.a('number')
-        expect(response.statusCode).to.equal(400)
-        done()
+    var req = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      method: 'POST',
+      url: '/v1/administrators/login',
+      payload: Querystring.stringify({
+        email: 'nobody@abibao.com',
+        password: 'pass4nobody'
       })
-      .catch(done)
+    }
+    global.ABIBAO.services.server.inject(req, res => {
+      expect(res).to.be.an('object')
+      expect(res.result).to.be.an('object')
+      expect(res.result.statusCode).to.be.a('number').to.equal(400)
+      expect(res.result.message).to.be.a('string').to.equal('Error: Bad Request')
+      stub.restore()
+      done()
+    })
+  })
+  it('should login', function (done) {
+    var stub = sinon.stub(global.ABIBAO.services.domain, 'execute', function (type, promise, params) {
+      return new Promise(function (resolve, reject) {
+        resolve({
+          email: params.email
+        })
+      })
+    })
+    var req = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      method: 'POST',
+      url: '/v1/administrators/login',
+      payload: Querystring.stringify({
+        email: 'nobody@abibao.com',
+        password: 'pass4nobody'
+      })
+    }
+    global.ABIBAO.services.server.inject(req, res => {
+      expect(res).to.be.an('object')
+      expect(res.result).to.be.an('object')
+      expect(res.statusCode).to.be.a('number').to.equal(200)
+      expect(res.result.email).to.be.a('string').to.equal('nobody@abibao.com')
+      stub.restore()
+      done()
+    })
   })
 })

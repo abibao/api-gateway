@@ -19,11 +19,14 @@ module.exports.domain = function () {
   return new Promise(function (resolve) {
     global.ABIBAO.services.domain = {
       execute: function (type, promise, params) {
-        return new Promise(function (resolve, reject) {
-          global.ABIBAO.services.domain[promise](params).then(resolve).catch(reject)
+        return new Promise(function (resolve) {
+          resolve({
+            type,
+            promise,
+            params
+          })
         })
-      },
-      administratorLoginWithCredentialsCommand: require('../src/domain/commands/administrator/administratorLoginWithCredentialsCommand')
+      }
     }
     resolve()
   })

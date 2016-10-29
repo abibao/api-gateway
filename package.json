@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.926",
+  "version": "2.9.929",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
@@ -17,6 +17,7 @@
     "globals": [
       "beforeEach",
       "before",
+      "after",
       "describe",
       "it"
     ],
@@ -48,7 +49,7 @@
     "bluebird": "3.4.6",
     "boom": "4.2.0",
     "bson": "0.5.6",
-    "bunyan": "1.8.3",
+    "bunyan": "1.8.4",
     "bunyan-logstash-tcp": "0.3.4",
     "crumb": "6.0.3",
     "cryptr": "2.0.0",
@@ -73,11 +74,12 @@
     "nconf": "0.8.4",
     "newrelic": "1.32.0",
     "node-uuid": "1.4.7",
+    "promise-maplimit": "1.0.1",
     "rabbit.js": "0.4.4",
     "request": "2.76.0",
     "request-promise": "4.1.1",
     "rethinkdbdash": "2.3.23",
-    "sendgrid": "4.7.0",
+    "sendgrid": "4.7.1",
     "servicebus": "2.0.5",
     "thinky": "2.3.7",
     "vision": "4.1.0",
@@ -100,6 +102,6 @@
     "sinon": "1.17.6",
     "snazzy": "5.0.0",
     "snyk": "1.19.1",
-    "standard": "8.4.0"
+    "standard": "8.5.0"
   }
 }
