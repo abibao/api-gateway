@@ -7,8 +7,9 @@ var config = require('nconf')
 config.argv().env().file({ file: 'nconf-deve.json' })
 
 const r = rethink({
-  host: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
+  host: config.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
+  db: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
   user: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
   password: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
   authKey: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
@@ -16,7 +17,7 @@ const r = rethink({
   silent: true
 })
 
-var database = config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
+const database = config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
 
 describe('rethinkdb structure', function () {
   it('should create database', function (done) {

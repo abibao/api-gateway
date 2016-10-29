@@ -10,7 +10,7 @@ var path = require('path')
 var fse = require('fs-extra')
 
 var optionsRethink = {
-  host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
+  host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
   db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
   user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),

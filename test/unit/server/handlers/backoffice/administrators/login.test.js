@@ -21,7 +21,7 @@ before(function (done) {
   })
 })
 
-describe.only('[unit] server administrators login', function () {
+describe('[unit] server administrators login', function () {
   it('should not register (error 401)', function (done) {
     inject({
       headers: {
@@ -41,7 +41,6 @@ describe.only('[unit] server administrators login', function () {
   it('should not login because no credentials', function (done) {
     var handler = stub(global.ABIBAO.services.domain, 'administratorLoginWithCredentialsCommand')
     handler.returns(1)
-    console.log(global.ABIBAO.services.domain.execute)
     inject({
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

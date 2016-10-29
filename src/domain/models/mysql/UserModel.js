@@ -1,7 +1,7 @@
 'use strict'
 
-module.exports = function (knex, database) {
-  return knex.schema.withSchema(database).createTableIfNotExists('users', function (table) {
+module.exports = function (knex) {
+  return knex.schema.createTableIfNotExists('users', function (table) {
     table.increments('id')
     table.string('email')
     table.string('charity')
