@@ -12,14 +12,9 @@ var knex = null
 
 describe('mysql structure', function () {
   it('should create schema if not exists', function (done) {
-<<<<<<< HEAD
     require('./../src/connections/knex')()
       .then((result) => {
         knex = result
-=======
-    knex.raw('CREATE SCHEMA IF NOT EXISTS `' + database + '` DEFAULT CHARACTER SET utf8;')
-      .then(() => {
->>>>>>> 4aee95594d225147776172551af83a9827f0c818
         done()
       }).catch(done)
   })
