@@ -34,7 +34,7 @@ internals.initialize = function () {
     if (internals.options.user && internals.options.pass) {
       url = url + internals.options.user + ':' + internals.options.pass + '@'
     }
-    url = url + internals.options.host + ':' + internals.options.port + '/ffff'
+    url = url + internals.options.host + ':' + internals.options.port
     abibao.debug('rabbitmq url=%s', url)
     internals.bus = require('servicebus').bus({url})
     internals.bus.on('error', (error) => {
