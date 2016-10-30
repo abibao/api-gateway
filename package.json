@@ -1,14 +1,15 @@
 {
   "name": "api-gateway",
-  "version": "2.9.931",
+  "version": "2.9.932",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",
     "crons": "npm-scripts/crons.sh",
-    "test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts .mocharc",
+    "test": "npm-scripts/test.sh",
     "test:standard": "node_modules/.bin/standard --verbose --fix | snazzy",
     "test:unit": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/unit",
     "test:integration": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/integration",
+    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts .mocharc",
     "test:security": "node_modules/.bin/snyk test",
     "setup:deve": "./docker-scripts/setup-deve.sh",
     "start": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
