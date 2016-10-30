@@ -8,7 +8,7 @@ WORKDIR /usr/app
 COPY newrelic.js /usr/app/
 COPY package.json /usr/app/
 ADD src /usr/app
-ADD tools /usr/app
+ADD tools /usr/app/tools
 COPY robot.txt /usr/app/
 COPY robot.txt /usr/app/www
 COPY npm-scripts/crons.sh /usr/app/
