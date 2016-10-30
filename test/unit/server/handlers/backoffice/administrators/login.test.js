@@ -101,7 +101,7 @@ describe('[unit] server /v1/administrators/login', function () {
     })
   })
   it('should login', function (done) {
-    var stub = sinon.stub(global.ABIBAO.services.domain, 'execute', function (type, promise, params) {
+    stub = sinon.stub(global.ABIBAO.services.domain, 'execute', function (type, promise, params) {
       return new Promise(function (resolve, reject) {
         resolve({
           email: params.email

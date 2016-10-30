@@ -1,10 +1,5 @@
 'use strict'
 
-var Promise = require('bluebird')
-
-module.exports = function () {
-  return new Promise(function (resolve) {
-    global.ABIBAO.debuggers.bus('bus is alive')
-    resolve()
-  })
+module.exports = function (message) {
+  global.ABIBAO.debuggers.bus('BUS_EVENT_IS_ALIVE %o', message)
 }

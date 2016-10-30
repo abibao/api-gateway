@@ -80,11 +80,6 @@ var engine = function () {
         global.ABIBAO.services.server.start(function (error) {
           if (error) { return abibao.error(error) }
           abibao.debug('server has just started')
-          global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_IS_ALIVE, {
-            name: global.ABIBAO.name,
-            uuid: global.ABIBAO.uuid,
-            message: 'has just connected into the bus'
-          })
           global.ABIBAO.running = true
           resolve()
         })

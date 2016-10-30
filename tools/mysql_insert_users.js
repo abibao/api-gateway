@@ -10,21 +10,18 @@ var fse = require('fs-extra')
 var glob = require('glob')
 var mapLimit = require('promise-maplimit')
 
-var optionsMySQL = {
+var options = {
   client: 'mysql',
-  pool: {
-    max: 10000
-  },
   connection: {
     host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-    port: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
+    port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
     user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
     password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
     database: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
   },
   debug: false
 }
-var knex = require('knex')(optionsMySQL)
+var knex = require('knex')(options)
 
 console.log('===== START ===============')
 

@@ -6,8 +6,8 @@ var internals = {
   options: {
     host: global.ABIBAO.nconf.get('RABBITMQ_ENV_DOCKERCLOUD_SERVICE_FQDN'),
     port: global.ABIBAO.nconf.get('RABBITMQ_PORT_5672_TCP_PORT'),
-    user: global.ABIBAO.nconf.get('RABBITMQ_ENV_RABBITMQ_DEFAULT_USER'),
-    pass: global.ABIBAO.nconf.get('RABBITMQ_ENV_RABBITMQ_DEFAULT_PASS')
+    user: 'admin',
+    pass: global.ABIBAO.nconf.get('RABBITMQ_ENV_RABBITMQ_PASS')
   },
   constants: { },
   events: {
@@ -40,7 +40,7 @@ internals.initialize = function () {
     internals.bus.on('error', (error) => {
       reject(error)
     })
-    internals.bus.on('ready', (error) => {
+    internals.bus.on('ready', () => {
       internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
       internals.bus.subscribe(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
       internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))

@@ -15,7 +15,7 @@ var options = {
   debug: false
 }
 
-module.exports = function() {
+module.exports = function () {
   return new Promise((resolve, reject) => {
     var knex = require('knex')(options)
     knex.raw('CREATE SCHEMA IF NOT EXISTS `' + nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE') + '` DEFAULT CHARACTER SET utf8;')
@@ -23,8 +23,8 @@ module.exports = function() {
         options.connection.database = nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
         knex.destroy()
         .then(() => {
-           knex = require('knex')(options)
-           resolve(knex)
+          knex = require('knex')(options)
+          resolve(knex)
         }).catch(reject)
       }).catch(reject)
   })
