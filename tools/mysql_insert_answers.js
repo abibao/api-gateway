@@ -4,11 +4,12 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-rece.json' })
 
-var async = require('async')
-var path = require('path')
+var _ = require('lodash')
 var fse = require('fs-extra')
+var path = require('path')
 var glob = require('glob')
-var mapLimit = require('promise-maplimit')
+var ProgressBar = require('progress')
+var ProgressPromise = require('progress-promise')
 
 var options = {
   client: 'mysql',
@@ -23,39 +24,54 @@ var options = {
 }
 var knex = require('knex')(options)
 
-console.log('===== START ===============')
-
 var cacheDir = path.resolve(__dirname, '../.cache/mysql/answers')
 
-var answers = []
-var files = glob.sync(cacheDir + '/**/*.json', {
-  nodir: true,
-  dot: true
-})
-
-console.log('number of files: %s', files.length)
-async.map(files, function (file) {
-  var data = fse.readJsonSync(file)
-  data.createdAt = new Date(data.createdAt)
-  answers.push(knex('answers').insert(data))
-})
-console.log('number of answers: %s', answers.length)
-
+console.log('===== START ===============')
+console.log('delete answers')
 knex('answers')
   .delete()
   .then(() => {
-    return mapLimit(answers, 100, function (item, index, array) {
-      console.log('... ', files[index])
+    console.log('get all files answers')
+    var files = glob.sync(cacheDir + '/**/*.json', {
+      nodir: true,
+      dot: true
     })
-  })
-  .then(() => {
-    console.log('===== END ===============')
-    knex.destroy()
-    process.exit(0)
-  })
-  .catch((error) => {
-    console.log(error)
-    console.log('===== END ERROR ===============')
-    knex.destroy()
-    process.exit(1)
+    var total = files.length
+    console.log('number of files: %s', files.length)
+    var bar = new ProgressBar('progress [:bar] :percent :etas', {
+      complete: '=',
+      incomplete: ' ',
+      width: 40,
+      total
+    })
+    var placeInQueue = function (source) {
+      var files = _.take(source, 100)
+      var queue = []
+      _.map(files, (file) => {
+        var data = fse.readJsonSync(file)
+        data.createdAt = new Date(data.createdAt)
+        queue.push(knex('answers').insert(data))
+      })
+      if (queue.length === 0) {
+        console.log('all answers have been processed')
+        console.log('===== END ===============')
+        knex.destroy()
+        process.exit(0)
+      }
+      ProgressPromise.all(queue)
+        .progress(() => {
+          bar.tick()
+        })
+        .then(() => {
+          source = _.difference(source, files)
+          placeInQueue(source)
+        })
+        .catch((error) => {
+          console.log(error)
+          console.log('===== END ===============')
+          knex.destroy()
+          process.exit(1)
+        })
+    }
+    placeInQueue(files)
   })
