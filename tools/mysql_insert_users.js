@@ -2,7 +2,7 @@
 
 // load environnement configuration
 var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-prod.json' })
+nconf.argv().env().file({ file: 'nconf-rece.json' })
 
 var async = require('async')
 var path = require('path')

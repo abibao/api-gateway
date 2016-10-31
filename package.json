@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.933",
+  "version": "2.9.935",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "auto:generate": "./npm-scripts/auto-generate.sh",

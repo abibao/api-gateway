@@ -4,7 +4,7 @@
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-var optionsRethink = {
+var options = {
   host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
   db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
@@ -13,6 +13,6 @@ var optionsRethink = {
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
   silent: true
 }
-var thinky = require('thinky')(optionsRethink)
+var thinky = require('thinky')(options)
 
 module.exports = thinky

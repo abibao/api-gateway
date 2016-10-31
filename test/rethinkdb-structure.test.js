@@ -1,21 +1,19 @@
 'use strict'
 
-const rethink = require('rethinkdbdash')
-
 // load environnement configuration
 var config = require('nconf')
 config.argv().env().file({ file: 'nconf-deve.json' })
 
-const r = rethink({
+var options = {
   host: config.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-  port: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
+  port: config.get('RETHINKDB_PORT_28015_TCP_PORT'),
   db: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
   user: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
   password: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
   authKey: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
-  discovery: false,
   silent: true
-})
+}
+var r = require('thinky')(options).r
 
 const database = config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
 

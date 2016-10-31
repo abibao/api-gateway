@@ -8,7 +8,7 @@ var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
 
-var optionsRethink = {
+var options = {
   host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
   db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
@@ -17,7 +17,7 @@ var optionsRethink = {
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
   silent: true
 }
-var r = require('thinky')(optionsRethink).r
+var r = require('thinky')(options).r
 
 var execReQL = function (table, skip, limit, callback) {
   r.table(table).skip(skip).limit(limit)
