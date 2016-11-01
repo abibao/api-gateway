@@ -10,8 +10,8 @@ var expect = chai.expect
 
 before(function (done) {
   Promise.all([
-    require('../../../../../mock-abibao').server(),
-    require('../../../../../mock-abibao').domain()
+    require('../../../../mock-abibao').server(),
+    require('../../../../mock-abibao').domain()
   ]).then(() => {
     done()
   })
@@ -19,14 +19,14 @@ before(function (done) {
 
 var stub
 
-describe('[unit] server /v1/administrators/login', function () {
+describe('[unit] server /v1/individuals/login', function () {
   it('should not login because email is mandatory', function (done) {
     var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      url: '/v1/administrators/login'
+      url: '/v1/individuals/login'
     }
     global.ABIBAO.services.server.inject(req, res => {
       expect(res).to.be.an('object')
@@ -42,7 +42,7 @@ describe('[unit] server /v1/administrators/login', function () {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      url: '/v1/administrators/login',
+      url: '/v1/individuals/login',
       payload: Querystring.stringify({
         email: 'nobody'
       })
@@ -61,7 +61,7 @@ describe('[unit] server /v1/administrators/login', function () {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      url: '/v1/administrators/login',
+      url: '/v1/individuals/login',
       payload: Querystring.stringify({
         email: 'nobody@abibao.com'
       })
@@ -85,7 +85,7 @@ describe('[unit] server /v1/administrators/login', function () {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      url: '/v1/administrators/login',
+      url: '/v1/individuals/login',
       payload: Querystring.stringify({
         email: 'nobody@abibao.com',
         password: 'pass4nobody'
@@ -113,7 +113,7 @@ describe('[unit] server /v1/administrators/login', function () {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      url: '/v1/administrators/login',
+      url: '/v1/individuals/login',
       payload: Querystring.stringify({
         email: 'nobody@abibao.com',
         password: 'pass4nobody'

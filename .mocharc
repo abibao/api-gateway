@@ -4,4 +4,6 @@
 --recursive test/rethinkdb-structure.test
 --recursive test/mysql-structure.test
 --recursive test/unit
+--recursive test/engine-initialize.test.js
+--recursive test/integration
 --recursive test/coverage-max.test.js

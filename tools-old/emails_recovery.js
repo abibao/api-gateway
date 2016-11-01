@@ -13,7 +13,7 @@ var engine = require('../src/engine')
 var faker = require('faker')
 
 var optionsRethink = {
-  host: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
+  host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
   db: databaseRethink,
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
@@ -27,10 +27,10 @@ var optionsMySQL = {
     max: 10000
   },
   connection: {
-    host: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
+    host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
     port: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
     user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-    password: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD'),
+    password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
     database: 'analytics_deve'
   },
   debug: false

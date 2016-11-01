@@ -2,59 +2,77 @@
 
 // load environnement configuration
 var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+nconf.argv().env().file({ file: 'nconf-rece.json' })
 
-var async = require('async')
-var path = require('path')
+var _ = require('lodash')
 var fse = require('fs-extra')
+var path = require('path')
 var glob = require('glob')
-var mapLimit = require('promise-maplimit')
+var ProgressBar = require('progress')
+var ProgressPromise = require('progress-promise')
 
-var optionsMySQL = {
+var options = {
   client: 'mysql',
   connection: {
-    host: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
-    port: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
+    host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
+    port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
     user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-    password: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD'),
+    password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
     database: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
   },
   debug: false
 }
-var knex = require('knex')(optionsMySQL)
-
-console.log('===== START ===============')
+var knex = require('knex')(options)
 
 var cacheDir = path.resolve(__dirname, '../.cache/mysql/users')
 
-var users = []
-var files = glob.sync(cacheDir + '/*.json', {
-  nodir: true,
-  dot: true
-})
-
-console.log('number of files: %s', files.length)
-async.map(files, function (file) {
-  var data = fse.readJsonSync(file)
-  data.createdAt = new Date(data.createdAt)
-  data.modifiedAt = new Date(data.modifiedAt)
-  users.push(knex('users').insert(data))
-})
-console.log('number of users: %s', users.length)
-
+console.log('===== START ===============')
+console.log('delete users')
 knex('users')
   .delete()
   .then(() => {
-    return mapLimit(users, 100, function (item, index, array) {
-      console.log('... ', files[index])
+    console.log('get all files users')
+    var files = glob.sync(cacheDir + '/**/*.json', {
+      nodir: true,
+      dot: true
     })
-  })
-  .then(() => {
-    console.log('===== END ===============')
-    process.exit(0)
-  })
-  .catch((error) => {
-    console.log(error)
-    console.log('===== END ERROR ===============')
-    process.exit(1)
+    var total = files.length
+    console.log('number of files: %s', files.length)
+    var bar = new ProgressBar('progress [:bar] :percent :etas', {
+      complete: '=',
+      incomplete: ' ',
+      width: 40,
+      total
+    })
+    var placeInQueue = function (source) {
+      var files = _.take(source, 300)
+      var queue = []
+      _.map(files, (file) => {
+        var data = fse.readJsonSync(file)
+        data.createdAt = new Date(data.createdAt)
+        data.modifiedAt = new Date(data.modifiedAt)
+        queue.push(knex('users').insert(data))
+      })
+      if (queue.length === 0) {
+        console.log('all users have been processed')
+        console.log('===== END ===============')
+        knex.destroy()
+        process.exit(0)
+      }
+      ProgressPromise.all(queue)
+        .progress(() => {
+          bar.tick()
+        })
+        .then(() => {
+          source = _.difference(source, files)
+          placeInQueue(source)
+        })
+        .catch((error) => {
+          console.log(error)
+          console.log('===== END ===============')
+          knex.destroy()
+          process.exit(1)
+        })
+    }
+    placeInQueue(files)
   })

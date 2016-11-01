@@ -4,25 +4,6 @@ var Promise = require('bluebird')
 var glob = require('glob')
 
 var internals = {
-  optionsRethink: {
-    host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_HOST'),
-    port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PORT'),
-    db: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
-    user: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
-    password: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
-    authKey: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
-    silent: true
-  },
-  optionsMySQL: {
-    client: 'mysql',
-    connection: {
-      host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_HOST'),
-      port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PORT'),
-      user: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-      password: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_PASSWORD')
-    },
-    debug: false
-  },
   constants: {
     ABIBAO_CONST_TOKEN_AUTH_ME: 'auth_me',
     ABIBAO_CONST_TOKEN_FINGERPRINT: 'fingerprint',
@@ -54,8 +35,7 @@ internals.initialize = function () {
   abibao.debug('start initializing')
   return new Promise(function (resolve, reject) {
     internals.domain.dictionnary = []
-    internals.domain.knex = require('knex')(internals.optionsMySQL)
-    internals.domain.thinky = require('thinky')(internals.optionsRethink)
+    internals.domain.thinky = require('./../connections/thinky')
     internals.domain.ThinkyErrors = internals.domain.thinky.Errors
     internals.domain.Query = internals.domain.thinky.Query
     internals.domain.r = internals.domain.thinky.r
@@ -67,15 +47,21 @@ internals.initialize = function () {
     internals.domain.getURNfromID = function (id, model) {
       return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
     }
-    Promise.all([
-      internals.domain.injector('commands'),
-      internals.domain.injector('queries'),
-      internals.domain.injector('models/mysql'),
-      internals.domain.injector('models/rethinkdb'),
-      internals.domain.AnswerModel(internals.domain.knex, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')),
-      internals.domain.UserModel(internals.domain.knex, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')),
-      internals.domain.VoteSMFModel(internals.domain.knex, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE'))
-    ]).then(resolve).catch(reject)
+    require('./../connections/knex')()
+      .then((result) => {
+        internals.domain.knex = result
+        return Promise.all([
+          internals.domain.injector('commands'),
+          internals.domain.injector('queries'),
+          internals.domain.injector('models/mysql'),
+          internals.domain.injector('models/rethinkdb'),
+          internals.domain.AnswerModel(internals.domain.knex),
+          internals.domain.UserModel(internals.domain.knex),
+          internals.domain.VoteSMFModel(internals.domain.knex)
+        ])
+      })
+      .then(resolve)
+      .catch(reject)
   })
 }
 

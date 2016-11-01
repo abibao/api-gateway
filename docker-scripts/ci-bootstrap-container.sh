@@ -2,7 +2,6 @@
 
 # script/ci-bootstrap-docker-container - make sure all required dependencies are setup
 
-
 LABEL_SCRIPT=$1
 DOCKER_NAME=$2
 DOCKER_OPTIONS=$3

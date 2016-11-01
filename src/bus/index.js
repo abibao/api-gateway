@@ -4,7 +4,10 @@ var Promise = require('bluebird')
 
 var internals = {
   options: {
-    url: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_RABBITMQ_URL')
+    host: global.ABIBAO.nconf.get('RABBITMQ_ENV_DOCKERCLOUD_SERVICE_FQDN'),
+    port: global.ABIBAO.nconf.get('RABBITMQ_PORT_5672_TCP_PORT'),
+    user: 'admin',
+    pass: global.ABIBAO.nconf.get('RABBITMQ_ENV_RABBITMQ_PASS')
   },
   constants: { },
   events: {
@@ -26,15 +29,26 @@ var abibao = {
 
 internals.initialize = function () {
   abibao.debug('start initializing')
-  return new Promise(function (resolve) {
-    internals.bus = require('servicebus').bus(internals.options)
-    internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
-    internals.bus.subscribe(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
-    resolve()
+  return new Promise(function (resolve, reject) {
+    var url = 'amqp://'
+    if (internals.options.user && internals.options.pass) {
+      url = url + internals.options.user + ':' + internals.options.pass + '@'
+    }
+    url = url + internals.options.host + ':' + internals.options.port
+    abibao.debug('rabbitmq url=%s', url)
+    internals.bus = require('servicebus').bus({url})
+    internals.bus.on('error', (error) => {
+      reject(error)
+    })
+    internals.bus.on('ready', () => {
+      internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
+      resolve()
+    })
   })
 }
 

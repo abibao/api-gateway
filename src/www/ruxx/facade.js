@@ -12,7 +12,7 @@ function Facade () {
       self.baseapi = 'https://api.pprod.abibao.com'
       break
     default:
-      self.baseapi = 'http://api.abibao.com'
+      self.baseapi = 'https://api.abibao.com'
       break
   }
 
