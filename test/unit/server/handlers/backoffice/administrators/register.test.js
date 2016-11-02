@@ -14,7 +14,7 @@ before(function (done) {
   })
 })
 
-describe('[unit] server /v1/administrators/register', function () {
+describe('[unit] server: /v1/administrators/register', function () {
   it('should not register because authentication is missing', function (done) {
     var req = {
       headers: {

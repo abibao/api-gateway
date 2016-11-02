@@ -14,7 +14,7 @@ before(function (done) {
   })
 })
 
-describe('[unit] server /v1/alive', function () {
+describe('[unit] server: /v1/alive', function () {
   it('should be alive', function (done) {
     var req = {
       method: 'GET',

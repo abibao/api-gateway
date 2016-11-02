@@ -1,6 +1,6 @@
 # API-GATEWAY
 
-![](https://img.shields.io/badge/abibao api gateway-2.9.951-5da2c7.svg)
+![](https://img.shields.io/badge/abibao api gateway-2.9.952-5da2c7.svg)
 ![](https://img.shields.io/badge/node-6-5da2c7.svg)
 [![Docker Automated buil](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000)]()  
 

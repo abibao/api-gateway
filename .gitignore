@@ -9,6 +9,8 @@ logs
 *.log
 npm-debug.log*
 newrelic_agent*
+spmdb
+spmlogs
 
 # Runtime data
 pids

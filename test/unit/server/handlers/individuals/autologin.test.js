@@ -14,7 +14,7 @@ before(function (done) {
   })
 })
 
-describe('[unit] server /v1/individuals/autologin/{fingerprint}', function () {
+describe('[unit] server: /v1/individuals/autologin/{fingerprint}', function () {
   it('should success', function (done) {
     var req = {
       headers: {

@@ -19,7 +19,7 @@ before(function (done) {
   })
 })
 
-describe('[unit] server /v1/individuals/register', function () {
+describe('[unit] server: /v1/individuals/register', function () {
   it('should not register because email is mandatory', function (done) {
     var req = {
       headers: {
