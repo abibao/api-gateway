@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# -----------------------
+# cron to calculate analytics in mysql from data in rethinkdb
+# -----------------------
+
+# exit on sub-module failure
 set -e
-clear
 
 # export from rethink to disk
 node tools/rethink_dump_export.js

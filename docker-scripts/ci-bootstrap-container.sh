@@ -1,14 +1,17 @@
 #!/bin/sh
 
-# script/ci-bootstrap-docker-container - make sure all required dependencies are setup
+# -----------------------
+# make sure all required dependencies are setup
+# -----------------------
 
+# exit on sub-module failure
+set -e
+
+# declare vars
 LABEL_SCRIPT=$1
 DOCKER_NAME=$2
 DOCKER_OPTIONS=$3
 DOCKER_LIBRARY=$4
-
-# exit on sub-module failure
-set -e
 
 # move to parent dir
 cd "$(dirname "$0")/.."

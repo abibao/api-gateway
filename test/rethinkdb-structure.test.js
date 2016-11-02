@@ -19,19 +19,13 @@ const database = config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
 
 describe('rethinkdb structure', function () {
   it('should create database', function (done) {
-    r.dbList().contains(database)
-      .then((exists) => {
-        if (exists === true) {
-          done()
-        } else {
-          r.dbCreate(database)
-            .then(() => {
-              done()
-            })
-            .catch(done)
-        }
+    r.dbCreate(database)
+      .then(() => {
+        done()
       })
-      .catch(done)
+      .catch(() => {
+        done()
+      })
   })
   it('should create table surveys', function (done) {
     r.db(database).tableList().contains('surveys')
