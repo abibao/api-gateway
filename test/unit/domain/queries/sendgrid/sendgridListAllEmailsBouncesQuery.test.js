@@ -3,9 +3,9 @@
 var chai = require('chai')
 var expect = chai.expect
 
-var command = require('../../../../../src/domain/queries/sendgrid/sendgridGetAllSuppressionBouncesQuery')
+var command = require('../../../../../src/domain/queries/sendgrid/sendgridListAllEmailsBouncesQuery')
 
-describe.only('[unit] domain: sendgridGetAllSuppressionBouncesQuery', function () {
+describe.only('[unit] domain: sendgridListAllBouncesQuery', function () {
   it('should fail on payload validation', function (done) {
     command({forbidden: true}).catch((error) => {
       expect(error).to.be.an('error')
@@ -13,7 +13,7 @@ describe.only('[unit] domain: sendgridGetAllSuppressionBouncesQuery', function (
       expect(error.code).to.be.eq('joi_validation_payload')
       expect(error.details).to.be.an('object')
       expect(error.details.type).to.be.eq('Query')
-      expect(error.details.name).to.be.eq('SendgridGetAllSuppressionBouncesQuery')
+      expect(error.details.name).to.be.eq('SendgridListAllEmailsBouncesQuery')
       done()
     })
   })
@@ -25,7 +25,7 @@ describe.only('[unit] domain: sendgridGetAllSuppressionBouncesQuery', function (
         expect(error.code).to.be.eq('bad_sendgrid_api_key')
         expect(error.details).to.be.an('object')
         expect(error.details.type).to.be.eq('Query')
-        expect(error.details.name).to.be.eq('SendgridGetAllSuppressionBouncesQuery')
+        expect(error.details.name).to.be.eq('SendgridListAllEmailsBouncesQuery')
         done()
       })
   })
