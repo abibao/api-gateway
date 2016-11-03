@@ -16,22 +16,21 @@ if (options.user && options.pass) {
   url = url + options.user + ':' + options.pass + '@'
 }
 url = url + options.host + ':' + options.port
-var context = require('rabbit.js').createContext(url)
+var bus = require('servicebus').bus({url})
 
-context.on('error', (error) => {
+bus.on('error', (error) => {
   console.log('bus error', error)
   process.exit(1)
 })
 
-context.on('ready', () => {
+bus.on('ready', () => {
   console.log('bus ready')
-  var sub = context.socket('PUSH')
-
-  // serup cron
-  var CronJob = require('cron').CronJob
-  new CronJob('*/60 * * * * *', function () {
-    console.log('You will see this message every second')
-    var sendgridListAllEmailsBouncesQuery = require('./../domain/queries/sendgrid/sendgridListAllEmailsBouncesQuery')
-    bus.publish('BUS_EVENT_IS_ALIVE', {})
-  }, null, true, 'Europe/Paris')
+  var count = 1
+  setInterval(() => {
+    var BUS_EVENT_IS_ALIVE = 'BUS_EVENT_IS_ALIVE' + '_' + config.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
+    console.log('bus.publish on BUS_EVENT_IS_ALIVE')
+    bus.publish(BUS_EVENT_IS_ALIVE, {time: Date.now(), count})
+    count += 1
+  }, 1000)
+  // var sendgridListAllEmailsBouncesQuery = require('./../domain/queries/sendgrid/sendgridListAllEmailsBouncesQuery')
 })

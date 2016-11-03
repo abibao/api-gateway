@@ -25,7 +25,7 @@ var execBatch = function (table) {
     r.table(table).delete()
       .then(function () {
         // insert
-        var dir = path.resolve(__dirname, '../.cache/rethinkdb', table)
+        var dir = path.resolve(__dirname, '../../.cache/rethinkdb', table)
         var files = fse.readdirSync(dir)
         async.mapSeries(files, function (file, done) {
           var filepath = path.resolve(dir, file)

@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.960",
+  "version": "2.9.961",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "crons": "npm-scripts/crons.sh",
@@ -11,7 +11,7 @@
     "test:integration": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/integration",
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts .mocharc",
     "test:security": "node_modules/.bin/snyk test",
-    "start": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node -r spm-agent-nodejs . | bunyan"
+    "start": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan"
   },
   "standard": {
     "globals": [
@@ -58,7 +58,6 @@
     "dotenv": "2.0.0",
     "eraro": "0.4.1",
     "faker": "3.1.0",
-    "feathers-knex": "2.4.0",
     "fs-extra": "1.0.0",
     "glob": "7.1.1",
     "hapi": "15.2.0",
@@ -78,7 +77,6 @@
     "node-uuid": "1.4.7",
     "progress": "1.1.8",
     "progress-promise": "0.0.5",
-    "rabbit.js": "0.4.4",
     "request": "2.78.0",
     "request-promise": "4.1.1",
     "rethinkdbdash": "2.3.23",

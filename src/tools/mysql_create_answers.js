@@ -21,18 +21,18 @@ var options = {
 var r = require('thinky')(options).r
 
 console.log('===== PREPARE ===============')
-var cacheDir = path.resolve(__dirname, '../.cache/mysql/answers')
+var cacheDir = path.resolve(__dirname, '../../.cache/mysql/answers')
 fse.ensureDirSync(cacheDir)
 fse.emptyDirSync(cacheDir)
 
 console.log('===== START ===============')
-var dir = path.resolve(__dirname, '../.cache/rethinkdb/surveys')
+var dir = path.resolve(__dirname, '../../.cache/rethinkdb/surveys')
 
 var files = fse.readdirSync(dir)
 
 var isURN = function (value) {
   try {
-    fse.accessSync(path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', value + '.json'))
+    fse.accessSync(path.resolve(__dirname, '../../.cache/rethinkdb/campaigns_items_choices', value + '.json'))
     return true
   } catch (e) {
     return false

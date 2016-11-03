@@ -6,7 +6,7 @@ module.exports = function () {
     table.increments('id')
     table.string('rethinkdb')
     table.string('email')
-    table.timestamp('created')
+    table.bigInteger('created')
     table.string('reason')
     table.string('status')
   })

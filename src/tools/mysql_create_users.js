@@ -20,12 +20,12 @@ var options = {
 var r = require('thinky')(options).r
 
 console.log('===== PREPARE ===============')
-var cacheDir = path.resolve(__dirname, '../.cache/mysql/users')
+var cacheDir = path.resolve(__dirname, '../../.cache/mysql/users')
 fse.ensureDirSync(cacheDir)
 fse.emptyDirSync(cacheDir)
 
 console.log('===== START ===============')
-var dir = path.resolve(__dirname, '../.cache/rethinkdb/individuals')
+var dir = path.resolve(__dirname, '../../.cache/rethinkdb/individuals')
 
 var files = fse.readdirSync(dir)
 
@@ -62,23 +62,23 @@ var busSend = function (individual, callback) {
       if (data.age !== null) {
         data.age = parseInt(data.age)
       }
-      filepath = path.resolve(__dirname, '../.cache/rethinkdb/entities', data.charity + '.json')
+      filepath = path.resolve(__dirname, '../../.cache/rethinkdb/entities', data.charity + '.json')
       if (fse.existsSync(filepath)) {
         data.charity = fse.readJsonSync(filepath).name
       }
-      filepath = path.resolve(__dirname, '../.cache/rethinkdb/entities', data.registeredCharity + '.json')
+      filepath = path.resolve(__dirname, '../../.cache/rethinkdb/entities', data.registeredCharity + '.json')
       if (fse.existsSync(filepath)) {
         data.registeredCharity = fse.readJsonSync(filepath).name
       }
-      filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.csp + '.json')
+      filepath = path.resolve(__dirname, '../../.cache/rethinkdb/campaigns_items_choices', data.csp + '.json')
       if (fse.existsSync(filepath)) {
         data.csp = fse.readJsonSync(filepath).text
       }
-      filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.department + '.json')
+      filepath = path.resolve(__dirname, '../../.cache/rethinkdb/campaigns_items_choices', data.department + '.json')
       if (fse.existsSync(filepath)) {
         data.department = fse.readJsonSync(filepath).text
       }
-      filepath = path.resolve(__dirname, '../.cache/rethinkdb/campaigns_items_choices', data.gender + '.json')
+      filepath = path.resolve(__dirname, '../../.cache/rethinkdb/campaigns_items_choices', data.gender + '.json')
       if (fse.existsSync(filepath)) {
         data.gender = fse.readJsonSync(filepath).text
       }
