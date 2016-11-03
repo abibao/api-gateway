@@ -5,7 +5,7 @@ var expect = chai.expect
 
 var command = require('../../../../../src/domain/queries/sendgrid/sendgridListAllEmailsBouncesQuery')
 
-describe.only('[unit] domain: sendgridListAllBouncesQuery', function () {
+describe('[unit] domain: sendgridListAllBouncesQuery', function () {
   it('should fail on payload validation', function (done) {
     command({forbidden: true}).catch((error) => {
       expect(error).to.be.an('error')
@@ -33,6 +33,9 @@ describe.only('[unit] domain: sendgridListAllBouncesQuery', function () {
     command({})
       .then((result) => {
         done()
+      })
+      .catch((error) => {
+        done(error)
       })
   })
 })

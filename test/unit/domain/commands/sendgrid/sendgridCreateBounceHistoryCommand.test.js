@@ -5,7 +5,7 @@ var expect = chai.expect
 
 var command = require('../../../../../src/domain/commands/sendgrid/sendgridCreateBounceHistoryCommand')
 
-describe.only('[unit] domain: sendgridCreateBounceHistoryCommand', function () {
+describe('[unit] domain: sendgridCreateBounceHistoryCommand', function () {
   it('should fail on payload validation, email mandatory', function (done) {
     command()
       .catch((error) => {
@@ -13,7 +13,8 @@ describe.only('[unit] domain: sendgridCreateBounceHistoryCommand', function () {
         expect(error.eraro).to.be.eq(true)
         expect(error.code).to.be.eq('joi_validation_payload')
         expect(error.details).to.be.an('object')
-        expect(error.details.type).to.be.eq('Query')
+        expect(error.details.type).to.be.eq('Command')
+        expect(error.details.name).to.be.eq('SendgridCreateBounceHistoryCommand')
         expect(error.details.error.toString()).to.be.eq('ValidationError: child "email" fails because ["email" is required]')
         done()
       })
@@ -25,7 +26,7 @@ describe.only('[unit] domain: sendgridCreateBounceHistoryCommand', function () {
         expect(error.eraro).to.be.eq(true)
         expect(error.code).to.be.eq('joi_validation_payload')
         expect(error.details).to.be.an('object')
-        expect(error.details.type).to.be.eq('Query')
+        expect(error.details.type).to.be.eq('Command')
         expect(error.details.name).to.be.eq('SendgridCreateBounceHistoryCommand')
         expect(error.details.error.toString()).to.be.eq('ValidationError: "forbidden" is not allowed')
         done()
@@ -38,15 +39,19 @@ describe.only('[unit] domain: sendgridCreateBounceHistoryCommand', function () {
         expect(error.eraro).to.be.eq(true)
         expect(error.code).to.be.eq('bad_sendgrid_api_key')
         expect(error.details).to.be.an('object')
-        expect(error.details.type).to.be.eq('Query')
+        expect(error.details.type).to.be.eq('Command')
         expect(error.details.name).to.be.eq('SendgridCreateBounceHistoryCommand')
         done()
       })
   })
   it('should success', function (done) {
-    command({email: 'nobody@test.com'})
+    command({email: 'julie.nichols@essilor.com'})
       .then((result) => {
         done()
+      })
+      .catch((error) => {
+        console.log(error)
+        done(error)
       })
   })
 })

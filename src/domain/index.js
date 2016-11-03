@@ -47,21 +47,19 @@ internals.initialize = function () {
     internals.domain.getURNfromID = function (id, model) {
       return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
     }
-    require('./../connections/knex')()
-      .then((result) => {
-        internals.domain.knex = result
-        return Promise.all([
-          internals.domain.injector('commands'),
-          internals.domain.injector('queries'),
-          internals.domain.injector('models/mysql'),
-          internals.domain.injector('models/rethinkdb'),
-          internals.domain.AnswerModel(internals.domain.knex),
-          internals.domain.UserModel(internals.domain.knex),
-          internals.domain.VoteSMFModel(internals.domain.knex)
-        ])
-      })
-      .then(resolve)
-      .catch(reject)
+    internals.domain.knex = require('./../connections/knex')()
+    Promise.all([
+      internals.domain.injector('commands'),
+      internals.domain.injector('queries'),
+      internals.domain.injector('models/mysql'),
+      internals.domain.injector('models/rethinkdb'),
+      internals.domain.AnswerModel(),
+      internals.domain.UserModel(),
+      internals.domain.VoteSMFModel(),
+      internals.domain.SendgridBounceModel()
+    ])
+    .then(resolve)
+    .catch(reject)
   })
 }
 

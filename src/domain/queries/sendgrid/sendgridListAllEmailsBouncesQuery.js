@@ -4,12 +4,12 @@ var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
 var Promise = require('bluebird')
-var Eraro = require('eraro')
+var eraro = require('eraro')
 var Joi = require('joi')
 var uuid = require('node-uuid')
-var r = require('./../../../connections/thinky').r
+var r = require('./../../../connections/rethinkdbdash')('sendgrid')
 
-var eraro = Eraro({
+var _eraro = eraro({
   package: 'abibao.domain.command',
   msgmap: {
     'unit_test': 'This is the first TDD error message',
@@ -48,27 +48,29 @@ module.exports = function (payload = {}) {
             return item('email')
           })
           .distinct()
+          .run()
           // call api: succeed
           .then((data) => {
             result.count = data.length
             result.data = data
             validate(result, resultSchema)
+              // validate result: succeed
               .then(() => {
                 resolve(result)
               })
               // validate result: failed
               .catch((error) => {
-                reject(eraro('joi_validation_result', {uuid: uuid.v4(), type, name, error}))
+                reject(_eraro('joi_validation_result', {uuid: uuid.v4(), type, name, error}))
               })
           })
           // call api: failed
           .catch((error) => {
-            reject(eraro('bad_sendgrid_api_key', {uuid: uuid.v4(), type, name, error}))
+            reject(_eraro('bad_sendgrid_api_key', {uuid: uuid.v4(), type, name, error}))
           })
       })
       // validate payload: failed
       .catch((error) => {
-        reject(eraro('joi_validation_payload', {uuid: uuid.v4(), type, name, error}))
+        reject(_eraro('joi_validation_payload', {uuid: uuid.v4(), type, name, error}))
       })
   })
 }
