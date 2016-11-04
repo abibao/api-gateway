@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.961",
+  "version": "2.9.962",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "crons": "npm-scripts/crons.sh",
@@ -82,6 +82,7 @@
     "rethinkdbdash": "2.3.23",
     "sendgrid": "4.7.1",
     "servicebus": "2.0.5",
+    "servicebus-retry": "0.0.11",
     "thinky": "2.3.7",
     "vision": "4.1.0",
     "wpapi": "0.11.0"

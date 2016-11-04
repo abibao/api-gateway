@@ -18,19 +18,20 @@ if (options.user && options.pass) {
 url = url + options.host + ':' + options.port
 var bus = require('servicebus').bus({url})
 
+// setup events
+var BUS_EVENT_SENDGRID_CRON_BOUNCES = 'BUS_EVENT_SENDGRID_CRON_BOUNCES' + '_' + config.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
+
+// on error
 bus.on('error', (error) => {
   console.log('bus error', error)
   process.exit(1)
 })
 
+// on ready
 bus.on('ready', () => {
-  console.log('bus ready')
-  var count = 1
-  setInterval(() => {
-    var BUS_EVENT_IS_ALIVE = 'BUS_EVENT_IS_ALIVE' + '_' + config.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
-    console.log('bus.publish on BUS_EVENT_IS_ALIVE')
-    bus.publish(BUS_EVENT_IS_ALIVE, {time: Date.now(), count})
-    count += 1
-  }, 1000)
-  // var sendgridListAllEmailsBouncesQuery = require('./../domain/queries/sendgrid/sendgridListAllEmailsBouncesQuery')
+  console.log('work in progress')
+  bus.publish(BUS_EVENT_SENDGRID_CRON_BOUNCES, {time: Date.now()})
+  setTimeout(() => {
+    process.exit(0)
+  }, 2000)
 })

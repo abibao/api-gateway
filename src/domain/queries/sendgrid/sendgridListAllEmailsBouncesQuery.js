@@ -1,13 +1,13 @@
 'use strict'
 
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+var config = require('nconf')
+config.argv().env().file({ file: 'nconf-deve.json' })
 
 var Promise = require('bluebird')
 var eraro = require('eraro')
 var Joi = require('joi')
 var uuid = require('node-uuid')
-var r = require('./../../../connections/rethinkdbdash')('sendgrid')
+var path = require('path')
 
 var _eraro = eraro({
   package: 'abibao.domain.command',
@@ -29,15 +29,18 @@ var resultSchema = Joi.object().keys({
   data: Joi.array().items(Joi.string().email()).required()
 })
 
+var r = require('./../../../connections/rethinkdbdash')('sendgrid')
+var helper = require('./../../../helper')
+
 module.exports = function (payload = {}) {
-  var type = 'Query'
-  var name = 'SendgridListAllEmailsBouncesQuery'
+  var type = helper.getTypeFromFilename(path.basename(__filename))
+  var name = helper.getNameFromFilename(path.basename(__filename))
   return new Promise(function (resolve, reject) {
     var result = {}
     validate(payload, payloadSchema)
       // validate payload: succeed
       .then(() => {
-        var apiKey = payload.apiKey || nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY')
+        var apiKey = payload.apiKey || config.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY')
         r.http('https://api.sendgrid.com/v3/suppression/bounces', {
           'header': {
             'Authorization': 'Bearer ' + apiKey

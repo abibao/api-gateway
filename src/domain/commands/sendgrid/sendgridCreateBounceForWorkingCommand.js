@@ -7,6 +7,7 @@ var Promise = require('bluebird')
 var eraro = require('eraro')
 var Joi = require('joi')
 var uuid = require('node-uuid')
+var path = require('path')
 
 var _eraro = eraro({
   package: 'abibao.domain.command',
@@ -30,10 +31,11 @@ var payloadSchema = Joi.object().keys({
 })
 
 var knex = require('./../../../connections/knex')('sendgrid')
+var helper = require('./../../../helper')
 
 module.exports = function (payload = {}) {
-  var type = 'Command'
-  var name = 'SendgridCreateBounceForWorkingCommand'
+  var type = helper.getTypeFromFilename(path.basename(__filename))
+  var name = helper.getNameFromFilename(path.basename(__filename))
   return new Promise(function (resolve, reject) {
     var result = {}
     // validate payload: succeed

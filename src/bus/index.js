@@ -16,7 +16,10 @@ var internals = {
     BUS_EVENT_ANALYTICS_COMPUTE_USER: 'BUS_EVENT_ANALYTICS_COMPUTE_USER' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
     BUS_EVENT_WEBHOOK_SLACK: 'BUS_EVENT_WEBHOOK_SLACK' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
     BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO: 'BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
-    BUS_EVENT_SMF_UPDATE_VOTE: 'BUS_EVENT_SMF_UPDATE_VOTE' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
+    BUS_EVENT_SMF_UPDATE_VOTE: 'BUS_EVENT_SMF_UPDATE_VOTE' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
+    BUS_EVENT_SENDGRID_CRON_BOUNCES: 'BUS_EVENT_SENDGRID_CRON_BOUNCES' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
+    BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY: 'BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
+    BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING: 'BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
   },
   bus: false
 }
@@ -47,6 +50,9 @@ internals.initialize = function () {
       internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
       internals.bus.subscribe(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
       internals.bus.subscribe(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_SENDGRID_CRON_BOUNCES, require('./handlers/sendgrid_crons_bounces'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY, require('./handlers/sendgrid_create_bounce_history'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING, require('./handlers/sendgrid_create_bounce_working'))
       resolve()
     })
   })

@@ -8,7 +8,7 @@ var eraro = require('eraro')
 var Joi = require('joi')
 var _ = require('lodash')
 var uuid = require('node-uuid')
-var r = require('./../../../connections/rethinkdbdash')('sendgrid')
+var path = require('path')
 
 var _eraro = eraro({
   package: 'abibao.domain.command',
@@ -38,9 +38,12 @@ var resultSchema = Joi.object().keys({
   data: Joi.array().items(resultItemSchema).required()
 })
 
+var r = require('./../../../connections/rethinkdbdash')('sendgrid')
+var helper = require('./../../../helper')
+
 module.exports = function (payload = {}) {
-  var type = 'Command'
-  var name = 'SendgridCreateBounceHistoryCommand'
+  var type = helper.getTypeFromFilename(path.basename(__filename))
+  var name = helper.getNameFromFilename(path.basename(__filename))
   return new Promise(function (resolve, reject) {
     var result = {}
     // validate payload: succeed
@@ -68,7 +71,15 @@ module.exports = function (payload = {}) {
                   promises.push(r.table('bounces').get(item.id).replace(item))
                 })
                 Promise.all(promises)
-                  .then((r) => {
+                  .then((resPromises) => {
+                    _.map(result.data, (item) => {
+                      r.table('bounces').get(item.id).run()
+                        .then((bounce) => {
+                          bounce.rethinkdb = bounce.id
+                          delete bounce.id
+                          global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING, bounce)
+                        }).catch(() => { })
+                    })
                     resolve(result)
                   })
                   .catch((error) => {
