@@ -34,7 +34,7 @@ module.exports = function (payload) {
               } else {
                 _answer = item
               }
-              global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
+              global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
                 survey: self.getIDfromURN(survey.urn),
                 label: payload.label,
                 answer: _answer,
@@ -48,7 +48,7 @@ module.exports = function (payload) {
             } else {
               _answer = payload.answer
             }
-            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
+            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
               survey: self.getIDfromURN(survey.urn),
               label: payload.label,
               answer: _answer,
@@ -57,7 +57,7 @@ module.exports = function (payload) {
           }
           // auto affectation ?
           if (waterfall.survey.isAbibao === true && waterfall.survey.complete === true) {
-            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, {
+            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, {
               urnIndividual: waterfall.survey.urnIndividual,
               urnCampaign: waterfall.survey.urnCampaign,
               urnCharity: waterfall.survey.urnCharity,

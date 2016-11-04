@@ -19,7 +19,7 @@ url = url + options.host + ':' + options.port
 var bus = require('servicebus').bus({url})
 
 // setup events
-var BUS_EVENT_SENDGRID_CRON_BOUNCES = 'BUS_EVENT_SENDGRID_CRON_BOUNCES' + '_' + config.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
+var BUS_EVENT_IS_ALIVE = 'BUS_EVENT_IS_ALIVE' + '_' + config.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
 
 // on error
 bus.on('error', (error) => {
@@ -30,7 +30,7 @@ bus.on('error', (error) => {
 // on ready
 bus.on('ready', () => {
   console.log('work in progress')
-  bus.send(BUS_EVENT_SENDGRID_CRON_BOUNCES, {time: Date.now()})
+  bus.publish(BUS_EVENT_IS_ALIVE, {time: Date.now()}, {type: 'fanout', exchangeName: 'amq.fanout'})
   setTimeout(() => {
     process.exit(0)
   }, 2000)

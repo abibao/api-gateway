@@ -7,7 +7,7 @@ module.exports = function (message) {
   global.ABIBAO.services.domain.execute('query', 'sendgridListAllEmailsBouncesQuery')
     .then((result) => {
       _.map(result.data, (email) => {
-        global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY, {email})
+        global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY, {email})
       })
     })
 }

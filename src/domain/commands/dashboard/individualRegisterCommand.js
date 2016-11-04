@@ -38,15 +38,15 @@ module.exports = function (payload) {
             resolve(individual)
             // events on bus
             // ... post informations on slack
-            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
+            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
               'username': 'IndividualRegisterCommand',
               'text': '[' + new Date() + '] - [' + individual.email + '] has just registered into abibao',
               'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
             })
             // ... update smf vote
-            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, individual)
+            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, individual)
             // ... compute user in mysql
-            global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
+            global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
           })
       })
       .catch(function (error) {

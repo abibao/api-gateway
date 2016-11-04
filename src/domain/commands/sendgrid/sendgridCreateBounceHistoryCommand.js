@@ -77,7 +77,7 @@ module.exports = function (payload = {}) {
                         .then((bounce) => {
                           bounce.rethinkdb = bounce.id
                           delete bounce.id
-                          global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING, bounce)
+                          global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING, bounce)
                         }).catch(() => { })
                     })
                     resolve(result)
