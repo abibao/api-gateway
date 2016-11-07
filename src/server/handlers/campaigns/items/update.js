@@ -26,7 +26,6 @@ module.exports = {
       // componentDropdown && componentMultipleChoice
       addCustomOption: Joi.boolean(),
       addCustomOptionLabel: Joi.string().allow(''),
-      addCustomOptionAnswer: Joi.string().allow(''),
       multipleSelections: Joi.boolean(),
       randomize: Joi.boolean(),
       alignment: Joi.string().valid(['vertical', 'horizontal']),

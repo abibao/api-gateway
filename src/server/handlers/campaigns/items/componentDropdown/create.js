@@ -21,7 +21,6 @@ module.exports = {
       required: Joi.boolean().required().default(false),
       addCustomOption: Joi.boolean().required().default(false),
       addCustomOptionLabel: Joi.string().allow(''),
-      addCustomOptionAnswer: Joi.string().allow(''),
       position: Joi.number().min(0),
       image: Joi.string().allow('').default(''),
       // component specific
