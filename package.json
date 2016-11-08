@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.980",
+  "version": "2.9.981",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "crons": "npm-scripts/crons.sh",
@@ -54,7 +54,7 @@
     "cron": "1.1.1",
     "crumb": "6.0.3",
     "cryptr": "2.0.0",
-    "debug": "2.2.0",
+    "debug": "2.3.0",
     "dotenv": "2.0.0",
     "eraro": "0.4.1",
     "faker": "3.1.0",
@@ -79,7 +79,7 @@
     "progress-promise": "0.0.5",
     "request": "2.78.0",
     "request-promise": "4.1.1",
-    "rethinkdbdash": "2.3.23",
+    "rethinkdbdash": "2.3.25",
     "sendgrid": "4.7.1",
     "servicebus": "2.0.5",
     "servicebus-retry": "0.0.11",

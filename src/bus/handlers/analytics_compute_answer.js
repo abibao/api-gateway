@@ -30,10 +30,10 @@ module.exports = function (message) {
           .where('question', result.data.question)
           .delete()
           .then(function () {
+            global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', result.data)
             return global.ABIBAO.services.domain.knex(database + '.answers').insert(result.data)
           })
           .then(function () {
-            global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', result.data.email)
             // update user
             global.ABIBAO.services.domain.execute('query', 'individualFilterQuery', {email: result.data.email})
             .then(function (individuals) {

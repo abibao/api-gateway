@@ -33,6 +33,7 @@ module.exports = function (payload) {
                 isURN = true
               } else {
                 _answer = item
+                isURN = false
               }
               global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
                 survey: self.getIDfromURN(survey.urn),
@@ -47,6 +48,7 @@ module.exports = function (payload) {
               isURN = true
             } else {
               _answer = payload.answer
+              isURN = false
             }
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, {
               survey: self.getIDfromURN(survey.urn),
