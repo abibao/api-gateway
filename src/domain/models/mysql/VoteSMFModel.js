@@ -1,6 +1,7 @@
 'use strict'
 
-module.exports = function (knex) {
+module.exports = function () {
+  var knex = require('./../../../connections/knex')()
   return knex.schema.createTableIfNotExists('smf_votes', function (table) {
     table.increments('id')
     table.string('email')

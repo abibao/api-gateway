@@ -4,7 +4,7 @@ var Promise = require('bluebird')
 var _ = require('lodash')
 
 var r = require('./../../../connections/thinky').r
-var knex = null
+var knex = require('./../../../connections/knex')()
 
 var validate = function (individual) {
   return new Promise(function (resolve, reject) {
@@ -18,12 +18,10 @@ var validate = function (individual) {
 module.exports = function (individual) {
   return new Promise(function (resolve, reject) {
     Promise.props({
-      validate: validate(individual),
-      knex: require('./../../../connections/knex')()
+      validate: validate(individual)
     })
     .then((result) => {
       global.ABIBAO.debuggers.domain('[%s] step 1: check surveys base answers', individual.email)
-      knex = result.knex
       individual.id = global.ABIBAO.services.domain.getIDfromURN(individual.urn)
       individual.charity = global.ABIBAO.services.domain.getIDfromURN(individual.urnCharity)
       r.table('surveys')

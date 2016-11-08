@@ -39,9 +39,14 @@
           <input onchange={ changeRequiredHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().required===true }"> <label>Obligatoire</label><br>
           <input onchange={ changeMultipleSelectionsHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().multipleSelections===true }"> <label>Sélection multiples</label><br>
           <input onchange={ changeRandomizeHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().randomize===true }"> <label>Affichage au hasard</label><br>
-          <form if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_DROPDOWN' } class="uk-form uk-width-1-1">
+          <form if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_DROPDOWN'  } class="uk-form uk-width-1-1">
             <br><span class="uk-text-bold">Placeholder</span><br>
             <input onchange={ changePlaceholderHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().placeholder }" placeholder="Saisissez une valeur">
+          </form>
+          <form class="uk-form uk-width-1-1">
+            <br><span class="uk-text-bold">Réponse personnalisée</span><br>
+            <input onchange={ changeCustomOptionEnabledHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().addCustomOption===true }"> <label>Activer</label><br>
+            <input onchange={ changeCustomOptionLabelHandler } if={ facade.getCurrentCampaignItem().addCustomOption } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().addCustomOptionLabel }" placeholder="Saisissez une valeur">
           </form>
           <h4>Choix de la question</h4>
           <ul onchange={ changeCampaignItemsChoicesOrderHandler } class="uk-nestable" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
@@ -124,6 +129,10 @@
       facade.getCurrentCampaignItem().label = e.currentTarget.value;
     }
 
+    changeCustomOptionLabelHandler(e) {
+      facade.getCurrentCampaignItem().addCustomOptionLabel = e.currentTarget.value;
+    }
+
     changeMinimumHandler(e) {
       facade.getCurrentCampaignItem().minimum = e.currentTarget.value;
     };
@@ -155,6 +164,10 @@
 
     changeMultipleSelectionsHandler(e) {
       facade.getCurrentCampaignItem().multipleSelections = e.currentTarget.checked;
+    };
+
+    changeCustomOptionEnabledHandler(e) {
+      facade.getCurrentCampaignItem().addCustomOption = e.currentTarget.checked;
     };
 
     changeRandomizeHandler(e) {

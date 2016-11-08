@@ -1,160 +1,93 @@
 'use strict'
 
-// load environnement configuration
-var config = require('nconf')
-config.argv().env().file({ file: 'nconf-deve.json' })
+var Promise = require('bluebird')
 
-var options = {
-  host: config.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-  port: config.get('RETHINKDB_PORT_28015_TCP_PORT'),
-  db: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
-  user: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
-  password: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
-  authKey: config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
-  silent: true
-}
-var r = require('thinky')(options).r
+var nconf = require('nconf')
+nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-const database = config.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-
-describe('rethinkdb structure', function () {
-  it('should create database', function (done) {
-    r.dbList().contains(database)
+var createRethinkdbDatabase = function (database) {
+  return new Promise((resolve, reject) => {
+    var r = require('../src/connections/rethinkdbdash')('EMPTY')
+    r.dbList()
+      .contains(database)
+      .run()
       .then((exists) => {
         if (exists === true) {
-          done()
+          resolve()
         } else {
           r.dbCreate(database)
             .then(() => {
-              done()
+              resolve()
             })
-            .catch(done)
+            .catch(reject)
         }
       })
-      .catch(done)
   })
-  it('should create table surveys', function (done) {
-    r.db(database).tableList().contains('surveys')
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table('surveys').delete()
-            .then(() => {
-              done()
-            }).catch(done)
-        } else {
-          r.db(database).tableCreate('surveys')
-            .then(() => {
-              done()
-            }).catch(done)
-        }
-      })
-      .catch(done)
-  })
-  it('should create table administrators', function (done) {
-    r.db(database).tableList().contains('administrators')
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table('administrators').delete()
-            .then(() => {
-              done()
-            }).catch(done)
-        } else {
-          r.db(database).tableCreate('administrators')
-            .then(() => {
-              done()
-            }).catch(done)
-        }
-      })
-      .catch(done)
-  })
-  it('should create table individuals', function (done) {
-    r.db(database).tableList().contains('individuals')
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table('individuals').delete()
-            .then(() => {
-              done()
-            }).catch(done)
-        } else {
-          r.db(database).tableCreate('individuals')
-            .then(() => {
-              done()
-            }).catch(done)
-        }
-      })
-      .catch(done)
-  })
-  it('should create table entities', function (done) {
-    r.db(database).tableList().contains('entities')
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table('entities').delete()
-            .then(() => {
-              done()
-            }).catch(done)
-        } else {
-          r.db(database).tableCreate('entities')
-            .then(() => {
-              done()
-            }).catch(done)
-        }
-      })
-      .catch(done)
-  })
-  it('should create table campaigns', function (done) {
-    r.db(database).tableList().contains('campaigns')
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table('campaigns').delete()
-            .then(() => {
-              done()
-            }).catch(done)
-        } else {
-          r.db(database).tableCreate('campaigns')
-            .then(() => {
-              done()
-            }).catch(done)
-        }
-      })
-      .catch(done)
-  })
-  it('should create table campaigns_items', function (done) {
-    r.db(database).tableList().contains('campaigns_items')
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table('campaigns_items').delete()
-            .then(() => {
-              done()
-            }).catch(done)
-        } else {
-          r.db(database).tableCreate('campaigns_items')
-            .then(() => {
-              done()
-            }).catch(done)
-        }
-      })
-      .catch(done)
-  })
-  it('should create table campaigns_items_choices', function (done) {
-    r.db(database).tableList().contains('campaigns_items_choices')
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table('campaigns_items_choices').delete()
-            .then(() => {
-              done()
-            }).catch(done)
-        } else {
-          r.db(database).tableCreate('campaigns_items_choices')
-            .then(() => {
-              done()
-            }).catch(done)
-        }
-      })
-      .catch(done)
-  })
+}
 
+var createRethinkdbTable = function (database, name) {
+  return new Promise((resolve, reject) => {
+    var r = require('../src/connections/rethinkdbdash')('EMPTY')
+    r.db(database)
+      .tableList()
+      .contains(name)
+      .run()
+      .then((exists) => {
+        if (exists === true) {
+          r.db(database).table(name)
+            .delete()
+            .run()
+            .then(() => {
+              resolve()
+            }).catch(reject)
+        } else {
+          r.db(database).tableCreate(name)
+            .run()
+            .then(() => {
+              resolve()
+            }).catch(reject)
+        }
+      })
+      .catch(reject)
+  })
+}
+
+describe('rethinkdb structure', function () {
+  it('should create database mvp', function (done) {
+    createRethinkdbDatabase(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')).then(done).catch(done)
+  })
+  it('should create table mvp.surveys', function (done) {
+    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'surveys').then(done).catch(done)
+  })
+  it('should create table mvp.administrators', function (done) {
+    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'administrators').then(done).catch(done)
+  })
+  it('should create table mvp.individuals', function (done) {
+    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'individuals').then(done).catch(done)
+  })
+  it('should create table mvp.entities', function (done) {
+    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'entities').then(done).catch(done)
+  })
+  it('should create table mvp.campaigns', function (done) {
+    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'campaigns').then(done).catch(done)
+  })
+  it('should create table mvp.campaigns_items', function (done) {
+    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'campaigns_items').then(done).catch(done)
+  })
+  it('should create table mvp.campaigns_items_choices', function (done) {
+    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'campaigns_items_choices').then(done).catch(done)
+  })
+  it('should create database sendgrid', function (done) {
+    createRethinkdbDatabase('sendgrid').then(done).catch(done)
+  })
+  it('should create table sendgrid.bounces', function (done) {
+    createRethinkdbTable('sendgrid', 'bounces').then(done).catch(done)
+  })
+})
+describe('rethinkdb data', function () {
   it('should create entity none', function (done) {
-    r.db(database).table('entities')
+    var r = require('../src/connections/rethinkdbdash')()
+    r.table('entities')
       .insert({
         'avatar': 'images/avatars/default.png',
         'contact': 'none@abibao.com',
@@ -177,7 +110,8 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create abibao entity', function (done) {
-    r.db(database).table('entities')
+    var r = require('../src/connections/rethinkdbdash')()
+    r.table('entities')
       .insert({
         'avatar': 'images/avatars/default.png',
         'contact': 'team@abibao.com',
@@ -200,6 +134,7 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create four campaigns for abibao', function (done) {
+    var r = require('../src/connections/rethinkdbdash')()
     var campaignsList = [{
       'company': '56aa131ca533a2a04be325ae',
       'createdAt': r.now(),
@@ -251,7 +186,7 @@ describe('rethinkdb structure', function () {
       'screenThankYouContent': '',
       'screenWelcomeContent': ''
     }]
-    r.db(database).table('campaigns')
+    r.table('campaigns')
       .insert(campaignsList)
       .then(() => {
         done()
@@ -259,7 +194,8 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create one campaign_item', function (done) {
-    r.db(database).table('campaigns_items')
+    var r = require('../src/connections/rethinkdbdash')()
+    r.table('campaigns_items')
       .insert({
         'addCustomOption': true,
         'alignment': 'horizontal',
@@ -284,7 +220,8 @@ describe('rethinkdb structure', function () {
       .catch(done)
   })
   it('should create one campaign_item_choice', function (done) {
-    r.db(database).table('campaigns_items_choices')
+    var r = require('../src/connections/rethinkdbdash')()
+    r.table('campaigns_items_choices')
       .insert({
         'campaign': '56eb2501e9b0fbf30250f8c8',
         'createdAt': r.now(),

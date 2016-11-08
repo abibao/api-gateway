@@ -24,6 +24,7 @@ module.exports = {
       multipleSelections: Joi.boolean().required().default(false),
       randomize: Joi.boolean().required().default(false),
       addCustomOption: Joi.boolean().required().default(false),
+      addCustomOptionLabel: Joi.string().allow(''),
       alignment: Joi.string().valid(['vertical', 'horizontal']).required().default('horizontal'),
       // abibao
       label: Joi.string().required(),

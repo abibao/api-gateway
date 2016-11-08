@@ -15,6 +15,7 @@ module.exports = {
     payload: {
       // component
       question: Joi.string(),
+      label: Joi.string().allow(''),
       description: Joi.string().allow(''),
       placeholder: Joi.string().allow(''),
       required: Joi.boolean(),
@@ -22,10 +23,11 @@ module.exports = {
       position: Joi.number().min(0),
       // componentLongText && componentShortText
       maxLength: Joi.number(),
-      // componentMultipleChoice
+      // componentDropdown && componentMultipleChoice
+      addCustomOption: Joi.boolean(),
+      addCustomOptionLabel: Joi.string().allow(''),
       multipleSelections: Joi.boolean(),
       randomize: Joi.boolean(),
-      addCustomOption: Joi.boolean(),
       alignment: Joi.string().valid(['vertical', 'horizontal']),
       // componentNumber
       minimum: Joi.number(),

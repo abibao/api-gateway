@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-#   Use this script to test if a given TCP host/port are available
+
+# -----------------------
+# make sure all required dependencies are setup for developpement
+# -----------------------
+
+# exit on sub-module failure
+set -e
 
 cmdname=$(basename $0)
 

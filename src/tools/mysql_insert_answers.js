@@ -24,14 +24,14 @@ var options = {
 }
 var knex = require('knex')(options)
 
-var cacheDir = path.resolve(__dirname, '../.cache/mysql/users')
+var cacheDir = path.resolve(__dirname, '../../.cache/mysql/answers')
 
 console.log('===== START ===============')
-console.log('delete users')
-knex('users')
+console.log('delete answers')
+knex('answers')
   .delete()
   .then(() => {
-    console.log('get all files users')
+    console.log('get all files answers')
     var files = glob.sync(cacheDir + '/**/*.json', {
       nodir: true,
       dot: true
@@ -45,16 +45,15 @@ knex('users')
       total
     })
     var placeInQueue = function (source) {
-      var files = _.take(source, 300)
+      var files = _.take(source, 100)
       var queue = []
       _.map(files, (file) => {
         var data = fse.readJsonSync(file)
         data.createdAt = new Date(data.createdAt)
-        data.modifiedAt = new Date(data.modifiedAt)
-        queue.push(knex('users').insert(data))
+        queue.push(knex('answers').insert(data))
       })
       if (queue.length === 0) {
-        console.log('all users have been processed')
+        console.log('all answers have been processed')
         console.log('===== END ===============')
         knex.destroy()
         process.exit(0)

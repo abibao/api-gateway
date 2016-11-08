@@ -1,6 +1,6 @@
 # API-GATEWAY
 
-![](https://img.shields.io/badge/abibao api gateway-2.9.933-5da2c7.svg)
+![](https://img.shields.io/badge/abibao api gateway-2.9.98-5da2c7.svg)
 ![](https://img.shields.io/badge/node-6-5da2c7.svg)
 [![Docker Automated buil](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?maxAge=2592000)]()  
 
@@ -15,10 +15,3 @@
 ### Description
 
 L'api c'est la vie ! Tout converge vers le gateway.
-
-### Scripts NPM
-
-Scripts | Descriptions
------------- | -------------
-```npm test``` | Lancement des tests (unitaires, intégrations, etc) + code coverage
-```npm start``` | Lancement de l'application en développement

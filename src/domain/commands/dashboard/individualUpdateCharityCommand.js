@@ -16,7 +16,7 @@ module.exports = function (payload) {
         if (individual.urnCharity === charity.urn) { return reject(new Error('Charity already affected')) }
         return self.execute('command', 'individualUpdateCommand', { urn: payload.credentials.urn, charity: self.getIDfromURN(charity.urn) }).then(function (individual) {
           resolve(individual)
-          global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
+          global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
         })
       })
     }).catch(function (error) {

@@ -26,7 +26,7 @@ var execReQL = function (table, skip, limit, callback) {
       console.log('table: %s skip=%s limit=%s (%s)', table, skip, limit, items.length)
       async.mapSeries(items, function (item, next) {
         console.log('..... save %s/%s.json', table, item.id)
-        var dir = path.resolve(__dirname, '../.cache/rethinkdb/' + table)
+        var dir = path.resolve(__dirname, '../../.cache/rethinkdb/' + table)
         fse.ensureDirSync(dir)
         var filepath = path.resolve(dir, item.id + '.json')
         fse.writeJsonSync(filepath, item)
@@ -48,7 +48,7 @@ var execReQL = function (table, skip, limit, callback) {
 }
 
 console.log('===== PREPARE ===============')
-var cacheDir = path.resolve(__dirname, '../.cache/rethinkdb')
+var cacheDir = path.resolve(__dirname, '../../.cache/rethinkdb')
 fse.ensureDirSync(cacheDir)
 fse.emptyDirSync(cacheDir)
 

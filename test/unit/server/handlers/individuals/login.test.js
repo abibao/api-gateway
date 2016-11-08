@@ -19,7 +19,7 @@ before(function (done) {
 
 var stub
 
-describe('[unit] server /v1/individuals/login', function () {
+describe('[unit] server: /v1/individuals/login', function () {
   it('should not login because email is mandatory', function (done) {
     var req = {
       headers: {

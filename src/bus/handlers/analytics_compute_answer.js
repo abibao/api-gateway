@@ -30,15 +30,15 @@ module.exports = function (message) {
           .where('question', result.data.question)
           .delete()
           .then(function () {
+            global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', result.data)
             return global.ABIBAO.services.domain.knex(database + '.answers').insert(result.data)
           })
           .then(function () {
-            global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', result.data.email)
             // update user
             global.ABIBAO.services.domain.execute('query', 'individualFilterQuery', {email: result.data.email})
             .then(function (individuals) {
               var individual = individuals[0]
-              global.ABIBAO.services.bus.publish(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
+              global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
             })
             resolve()
           })

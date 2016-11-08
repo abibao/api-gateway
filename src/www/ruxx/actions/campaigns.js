@@ -10,8 +10,6 @@ function CampaignsActions (facade) {
         position: facade.getCurrentEntity().campaigns.length + 1,
         screenWelcomeContent: '',
         screenThankYouContent: '',
-        price: 0,
-        currency: 'EUR',
         published: false,
         description: 'Veuillez saisir une description'
       }
@@ -35,6 +33,8 @@ function CampaignsActions (facade) {
         campaign: facade.getCurrentCampaign().urn,
         question: 'Quelle est la question ?',
         required: true,
+        addCustomOption: false,
+        addCustomOptionLabel: 'Réponse libre...',
         position: facade.getCurrentCampaign().items.length + 1,
         label: 'ABIBAO_ANSWER_',
         placeholder: 'Ceci est un placeholder'
@@ -85,6 +85,7 @@ function CampaignsActions (facade) {
         multipleSelections: false,
         randomize: false,
         addCustomOption: false,
+        addCustomOptionLabel: 'Réponse libre...', 
         alignment: 'horizontal'
       }
       facade.call('POST', facade.baseapi + '/v1/campaigns/items/multiple-choice', payload).then(function (item) {
@@ -130,7 +131,6 @@ function CampaignsActions (facade) {
       delete data.modifiedAt
       delete data.urn
       delete data.company
-      delete data.label
       delete data.type
       delete data.choices
       delete data.urnCampaign

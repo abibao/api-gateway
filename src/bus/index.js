@@ -16,7 +16,10 @@ var internals = {
     BUS_EVENT_ANALYTICS_COMPUTE_USER: 'BUS_EVENT_ANALYTICS_COMPUTE_USER' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
     BUS_EVENT_WEBHOOK_SLACK: 'BUS_EVENT_WEBHOOK_SLACK' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
     BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO: 'BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
-    BUS_EVENT_SMF_UPDATE_VOTE: 'BUS_EVENT_SMF_UPDATE_VOTE' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
+    BUS_EVENT_SMF_UPDATE_VOTE: 'BUS_EVENT_SMF_UPDATE_VOTE' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
+    BUS_EVENT_SENDGRID_CRON_BOUNCES: 'BUS_EVENT_SENDGRID_CRON_BOUNCES' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
+    BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY: 'BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase(),
+    BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING: 'BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING' + '_' + global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV').toUpperCase()
   },
   bus: false
 }
@@ -41,12 +44,15 @@ internals.initialize = function () {
       reject(error)
     })
     internals.bus.on('ready', () => {
-      internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'))
-      internals.bus.subscribe(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
-      internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
-      internals.bus.subscribe(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
-      internals.bus.subscribe(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
-      internals.bus.subscribe(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
+      internals.bus.subscribe(internals.events.BUS_EVENT_IS_ALIVE, require('./handlers/is_alive'), {type: 'fanout', exchangeName: 'amq.fanout'})
+      internals.bus.listen(internals.events.BUS_EVENT_SMF_UPDATE_VOTE, require('./handlers/smf_update_vote'))
+      internals.bus.listen(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_ANSWER, require('./handlers/analytics_compute_answer'))
+      internals.bus.listen(internals.events.BUS_EVENT_ANALYTICS_COMPUTE_USER, require('./handlers/analytics_compute_user'))
+      internals.bus.listen(internals.events.BUS_EVENT_WEBHOOK_SLACK, require('./handlers/webhook_slack'))
+      internals.bus.listen(internals.events.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, require('./handlers/email_abibao_affect_campaigns_auto'))
+      internals.bus.listen(internals.events.BUS_EVENT_SENDGRID_CRON_BOUNCES, require('./handlers/sendgrid_crons_bounces'))
+      internals.bus.listen(internals.events.BUS_EVENT_SENDGRID_CREATE_BOUNCE_HISTORY, require('./handlers/sendgrid_create_bounce_history'))
+      internals.bus.listen(internals.events.BUS_EVENT_SENDGRID_CREATE_BOUNCE_WORKING, require('./handlers/sendgrid_create_bounce_working'))
       resolve()
     })
   })
