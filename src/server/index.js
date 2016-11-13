@@ -50,9 +50,7 @@ internals.initialize = function () {
         payload: request.payload,
         exectime: request.info.responded - request.info.received
       }
-      if (global.ABIBAO.environnement === 'prod') {
-        global.ABIBAO.logger.info(data)
-      }
+      global.ABIBAO.logger.info(data)
       abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
     })
     var plugins = ['inert', 'auth'] // 'crumb'
