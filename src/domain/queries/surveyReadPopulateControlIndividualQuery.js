@@ -28,7 +28,7 @@ module.exports = function (payload) {
                 }
               }).without('id', 'campaign', 'createdAt', 'modifiedAt')
             }
-          }).without('id', 'company', 'price', 'currency', 'createdAt', 'modifiedAt')
+          }).without('id', 'company', 'createdAt', 'modifiedAt')
         }
       }).without('id', 'charity', 'individual')
         .then(function (survey) {

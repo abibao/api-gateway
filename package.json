@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.982",
+  "version": "2.9.984",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "crons": "npm-scripts/crons.sh",
@@ -69,7 +69,7 @@
     "joi": "9.2.0",
     "jsonwebtoken": "7.1.9",
     "knex": "0.12.6",
-    "lodash": "4.16.6",
+    "lodash": "4.17.0",
     "md5": "2.2.1",
     "mysql": "2.12.0",
     "nconf": "0.8.4",

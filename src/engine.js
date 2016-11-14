@@ -13,6 +13,8 @@ ROLES
 
 var Promise = require('bluebird')
 
+var uuid = require('node-uuid')
+
 // load environnement configuration
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
@@ -81,6 +83,14 @@ var engine = function () {
           if (error) { return abibao.error(error) }
           abibao.debug('server has just started')
           global.ABIBAO.running = true
+          var data = {
+            uuid: uuid.v1(),
+            environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
+            version: process.env.npm_package_version,
+            type: 'system',
+            promise: 'engineInitializedSuccess'
+          }
+          global.ABIBAO.logger.info(data)
           resolve()
         })
       })

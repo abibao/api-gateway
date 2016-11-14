@@ -1,8 +1,34 @@
 'use strict'
 
+var args = process.argv
+args.shift()
+args.shift()
+
+// **********************
+// Only one argument is allow and mandatory: environnement
+// **********************
+try {
+  var arg = {
+    label: args[0].split('=')[0],
+    value: args[0].split('=')[1]
+  }
+  if (arg.label !== 'environnement') {
+    console.log('environnement is mandatory')
+    process.exit(1)
+  }
+  if (arg.value !== 'deve' && arg.value !== 'rece' && arg.value !== 'prod') {
+    console.log('not a valid environnement')
+    process.exit(1)
+  }
+} catch (e) {
+  console.log(e)
+  process.exit(1)
+}
+// **********************
+
 // load environnement configuration
 var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-prod.json' })
+nconf.argv().env().file({ file: 'nconf-' + arg.value + '.json' })
 
 var async = require('async')
 var path = require('path')

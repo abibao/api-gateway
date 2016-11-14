@@ -140,14 +140,6 @@
       facade.getCurrentCampaign().name =  e.currentTarget.value;
     };
 
-    changePriceHandler(e) {
-      facade.getCurrentCampaign().price =  e.currentTarget.value;
-    };
-
-    changeCurrencyHandler(e) {
-      facade.getCurrentCampaign().currency =  e.currentTarget.selectedOptions[0].value;
-    };
-
     changeDescriptionHandler(e) {
       facade.getCurrentCampaign().description = e.currentTarget.value;
     };
