@@ -16,6 +16,8 @@ module.exports = function (filters) {
           delete model.charity
           delete model.campaign
           delete model.item
+          delete model.hasRegisteredEntity
+          delete model.hasRegisteredSurvey
         })
         resolve(models)
       })

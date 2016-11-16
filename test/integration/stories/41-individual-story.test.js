@@ -31,7 +31,9 @@ describe('[integration] individual story', function () {
       expect(result).to.have.property('urn')
       individualFake.urn = result.urn
       individualFake.id = global.ABIBAO.services.domain.getIDfromURN(result.urn)
-      done()
+      setTimeout(() => {
+        done()
+      }, 1000)
     }).catch(function (error) {
       done(error)
     })

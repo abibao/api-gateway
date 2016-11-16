@@ -44,8 +44,6 @@ module.exports = function (payload) {
       .then(function (payload) {
         return self.execute('command', 'individualCreateCommand', payload)
           .then(function (individual) {
-            // next tick on request
-            resolve(individual)
             // events on bus
             // ... post informations on slack
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
@@ -57,6 +55,8 @@ module.exports = function (payload) {
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, individual)
             // ... compute user in mysql
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
+            // next tick on request
+            resolve(individual)
           })
       })
       .catch(function (error) {

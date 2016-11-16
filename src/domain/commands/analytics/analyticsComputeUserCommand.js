@@ -24,6 +24,7 @@ module.exports = function (individual) {
       global.ABIBAO.debuggers.domain('[%s] step 1: check surveys base answers', individual.email)
       individual.id = global.ABIBAO.services.domain.getIDfromURN(individual.urn)
       individual.charity = global.ABIBAO.services.domain.getIDfromURN(individual.urnCharity)
+      individual.hasRegisteredEntity = global.ABIBAO.services.domain.getIDfromURN(individual.urnRegisteredEntity)
       r.table('surveys')
         .filter({individual: individual.id})
         .map(function (item) {

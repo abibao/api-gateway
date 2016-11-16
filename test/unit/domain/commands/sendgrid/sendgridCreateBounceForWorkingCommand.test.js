@@ -182,7 +182,6 @@ describe('[unit] domain: sendgridCreateBounceForWorkingCommand', function () {
         done()
       })
       .catch((error) => {
-        console.log(error)
         done(error)
       })
   })

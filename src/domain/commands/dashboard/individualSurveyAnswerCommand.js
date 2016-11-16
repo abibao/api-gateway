@@ -58,7 +58,6 @@ module.exports = function (payload) {
             })
           }
           // auto affectation at the end of abibao survey number 2 ?
-          console.log(waterfall.survey)
           if (waterfall.survey.isAbibao === true && waterfall.survey.complete === true && waterfall.survey.position === 2) {
             global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO, {
               urnIndividual: waterfall.survey.urnIndividual,

@@ -10,7 +10,7 @@ var webhookSlack = require('../../../src/bus/handlers/webhook_slack')
 describe('[integration] servicebus story', function () {
   it('should simulate and fail BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', function (done) {
     analyticsComputeAnswer({
-      survey: '5728fc583dea810500da78d6',
+      survey: 'ABIBAO_ANSWER_FONDAMENTAL_AGE',
       label: 'ABIBAO_ANSWER_FONDAMENTAL_AGE',
       answer: '1970',
       isURN: false

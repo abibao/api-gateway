@@ -85,7 +85,7 @@ describe('rethinkdb structure', function () {
   })
 })
 describe('rethinkdb data', function () {
-  it('should create entity none', function (done) {
+  it('should create "none" entity', function (done) {
     var r = require('../src/connections/rethinkdbdash')()
     r.table('entities')
       .insert({
@@ -109,7 +109,7 @@ describe('rethinkdb data', function () {
       })
       .catch(done)
   })
-  it('should create abibao entity', function (done) {
+  it('should create "abibao" entity', function (done) {
     var r = require('../src/connections/rethinkdbdash')()
     r.table('entities')
       .insert({
@@ -126,6 +126,30 @@ describe('rethinkdb data', function () {
         'title': 'Abibao Title',
         'type': 'abibao',
         'url': 'http://www.abibao.com',
+        'usages': ''
+      })
+      .then(() => {
+        done()
+      })
+      .catch(done)
+  })
+  it('should create "association" entity', function (done) {
+    var r = require('../src/connections/rethinkdbdash')()
+    r.table('entities')
+      .insert({
+        'avatar': 'images/avatars/default.png',
+        'contact': 'association@abibao.com',
+        'createdAt': r.now(),
+        'description': 'Association Description',
+        'hangs': 'Association Accroche',
+        'icon': 'images/icons/default.png',
+        'id': 'ffaa131ca533a2a04be325aa',
+        'modifiedAt': r.now(),
+        'name': 'Association Nom',
+        'picture': 'images/pictures/default.png',
+        'title': 'Association Title',
+        'type': 'charity',
+        'url': 'http://www.association.com',
         'usages': ''
       })
       .then(() => {

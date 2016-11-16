@@ -14,6 +14,8 @@ module.exports = function (urn) {
         delete model.charity
         delete model.campaign
         delete model.item
+        delete model.hasRegisteredEntity
+        delete model.hasRegisteredSurvey
         resolve(model)
       })
       .catch(function (error) {

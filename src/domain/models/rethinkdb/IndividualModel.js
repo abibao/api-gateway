@@ -19,6 +19,12 @@ module.exports = function (thinky) {
     urnCharity: type.virtual().default(function () {
       return _.isUndefined(this.charity) ? null : 'urn:abibao:database:entity:' + cryptr.encrypt(this.charity)
     }),
+    urnRegisteredEntity: type.virtual().default(function () {
+      return _.isUndefined(this.hasRegisteredEntity) ? null : 'urn:abibao:database:entity:' + cryptr.encrypt(this.hasRegisteredEntity)
+    }),
+    urnRegisteredSurvey: type.virtual().default(function () {
+      return _.isUndefined(this.hasRegisteredSurvey) ? null : 'urn:abibao:database:campaign:' + cryptr.encrypt(this.hasRegisteredSurvey)
+    }),
     // fields
     email: type.string().email().required(),
     scope: type.string().default('individual'),

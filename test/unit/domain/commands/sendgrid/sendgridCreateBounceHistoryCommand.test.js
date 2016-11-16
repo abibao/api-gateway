@@ -50,7 +50,6 @@ describe('[unit] domain: sendgridCreateBounceHistoryCommand', function () {
         done()
       })
       .catch((error) => {
-        console.log(error)
         done(error)
       })
   })
