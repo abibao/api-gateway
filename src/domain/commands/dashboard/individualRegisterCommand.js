@@ -23,11 +23,21 @@ module.exports = function (payload) {
         if (individuals.length > 0) {
           throw new Error('Email already exists in database')
         }
-        // create individual
+        // entity ?
         if (payload.entity) {
           payload.charity = self.getIDfromURN(payload.entity)
           payload.hasRegisteredEntity = payload.charity
           delete payload.entity
+        }
+        // survey ?
+        if (payload.survey) {
+          payload.hasRegisteredSurvey = self.getIDfromURN(payload.survey)
+          delete payload.survey
+        }
+        // source ?
+        if (payload.source) {
+          payload.hasRegisteredSource = payload.source
+          delete payload.source
         }
         return payload
       })

@@ -13,7 +13,9 @@ module.exports = {
       email: Joi.string().required().email(),
       password1: Joi.string().required(),
       password2: Joi.string().required(),
-      entity: Joi.string()
+      entity: Joi.string(),
+      survey: Joi.string(),
+      source: Joi.string()
     }
   },
   jsonp: 'callback',
