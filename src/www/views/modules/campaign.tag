@@ -39,12 +39,13 @@
               <div class="uk-nestable-panel uk-text-truncate">
                 <i if={ campaignItem.type==="ABIBAO_COMPONENT_DROPDOWN" } class="uk-nestable-handle uk-icon uk-icon-toggle-down uk-margin-small-right"></i>
                 <i if={ campaignItem.type==="ABIBAO_COMPONENT_LONG_TEXT" } class="uk-nestable-handle uk-icon uk-icon-file-text-o uk-margin-small-right"></i>
-                <i if={ campaignItem.type==="ABIBAO_COMPONENT_SHORT_TEXT" } class="uk-nestable-handle uk-icon uk-icon-text-width uk-margin-small-right"></i>
                 <i if={ campaignItem.type==="ABIBAO_COMPONENT_MULTIPLE_CHOICE" } class="uk-nestable-handle uk-icon uk-icon-list-ol uk-margin-small-right"></i>
                 <i if={ campaignItem.type==="ABIBAO_COMPONENT_NUMBER" } class="uk-nestable-handle uk-icon uk-icon-sort-numeric-asc uk-margin-small-right"></i>
+                <i if={ campaignItem.type==="ABIBAO_COMPONENT_SHORT_TEXT" } class="uk-nestable-handle uk-icon uk-icon-text-width uk-margin-small-right"></i>
+                <i if={ campaignItem.type==="ABIBAO_COMPONENT_STATEMENT" } class="uk-nestable-handle uk-icon uk-icon-sticky-note-o uk-margin-small-right"></i>
                 <i if={ campaignItem.type==="ABIBAO_COMPONENT_YES_NO" } class="uk-nestable-handle uk-icon uk-icon-toggle-on uk-margin-small-right"></i>
-                <div if={ campaignItem.choices.length>0 } class="uk-badge uk-badge-notification uk-badge-success">{ campaignItem.choices.length }</div>
-                <div if={ campaignItem.choices.length===0 } class="uk-badge uk-badge-notification uk-badge-danger"> </div>
+                <div style="width: 30px;" if={ campaignItem.choices.length>0 } class="uk-badge uk-badge-notification uk-badge-success">{ campaignItem.choices.length }</div>
+                <div style="width: 30px;background: none;" if={ campaignItem.choices.length===0 } class="uk-badge uk-badge-notification">-</div>
                 <a href="/#campaigns-items/{ campaignItem.urn }">({ campaignItem.position }) { campaignItem.question }</a>
               </div>
             </li>
@@ -54,10 +55,11 @@
           <div class="uk-form-select uk-button uk-button-large uk-width-2-4 uk-float-left" data-uk-form-select>
             <span></span>
             <select onchange={ changeCreateItemWithType }>
-              <option>YES_NO</option>
-              <option>NUMBER</option>
-              <option>MULTIPLE_CHOICE</option>
               <option>DROPDOWN</option>
+              <option>MULTIPLE_CHOICE</option>
+              <option>NUMBER</option>
+              <option>STATEMENT</option>
+              <option>YES_NO</option>
             </select>
           </div>
           <button type="button" onclick={ createCampaignItemsHandler } class="uk-width-1-4 uk-button uk-button-primary uk-button-large uk-float-right">Ajouter</button>
@@ -99,14 +101,20 @@
               facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
             });
           break;
-        case 'YES_NO':
-          facade.actions.campaigns.createItemYesNo()
+        case 'MULTIPLE_CHOICE':
+          facade.actions.campaigns.createItemMultipleChoice()
+          .then(function() {
+            facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
+          });
+          break;
+        case 'STATEMENT':
+          facade.actions.campaigns.createItemStatement()
             .then(function() {
               facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
             });
           break;
-        case 'MULTIPLE_CHOICE':
-          facade.actions.campaigns.createItemMultipleChoice()
+        case 'YES_NO':
+          facade.actions.campaigns.createItemYesNo()
             .then(function() {
               facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
             });

@@ -64,6 +64,7 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/campaigns/items/long-text', config: require('./handlers/campaigns/items/componentLongText/create') },
   { method: 'POST', path: '/v1/campaigns/items/multiple-choice', config: require('./handlers/campaigns/items/componentMultipleChoice/create') },
   { method: 'POST', path: '/v1/campaigns/items/yes-no', config: require('./handlers/campaigns/items/componentYesNo/create') },
+  { method: 'POST', path: '/v1/campaigns/items/statement', config: require('./handlers/campaigns/items/componentStatement/create') },
   { method: 'POST', path: '/v1/campaigns/items/dropdown', config: require('./handlers/campaigns/items/componentDropdown/create') },
   { method: 'POST', path: '/v1/campaigns/items/number', config: require('./handlers/campaigns/items/componentNumber/create') }
 

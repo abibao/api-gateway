@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.984",
+  "version": "2.9.985",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "crons": "npm-scripts/crons.sh",
@@ -49,7 +49,7 @@
     "bluebird": "3.4.6",
     "boom": "4.2.0",
     "bson": "0.5.6",
-    "bunyan": "1.8.4",
+    "bunyan": "1.8.5",
     "bunyan-logstash-tcp": "0.3.4",
     "cron": "1.1.1",
     "crumb": "6.0.3",
@@ -69,7 +69,7 @@
     "joi": "9.2.0",
     "jsonwebtoken": "7.1.9",
     "knex": "0.12.6",
-    "lodash": "4.17.0",
+    "lodash": "4.17.2",
     "md5": "2.2.1",
     "mysql": "2.12.0",
     "nconf": "0.8.4",
