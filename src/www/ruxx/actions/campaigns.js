@@ -56,10 +56,10 @@ function CampaignsActions (facade) {
     return new Promise(function (resolve, reject) {
       var payload = {
         campaign: facade.getCurrentCampaign().urn,
-        question: 'Titre de l\intercalaire...',
+        question: 'Titre de l\'intercalaire...',
         required: true,
         position: facade.getCurrentCampaign().items.length + 1,
-        label: 'ABIBAO_ANSWER_'
+        label: 'ABIBAO_ANSWER_STATEMENT_000'
       }
       facade.call('POST', facade.baseapi + '/v1/campaigns/items/statement', payload).then(function (item) {
         self.facade.setLoading(false)
