@@ -10,7 +10,7 @@ module.exports = function (urn) {
   return new Promise(function (resolve, reject) {
     self.execute('query', 'campaignItemReadQuery', urn).then(function (campaignItem) {
       return self.execute('query', 'campaignItemChoiceFilterQuery', {item: self.getIDfromURN(urn)}).then(function (choices) {
-        campaignItem.choices = _.orderBy(choices, ['position'], ['asc']);
+        campaignItem.choices = _.orderBy(choices, ['position'], ['asc'])
         resolve(campaignItem)
       })
     }).catch(function (error) {
