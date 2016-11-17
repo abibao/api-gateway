@@ -179,22 +179,22 @@ describe('rethinkdb data', function () {
     var campaignsList = [{
       'company': '56aa131ca533a2a04be325ae',
       'createdAt': r.now(),
-      'description': 'Premiere série de questions diverses pour l\'onboarding.',
-      'id': '56eb2501e9b0fbf30250f8c8',
+      'description': 'Sondage fondamental',
+      'id': '56eb24cfe9b0fbf30250f8c7',
       'modifiedAt': r.now(),
-      'name': 'Sondage profilage 02',
-      'position': 2,
+      'name': 'Sondage profilage 01',
+      'position': 1,
       'published': true,
       'screenThankYouContent': '',
       'screenWelcomeContent': ''
     }, {
       'company': '56aa131ca533a2a04be325ae',
       'createdAt': r.now(),
-      'description': 'Sondage fondamental',
-      'id': '56eb24cfe9b0fbf30250f8c7',
+      'description': 'Premiere série de questions diverses pour l\'onboarding.',
+      'id': '56eb2501e9b0fbf30250f8c8',
       'modifiedAt': r.now(),
-      'name': 'Sondage profilage 01',
-      'position': 1,
+      'name': 'Sondage profilage 02',
+      'position': 2,
       'published': true,
       'screenThankYouContent': '',
       'screenWelcomeContent': ''
@@ -232,7 +232,7 @@ describe('rethinkdb data', function () {
       .insert({
         'addCustomOption': true,
         'alignment': 'horizontal',
-        'campaign': '56eb2501e9b0fbf30250f8c8',
+        'campaign': '56eb24cfe9b0fbf30250f8c7',
         'createdAt': r.now(),
         'description': 'Abibao ne s\'intéresse pas à votre identité personnelle. Définissons plutôt vos centres d\'intérêts en tant que consommateur.',
         'id': '56eb2757e9b0fbf30250f8cb',
@@ -256,7 +256,7 @@ describe('rethinkdb data', function () {
     var r = require('../src/connections/rethinkdbdash')()
     r.table('campaigns_items_choices')
       .insert({
-        'campaign': '56eb2501e9b0fbf30250f8c8',
+        'campaign': '56eb2757e9b0fbf30250f8cb',
         'createdAt': r.now(),
         'id': '56ee9a414726e973079d96d0',
         'item': '56eb2757e9b0fbf30250f8cb',

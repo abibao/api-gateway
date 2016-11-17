@@ -1,9 +1,9 @@
 --timeout 5000
 --use_strict
 --recursive test/standard.test.js
---recursive test/engine-initialize.test.js
 --recursive test/rethinkdb-structure.test.js
 --recursive test/mysql-structure.test.js
+--recursive test/engine-initialize.test.js
 --recursive test/unit
 --recursive test/integration
 --recursive test/coverage-max.test.js

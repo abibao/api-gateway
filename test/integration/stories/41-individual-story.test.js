@@ -139,6 +139,17 @@ describe('[integration] individual story', function () {
       done(error)
     })
   })
+  it('should success affect a campaign', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'individualCreateSurveyCommand', {
+      individual: individualFake.urn,
+      campaign: global.ABIBAO.services.domain.getURNfromID('56eb24cfe9b0fbf30250f8c7', 'campaign'),
+      charity: global.ABIBAO.services.domain.getURNfromID('ffaa131ca533a2a04be325aa', 'entity')
+    }).then(function () {
+      done()
+    }).catch(function (error) {
+      done(error)
+    })
+  })
   it('should update individual', function (done) {
     global.ABIBAO.services.domain.execute('command', 'individualUpdateCommand', {
       urn: individualFake.urn,
@@ -165,5 +176,10 @@ describe('[integration] individual story', function () {
       .catch(function (error) {
         done(error)
       })
+  })
+  it('shoud wait 3000ms (bus events)', function (done) {
+    setTimeout(() => {
+      done()
+    }, 3000)
   })
 })
