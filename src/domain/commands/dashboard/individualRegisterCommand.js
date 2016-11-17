@@ -45,7 +45,6 @@ module.exports = function (payload) {
         return self.execute('command', 'individualCreateCommand', payload)
       })
       .then(function (individual) {
-        // if ( individual.urnRegisteredSurvey !== )
         // events on bus
         // ... post informations on slack
         global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
@@ -57,8 +56,18 @@ module.exports = function (payload) {
         global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, individual)
         // ... compute user in mysql
         global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_ANALYTICS_COMPUTE_USER, individual)
-        // next tick on request
-        resolve(individual)
+        // auto affect survey ?
+        if (self.getIDfromURN(individual.urnRegisteredSurvey) !== 'none') {
+          self.execute('command', 'individualCreateSurveyCommand', {
+            campaign: individual.urnRegisteredSurvey,
+            individual: individual.urn,
+            charity: individual.urnCharity
+          }).then(() => {
+            resolve(individual)
+          }).catch(reject)
+        } else {
+          resolve(individual)
+        }
       })
       .catch(function (error) {
         reject(error)

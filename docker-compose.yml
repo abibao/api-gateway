@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  node:
+    image: mhart/alpine-node:6
+    container_name: deve_node
+    depends_on:
+      - mysql
+      - rethinkdb
+      - rabbitmq
+    command: node --version
+  mysql:
+    image: library/mysql:5
+    container_name: deve_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: none
+  rethinkdb:
+    image: library/rethinkdb
+    container_name: deve_rethinkdb
+    ports:
+      - "8080:8080"
+      - "28015:28015"
+      - "29015:29015"
+  rabbitmq:
+    image: tutum/rabbitmq:latest
+    container_name: deve_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_PASS: none

@@ -4,4 +4,4 @@
 --recursive test/rethinkdb-structure.test.js
 --recursive test/mysql-structure.test.js
 --recursive test/engine-initialize.test.js
---recursive test/integration/stories/41-individual-story.test.js
+--recursive test/integration/stories/42-individual-register-story.test.js

@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "2.9.988",
+  "version": "3.0.001",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "crons": "npm-scripts/crons.sh",
