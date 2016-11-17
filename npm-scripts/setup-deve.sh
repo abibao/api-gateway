@@ -1,10 +1,4 @@
 #!/bin/sh
-
-# -----------------------
-# make sure all required dependencies are setup for developpement
-# -----------------------
-
-# exit on sub-module failure
 set -e
 
 docker-scripts/ci-bootstrap-container.sh "mysql" "deve_mysql" "-p 3306:3306 -e MYSQL_ROOT_PASSWORD=none" "library/mysql:5"

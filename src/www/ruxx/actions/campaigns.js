@@ -74,6 +74,29 @@ function CampaignsActions (facade) {
     })
   }
 
+  self.createItemLongText = function () {
+    return new Promise(function (resolve, reject) {
+      var payload = {
+        campaign: facade.getCurrentCampaign().urn,
+        question: 'Quelle est la question ?',
+        required: true,
+        position: facade.getCurrentCampaign().items.length + 1,
+        label: 'ABIBAO_ANSWER_',
+        maxLength: 200
+      }
+      facade.call('POST', facade.baseapi + '/v1/campaigns/items/long-text', payload).then(function (item) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemLongText %o', item)
+        resolve()
+      }).catch(function (error) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemLongText (ERROR) %o', error)
+        self.facade.trigger('EVENT_CALLER_ERROR', error)
+        reject(error)
+      })
+    })
+  }
+
   self.createItemYesNo = function () {
     return new Promise(function (resolve, reject) {
       var payload = {

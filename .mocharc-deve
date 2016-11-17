@@ -4,4 +4,4 @@
 --recursive test/engine-initialize.test.js
 --recursive test/rethinkdb-structure.test.js
 --recursive test/mysql-structure.test.js
---recursive test/integration
+--recursive test/integration/stories/72-campaigns-items-all-types.test.js

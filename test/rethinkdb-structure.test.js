@@ -85,6 +85,23 @@ describe('rethinkdb structure', function () {
   })
 })
 describe('rethinkdb data', function () {
+  it('should create one administrator', function (done) {
+    var r = require('../src/connections/rethinkdbdash')()
+    r.table('administrators')
+      .insert({
+        'createdAt': r.now(),
+        'email': 'admin@abibao.com',
+        'hashedPassword': 'X6v+4xv+5KQpnaGzyzuNZWcmDViE0qUiy/xAlmYXGjPh7DUQrmSnqqrGTu6itpXK+8pQfFMuroiuQvSiyD3MKA==',
+        'id': '582d787db54c107b8466cac1',
+        'modifiedAt': r.now(),
+        'salt': 'r3wCbr4dUF4DuO+M1KNlaw==',
+        'scope': 'administrator'
+      })
+      .then(() => {
+        done()
+      })
+      .catch(done)
+  })
   it('should create "none" entity', function (done) {
     var r = require('../src/connections/rethinkdbdash')()
     r.table('entities')

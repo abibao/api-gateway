@@ -56,6 +56,7 @@
             <span></span>
             <select onchange={ changeCreateItemWithType }>
               <option>DROPDOWN</option>
+              <option>LONG_TEXT</option>
               <option>MULTIPLE_CHOICE</option>
               <option>NUMBER</option>
               <option>STATEMENT</option>
@@ -97,6 +98,12 @@
       switch (self.createItemWithType) {
         case 'DROPDOWN':
           facade.actions.campaigns.createItemDropdown()
+            .then(function() {
+              facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
+            });
+          break;
+        case 'LONG_TEXT':
+          facade.actions.campaigns.createItemLongText()
             .then(function() {
               facade.actions.campaigns.selectCampaign(facade.getCurrentCampaign().urn)
             });

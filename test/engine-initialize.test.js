@@ -9,7 +9,9 @@ describe('engine structure', function () {
       .then(function () {
         expect(global.ABIBAO.uuid).to.be.a('string')
         expect(global.ABIBAO.running).to.be.eq(true)
-        done()
+        setTimeout(() => {
+          done()
+        }, 2000)
       })
       .catch(done)
   })
