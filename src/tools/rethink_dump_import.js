@@ -45,29 +45,36 @@ var options = {
 }
 var r = require('thinky')(options).r
 
+var cacheDir = path.resolve(__dirname, '.cache', arg.value, 'rethinkdb')
+
 var execBatch = function (table) {
   return new Promise(function (resolve, reject) {
     console.log('delete %s', table)
     r.table(table).delete()
-      .then(function () {
+      .then(() => {
         // insert
-        var dir = path.resolve(__dirname, '../../.cache/rethinkdb', table)
+        var dir = path.resolve(cacheDir, table)
         var files = fse.readdirSync(dir)
-        async.mapSeries(files, function (file, done) {
-          var filepath = path.resolve(dir, file)
-          var json = fse.readJsonSync(filepath)
-          console.log('...... %s', json.id)
-          r.table(table).insert(json)
-            .then(function () {
-              done()
-            })
-        }, function (err) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve()
-          }
-        })
+        async.eachOfLimit(files, 1,
+          (file, next) => {
+            var filepath = path.resolve(dir, file)
+            var json = fse.readJsonSync(filepath)
+            console.log('...... %s', json.id)
+            r.table(table).insert(json)
+              .then(() => {
+                next()
+              })
+              .catch((error) => {
+                next(error)
+              })
+          },
+          (err) => {
+            if (err) {
+              reject(err)
+            } else {
+              resolve()
+            }
+          })
       })
   })
 }

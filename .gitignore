@@ -1,4 +1,4 @@
-.cache
+src/tools/.cache
 nconf-deve.json
 nconf-rece.json
 nconf-prod.json
