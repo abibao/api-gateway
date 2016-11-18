@@ -8,6 +8,8 @@ services:
       - mysql
       - rethinkdb
       - rabbitmq
+      - logstash
+      - elasticsearch
     command: node --version
   mysql:
     image: library/mysql:5
@@ -31,3 +33,19 @@ services:
       - "15672:15672"
     environment:
       RABBITMQ_PASS: none
+  logstash:
+    build: docker/logstash/
+    container_name: deve_logstash
+    command: -f /etc/logstash/conf.d/
+    volumes:
+      - ./docker/logstash/config:/etc/logstash/conf.d
+    ports:
+      - "5000:5000"
+  elasticsearch:
+    build: docker/elasticsearch/
+    container_name: deve_elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
