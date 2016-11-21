@@ -159,10 +159,6 @@
       facade.getCurrentCampaign().description = e.currentTarget.value;
     };
 
-    changePublishedHandler(e) {
-      facade.getCurrentCampaign().published = e.currentTarget.checked;
-    };
-
     updateCampaignHandler(e) {
       facade.actions.campaigns.update(facade.getCurrentCampaign());
     };
