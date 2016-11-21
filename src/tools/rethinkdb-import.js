@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-var Promise = require('bluebird')
+var sh = require('shelljs')
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
@@ -10,27 +10,30 @@ var ProgressBar = require('progress')
 var colors = require('colors/safe')
 
 var sourceValue = null
-var envValue = null
+var fromEnvValue = null
+var toEnvValue = null
 
 var program = require('commander')
 program
-  .arguments('<source> [env]')
-  .action((source, env) => {
+  .arguments('<source> [fromEnv] [toEnv]')
+  .action((source, fromEnv, toEnv) => {
     sourceValue = source
-    envValue = env
+    fromEnvValue = fromEnv
+    toEnvValue = toEnv
   })
 
 program.parse(process.argv)
 
 console.log('')
 console.log(colors.green.bold('***************************************************'))
-console.log(colors.green.bold('rethinkdb export table(s) to file(s)'))
+console.log(colors.green.bold('rethinkdb import file(s) to table(s)'))
 console.log(colors.green.bold('***************************************************'))
-console.log(colors.yellow.bold('table(s):'), sourceValue || 'no table given!')
-console.log(colors.yellow.bold('environment:'), envValue || 'no environment given!')
+console.log(colors.yellow.bold('file(s):'), sourceValue || 'no file given!')
+console.log(colors.yellow.bold('environment (from):'), fromEnvValue || 'no environment given!')
+console.log(colors.yellow.bold('environment (to):'), toEnvValue || 'no environment given!')
 console.log(colors.green.bold('***************************************************'))
 
-if (!sourceValue || !envValue) {
+if (!sourceValue || !fromEnvValue || !toEnvValue) {
   process.exit(1)
 }
 
@@ -40,7 +43,7 @@ if (sourceValue === 'all') {
 
 // load environnement configuration
 var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
+nconf.argv().env().file({ file: 'nconf-' + toEnvValue + '.json' })
 var options = {
   host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
@@ -53,55 +56,53 @@ var options = {
 var r = require('thinky')(options).r
 
 // select files cache
-var cacheDir = path.resolve(__dirname, '.cache', envValue, 'rethinkdb')
-fse.ensureDirSync(cacheDir)
-fse.emptyDirSync(cacheDir)
+var cacheDir = path.resolve(__dirname, '.cache', fromEnvValue, 'rethinkdb')
 
 // initialize progress bar
 var total = 0
-var promises = []
+var dirCount = (folderPath) => {
+  sh.cd(folderPath)
+  var files = sh.ls() || []
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i]
+    if (!file.match(/.*\..*/)) {
+      dirCount(file)
+      sh.cd('../')
+    } else {
+      total++
+    }
+  }
+}
 var tables = sourceValue.split(',')
 _.map(tables, (table) => {
-  promises.push(r.table(table).count())
+  dirCount(path.resolve(cacheDir, table))
 })
-Promise.all(promises)
-  .then((result) => {
-    _.map(result, (count) => {
-      total += count
-    })
-    run()
-  })
-  .catch(function (error) {
-    console.log('\n', colors.bgRed.bold(' ERROR! '))
-    console.log(colors.gray(error), '\n')
-    process.exit(1)
-  })
 
 // handler
-var execBatch = (table, skip, limit, bar, callback) => {
-  r.table(table).skip(skip).limit(limit)
-    .then(function (result) {
-      var items = result
-      async.mapSeries(items, function (item, next) {
-        var dir = path.resolve(cacheDir, table)
-        fse.ensureDirSync(dir)
-        var filepath = path.resolve(dir, item.id + '.json')
-        fse.writeJsonSync(filepath, item)
+var execBatch = function (table, bar, callback) {
+  r.table(table).delete()
+    .then(() => {
+      // insert
+      var dir = path.resolve(cacheDir, table)
+      var files = fse.readdirSync(dir)
+      async.mapSeries(files, (file, next) => {
+        var filepath = path.resolve(dir, file)
+        var json = fse.readJsonSync(filepath)
         bar.tick()
-        next()
-      }, function (err) {
-        if (err) { return callback() }
-        r.table(table).count().then(function (count) {
-          if (skip + limit < count) {
-            execBatch(table, skip + limit, limit, bar, callback)
-          } else {
-            callback()
-          }
-        })
+        r.table(table).insert(json)
+          .then(() => {
+            next()
+          })
+          .catch((error) => {
+            next(error)
+          })
+      }, (err) => {
+        if (err) {
+          callback(err)
+        } else {
+          callback()
+        }
       })
-    })
-    .catch(function (error) {
-      callback(error)
     })
 }
 
@@ -113,9 +114,9 @@ var run = () => {
     width: 30,
     total
   })
-  async.mapSeries(tables, function (table, next) {
-    execBatch(table, 0, 100, bar, next)
-  }, function (err, results) {
+  async.mapSeries(tables, (table, next) => {
+    execBatch(table, bar, next)
+  }, (err, results) => {
     if (err) {
       console.log('\n', colors.bgRed.bold(' ERROR! '))
       console.log(err, '\n')
@@ -126,3 +127,5 @@ var run = () => {
     }
   })
 }
+
+run()

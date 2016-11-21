@@ -6,7 +6,7 @@ var Boom = require('boom')
 module.exports = {
   auth: false,
   payload: {
-    allow: 'application/x-www-form-urlencoded'
+    allow: ['application/x-www-form-urlencoded', 'application/json']
   },
   validate: {
     payload: {

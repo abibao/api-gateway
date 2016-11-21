@@ -9,7 +9,7 @@ module.exports = {
     scope: ['administrator']
   },
   payload: {
-    allow: 'application/x-www-form-urlencoded'
+    allow: ['application/x-www-form-urlencoded', 'application/json']
   },
   validate: {
     params: {

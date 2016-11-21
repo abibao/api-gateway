@@ -22,6 +22,7 @@ var abibao = {
 var uuid = require('node-uuid')
 var async = require('async')
 var Hapi = require('hapi')
+var Nes = require('nes')
 var Routes = require('./routes')
 
 internals.initialize = function () {
@@ -61,8 +62,11 @@ internals.initialize = function () {
     }, function (err, results) {
       if (err) { return reject(err) }
       abibao.debug('plugins %o', results)
-      internals.server.route(Routes.endpoints)
-      resolve()
+      internals.server.register(Nes, (err) => {
+        if (err) { return reject(err) }
+        internals.server.route(Routes.endpoints)
+        resolve()
+      })
     })
   })
 }
