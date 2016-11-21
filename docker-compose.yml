@@ -22,7 +22,7 @@ services:
     image: library/rethinkdb
     container_name: deve_rethinkdb
     ports:
-      - "8080:8080"
+      - "28080:8080"
       - "28015:28015"
       - "29015:29015"
   rabbitmq:

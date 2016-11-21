@@ -22,7 +22,6 @@ var abibao = {
 var uuid = require('node-uuid')
 var async = require('async')
 var Hapi = require('hapi')
-var Nes = require('nes')
 var Routes = require('./routes')
 
 internals.initialize = function () {
@@ -54,7 +53,7 @@ internals.initialize = function () {
       global.ABIBAO.logger.info(data)
       abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
     })
-    var plugins = ['inert', 'auth'] // 'crumb'
+    var plugins = ['inert', 'auth', 'nes'] // 'crumb'
     async.mapSeries(plugins, function (item, next) {
       require('./plugins/' + item)(internals.server, function () {
         next(null, item)
@@ -62,11 +61,8 @@ internals.initialize = function () {
     }, function (err, results) {
       if (err) { return reject(err) }
       abibao.debug('plugins %o', results)
-      internals.server.register(Nes, (err) => {
-        if (err) { return reject(err) }
-        internals.server.route(Routes.endpoints)
-        resolve()
-      })
+      internals.server.route(Routes.endpoints)
+      resolve()
     })
   })
 }

@@ -1,11 +1,9 @@
 'use strict'
 
-var Basic = require('hapi-auth-basic')
 var AuthJWT = require('hapi-auth-jwt2')
 
 var AuthProvision = function (server, callback) {
   server.register([
-    {register: Basic},
     {register: AuthJWT}
   ],
     function () {
