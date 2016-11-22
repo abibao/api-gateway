@@ -53,7 +53,7 @@ internals.initialize = function () {
       global.ABIBAO.logger.info(data)
       abibao.debug('[%s] %s (%sms)', data.method, data.path, data.exectime)
     })
-    var plugins = ['inert', 'auth', 'nes'] // 'crumb'
+    var plugins = ['inert', 'auth', 'nes']
     async.mapSeries(plugins, function (item, next) {
       require('./plugins/' + item)(internals.server, function () {
         next(null, item)
@@ -61,6 +61,7 @@ internals.initialize = function () {
     }, function (err, results) {
       if (err) { return reject(err) }
       abibao.debug('plugins %o', results)
+      internals.server.auth.default('jwt')
       internals.server.route(Routes.endpoints)
       resolve()
     })

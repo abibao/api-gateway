@@ -83,7 +83,7 @@
     "progress-promise": "0.0.5",
     "request": "2.79.0",
     "request-promise": "4.1.1",
-    "rethinkdbdash": "2.3.26",
+    "rethinkdbdash": "2.3.27",
     "sendgrid": "4.7.1",
     "servicebus": "2.0.5",
     "servicebus-retry": "0.0.11",

@@ -37,7 +37,8 @@ global.ABIBAO = {
     application: require('debug')('abibao:application'),
     bus: require('debug')('abibao:bus'),
     domain: require('debug')('abibao:domain'),
-    server: require('debug')('abibao:server')
+    server: require('debug')('abibao:server'),
+    socket: require('debug')('abibao:socket')
   },
   logger: require('bunyan').createLogger({
     name: 'api-gateway',
