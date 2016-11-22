@@ -11,7 +11,8 @@ var abibao = {
 var AuthProvision = function (server, callback) {
   server.register({
     register: AuthJWT,
-    options: {}
+    options: {
+    }
   },
   (error) => {
     if (error) {
