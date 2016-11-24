@@ -9,11 +9,10 @@ module.exports = function (wpid) {
   return new Promise(function (resolve, reject) {
     Promise.props({
       score: self.knex(database + '.smf_votes').sum('points as points').where({startup_id: wpid}),
-      name: self.knex(database + '.smf_votes').distinct('startup_name').where({startup_id: wpid})
+      startup: self.execute('query', 'wpSMFStartupReadQuery', wpid)
     }).then(function (result) {
-      result.score = result.score[0].points
-      result.name = result.name[0].startup_name
-      resolve(result)
+      result.startup.score = result.score[0].points
+      resolve(result.startup)
     }).catch((error) => {
       reject(error)
     })
