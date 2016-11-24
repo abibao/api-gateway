@@ -6,7 +6,7 @@ module.exports = {
   auth: false,
   jsonp: 'callback',
   handler (request, reply) {
-    global.ABIBAO.services.domain.execute('query', 'wpSMFCalculatePointsWithStartupIdQuery', request.params.startup)
+    global.ABIBAO.services.domain.execute('query', 'wpSMFCalculatePointsWithStartupIdQuery', request.params.wpid)
       .then(function (result) {
         reply(result)
       })
