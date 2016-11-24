@@ -31,6 +31,7 @@ exports.endpoints = [
 
   // wordpress > smf
   { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}', config: require('./handlers/smf/startups/read') },
+  { method: 'GET', path: '/v1/wp_json/smf/points/{startup}', config: require('./handlers/smf/startups/points') },
   { method: 'POST', path: '/v1/wp_json/smf/startups/{wpid}/vote', config: require('./handlers/smf/startups/vote') },
 
   // administrators
