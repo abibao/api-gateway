@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "3.0.003",
+  "version": "3.0.010",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "crons": "npm-scripts/crons.sh",
@@ -60,8 +60,10 @@
     "cryptr": "2.0.0",
     "debug": "2.3.3",
     "dotenv": "2.0.0",
+    "download": "5.0.2",
     "eraro": "0.4.1",
     "faker": "3.1.0",
+    "fast-csv": "2.3.0",
     "fs-extra": "1.0.0",
     "glob": "7.1.1",
     "hapi": "15.2.0",
