@@ -25,7 +25,7 @@ module.exports = function (payload) {
       self.execute('query', 'individualFilterQuery', {email: payload.email})
         .then(function (individuals) {
           if (individuals.length === 1) {
-            payload.points = 3
+            payload.points = 4
             payload.converted = true
             var individual = individuals[0]
             payload['charity_id'] = self.getIDfromURN(individual.urnCharity)
