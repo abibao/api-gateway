@@ -1,0 +1,7 @@
+--timeout 5000
+--use_strict
+--recursive test/standard.test.js
+--recursive test/rethinkdb-structure.test.js
+--recursive test/mysql-structure.test.js
+--recursive test/engine-initialize.test.js
+--recursive test/integration/stories/42-individual-register-story.test.js

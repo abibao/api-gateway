@@ -9,7 +9,6 @@ module.exports = function (message) {
     // check if campaign is in position (2)
     self.execute('query', 'campaignReadQuery', message.urnCampaign)
       .then(function (campaign) {
-        if (campaign.position !== 2) { throw new Error('campaign is not in position (2)') }
         // get email from individual
         return self.execute('query', 'individualReadQuery', message.urnIndividual)
           .then(function (individual) {
@@ -18,7 +17,7 @@ module.exports = function (message) {
               email: individual.email,
               urnIndividual: individual.urn,
               urnCharity: message.urnCharity,
-              urnCompany: message.urnCompany
+              urnCompany: campaign.urnCompany
             })
               .then(function () {
                 global.ABIBAO.debuggers.bus('BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO has been sended to "%s"', message.email)

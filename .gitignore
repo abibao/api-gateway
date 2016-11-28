@@ -4,6 +4,9 @@ nconf-rece.json
 nconf-prod.json
 backup-*.zip
 
+configurations/02-rece
+configurations/03-prod
+
 Logs
 logs
 *.log

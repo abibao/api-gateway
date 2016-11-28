@@ -52,6 +52,51 @@ function CampaignsActions (facade) {
     })
   }
 
+  self.createItemStatement = function () {
+    return new Promise(function (resolve, reject) {
+      var payload = {
+        campaign: facade.getCurrentCampaign().urn,
+        question: 'Titre de l\'intercalaire...',
+        required: true,
+        position: facade.getCurrentCampaign().items.length + 1,
+        label: 'ABIBAO_ANSWER_STATEMENT_000'
+      }
+      facade.call('POST', facade.baseapi + '/v1/campaigns/items/statement', payload).then(function (item) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.statement %o', item)
+        resolve()
+      }).catch(function (error) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.statement (ERROR) %o', error)
+        self.facade.trigger('EVENT_CALLER_ERROR', error)
+        reject(error)
+      })
+    })
+  }
+
+  self.createItemLongText = function () {
+    return new Promise(function (resolve, reject) {
+      var payload = {
+        campaign: facade.getCurrentCampaign().urn,
+        question: 'Quelle est la question ?',
+        required: true,
+        position: facade.getCurrentCampaign().items.length + 1,
+        label: 'ABIBAO_ANSWER_',
+        maxLength: 200
+      }
+      facade.call('POST', facade.baseapi + '/v1/campaigns/items/long-text', payload).then(function (item) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemLongText %o', item)
+        resolve()
+      }).catch(function (error) {
+        self.facade.setLoading(false)
+        self.facade.debugAction('CampaignsActions.createItemLongText (ERROR) %o', error)
+        self.facade.trigger('EVENT_CALLER_ERROR', error)
+        reject(error)
+      })
+    })
+  }
+
   self.createItemYesNo = function () {
     return new Promise(function (resolve, reject) {
       var payload = {
@@ -85,7 +130,7 @@ function CampaignsActions (facade) {
         multipleSelections: false,
         randomize: false,
         addCustomOption: false,
-        addCustomOptionLabel: 'Réponse libre...', 
+        addCustomOptionLabel: 'Réponse libre...',
         alignment: 'horizontal'
       }
       facade.call('POST', facade.baseapi + '/v1/campaigns/items/multiple-choice', payload).then(function (item) {

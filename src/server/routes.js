@@ -1,8 +1,5 @@
 'use strict'
 
-var resolve = require('path').resolve
-var normalize = require('path').normalize
-
 exports.endpoints = [
 
   // server is alive
@@ -15,7 +12,7 @@ exports.endpoints = [
   { method: 'GET', path: '/v1/stats/individuals/ages/{gender}', config: require('./handlers/stats/individuals/ages') },
 
   // www - administrator
-  { method: 'GET', path: '/administrator/{param*}', handler: { directory: { defaultExtension: 'html', path: normalize(resolve(__dirname, '../www')) } } },
+  { method: 'GET', path: '/administrator/{param*}', config: require('./handlers/administrator') },
 
   // auto affect campaign
   { method: 'GET', path: '/redirect/campaign/affect/{sealed}', config: require('./handlers/redirect/campaign/affect') },
@@ -31,6 +28,7 @@ exports.endpoints = [
 
   // wordpress > smf
   { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}', config: require('./handlers/smf/startups/read') },
+  { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}/score', config: require('./handlers/smf/startups/points') },
   { method: 'POST', path: '/v1/wp_json/smf/startups/{wpid}/vote', config: require('./handlers/smf/startups/vote') },
 
   // administrators
@@ -64,6 +62,7 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/campaigns/items/long-text', config: require('./handlers/campaigns/items/componentLongText/create') },
   { method: 'POST', path: '/v1/campaigns/items/multiple-choice', config: require('./handlers/campaigns/items/componentMultipleChoice/create') },
   { method: 'POST', path: '/v1/campaigns/items/yes-no', config: require('./handlers/campaigns/items/componentYesNo/create') },
+  { method: 'POST', path: '/v1/campaigns/items/statement', config: require('./handlers/campaigns/items/componentStatement/create') },
   { method: 'POST', path: '/v1/campaigns/items/dropdown', config: require('./handlers/campaigns/items/componentDropdown/create') },
   { method: 'POST', path: '/v1/campaigns/items/number', config: require('./handlers/campaigns/items/componentNumber/create') }
 

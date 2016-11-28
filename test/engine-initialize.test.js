@@ -8,8 +8,9 @@ describe('engine structure', function () {
     require('../src/engine')()
       .then(function () {
         expect(global.ABIBAO.uuid).to.be.a('string')
-        expect(global.ABIBAO.running).to.be.eq(true)
-        done()
+        setTimeout(() => {
+          done()
+        }, 1000)
       })
       .catch(done)
   })

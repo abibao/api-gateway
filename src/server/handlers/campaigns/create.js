@@ -9,7 +9,7 @@ module.exports = {
     scope: ['administrator']
   },
   payload: {
-    allow: 'application/x-www-form-urlencoded'
+    allow: ['application/x-www-form-urlencoded', 'application/json']
   },
   validate: {
     payload: {
@@ -18,8 +18,6 @@ module.exports = {
       position: Joi.number().min(0).default(0),
       screenWelcomeContent: Joi.string().allow(''),
       screenThankYouContent: Joi.string().allow(''),
-      price: Joi.number().min(0).required(),
-      currency: Joi.string().valid(['EUR']).required(),
       published: Joi.boolean().default(false).required(),
       description: Joi.string()
     }

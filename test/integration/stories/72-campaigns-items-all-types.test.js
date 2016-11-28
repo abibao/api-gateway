@@ -160,4 +160,50 @@ describe('[integration] handlers/campaigns-items-all-types', function () {
         done(error)
       })
   })
+  it('should create componentStatement with fake data', function (done) {
+    campaignItemFake = {
+      campaign: campaignFake.urn,
+      label: faker.lorem.sentence()
+    }
+    global.ABIBAO.services.domain.execute('command', 'campaignItemStatementCreateCommand', campaignItemFake)
+      .then(function (item) {
+        campaignItemFake = item
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('should delete last created componentStatement', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'campaignItemDeleteCommand', campaignItemFake.urn)
+      .then(function () {
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('should create componentLongText with fake data', function (done) {
+    campaignItemFake = {
+      campaign: campaignFake.urn,
+      label: faker.lorem.sentence()
+    }
+    global.ABIBAO.services.domain.execute('command', 'campaignItemLongTextCreateCommand', campaignItemFake)
+      .then(function (item) {
+        campaignItemFake = item
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
+  it('should delete last created componentLongText', function (done) {
+    global.ABIBAO.services.domain.execute('command', 'campaignItemDeleteCommand', campaignItemFake.urn)
+      .then(function () {
+        done()
+      })
+      .catch(function (error) {
+        done(error)
+      })
+  })
 })

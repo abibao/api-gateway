@@ -110,27 +110,22 @@ function Facade () {
   }
 
   self.call = function (method, url, payload) {
+    if (payload) { delete payload.published }
     self.debugCall('new promise %s %s %o', method, url, payload)
     self.setLoading(true)
     return new Promise(function (resolve, reject) {
       // Headers
       $.ajaxSetup({
+        contentType: 'application/json',
+        dataType: 'json',
         headers: {
           'Authorization': Cookies.get('USER-TOKEN')
         }
       })
-      // Resolve
-      /*
-      'X-CSRF-Token': Cookies.get('CSRF-TOKEN')
-      xhrFields: {
-        withCredentials: true
-      },
-      crossDomain: true
-      */
       $.ajax({
         method: method,
         url: url,
-        data: payload
+        data: JSON.stringify(payload)
       })
         .fail(function (error) {
           self.debugCall('error %s %s %o', method, url, error)

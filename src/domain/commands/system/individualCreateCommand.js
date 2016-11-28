@@ -19,6 +19,8 @@ module.exports = function (payload) {
         delete created.charity
         delete created.campaign
         delete created.item
+        delete created.hasRegisteredEntity
+        delete created.hasRegisteredSurvey
         resolve(created)
       })
       .catch(function (error) {

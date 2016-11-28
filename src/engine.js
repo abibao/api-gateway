@@ -13,6 +13,8 @@ ROLES
 
 var Promise = require('bluebird')
 
+var uuid = require('node-uuid')
+
 // load environnement configuration
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
@@ -35,7 +37,8 @@ global.ABIBAO = {
     application: require('debug')('abibao:application'),
     bus: require('debug')('abibao:bus'),
     domain: require('debug')('abibao:domain'),
-    server: require('debug')('abibao:server')
+    server: require('debug')('abibao:server'),
+    socket: require('debug')('abibao:socket')
   },
   logger: require('bunyan').createLogger({
     name: 'api-gateway',
@@ -81,6 +84,14 @@ var engine = function () {
           if (error) { return abibao.error(error) }
           abibao.debug('server has just started')
           global.ABIBAO.running = true
+          var data = {
+            uuid: uuid.v1(),
+            environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
+            version: process.env.npm_package_version,
+            type: 'system',
+            promise: 'engineInitializedSuccess'
+          }
+          global.ABIBAO.logger.info(data)
           resolve()
         })
       })

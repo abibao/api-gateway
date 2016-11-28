@@ -15,6 +15,8 @@ module.exports = function (payload) {
           delete updated.charity
           delete updated.campaign
           delete updated.item
+          delete updated.hasRegisteredEntity
+          delete updated.hasRegisteredSurvey
           resolve(updated)
           global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, updated)
         })

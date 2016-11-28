@@ -1,33 +1,32 @@
 'use strict'
 
 var Promise = require('bluebird')
-
 var Hoek = require('hoek')
 
 module.exports = function (urn) {
   var self = Hoek.clone(global.ABIBAO.services.domain)
   return new Promise(function (resolve, reject) {
-    try {
-      self.SurveyModel.get(self.getIDfromURN(urn)).run().then(function (model) {
-        return self.EntityModel.get(self.getIDfromURN(model.urnCompany)).run().then(function (company) {
-          delete model.id
-          delete model.company
-          delete model.charity
-          delete model.campaign
-          delete model.item
-          if (company.type === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) {
-            model.isAbibao = true
-          } else {
-            model.isAbibao = false
-          }
-          resolve(model)
-        })
+    var waterfall = null
+    self.SurveyModel.get(self.getIDfromURN(urn)).run()
+      .then(function (survey) {
+        waterfall = Hoek.clone(survey)
+        return self.EntityModel.get(self.getIDfromURN(waterfall.urnCompany)).run()
       })
-        .catch(function (error) {
-          reject(error)
-        })
-    } catch (e) {
-      reject(e)
-    }
+      .then(function (company) {
+        waterfall.isAbibao = (company.type === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO)
+        return self.CampaignModel.get(self.getIDfromURN(waterfall.urnCampaign)).run()
+      })
+      .then(function (campaign) {
+        delete waterfall.id
+        delete waterfall.company
+        delete waterfall.charity
+        delete waterfall.campaign
+        delete waterfall.item
+        waterfall.position = campaign.position
+        resolve(waterfall)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
   })
 }

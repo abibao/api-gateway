@@ -21,8 +21,6 @@ module.exports = function (thinky) {
     // fields
     name: type.string().required(),
     description: type.string(),
-    price: type.number().min(0).required(),
-    currency: type.string().enum(['EUR']).required(), // ISO 4217 : https://fr.wikipedia.org/wiki/ISO_4217
     position: type.number().min(0).default(0),
     screenWelcomeContent: type.string(),
     screenThankYouContent: type.string(),
@@ -43,8 +41,6 @@ module.exports = function (thinky) {
   CampaignModel.define('getFakeData', function () {
     return {
       name: faker.name.lastName().toLowerCase(),
-      price: faker.random.number(),
-      currency: 'EUR',
       position: faker.random.number(),
       item: faker.name.lastName().toLowerCase(),
       company: faker.name.lastName().toLowerCase()

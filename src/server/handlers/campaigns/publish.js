@@ -9,7 +9,7 @@ module.exports = {
     scope: ['administrator']
   },
   payload: {
-    allow: 'application/x-www-form-urlencoded'
+    allow: ['application/x-www-form-urlencoded', 'application/json']
   },
   validate: {
     params: {
@@ -18,7 +18,7 @@ module.exports = {
     payload: {
       maximum: Joi.number().integer().min(0).required(),
       filter: Joi.string().required(),
-      finishedAt: Joi.date().format('DD/MM/YYYY')
+      finishedAt: Joi.date()
     }
   },
   jsonp: 'callback',
