@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-var sh = require('shelljs')
+var glob = require('glob')
 var async = require('async')
 var path = require('path')
 var fse = require('fs-extra')
@@ -44,6 +44,8 @@ if (sourceValue === 'all') {
 // load environnement configuration
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-' + toEnvValue + '.json' })
+
+// rethinkdb
 var options = {
   host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
@@ -60,18 +62,13 @@ var cacheDir = path.resolve(__dirname, '.cache', fromEnvValue, 'rethinkdb')
 
 // initialize progress bar
 var total = 0
-var dirCount = (folderPath) => {
-  sh.cd(folderPath)
-  var files = sh.ls() || []
-  for (var i = 0; i < files.length; i++) {
-    var file = files[i]
-    if (!file.match(/.*\..*/)) {
-      dirCount(file)
-      sh.cd('../')
-    } else {
-      total++
-    }
-  }
+var dirCount = (patternPath) => {
+  var files = glob.sync(patternPath + '/*.json', {
+    nodir: true,
+    dot: true,
+    ignore: ['index.js']
+  })
+  total += files.length
 }
 var tables = sourceValue.split(',')
 _.map(tables, (table) => {
