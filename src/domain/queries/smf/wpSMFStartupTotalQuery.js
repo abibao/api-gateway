@@ -8,7 +8,7 @@ module.exports = function () {
   var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
   return new Promise(function (resolve, reject) {
     Promise.props({
-      scores: self.knex.select('startup_id, startup_name').sum('points as points').from(database + '.smf_votes').groupBy('startup_id, startup_name'),
+      scores: self.knex.select('startup_id').sum('points as points').from(database + '.smf_votes').groupBy('startup_id'),
       total: self.knex.sum('points as points').from(database + '.smf_votes')
     }).then(function (result) {
       result.total = result.total[0].points || 0
