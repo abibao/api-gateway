@@ -27,6 +27,7 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/auth/surveys/{urn}/answers', config: require('./handlers/individuals/auth/surveys/answer') },
 
   // wordpress > smf
+  { method: 'GET', path: '/v1/wp_json/smf/startups/scores', config: require('./handlers/smf/startups/scores') },
   { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}', config: require('./handlers/smf/startups/read') },
   { method: 'GET', path: '/v1/wp_json/smf/startups/{wpid}/score', config: require('./handlers/smf/startups/points') },
   { method: 'POST', path: '/v1/wp_json/smf/startups/{wpid}/vote', config: require('./handlers/smf/startups/vote') },

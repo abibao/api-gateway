@@ -26,7 +26,6 @@ console.log(colors.green.bold('*************************************************
 console.log(colors.green.bold('create or update users in mysql from cache'))
 console.log(colors.green.bold('***************************************************'))
 console.log(colors.yellow.bold('environment:'), envValue || 'no environment given!')
-console.log(colors.green.bold('***************************************************'))
 
 if (!envValue) {
   process.exit(1)
@@ -76,6 +75,8 @@ var files = glob.sync(patternPath, {
   ignore: ['index.js']
 })
 var total = files.length
+console.log(colors.yellow.bold('total:'), total)
+console.log(colors.green.bold('***************************************************'))
 
 // handler
 var execBatch = function (filepath, bar, callback) {
@@ -112,9 +113,10 @@ var execBatch = function (filepath, bar, callback) {
           default:
         }
       })
-      Promise.props(promises)
+      var data
+      return Promise.props(promises)
         .then((result) => {
-          var data = {
+          data = {
             email: individual.email || null,
             charity: result.CHARITY || null,
             registeredCharity: result.HAS_REGISTERED_ENTITY || null,
@@ -127,20 +129,16 @@ var execBatch = function (filepath, bar, callback) {
           var target = path.resolve(mysqlDir, individual.id + '.json')
           fse.writeJsonSync(target, data)
           // write in mysql
-          knex('users').where('email', data.email).delete()
-            .then(() => {
-              return knex('users').insert(data)
-            })
-            .then(function () {
-              bar.tick()
-              callback()
-            })
-            .catch(() => {
-              bar.tick()
-              callback()
-            })
+          return knex('users').where('email', data.email)
         })
-        .catch(() => {
+        .then((result) => {
+          if (result.length === 0) {
+            return knex('users').insert(data)
+          } else {
+            return knex('users').where('email', data.email).update(data)
+          }
+        })
+        .then((result) => {
           bar.tick()
           callback()
         })
