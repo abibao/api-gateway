@@ -76,14 +76,14 @@ module.exports = function (individual) {
                 createdAt: new Date(individual.createdAt)
               }
               global.ABIBAO.debuggers.domain('[%s] step 3: replace/insert those data in mysql analytics, data=%o', individual.email, data)
-              knex('users').where('email', data.email).delete()
-                .then(() => {
-                  return knex('users').insert(data)
+              return knex('users').where('email', data.email)
+                .then((result) => {
+                  if (result.length === 0) {
+                    return knex('users').insert(data)
+                  } else {
+                    return knex('users').where('email', data.email).update(data)
+                  }
                 })
-                .then(function () {
-                  resolve(data)
-                })
-                .catch(reject)
             })
             .catch(reject)
         })

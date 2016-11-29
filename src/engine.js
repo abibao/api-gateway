@@ -4,7 +4,7 @@
 ====================================================
 ROLES
 ====================================================
-  - initialize application in node global
+  - initialize engine (bus, cqrs, api)
   - initialize debuggers
   - initialize loggers
   - initialize services loaders

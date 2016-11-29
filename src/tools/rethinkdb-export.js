@@ -41,6 +41,8 @@ if (sourceValue === 'all') {
 // load environnement configuration
 var nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
+
+// rethinkdb
 var options = {
   host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),

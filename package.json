@@ -89,7 +89,6 @@
     "sendgrid": "4.7.1",
     "servicebus": "2.0.5",
     "servicebus-retry": "0.0.11",
-    "shelljs": "0.7.5",
     "thinky": "2.3.8",
     "vision": "4.1.0",
     "wpapi": "0.11.0"
