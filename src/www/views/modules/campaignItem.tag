@@ -24,8 +24,9 @@
                 <span class="uk-text-bold">Tags</span><br>
                 <input onchange={ changeTagsHandler } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().tags }" placeholder="Saisissez une valeur"><br>
                 <br>
-                <span class="uk-text-bold">Réponse personnalisée</span><br>
-                <input onchange={ changeCustomOptionEnabledHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().addCustomOption===true }"> <label>Activer</label><br>
+                <br>
+                <input onchange={ changeRequiredHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().required===true }"> <label>Obligatoire</label><br>
+                <input onchange={ changeCustomOptionEnabledHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().addCustomOption===true }"> <label>Réponse personnalisée</label><br>
                 <input onchange={ changeCustomOptionLabelHandler } if={ facade.getCurrentCampaignItem().addCustomOption } class="uk-width-1-1" type="text" value="{ facade.getCurrentCampaignItem().addCustomOptionLabel }" placeholder="Saisissez une valeur">
               </div>
             </fieldset>
@@ -40,7 +41,6 @@
 
         <div class="uk-panel uk-panel-box">
           <h4>Options</h4>
-          <input onchange={ changeRequiredHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().required===true }"> <label>Obligatoire</label><br>
           <input onchange={ changeMultipleSelectionsHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().multipleSelections===true }"> <label>Sélection multiples</label><br>
           <input onchange={ changeRandomizeHandler } type="checkbox" checked="{ facade.getCurrentCampaignItem().randomize===true }"> <label>Affichage au hasard</label><br>
           <form if={ facade.getCurrentCampaignItem().type==='ABIBAO_COMPONENT_DROPDOWN'  } class="uk-form uk-width-1-1">
