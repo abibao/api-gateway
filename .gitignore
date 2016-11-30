@@ -3,6 +3,7 @@ nconf-deve.json
 nconf-rece.json
 nconf-prod.json
 backup-*.zip
+heapdump*.*
 
 configurations/02-rece
 configurations/03-prod

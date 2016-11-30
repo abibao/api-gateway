@@ -3,7 +3,6 @@
   "version": "3.0.010",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
-    "crons": "npm-scripts/crons.sh",
     "setup:deve": "npm-scripts/setup-deve.sh",
     "setup:clean": "npm-scripts/setup-clean.sh",
     "test": "npm-scripts/test.sh",
