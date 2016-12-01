@@ -2,11 +2,13 @@
 
 class Engine {
   constructor () {
-    this.type = 'Engine'
+    this.type = 'engine'
     this.name = 'engine'
+    this.version = process.env.npm_package_version
     this.starttime = new Date()
     this.modules = require('./NodeModules')
-    this.debug = this.modules.get('debug')('abibao:' + this.name)
+    this.debug = this.modules.get('debug')('abibao:' + this.type)
+    this.error = this.modules.get('debug')('abibao:error')
   }
   initialize () {
     this.debug('initialize started')
@@ -36,11 +38,13 @@ class Engine {
     this.databases.r = this.modules.get('rethinkdbdash')(this.configurations.rethinkdb)
     this.databases.thinky = this.modules.get('thinky')(this.configurations.rethinkdb)
     this.databases.knex = this.modules.get('knex')(this.configurations.mysql)
-    // initialize domain, server and bus
+    // initializers
     const Promise = this.modules.get('bluebird')
     const Domain = require('./Domain')
+    const Server = require('./Server')
     this.domain = new Domain(this)
-    const promises = [this.domain.initialize()]
+    this.server = new Server(this)
+    const promises = [this.domain.initialize(), this.server.initialize()]
     return Promise.all(promises)
   }
 }

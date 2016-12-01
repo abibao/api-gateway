@@ -2,10 +2,10 @@
 
 class NodeModules {
   constructor () {
-    this.type = 'NodeModules'
+    this.type = 'modules'
     this.name = 'node-modules'
     this._cache = {}
-    this.debug = require('debug')('abibao:' + this.name)
+    this.debug = require('debug')('abibao:' + this.type)
   }
   get (moduleName) {
     let mod = this._cache[moduleName]
