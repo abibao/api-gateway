@@ -15,14 +15,16 @@ class Domain {
 Domain.prototype.execute = function (type, promise, params) {
   const uuid = this.modules.get('node-uuid')
   return new Promise((resolve, reject) => {
-    var starttime = new Date()
-    var data = {
+    const starttime = new Date()
+    let data = {
       uuid: uuid.v1(),
       environnement: this.nconf.get('ABIBAO_API_GATEWAY_ENV'),
       type,
       promise
     }
-    this[promise].handler(params)
+    const Action = this[promise]
+    const action = new Action(this)
+    action.handler(params)
       .then((result) => {
         data.exectime = new Date() - starttime
         // global.ABIBAO.logger.info(data)
@@ -63,6 +65,7 @@ Domain.prototype.initialize = function () {
 }
 
 Domain.prototype.injector = function (type) {
+  const Promise = this.modules.get('bluebird')
   return new Promise((resolve, reject) => {
     const path = this.modules.get('path')
     const glob = this.modules.get('glob')
@@ -83,12 +86,10 @@ Domain.prototype.injector = function (type) {
           this[name] = require(file)(this)
           break
         case '../domain/commands':
-          let Command = require(file)
-          this[name] = new Command(this)
+          this[name] = require(file)
           break
         case '../domain/queries':
-          let Query = require(file)
-          this[name] = new Query(this)
+          this[name] = require(file)
           break
         default:
           this[name] = require(file)

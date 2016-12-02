@@ -1,36 +1,34 @@
 'use strict'
 
-const sinon = require('sinon')
-const chai = require('chai')
-const expect = chai.expect
+var Promise = require('bluebird')
+var Querystring = require('querystring')
+var Boom = require('boom')
 
-const Querystring = require('querystring')
-
-const engine = require('../../../../engine.mock')
-const Server = require('../../../../../src-v3/lib/Server')
-let server = false
+var sinon = require('sinon')
+var chai = require('chai')
+var expect = chai.expect
 
 before(function (done) {
-  engine.initialize()
-    .then(() => {
-      server = new Server(engine)
-      return server.initialize().then(() => {
-        done()
-      })
-    })
-    .catch(done)
+  Promise.all([
+    require('../../../../mock-abibao').server(),
+    require('../../../../mock-abibao').domain()
+  ]).then(() => {
+    done()
+  })
 })
+
+var stub
 
 describe('[unit] server: /v1/individuals/login', function () {
   it('should not login because email is mandatory', function (done) {
-    const req = {
+    var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
       url: '/v1/individuals/login'
     }
-    server.hapi.inject(req, res => {
+    global.ABIBAO.services.server.inject(req, res => {
       expect(res).to.be.an('object')
       expect(res.result).to.be.an('object')
       expect(res.result.statusCode).to.be.a('number').to.equal(400)
@@ -39,7 +37,7 @@ describe('[unit] server: /v1/individuals/login', function () {
     })
   })
   it('should not login because email has not a valid format', function (done) {
-    const req = {
+    var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -49,7 +47,7 @@ describe('[unit] server: /v1/individuals/login', function () {
         email: 'nobody'
       })
     }
-    server.hapi.inject(req, res => {
+    global.ABIBAO.services.server.inject(req, res => {
       expect(res).to.be.an('object')
       expect(res.result).to.be.an('object')
       expect(res.result.statusCode).to.be.a('number').to.equal(400)
@@ -58,7 +56,7 @@ describe('[unit] server: /v1/individuals/login', function () {
     })
   })
   it('should not login because password is mandatory', function (done) {
-    const req = {
+    var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -68,7 +66,7 @@ describe('[unit] server: /v1/individuals/login', function () {
         email: 'nobody@abibao.com'
       })
     }
-    server.hapi.inject(req, res => {
+    global.ABIBAO.services.server.inject(req, res => {
       expect(res).to.be.an('object')
       expect(res.result).to.be.an('object')
       expect(res.result.statusCode).to.be.a('number').to.equal(400)
@@ -77,12 +75,12 @@ describe('[unit] server: /v1/individuals/login', function () {
     })
   })
   it('should not login and return a boom error', function (done) {
-    let stub = sinon.stub(server.hapi.methods, 'command', function (name, params = {}) {
+    stub = sinon.stub(global.ABIBAO.services.domain, 'execute', function (type, promise, params) {
       return new Promise(function (resolve, reject) {
-        reject('ERROR_BAD_AUTHENTIFICATION')
+        reject(Boom.badRequest())
       })
     })
-    const req = {
+    var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -93,25 +91,24 @@ describe('[unit] server: /v1/individuals/login', function () {
         password: 'pass4nobody'
       })
     }
-    server.hapi.inject(req, res => {
-      stub.restore()
-      console.log(res.result)
+    global.ABIBAO.services.server.inject(req, res => {
       expect(res).to.be.an('object')
       expect(res.result).to.be.an('object')
       expect(res.result.statusCode).to.be.a('number').to.equal(400)
       expect(res.result.message).to.be.a('string').to.equal('Error: Bad Request')
+      stub.restore()
       done()
     })
   })
   it('should login', function (done) {
-    let stub = sinon.stub(server.hapi.methods, 'command', function (name, params = {}) {
+    stub = sinon.stub(global.ABIBAO.services.domain, 'execute', function (type, promise, params) {
       return new Promise(function (resolve, reject) {
         resolve({
           email: params.email
         })
       })
     })
-    const req = {
+    var req = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -122,12 +119,12 @@ describe('[unit] server: /v1/individuals/login', function () {
         password: 'pass4nobody'
       })
     }
-    server.hapi.inject(req, res => {
-      stub.restore()
+    global.ABIBAO.services.server.inject(req, res => {
       expect(res).to.be.an('object')
       expect(res.result).to.be.an('object')
       expect(res.statusCode).to.be.a('number').to.equal(200)
       expect(res.result.email).to.be.a('string').to.equal('nobody@abibao.com')
+      stub.restore()
       done()
     })
   })

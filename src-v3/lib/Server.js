@@ -6,20 +6,12 @@ class Server {
     this.name = 'server'
     this.modules = engine.modules
     this.debug = this.modules.get('debug')('abibao:' + this.type)
-    this.error = engine.error
-    this.nconf = engine.nconf
+    this.modules = engine.modules
     this.options = {
-      host: this.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
-      port: this.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
+      host: engine.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
+      port: engine.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
       labels: ['api', 'administrator']
     }
-  }
-}
-
-Server.prototype.initialize = function () {
-  const Promise = this.modules.get('bluebird')
-  return new Promise((resolve, reject) => {
-    this.debug('start initializing %o', this.options)
     const Hapi = this.modules.get('hapi')
     this.hapi = new Hapi.Server({
       debug: false,
@@ -29,6 +21,31 @@ Server.prototype.initialize = function () {
         }
       }
     })
+    this.hapi.method({
+      name: 'modules.get',
+      method: (name) => {
+        return engine.modules.get(name)
+      }
+    })
+    this.hapi.method({
+      name: 'command',
+      method: (name, params) => {
+        return engine.domain.execute('Command', name, params)
+      }
+    })
+    this.hapi.method({
+      name: 'query',
+      method: (name, params) => {
+        return engine.domain.execute('Query', name, params)
+      }
+    })
+  }
+}
+
+Server.prototype.initialize = function () {
+  const Promise = this.modules.get('bluebird')
+  return new Promise((resolve, reject) => {
+    this.debug('start initializing %o', this.options)
     this.hapi.connection(this.options)
     const async = this.modules.get('async')
     const plugins = [] // ['inert', 'auth', 'nes']

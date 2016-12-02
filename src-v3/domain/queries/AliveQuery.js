@@ -5,7 +5,6 @@ class AliveQuery {
     this.type = 'query'
     this.name = 'alive-query'
     this.modules = domain.modules
-    this.debug = this.modules.get('debug')('abibao:' + this.type)
     this.nconf = domain.nconf
   }
 }
