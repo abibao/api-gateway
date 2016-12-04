@@ -1,16 +1,18 @@
 'use strict'
 
+// libraries
+const Boom = require('boom')
+
 module.exports = {
   auth: false,
   jsonp: 'callback',
   handler (request, reply) {
     request.server.methods.query('AliveQuery')
-      .then((result) => {
-        reply(result)
+      .then((query) => {
+        reply(query.result)
       })
-      .catch(function (error) {
-        const Boom = request.server.methods.modules.get('boom')
-        reply(Boom.badRequest(error))
+      .catch(function (query) {
+        reply(Boom.badRequest(query.error))
       })
   }
 }

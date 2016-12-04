@@ -1,7 +1,9 @@
 'use strict'
 
+// libraries
+const bucker = require('bucker')
+
 const Provision = function (server, callback) {
-  const bucker = server.methods.modules.get('bucker')
   server.register({
     register: bucker,
     options: {

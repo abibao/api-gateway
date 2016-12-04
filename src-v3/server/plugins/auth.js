@@ -1,14 +1,14 @@
 'use strict'
 
-var AuthJWT = require('hapi-auth-jwt2')
+const AuthJWT = require('hapi-auth-jwt2')
 
 // use debuggers reference
-var abibao = {
+const abibao = {
   debug: global.ABIBAO.debuggers.socket,
   error: global.ABIBAO.debuggers.error
 }
 
-var AuthProvision = function (server, callback) {
+const AuthProvision = function (server, callback) {
   server.register({
     register: AuthJWT,
     options: {

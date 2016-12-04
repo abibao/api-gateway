@@ -1,14 +1,14 @@
 'use strict'
 
-var Nes = require('nes')
+const Nes = require('nes')
 
 // use debuggers reference
-var abibao = {
+const abibao = {
   debug: global.ABIBAO.debuggers.socket,
   error: global.ABIBAO.debuggers.error
 }
 
-var NesProvision = function (server, callback) {
+const NesProvision = function (server, callback) {
   server.register({
     register: Nes,
     options: {

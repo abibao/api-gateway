@@ -1,19 +1,38 @@
 'use strict'
 
+// debugs
+const _debug = require('debug')('abibao:engine')
+const _error = require('debug')('abibao:error')
+
+// libraries
+const Promise = require('bluebird')
+const nconf = require('nconf').argv().env().file({ file: 'nconf-deve.json' })
+
+// internals
+const Domain = require('./Domain')
+const Server = require('./Server')
+
 class Engine {
   constructor () {
     this.type = 'engine'
     this.name = 'engine'
+    this.debug = _debug
+    this.error = _error
     this.version = process.env.npm_package_version
     this.starttime = new Date()
-    this.modules = require('./NodeModules')
-    this.debug = this.modules.get('debug')('abibao:' + this.type)
-    this.error = this.modules.get('debug')('abibao:error')
+    this.databases = {}
+    // initialize databases via internal modules loader, to avoid tests failure
+    this.modules = {
+      get: (name) => {
+        this.debug('start database %s', name)
+        return require(name)
+      }
+    }
   }
   initialize () {
     this.debug('initialize started')
     // load configurations
-    this.nconf = this.modules.get('nconf').argv().env().file({ file: 'nconf-deve.json' })
+    this.nconf = nconf
     this.configurations = {
       rethinkdb: {
         host: this.nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
@@ -33,15 +52,9 @@ class Engine {
         debug: false
       }
     }
-    // initialize databases
-    this.databases = {}
     this.databases.r = this.modules.get('rethinkdbdash')(this.configurations.rethinkdb)
-    this.databases.thinky = this.modules.get('thinky')(this.configurations.rethinkdb)
     this.databases.knex = this.modules.get('knex')(this.configurations.mysql)
     // initializers
-    const Promise = this.modules.get('bluebird')
-    const Domain = require('./Domain')
-    const Server = require('./Server')
     this.domain = new Domain(this)
     this.server = new Server(this)
     const promises = [this.domain.initialize(), this.server.initialize()]

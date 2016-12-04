@@ -1,30 +1,33 @@
 'use strict'
 
+// debugs
+const _debug = require('debug')('abibao:server')
+
+// libraries
+const Promise = require('bluebird')
+const Hapi = require('hapi')
+const async = require('async')
+
+// internals
+const routes = require('./../server/routes')
+
 class Server {
   constructor (engine) {
     this.type = 'server'
     this.name = 'server'
-    this.modules = engine.modules
-    this.debug = this.modules.get('debug')('abibao:' + this.type)
-    this.modules = engine.modules
+    this.debug = _debug
+    this.error = engine.error
     this.options = {
       host: engine.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
       port: engine.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
       labels: ['api', 'administrator']
     }
-    const Hapi = this.modules.get('hapi')
     this.hapi = new Hapi.Server({
       debug: false,
       connections: {
         routes: {
           cors: true
         }
-      }
-    })
-    this.hapi.method({
-      name: 'modules.get',
-      method: (name) => {
-        return engine.modules.get(name)
       }
     })
     this.hapi.method({
@@ -43,11 +46,9 @@ class Server {
 }
 
 Server.prototype.initialize = function () {
-  const Promise = this.modules.get('bluebird')
   return new Promise((resolve, reject) => {
     this.debug('start initializing %o', this.options)
     this.hapi.connection(this.options)
-    const async = this.modules.get('async')
     const plugins = [] // ['inert', 'auth', 'nes']
     async.mapSeries(plugins, (item, next) => {
       require('./../server/plugins/' + item)(this.hapi, function () {
@@ -57,7 +58,7 @@ Server.prototype.initialize = function () {
       if (error) { return reject(error) }
       this.debug('plugins %o', results)
       // this.hapi.auth.default('jwt')
-      this.hapi.route(require('./../server/routes').endpoints)
+      this.hapi.route(routes.endpoints)
       this.hapi.start(() => {
         resolve()
       })

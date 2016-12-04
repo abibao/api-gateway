@@ -1,14 +1,14 @@
 'use strict'
 
-var Inert = require('inert')
+const Inert = require('inert')
 
 // use debuggers reference
-var abibao = {
+const abibao = {
   debug: global.ABIBAO.debuggers.socket,
   error: global.ABIBAO.debuggers.error
 }
 
-var InertProvision = function (server, callback) {
+const InertProvision = function (server, callback) {
   server.register({
     register: Inert,
     options: {}

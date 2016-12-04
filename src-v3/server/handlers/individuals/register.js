@@ -11,18 +11,21 @@ module.exports = {
   },
   validate: {
     payload: {
-      email: Joi.string().email().required(),
-      password: Joi.string().required()
+      email: Joi.string().required().email(),
+      password1: Joi.string().required(),
+      password2: Joi.string().required(),
+      entity: Joi.string(),
+      survey: Joi.string(),
+      source: Joi.string()
     }
   },
   jsonp: 'callback',
   handler (request, reply) {
-    request.server.methods.command('IndividualLoginWithCredentialsCommand', request.payload)
+    request.server.methods.command('IndividualRegisterCommand', request.payload)
       .then(function (command) {
         reply(command.result)
       })
       .catch(function (command) {
-        if (command.error === 'ERROR_BAD_AUTHENTIFICATION') { return reply(Boom.unauthorized('Email address and/or password invalid')) }
         reply(Boom.badRequest(command.error))
       })
   }

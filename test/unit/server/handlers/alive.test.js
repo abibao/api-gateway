@@ -9,6 +9,7 @@ const Boom = require('boom')
 const engine = require('../../../engine.mock')
 const Server = require('../../../../src-v3/lib/Server')
 let server = false
+let stub = false
 
 before(function (done) {
   engine.initialize()
@@ -35,7 +36,8 @@ describe('[unit] server: /v1/alive', function () {
     })
   })
   it('should be not alive', function (done) {
-    let stub = sinon.stub(server.hapi.methods, 'query', function (name, params = {}) {
+    if (stub) { stub.restore() }
+    stub = sinon.stub(server.hapi.methods, 'query', function (name, params = {}) {
       return new Promise((resolve, reject) => {
         reject(Boom.badRequest())
       })
@@ -45,7 +47,6 @@ describe('[unit] server: /v1/alive', function () {
       url: '/v1/alive'
     }
     server.hapi.inject(req, res => {
-      stub.restore()
       expect(res).to.be.an('object')
       expect(res.result).to.be.an('object')
       expect(res.statusCode).to.be.a('number').to.equal(400)
