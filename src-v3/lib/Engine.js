@@ -18,7 +18,7 @@ class Engine {
     this.name = 'engine'
     this.debug = _debug
     this.error = _error
-    this.version = process.env.npm_package_version
+    this.version = process.env['npm_package_version']
     this.starttime = new Date()
     this.databases = {}
     // initialize databases via internal modules loader, to avoid tests failure

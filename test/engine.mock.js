@@ -52,7 +52,7 @@ engine.modules.get = (name) => {
             fse.ensureDirSync(dirpath)
             const filepath = path.resolve(dirpath, data.id + '.json')
             fse.writeJsonSync(filepath, data)
-            this.result = true
+            this.result = data
             return this
           },
           run () {

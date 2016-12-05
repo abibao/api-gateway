@@ -12,14 +12,13 @@ class IndividualCreateAuthTokenCommand {
     this.r = domain.databases.r
     this.domain = domain
   }
-  handler (urn) {
+  handler (id) {
+    const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
     return new Promise((resolve, reject) => {
-      const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-      const id = this.domain.getIDfromURN(urn)
       this.r.db(database).table('individuals').get(id).run()
         .then((individual) => {
           const credentials = {
-            action: 'auth_me',
+            action: 'ABIBAO_CONST_TOKEN_AUTH_ME',
             urn: individual.urn,
             scope: individual.scope
           }

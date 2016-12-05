@@ -14,16 +14,16 @@ class IndividualRegisterCommand {
     this.domain = domain
   }
   handler (payload) {
+    const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
+    const schema = Joi.object().keys({
+      email: Joi.string().email().required(),
+      password1: Joi.string().required(),
+      password2: Joi.string().required(),
+      entity: Joi.string(),
+      survey: Joi.string(),
+      source: Joi.string()
+    })
     return new Promise((resolve, reject) => {
-      const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-      const schema = Joi.object().keys({
-        email: Joi.string().email().required(),
-        password1: Joi.string().required(),
-        password2: Joi.string().required(),
-        entity: Joi.string(),
-        survey: Joi.string(),
-        source: Joi.string()
-      })
       // validate payload
       validate(payload, schema)
         .then((result) => {

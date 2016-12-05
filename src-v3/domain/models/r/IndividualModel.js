@@ -18,13 +18,16 @@ class IndividualModel {
     result.urnCharity = _.isUndefined(result.charity) ? null : 'urn:abibao:database:entity:' + this.cryptr.encrypt(result.charity)
     result.urnRegisteredEntity = _.isUndefined(result.hasRegisteredEntity) ? null : 'urn:abibao:database:entity:' + this.cryptr.encrypt(result.hasRegisteredEntity)
     result.urnRegisteredSurvey = _.isUndefined(result.hasRegisteredSurvey) ? null : 'urn:abibao:database:campaign:' + this.cryptr.encrypt(result.hasRegisteredSurvey)
-    delete result.id
-    delete result.hashedPassword
-    delete result.salt
-    delete result.charity
-    delete result.hasRegisteredSurvey
-    delete result.hasRegisteredEntity
-    return result
+    return {
+      urn: result.urn,
+      urnCharity: result.urnCharity,
+      urnRegisteredEntity: result.urnRegisteredEntity,
+      urnRegisteredSurvey: result.urnRegisteredSurvey,
+      email: result.email,
+      scope: result.scope,
+      createdAt: result.createdAt,
+      modifiedAt: result.modifiedAt
+    }
   }
   create (data) {
     data.id = new ObjectId().toString()
@@ -32,6 +35,7 @@ class IndividualModel {
     data.modifiedAt = Date.now()
     data.salt = this.makeSalt()
     data.hashedPassword = this.encryptPassword(data.password, data.salt)
+    data.scope = 'individual'
     delete data.password
     return data
   }

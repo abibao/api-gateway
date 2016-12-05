@@ -15,15 +15,17 @@ class IndividualLoginWithCredentialsCommand {
     this.domain = domain
   }
   handler (payload) {
+    const credentials = {}
+    let token = ''
+    const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
+    const schema = Joi.object().keys({
+      email: Joi.string().email().required(),
+      password: Joi.string().required()
+    })
     return new Promise((resolve, reject) => {
-      const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
-      const schema = Joi.object().keys({
-        email: Joi.string().email().required(),
-        password: Joi.string().required()
-      })
       // validate payload
       validate(payload, schema)
-        .then((result) => {
+        .then(() => {
           // find individual by email
           payload.email = payload.email.toLowerCase()
           return this.r.db(database).table('individuals').filter({email: payload.email}).run()
@@ -32,24 +34,49 @@ class IndividualLoginWithCredentialsCommand {
           if (individuals.length === 0) { throw new Error('ERROR_BAD_AUTHENTIFICATION') }
           let result = individuals[0]
           let individual = this.individualModel.transform(result)
+          credentials.urn = individual.urn
+          credentials.scope = individual.scope
           // verifying password
           if (this.individualModel.authenticate(payload.password, result)) {
-            return this.domain.execute('Command', 'IndividualCreateAuthTokenCommand', individual.urn)
+            individual.id = this.domain.getIDfromURN(individual.urn)
+            // create a server side token
+            return this.domain.execute('Command', 'IndividualCreateAuthTokenCommand', individual.id)
           } else {
             reject(new Error('ERROR_BAD_AUTHENTIFICATION'))
           }
         })
         .then((command) => {
-          return this.domain.execute('Command', 'AuthentificationGlobalInformationsQuery', command.result)
+          token = command.result
+          credentials.action = 'ABIBAO_CONST_TOKEN_AUTH_ME'
+          // get globalInfos about an individual
+          return this.domain.execute('Command', 'AuthentificationGlobalInformationsQuery', credentials)
         })
         .then((command) => {
-          resolve(command.result)
+          const infos = command.result
+          // assign campaigns 1 and 2 of abibao if needed
+          if (infos.abibaoCompleted.length === 0 && infos.abibaoInProgress.length === 0) {
+            const promises = {}
+            promises.a = this.domain.execute('Command', 'IndividualCreateAbibaoSurveyCommand', {email: infos.email, position: 1})
+            promises.b = this.domain.execute('Command', 'IndividualCreateAbibaoSurveyCommand', {email: infos.email, position: 2})
+            promises.infos = this.domain.execute('Command', 'AuthentificationGlobalInformationsQuery', credentials)
+            return Promise.props(promises)
+          } else {
+            return {
+              a: false,
+              b: false,
+              infos
+            }
+          }
+        })
+        .then((commands) => {
+          resolve({
+            token,
+            globalInfos: commands.infos.result
+          })
         })
         .catch((error) => {
           reject(error)
         })
-      // --- assign abibao campaigns 1 and 2 if not already done
-      // --- then return globalInfos and token
     })
   }
 }
