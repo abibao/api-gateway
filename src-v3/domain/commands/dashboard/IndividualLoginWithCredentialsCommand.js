@@ -11,7 +11,6 @@ class IndividualLoginWithCredentialsCommand {
     this.name = 'individual-login-with-credentials-command'
     this.nconf = domain.nconf
     this.r = domain.databases.r
-    this.individualModel = domain.IndividualModel
     this.domain = domain
   }
   handler (payload) {
@@ -33,11 +32,11 @@ class IndividualLoginWithCredentialsCommand {
         .then((individuals) => {
           if (individuals.length === 0) { throw new Error('ERROR_BAD_AUTHENTIFICATION') }
           let result = individuals[0]
-          let individual = this.individualModel.transform(result)
+          let individual = this.domain.IndividualModel.transform(result)
           credentials.urn = individual.urn
           credentials.scope = individual.scope
           // verifying password
-          if (this.individualModel.authenticate(payload.password, result)) {
+          if (this.domain.IndividualModel.authenticate(payload.password, result)) {
             individual.id = this.domain.getIDfromURN(individual.urn)
             // create a server side token
             return this.domain.execute('Command', 'IndividualCreateAuthTokenCommand', individual.id)
@@ -58,7 +57,6 @@ class IndividualLoginWithCredentialsCommand {
             const promises = {}
             promises.a = this.domain.execute('Command', 'IndividualCreateAbibaoSurveyCommand', {email: infos.email, position: 1})
             promises.b = this.domain.execute('Command', 'IndividualCreateAbibaoSurveyCommand', {email: infos.email, position: 2})
-            promises.infos = this.domain.execute('Command', 'AuthentificationGlobalInformationsQuery', credentials)
             return Promise.props(promises)
           } else {
             return {
@@ -68,10 +66,13 @@ class IndividualLoginWithCredentialsCommand {
             }
           }
         })
-        .then((commands) => {
+        .then(() => {
+          return this.domain.execute('Command', 'AuthentificationGlobalInformationsQuery', credentials)
+        })
+        .then((query) => {
           resolve({
             token,
-            globalInfos: commands.infos.result
+            globalInfos: query.result
           })
         })
         .catch((error) => {

@@ -47,7 +47,6 @@ describe('[unit] domain: IndividualLoginWithCredentialsCommand', function () {
   it('should success login and return globalInfos', function (done) {
     domain.execute('Command', 'IndividualLoginWithCredentialsCommand', {email: 'gperreymond@gmail.com', password: 'test1234'})
       .then((result) => {
-        console.log(result.result)
         expect(result.result).to.be.an('object')
         expect(result.result.token).to.be.a('string')
         expect(result.result.globalInfos).to.be.an('object')
@@ -56,11 +55,9 @@ describe('[unit] domain: IndividualLoginWithCredentialsCommand', function () {
         expect(result.result.globalInfos.abibaoCompleted).to.be.an('array')
         expect(result.result.globalInfos.surveysInProgress).to.be.an('array')
         expect(result.result.globalInfos.surveysCompleted).to.be.an('array')
+        expect(result.result.globalInfos.abibaoInProgress.length).to.be.eq(2)
         done()
       })
-      .catch((error) => {
-        console.log(error)
-        done(error)
-      })
+      .catch(done)
   })
 })

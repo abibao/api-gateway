@@ -38,7 +38,7 @@ engine.modules.get = (name) => {
               let filepath = path.resolve(dirpath, filename)
               this.collection.push(fse.readJsonSync(filepath))
             })
-            let filter = _.find(this.collection, params) || []
+            let filter = _.filter(this.collection, params) || []
             if (_.isArray(filter)) {
               this.result = filter
             } else {

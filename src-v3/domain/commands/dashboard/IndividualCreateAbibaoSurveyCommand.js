@@ -61,9 +61,11 @@ class IndividualCreateAbibaoSurveyCommand {
               charity: waterfall.campaign.company,
               individual: waterfall.individual.id,
               complete: false,
+              isAbibao: true,
               answers: {}
             }
             // create the new survey
+            data = this.domain.SurveyModel.create(data)
             return this.r.db(database).table('surveys').insert(data).run()
           }
         })

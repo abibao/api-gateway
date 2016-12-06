@@ -10,7 +10,6 @@ class IndividualRegisterCommand {
     this.name = 'individual-register-command'
     this.nconf = domain.nconf
     this.r = domain.databases.r
-    this.individualModel = domain.IndividualModel
     this.domain = domain
   }
   handler (payload) {

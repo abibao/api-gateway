@@ -9,7 +9,6 @@ class AuthentificationGlobalInformationsQuery {
     this.name = 'authentification-global-informations-query'
     this.nconf = domain.nconf
     this.r = domain.databases.r
-    this.individualModel = domain.IndividualModel
     this.domain = domain
   }
   handler (credentials) {
@@ -29,7 +28,7 @@ class AuthentificationGlobalInformationsQuery {
       promises.surveysCompleted = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: true, isAbibao: false}).run()
       promises.surveysInProgress = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: false, isAbibao: false}).run()
       // execute all
-      Promise.props(promises)
+      return Promise.props(promises)
         .then((result) => {
           // controls
           // return

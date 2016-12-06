@@ -28,7 +28,7 @@ describe('[unit] domain: RethinkCreateDocumentWithModelCommand', function () {
     }
     const payload = {
       name: 'abibao name',
-      contact: 'gilles@abibao.com',
+      contact: 'contact@abibao.com',
       url: 'http://abibao.com',
       type: 'abibao',
       title: 'abibao title',
