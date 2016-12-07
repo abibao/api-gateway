@@ -13,6 +13,25 @@ engine.modules.get = (name) => {
     case 'rethinkdbdash':
       return (options) => {
         return {
+          dbList: function () {
+            this.result = 'dbList'
+            return this
+          },
+          contains: function () {
+            return this
+          },
+          dbCreate: function () {
+            this.result = 'dbCreate'
+            return this
+          },
+          tableCreate: function () {
+            this.result = 'tableCreate'
+            return this
+          },
+          tableList: function () {
+            this.result = 'tableList'
+            return this
+          },
           db: function (name) {
             this.result = null
             this.error = null
@@ -74,6 +93,9 @@ engine.modules.get = (name) => {
     case 'knex':
       return function (options) {
         return {
+          raw: function () {
+            return this
+          },
           schema: {
             createTableIfNotExists: function (db, table) {
               return new Promise((resolve) => {

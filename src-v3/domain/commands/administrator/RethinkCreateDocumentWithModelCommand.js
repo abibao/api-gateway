@@ -23,7 +23,7 @@ class RethinkCreateDocumentWithModelCommand {
     const payload = data.payload || {}
     return new Promise((resolve, reject) => {
       const model = this.domain[params.model]
-      const database = params.database || this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
+      const database = params.database || this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP')
       validate(payload, model.schema())
         .then(() => {
           return validate(params, schema)

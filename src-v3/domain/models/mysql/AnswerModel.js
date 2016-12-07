@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = function (domain) {
-  const db = domain.nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_DATABASE')
+  const db = domain.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
   return domain.databases.knex.schema.createTableIfNotExists(db + '.answers', function (table) {
     table.increments('id')
     table.string('email')

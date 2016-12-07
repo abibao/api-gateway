@@ -60,6 +60,9 @@ describe('[unit] domain: IndividualRegisterCommand', function () {
     domain.execute('Command', 'IndividualRegisterCommand', payload)
       .then((result) => {
         expect(result).to.be.an('object')
+        expect(result.result).to.be.an('object')
+        expect(result.result.urn).to.be.a('string')
+        expect(result.result.email).to.be.eq('gilles@abibao.com')
         done()
       })
       .catch(done)

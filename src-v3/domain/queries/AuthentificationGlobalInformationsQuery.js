@@ -2,6 +2,7 @@
 
 // libraries
 const Promise = require('bluebird')
+const _ = require('lodash')
 
 class AuthentificationGlobalInformationsQuery {
   constructor (domain) {
@@ -13,7 +14,7 @@ class AuthentificationGlobalInformationsQuery {
   }
   handler (credentials) {
     const promises = {}
-    const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
+    const database = this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP')
     return new Promise((resolve, reject) => {
       // credentials controls
       credentials.action = credentials.action || 'unauthorized'
@@ -30,9 +31,22 @@ class AuthentificationGlobalInformationsQuery {
       // execute all
       return Promise.props(promises)
         .then((result) => {
-          // controls
+          const surveys = ['abibaoCompleted', 'abibaoInProgress', 'surveysCompleted', 'surveysInProgress']
+          _.map(surveys, (survey) => {
+            result[survey] = _.map(result[survey], (item) => {
+              return {
+                urn: this.domain.getURNfromID('survey', item.id),
+                answers: Object.keys(item.answers).length,
+                createdAt: item.createdAt,
+                modifiedAt: item.modifiedAt
+              }
+            })
+          })
+          return result
+        })
+        .then((result) => {
           // return
-          resolve({
+          return {
             urn: this.domain.getURNfromID('individual', result.individual.id),
             email: result.individual.email,
             currentCharity: this.domain.getURNfromID('charity', result.individual.charity) || 'none',
@@ -41,7 +55,10 @@ class AuthentificationGlobalInformationsQuery {
             surveysInProgress: result.surveysInProgress,
             abibaoCompleted: result.abibaoCompleted,
             surveysCompleted: result.surveysCompleted
-          })
+          }
+        })
+        .then((result) => {
+          resolve(result)
         })
         .catch((error) => {
           reject(error)

@@ -25,7 +25,7 @@ class Domain {
   getIDfromURN (urn) {
     return this.cryptr.decrypt(_.last(_.split(urn, ':')))
   }
-  getURNfromID (id, model) {
+  getURNfromID (model, id) {
     return 'urn:abibao:database:' + model + ':' + this.cryptr.encrypt(id)
   }
 }
@@ -39,6 +39,9 @@ Domain.prototype.execute = function (type, promise, params) {
       type,
       promise
     }
+    this.on(promise, (message) => {
+      console.log()
+    })
     const Action = this[promise]
     const action = new Action(this)
     action.handler(params)
@@ -59,6 +62,57 @@ Domain.prototype.execute = function (type, promise, params) {
   })
 }
 
+Domain.prototype.createRethinkdbSchema = function (database) {
+  return new Promise((resolve, reject) => {
+    this.databases.r.dbList()
+      .contains(database)
+      .run()
+      .then((exists) => {
+        if (exists === true) {
+          resolve()
+        } else {
+          return this.databases.r.dbCreate(database)
+            .run()
+            .then(() => {
+              resolve()
+            })
+        }
+      })
+      .catch(reject)
+  })
+}
+
+Domain.prototype.createRethinkdbStructure = function (database, tables) {
+  return new Promise((resolve, reject) => {
+    const promises = []
+    _.map(tables, (table) => {
+      promises.push(this.createRethinkdbTable(database, table))
+    })
+    Promise.all(promises).then(resolve).catch(reject)
+  })
+}
+
+Domain.prototype.createRethinkdbTable = function (database, table) {
+  return new Promise((resolve, reject) => {
+    this.databases.r.db(database)
+      .tableList()
+      .contains(table)
+      .run()
+      .then((exists) => {
+        if (exists === true) {
+          resolve()
+        } else {
+          return this.databases.r.db(database).tableCreate(table)
+            .run()
+            .then(() => {
+              resolve()
+            })
+        }
+      })
+      .catch(reject)
+  })
+}
+
 Domain.prototype.initialize = function () {
   return new Promise((resolve, reject) => {
     this.debug('start initializing')
@@ -66,10 +120,14 @@ Domain.prototype.initialize = function () {
       this.injector('../domain/models/mysql'),
       this.injector('../domain/models/r'),
       this.injector('../domain/commands'),
-      this.injector('../domain/queries')
+      this.injector('../domain/queries'),
+      this.createRethinkdbSchema(this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP')),
+      this.databases.knex.raw('CREATE SCHEMA IF NOT EXISTS `' + this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS') + '` DEFAULT CHARACTER SET utf8;'),
+      this.databases.knex.raw('CREATE SCHEMA IF NOT EXISTS `' + this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_SENDGRID') + '` DEFAULT CHARACTER SET utf8;')
     ])
     .then(() => {
       return Promise.all([
+        this.createRethinkdbStructure(this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP'), ['administrators', 'individuals', 'entities', 'campaigns', 'campaigns_items', 'campaigns_items_choices', 'surveys']),
         this.AnswerModel(this),
         this.UserModel(this),
         this.VoteSMFModel(this),

@@ -16,7 +16,7 @@ class IndividualLoginWithCredentialsCommand {
   handler (payload) {
     const credentials = {}
     let token = ''
-    const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
+    const database = this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP')
     const schema = Joi.object().keys({
       email: Joi.string().email().required(),
       password: Joi.string().required()

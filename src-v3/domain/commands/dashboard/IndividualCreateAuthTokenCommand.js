@@ -13,7 +13,7 @@ class IndividualCreateAuthTokenCommand {
     this.domain = domain
   }
   handler (id) {
-    const database = this.nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')
+    const database = this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP')
     return new Promise((resolve, reject) => {
       this.r.db(database).table('individuals').get(id).run()
         .then((individual) => {
