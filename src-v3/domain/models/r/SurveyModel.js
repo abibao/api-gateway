@@ -19,9 +19,23 @@ class SurveyModel {
       charity: Joi.string().required(),
       individual: Joi.string().required(),
       answers: Joi.object(),
-      isAbibao: Joi.boolean().default(false),
+      abibao: Joi.boolean().default(false),
       complete: Joi.boolean().default(false)
     })
+  }
+  patch (data) {
+    return {
+      id: data.id,
+      campaign: data.campaign,
+      company: data.company,
+      charity: data.charity,
+      individual: data.individual,
+      answers: data.answers,
+      complete: data.complete,
+      abibao: data.abibao,
+      createdAt: new Date(data.createdAt).getTime(),
+      modifiedAt: new Date(data.modifiedAt).getTime()
+    }
   }
   transform (data) {
     let result = Hoek.clone(data)
@@ -38,7 +52,7 @@ class SurveyModel {
       urnIndividual: result.urnIndividual,
       answers: result.answers,
       complete: result.complete,
-      isAbibao: result.isAbibao,
+      abibao: result.abibao,
       createdAt: result.createdAt,
       modifiedAt: result.modifiedAt
     }

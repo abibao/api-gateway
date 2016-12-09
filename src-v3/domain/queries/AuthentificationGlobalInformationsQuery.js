@@ -24,10 +24,10 @@ class AuthentificationGlobalInformationsQuery {
       credentials.id = this.domain.getIDfromURN(credentials.urn)
       // load promises
       promises.individual = this.r.db(database).table('individuals').get(credentials.id).run()
-      promises.abibaoCompleted = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: true, isAbibao: true}).run()
-      promises.abibaoInProgress = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: false, isAbibao: true}).run()
-      promises.surveysCompleted = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: true, isAbibao: false}).run()
-      promises.surveysInProgress = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: false, isAbibao: false}).run()
+      promises.abibaoCompleted = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: true, abibao: true}).run()
+      promises.abibaoInProgress = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: false, abibao: true}).run()
+      promises.surveysCompleted = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: true, abibao: false}).run()
+      promises.surveysInProgress = this.r.db(database).table('surveys').filter({'individual': credentials.id, complete: false, abibao: false}).run()
       // execute all
       return Promise.props(promises)
         .then((result) => {
@@ -49,7 +49,7 @@ class AuthentificationGlobalInformationsQuery {
           return {
             urn: this.domain.getURNfromID('individual', result.individual.id),
             email: result.individual.email,
-            currentCharity: this.domain.getURNfromID('charity', result.individual.charity) || 'none',
+            currentCharity: this.domain.getURNfromID('charity', result.individual.charity || 'none'),
             charitiesHistory: [],
             abibaoInProgress: result.abibaoInProgress,
             surveysInProgress: result.surveysInProgress,

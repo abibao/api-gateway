@@ -1,8 +1,6 @@
 'use strict'
 
 const Promise = require('bluebird')
-const util = require('util')
-const EventEmitter = require('events').EventEmitter
 const Joi = require('joi')
 const validate = Promise.promisify(Joi.validate)
 
@@ -13,7 +11,6 @@ class IndividualRegisterCommand {
     this.nconf = domain.nconf
     this.r = domain.databases.r
     this.domain = domain
-    EventEmitter.call(this)
   }
   handler (payload) {
     const database = this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP')
@@ -73,13 +70,13 @@ class IndividualRegisterCommand {
           if (individuals.length === 0) {
             throw new Error('Email not found in database')
           } else {
-            // ... post on slack
+            // ... post on slack with bus
             const body = {
               'username': 'IndividualRegisterCommand',
               'text': '[' + new Date() + '] - [' + individuals[0].email + '] has just registered into abibao'
             }
             const webhook = this.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
-            this.emit('WebhookSlackCommand', {body, webhook})
+            this.domain.WebhookSlackCommand.bus.emit('execute', body, webhook)
             // ... normal resolve
             resolve(this.domain.IndividualModel.transform(individuals[0]))
           }
@@ -90,8 +87,6 @@ class IndividualRegisterCommand {
     })
   }
 }
-
-util.inherits(IndividualRegisterCommand, EventEmitter)
 
 module.exports = IndividualRegisterCommand
 

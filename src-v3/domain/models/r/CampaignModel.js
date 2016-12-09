@@ -23,6 +23,19 @@ class CampaignModel {
       published: Joi.boolean().default(false)
     })
   }
+  patch (data) {
+    return {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      company: data.company,
+      position: data.position,
+      screenWelcomeContent: data.screenWelcomeContent,
+      screenThankYouContent: data.screenThankYouContent,
+      createdAt: new Date(data.createdAt).getTime(),
+      modifiedAt: new Date(data.modifiedAt).getTime()
+    }
+  }
   transform (data) {
     let result = Hoek.clone(data)
     result.urn = _.isUndefined(result.id) ? null : 'urn:abibao:database:campaign:' + this.cryptr.encrypt(result.id)

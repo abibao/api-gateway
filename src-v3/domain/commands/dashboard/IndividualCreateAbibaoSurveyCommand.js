@@ -61,23 +61,22 @@ class IndividualCreateAbibaoSurveyCommand {
               charity: waterfall.campaign.company,
               individual: waterfall.individual.id,
               complete: false,
-              isAbibao: true,
+              abibao: true,
               answers: {}
             }
-            // ... post on slack
-            /*
-            const body = {
-              'username': 'IndividualCreateAbibaoSurveyCommand',
-              'text': '[' + new Date() + '] - [' + waterfall.individua.email + '] can access abibao surveys (' + waterfall.campaign.position + ')'
-            }
-            const webhook = this.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
-            this.domain.execute('Command', 'WebhookSlackCommand', {body, webhook}) */
             // create the new survey
             data = this.domain.SurveyModel.create(data)
             return this.r.db(database).table('surveys').insert(data).run()
           }
         })
         .then(() => {
+          // ... post on slack with bus
+          const body = {
+            'username': 'IndividualCreateAbibaoSurveyCommand',
+            'text': '[' + new Date() + '] - [' + waterfall.individual.email + '] can access abibao surveys (' + waterfall.campaign.position + ')'
+          }
+          const webhook = this.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+          this.domain.WebhookSlackCommand.bus.emit('execute', body, webhook)
           // ... normal resolve
           resolve()
         })
