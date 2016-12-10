@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict'
 
-var Promise = require('bluebird')
 var Hoek = require('hoek')
 var glob = require('glob')
 var async = require('async')
@@ -10,6 +9,7 @@ var fse = require('fs-extra')
 var _ = require('lodash')
 var ProgressBar = require('progress')
 var colors = require('colors/safe')
+var uuid = require('node-uuid')
 
 var envValue = null
 
@@ -94,29 +94,24 @@ var execBatch = function (filepath, bar, callback) {
   var answers = Object.keys(survey.answers)
   var messages = []
   _.map(answers, function (answer) {
-    var data = {
-      email: survey.individual,
-      'charity_id': survey.charity,
-      'charity_name': survey.charity,
-      'campaign_id': survey.campaign,
-      'campaign_name': survey.campaign,
-      question: answer,
-      answer: survey.answers[answer],
-      'answer_text': survey.answers[answer],
-      createdAt: false
+    var message = {
+      survey: survey.id,
+      label: answer
     }
     if (_.isArray(survey.answers[answer])) {
       _.map(survey.answers[answer], function (item) {
-        var duplicate = Hoek.clone(data)
-        duplicate.answer = item
-        duplicate['answer_text'] = item
+        var duplicate = Hoek.clone(message)
+        message.answer = item
+        message.isURN = isURN(item)
         messages.push(duplicate)
       })
     } else {
-      messages.push(data)
+      message.answer = survey.answers[answer]
+      message.isURN = isURN(survey.answers[answer])
+      messages.push(message)
     }
   })
-  async.mapSeries(messages, (message, next) => {
+  async.mapLimit(messages, 50, (message, next) => {
     r.table('surveys')
       .get(message.survey)
       .merge(function (item) {
@@ -129,18 +124,39 @@ var execBatch = function (filepath, bar, callback) {
             'campaign_name': r.table('campaigns').get(item('campaign'))('name'),
             question: message.label,
             answer: message.answer,
-            'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
-            createdAt: item('createdAt')
+            'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer
           }
         }
       })
       .then(function (result) {
-        fse.writeJsonSync(filepath, result.data)
-        callback()
+        var targetpath = path.resolve(mysqlDir, result.data.campaign_id, result.data.question, uuid.v1() + '.json')
+        fse.ensureFileSync(targetpath)
+        fse.writeJsonSync(targetpath, result.data)
+        // write in mysql
+        result.data.createdAt = knex.fn.now()
+        if (result.data.answer && result.data.question) {
+          return knex('answers')
+            .where('email', result.data.email)
+            .andWhere('campaign_id', result.data.campaign_id)
+            .andWhere('question', result.data.question)
+            .delete()
+            .then(() => {
+              return knex('answers').insert(result.data)
+            })
+        } else {
+          return false
+        }
+      })
+      .then(() => {
+        next()
       })
       .catch(function () {
-        callback()
+        console.log('error.message', message)
+        next()
       })
+  }, () => {
+    bar.tick()
+    callback()
   })
 }
 

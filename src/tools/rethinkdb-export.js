@@ -117,10 +117,10 @@ var run = () => {
   })
   async.mapSeries(tables, function (table, next) {
     execBatch(table, 0, 100, bar, next)
-  }, function (err, results) {
-    if (err) {
-      console.log('\n', colors.bgRed.bold(' ERROR! '))
-      console.log(err, '\n')
+  }, function (error, results) {
+    if (error) {
+      console.log('\n', colors.bgRed.bold(' ERROR! '), '\n')
+      console.log(error)
       process.exit(1)
     } else {
       console.log('\n', colors.bgGreen.bold(' DONE! '), '\n')
