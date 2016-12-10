@@ -44,6 +44,24 @@ module.exports = function (payload) {
       .then(function (payload) {
         return self.execute('command', 'individualCreateCommand', payload)
       })
+      .then((individual) => {
+        if (payload.hasRegisteredSurvey && payload.hasRegisteredEntity) {
+          return self.execute('command', 'individualCreateSurveyCommand', {
+            campaign: individual.urnRegisteredSurvey,
+            individual: individual.urn,
+            charity: individual.urnRegisteredEntity
+          }).then(() => {
+            return self.execute('command', 'individualUpdateCommand', {
+              urn: individual.urn,
+              hasRegisteredEntity: 'none'
+            }).then(function (individual) {
+              return individual
+            })
+          })
+        } else {
+          return individual
+        }
+      })
       .then(function (individual) {
         // events on bus
         // ... post informations on slack

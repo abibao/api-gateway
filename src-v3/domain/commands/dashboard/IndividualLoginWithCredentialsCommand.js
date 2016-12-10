@@ -14,7 +14,7 @@ class IndividualLoginWithCredentialsCommand {
     this.domain = domain
   }
   handler (payload) {
-    const credentials = {}
+    let credentials = {}
     let token = ''
     const database = this.nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP')
     const schema = Joi.object().keys({
@@ -33,11 +33,12 @@ class IndividualLoginWithCredentialsCommand {
           if (individuals.length === 0) { throw new Error('ERROR_BAD_AUTHENTIFICATION') }
           let result = individuals[0]
           let individual = this.domain.IndividualModel.transform(result)
-          credentials.urn = individual.urn
-          credentials.scope = individual.scope
           // verifying password
           if (this.domain.IndividualModel.authenticate(payload.password, result)) {
             individual.id = this.domain.getIDfromURN(individual.urn)
+            credentials.urn = individual.urn
+            credentials.scope = result.scope
+            credentials.action = 'ABIBAO_CONST_TOKEN_AUTH_ME'
             // create a server side token
             return this.domain.execute('Command', 'IndividualCreateAuthTokenCommand', individual.id)
           } else {
@@ -46,7 +47,6 @@ class IndividualLoginWithCredentialsCommand {
         })
         .then((command) => {
           token = command.result
-          credentials.action = 'ABIBAO_CONST_TOKEN_AUTH_ME'
           // get globalInfos about an individual
           return this.domain.execute('Command', 'AuthentificationGlobalInformationsQuery', credentials)
         })

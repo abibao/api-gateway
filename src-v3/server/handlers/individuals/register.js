@@ -22,10 +22,10 @@ module.exports = {
   jsonp: 'callback',
   handler (request, reply) {
     request.server.methods.command('IndividualRegisterCommand', request.payload)
-      .then(function (command) {
+      .then((command) => {
         reply(command.result)
       })
-      .catch(function (command) {
+      .catch((command) => {
         reply(Boom.badRequest(command.error))
       })
   }

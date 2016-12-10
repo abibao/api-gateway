@@ -33,3 +33,6 @@ r.db('recemvp')
   .catch((error) => {
     console.log(error)
   })
+
+r.db('mvp_deve').table('surveys').filter({isAbibao: true}).update({abibao: true})
+r.db('mvp_deve').table('surveys').filter({isAbibao: false}).update({abibao: false})

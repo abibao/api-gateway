@@ -55,7 +55,7 @@ class IndividualCreateAbibaoSurveyCommand {
             resolve()
           } else {
             // ok so we continue
-            var data = {
+            let data = {
               campaign: waterfall.campaign.id,
               company: waterfall.campaign.company,
               charity: waterfall.campaign.company,

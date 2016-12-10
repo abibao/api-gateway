@@ -18,10 +18,10 @@ module.exports = {
   jsonp: 'callback',
   handler (request, reply) {
     request.server.methods.command('IndividualLoginWithCredentialsCommand', request.payload)
-      .then(function (command) {
+      .then((command) => {
         reply(command.result)
       })
-      .catch(function (command) {
+      .catch((command) => {
         if (command.error === 'ERROR_BAD_AUTHENTIFICATION') { return reply(Boom.unauthorized('Email address and/or password invalid')) }
         reply(Boom.badRequest(command.error))
       })

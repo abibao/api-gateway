@@ -19,7 +19,7 @@ class IndividualCreateAuthTokenCommand {
         .then((individual) => {
           const credentials = {
             action: 'ABIBAO_CONST_TOKEN_AUTH_ME',
-            urn: individual.urn,
+            urn: this.domain.getURNfromID('individual', individual.id),
             scope: individual.scope
           }
           const token = JWT.sign(credentials, this.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), { expiresIn: 60 * 60 * 24 })

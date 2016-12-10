@@ -23,7 +23,8 @@ const Provision = function (server, callback) {
         color: false
       }
     }
-  }, (error) => {
+  },
+  (error) => {
     callback(error)
   })
 }

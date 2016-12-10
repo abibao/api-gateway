@@ -17,9 +17,10 @@ class Server {
     this.name = 'server'
     this.debug = _debug
     this.error = engine.error
+    this.nconf = engine.nconf
     this.options = {
-      host: engine.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
-      port: engine.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
+      host: this.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
+      port: this.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
       labels: ['api', 'administrator']
     }
     this.hapi = new Hapi.Server({
@@ -49,9 +50,9 @@ Server.prototype.initialize = function () {
   return new Promise((resolve, reject) => {
     this.debug('start initializing %o', this.options)
     this.hapi.connection(this.options)
-    const plugins = [] // ['inert', 'auth', 'nes']
+    const plugins = ['auth']
     async.mapSeries(plugins, (item, next) => {
-      require('./../server/plugins/' + item)(this.hapi, function () {
+      require('./../server/plugins/' + item)(this, function () {
         next(null, item)
       })
     }, (error, results) => {

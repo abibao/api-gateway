@@ -1,30 +1,22 @@
 'use strict'
 
 const AuthJWT = require('hapi-auth-jwt2')
+const path = require('path')
 
-// use debuggers reference
-const abibao = {
-  debug: global.ABIBAO.debuggers.socket,
-  error: global.ABIBAO.debuggers.error
-}
-
-const AuthProvision = function (server, callback) {
-  server.register({
+const Provision = function (server, callback) {
+  server.hapi.register({
     register: AuthJWT,
-    options: {
-    }
+    options: { }
   },
   (error) => {
-    if (error) {
-      abibao.error(error)
-    }
-    server.auth.strategy('jwt', 'jwt', {
-      key: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'),
-      validateFunc: require('./libs/auth_jwt_validate.js'),
+    const libpath = path.resolve(__dirname, 'libs')
+    server.hapi.auth.strategy('jwt', 'jwt', {
+      key: server.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'),
+      validateFunc: require(path.resolve(libpath, 'auth-jwt-validate')),
       verifyOptions: { algorithms: ['HS256'] }
     })
     callback(error)
   })
 }
 
-module.exports = AuthProvision
+module.exports = Provision
