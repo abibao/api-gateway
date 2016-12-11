@@ -15,7 +15,8 @@ exports.endpoints = [
   { method: 'GET', path: '/administrator/{param*}', config: require('./handlers/administrator') },
 
   // auto affect campaign
-  { method: 'GET', path: '/redirect/campaign/affect/{sealed}', config: require('./handlers/redirect/campaign/affect') },
+  { method: 'GET', path: '/redirect/individual/assign/campaign/{sealed}', config: require('./handlers/redirect/campaign/assign') },
+  { method: 'GET', path: '/redirect/campaign/assign/{sealed}', config: require('./handlers/redirect/campaign/assign-abibao') },
 
   // individuals
   { method: 'POST', path: '/v1/individuals/autologin/{fingerprint}', config: require('./handlers/individuals/autologin') },
