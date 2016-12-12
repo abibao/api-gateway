@@ -12,21 +12,16 @@ module.exports = {
     allow: ['application/x-www-form-urlencoded', 'application/json']
   },
   validate: {
-    params: {
-      urn: Joi.string().required()
-    },
     payload: {
-      maximum: Joi.number().integer().min(0).required(),
-      filter: Joi.string().required(),
-      finishedAt: Joi.date()
+      email: Joi.string().email().required()
     }
   },
   jsonp: 'callback',
   handler (request, reply) {
-    request.payload.urn = request.params.urn
-    global.ABIBAO.services.domain.execute('command', 'campaignPublishCommand', request.payload)
-      .then(function (result) {
-        reply(result)
+    request.payload.campaign = request.params.urn
+    global.ABIBAO.services.domain.execute('command', 'individualSendEmailAffectCampaignsAuto', request.payload)
+      .then(function (campaign) {
+        reply(campaign)
       })
       .catch(function (error) {
         reply(Boom.badRequest(error))
