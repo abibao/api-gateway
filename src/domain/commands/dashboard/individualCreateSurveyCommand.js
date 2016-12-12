@@ -22,24 +22,24 @@ module.exports = function (data) {
           individual: self.getIDfromURN(result.individual.urn),
           answers: {}
         }
+        var message = {
+          'username': 'individualCreateSurveyCommand',
+          'text': '[' + new Date() + '] - [' + result.individual.email + '] can access a new survey (' + result.campaign.name + ')',
+          'webhook': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+        }
         return self.execute('query', 'surveyFilterQuery', {
           campaign: self.getIDfromURN(result.campaign.urn),
-          company: self.getIDfromURN(result.campaign.urnCompany),
-          charity: self.getIDfromURN(result.charity.urn)
+          individual: self.getIDfromURN(result.individual.urn)
         }).then((surveys) => {
           if (surveys.length === 0) {
             return self.execute('command', 'surveyCreateCommand', data)
               .then(() => {
-                resolve()
+                resolve({created: true})
                 // informations posted on slack
-                global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
-                  'username': 'individualCreateSurveyCommand',
-                  'text': '[' + new Date() + '] - [' + result.individual.email + '] can access a new survey (' + result.campaign.name + ')',
-                  'webhook': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
-                })
+                global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, message)
               })
           } else {
-            resolve()
+            resolve({created: true})
           }
         })
       })
