@@ -27,7 +27,7 @@ module.exports = function (message) {
             ],
             'subject': "Regardez comme il est facile d'aider une association.",
             'substitutions': {
-              '%urn_survey%': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_URI') + '/redirect/campaign/affect/' + sealed
+              '%urn_survey%': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_URI') + '/redirect/campaign/assign/' + sealed
             }
           }
         ],
