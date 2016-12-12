@@ -50,7 +50,7 @@ exports.endpoints = [
   { method: 'POST', path: '/v1/campaigns', config: require('./handlers/campaigns/create') },
   { method: 'GET', path: '/v1/campaigns/{urn}', config: require('./handlers/campaigns/read') },
   { method: 'PATCH', path: '/v1/campaigns/{urn}', config: require('./handlers/campaigns/update') },
-  { method: 'POST', path: '/v1/campaigns/{urn}/publish', config: require('./handlers/campaigns/publish') },
+  { method: 'POST', path: '/v1/campaigns/{urn}/affect', config: require('./handlers/campaigns/affect') },
 
   // choices
   { method: 'POST', path: '/v1/choices', config: require('./handlers/campaigns/items/choices/create') },
