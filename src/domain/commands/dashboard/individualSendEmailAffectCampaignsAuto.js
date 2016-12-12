@@ -9,6 +9,7 @@ var Base64 = require('base64-url')
 module.exports = function (payload) {
   return new Promise(function (resolve, reject) {
     var message = {
+      email: payload.email,
       action: global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_ABIBAO_CAMPAIGN_PUBLISH_AUTO
     }
     var sealed = ''

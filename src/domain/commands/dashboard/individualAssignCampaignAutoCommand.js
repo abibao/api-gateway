@@ -16,6 +16,8 @@ module.exports = function (sealed) {
       switch (true) {
         case _.isNull(err) === false:
           return reject(err)
+        case _.isUndefined(unsealed.email):
+          return reject(new Error('Email is undefined'))
         case _.isUndefined(unsealed.individual):
           return reject(new Error('Individual is undefined'))
         case _.isUndefined(unsealed.charity):
@@ -31,7 +33,10 @@ module.exports = function (sealed) {
       }
       self.execute('command', 'individualCreateSurveyCommand', {campaign: unsealed.campaign, individual: unsealed.individual, charity: unsealed.charity})
         .then(function () {
-          resolve({redirect: true})
+          return self.execute('command', 'individualCreateFingerprintTokenCommand', {urn: unsealed.individual, email: unsealed.email})
+            .then((fingerprint) => {
+              resolve({fingerprint})
+            })
         })
         .catch(reject)
     })
