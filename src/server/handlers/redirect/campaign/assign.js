@@ -14,7 +14,7 @@ module.exports = {
   handler (request, reply) {
     global.ABIBAO.services.domain.execute('command', 'individualAssignCampaignAutoCommand', request.params.sealed)
       .then(function (result) {
-        reply.redirect(global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI') + '?fingerprint=' + result.fingerprint)
+        reply.redirect(global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI') + '/login?fingerprint=' + result.fingerprint)
       })
       .catch(function (error) {
         reply(Boom.badRequest(error))
