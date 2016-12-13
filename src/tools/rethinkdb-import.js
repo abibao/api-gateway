@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 'use strict'
 
+var couchbase = require('couchbase')
+var cluster = new couchbase.Cluster('couchbase://localhost/')
+var bucket = cluster.openBucket('default')
+var N1qlQuery = couchbase.N1qlQuery
+
 var glob = require('glob')
 var async = require('async')
 var path = require('path')
@@ -86,13 +91,19 @@ var execBatch = function (table, bar, callback) {
         var filepath = path.resolve(dir, file)
         var json = fse.readJsonSync(filepath)
         bar.tick()
-        r.table(table).insert(json)
-          .then(() => {
-            next()
-          })
-          .catch((error) => {
-            next(error)
-          })
+        // couch
+        bucket.upsert(table + ':' + json.id, json
+        , (error) => {
+          if (error) { return next(error) }
+          // rethink
+          r.table(table).insert(json)
+            .then(() => {
+              next()
+            })
+            .catch((error) => {
+              next(error)
+            })
+        })
       }, (err) => {
         if (err) {
           callback(err)
