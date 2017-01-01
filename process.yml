@@ -1,0 +1,6 @@
+apps:
+  - script            : 'index.js'
+    name              : 'ABIBAO_API_GATEWAY'
+    exec_mode         : 'cluster'
+    instances         : 1
+    max_memory_restart: '650M'
