@@ -1,0 +1,11 @@
+apps:
+  - script            : 'index.js'
+    name              : 'api.rece.abibao.com'
+    exec_mode         : 'cluster'
+    instances         : 2
+    max_memory_restart: '325M'
+  - script            : 'index.js'
+    name              : 'api.prod.abibao.com'
+    exec_mode         : 'cluster'
+    instances         : 4
+    max_memory_restart: '650M'

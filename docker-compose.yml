@@ -1,6 +1,7 @@
 version: '2'
 
 services:
+
   node:
     image: mhart/alpine-node:6
     container_name: deve_node
@@ -11,6 +12,7 @@ services:
       - logstash
       - elasticsearch
     command: node --version
+
   mysql:
     image: library/mysql:5
     container_name: deve_mysql
@@ -18,6 +20,7 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: none
+
   rethinkdb:
     image: library/rethinkdb
     container_name: deve_rethinkdb
@@ -25,6 +28,7 @@ services:
       - "28080:8080"
       - "28015:28015"
       - "29015:29015"
+
   rabbitmq:
     image: tutum/rabbitmq:latest
     container_name: deve_rabbitmq
@@ -33,6 +37,7 @@ services:
       - "15672:15672"
     environment:
       RABBITMQ_PASS: none
+
   logstash:
     build: docker/logstash/
     container_name: deve_logstash
@@ -41,6 +46,7 @@ services:
       - ./docker/logstash/config:/etc/logstash/conf.d
     ports:
       - "5000:5000"
+      
   elasticsearch:
     build: docker/elasticsearch/
     container_name: deve_elasticsearch
