@@ -1,14 +1,12 @@
 'use strict'
 
 var Promise = require('bluebird')
-
-var nconf = global.ABIBAO.nconf
-var Hoek = require('hoek')
 var Iron = require('iron')
 var Base64 = require('base64-url')
 
 module.exports = function (payload) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
+  var nconf = global.ABIBAO.nconf
   return new Promise(function (resolve, reject) {
     self.execute('query', 'individualReadQuery', payload.urn)
       .then(function (individual) {

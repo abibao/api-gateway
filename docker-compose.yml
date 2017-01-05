@@ -4,7 +4,6 @@ services:
 
   node:
     image: mhart/alpine-node:6
-    container_name: deve_node
     depends_on:
       - mysql
       - rethinkdb
@@ -15,7 +14,6 @@ services:
 
   mysql:
     image: library/mysql:5
-    container_name: deve_mysql
     ports:
       - "3306:3306"
     environment:
@@ -23,7 +21,6 @@ services:
 
   rethinkdb:
     image: library/rethinkdb
-    container_name: deve_rethinkdb
     ports:
       - "28080:8080"
       - "28015:28015"
@@ -31,7 +28,6 @@ services:
 
   rabbitmq:
     image: tutum/rabbitmq:latest
-    container_name: deve_rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -40,16 +36,14 @@ services:
 
   logstash:
     build: docker/logstash/
-    container_name: deve_logstash
     command: -f /etc/logstash/conf.d/
     volumes:
       - ./docker/logstash/config:/etc/logstash/conf.d
     ports:
       - "5000:5000"
-      
+
   elasticsearch:
     build: docker/elasticsearch/
-    container_name: deve_elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"

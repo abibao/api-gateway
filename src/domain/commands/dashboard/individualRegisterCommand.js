@@ -1,12 +1,11 @@
 'use strict'
 
 var Promise = require('bluebird')
-var Hoek = require('hoek')
 
 var nconf = global.ABIBAO.nconf
 
 module.exports = function (payload) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     // email to lowercase
     payload.email = payload.email.toLowerCase()

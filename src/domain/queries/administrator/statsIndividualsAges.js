@@ -1,10 +1,9 @@
 'use strict'
 
-var Hoek = require('hoek')
 var _ = require('lodash')
 
 module.exports = function (value) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     try {
       var gender = (value === 'MALE') ? '56ee9a414726e973079d96d0' : '56ee9a414726e973079d96d1'

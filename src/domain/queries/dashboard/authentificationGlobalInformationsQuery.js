@@ -1,14 +1,12 @@
 'use strict'
 
 var Promise = require('bluebird')
-
-var Hoek = require('hoek')
 var _ = require('lodash')
 var waterfall = require('async').waterfall
 var map = require('async').map
 
 var waterIndividual = function (waterfallResults, callback) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   self.execute('query', 'individualReadQuery', waterfallResults.credentials.urn)
     .then(function (individual) {
       waterfallResults.individual = individual
@@ -18,7 +16,7 @@ var waterIndividual = function (waterfallResults, callback) {
 }
 
 var waterCurrentCharity = function (waterfallResults, callback) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   self.execute('query', 'entityReadQuery', waterfallResults.individual.urnCharity)
     .then(function (entity) {
       waterfallResults.currentCharity = entity
@@ -33,7 +31,7 @@ var waterCharitiesHistory = function (waterfallResults, callback) {
 }
 
 var waterIndividualSurveys = function (waterfallResults, callback) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   self.execute('query', 'surveyFilterQuery', {'individual': waterfallResults.credentials.id})
     .then(function (surveys) {
       map(surveys, function (survey, next) {
@@ -126,7 +124,7 @@ var surveysCompletedHandler = function (values) {
 }
 
 module.exports = function (credentials) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     if (_.isUndefined(credentials.action)) { return reject(new Error('Action is undefined')) }
     if (credentials.action !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_TOKEN_AUTH_ME) { return reject(new Error('Action is unauthorized')) }

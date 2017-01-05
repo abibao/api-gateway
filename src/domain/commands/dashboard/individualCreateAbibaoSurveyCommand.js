@@ -2,14 +2,12 @@
 
 var Promise = require('bluebird')
 
-var nconf = global.ABIBAO.nconf
-var Hoek = require('hoek')
-
 module.exports = function (data) {
   var target = data.target
   var position = data.position
   var email = data.email
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
+  var nconf = global.ABIBAO.nconf
   return new Promise(function (resolve, reject) {
     // get abibao entity
     self.execute('query', 'entityFilterQuery', {type: 'abibao'})
