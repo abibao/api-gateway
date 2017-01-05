@@ -124,7 +124,8 @@ var execBatch = function (filepath, bar, callback) {
             'campaign_name': r.table('campaigns').get(item('campaign'))('name'),
             question: message.label,
             answer: message.answer,
-            'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer
+            'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
+            'createdAt': item('modifiedAt')
           }
         }
       })
@@ -133,7 +134,7 @@ var execBatch = function (filepath, bar, callback) {
         fse.ensureFileSync(targetpath)
         fse.writeJsonSync(targetpath, result.data)
         // write in mysql
-        result.data.createdAt = knex.fn.now()
+        result.data.createdAt = new Date(result.data.createdAt)
         if (result.data.answer && result.data.question) {
           return knex('answers')
             .where('email', result.data.email)
