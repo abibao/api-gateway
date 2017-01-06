@@ -48,11 +48,16 @@ internals.initialize = function () {
       return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
     }
     internals.domain.knex = require('./../connections/knex')()
+    internals.domain.sequelize = {
+      mvp: require('./../connections/sequelize')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP'))
+    }
     Promise.all([
+      internals.domain.sequelize.mvp.authenticate(),
       internals.domain.injector('commands'),
       internals.domain.injector('queries'),
       internals.domain.injector('models/mysql'),
       internals.domain.injector('models/rethinkdb'),
+      internals.domain.injector('models/sequelize/mvp'),
       internals.domain.AnswerModel(),
       internals.domain.UserModel(),
       internals.domain.VoteSMFModel(),
@@ -102,6 +107,9 @@ internals.injector = function (type) {
       switch (type) {
         case 'models/rethinkdb':
           self[name] = require(file)(self.thinky)
+          break
+        case 'models/sequelize/mvp':
+          self[name] = require(file)(self.sequelize.mvp)
           break
         default:
           self[name] = require(file)

@@ -5,6 +5,10 @@ exports.endpoints = [
   // server is alive
   { method: 'GET', path: '/v1/alive', config: require('./handlers/alive') },
 
+  // api -- v2
+  { method: 'GET', path: '/v2/campaigns', config: require('./handlers/v2/campaigns').list },
+  { method: 'POST', path: '/v2/campaigns', config: require('./handlers/v2/campaigns').create },
+
   // stats
   { method: 'GET', path: '/v1/stats/charities/individuals', config: require('./handlers/stats/charities/individuals') },
   { method: 'GET', path: '/v1/stats/charities/none', config: require('./handlers/stats/charities/none') },

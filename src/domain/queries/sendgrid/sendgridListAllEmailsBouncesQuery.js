@@ -29,7 +29,7 @@ var resultSchema = Joi.object().keys({
   data: Joi.array().items(Joi.string().email()).required()
 })
 
-var r = require('./../../../connections/rethinkdbdash')('sendgrid')
+var r = require('./../../../connections/rethinkdbdash')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_SENDGRID'))
 var helper = require('./../../../helper')
 
 module.exports = function (payload = {}) {

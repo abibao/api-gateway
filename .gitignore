@@ -4,6 +4,7 @@ nconf-rece.json
 nconf-prod.json
 backup-*.zip
 
+volumes
 test/databases
 
 Logs

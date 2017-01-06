@@ -5,6 +5,7 @@
   "scripts": {
     "setup:deve": "npm-scripts/setup-deve.sh",
     "setup:clean": "npm-scripts/setup-clean.sh",
+    "batch:import": "./src/batchs/import.sh",
     "test": "npm-scripts/test.sh",
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts .mocharc",
     "test:standard": "node_modules/.bin/standard --verbose --fix | snazzy",
@@ -106,7 +107,7 @@
     "rethinkdb": "2.3.3",
     "sinon": "1.17.7",
     "snazzy": "5.0.0",
-    "snyk": "1.23.1",
+    "snyk": "1.23.2",
     "standard": "8.6.0"
   }
 }

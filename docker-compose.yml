@@ -14,13 +14,17 @@ services:
 
   mysql:
     image: library/mysql:5
-    ports:
-      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: none
+    volumes:
+      - ./volumes/databases/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
   rethinkdb:
     image: library/rethinkdb
+    volumes:
+      - ./volumes/databases/rethinkdb:/data
     ports:
       - "28080:8080"
       - "28015:28015"
@@ -28,11 +32,11 @@ services:
 
   rabbitmq:
     image: tutum/rabbitmq:latest
+    environment:
+      RABBITMQ_PASS: none
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      RABBITMQ_PASS: none
 
   logstash:
     build: docker/logstash/
