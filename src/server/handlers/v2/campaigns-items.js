@@ -12,7 +12,7 @@ module.exports.create = {
   },
   jsonp: 'callback',
   handler (request, reply) {
-    global.ABIBAO.services.domain.Campaign.upsert(request.payload)
+    global.ABIBAO.services.domain.CampaignItem.upsert(request.payload)
       .then(function (result) {
         reply(result)
       })
@@ -30,7 +30,7 @@ module.exports.list = {
   },
   jsonp: 'callback',
   handler (request, reply) {
-    global.ABIBAO.services.domain.Campaign.findAndCount({ offset: parseInt(request.query.offset) || 0, limit: parseInt(request.query.limit) || 20 })
+    global.ABIBAO.services.domain.CampaignItem.findAndCount({ offset: parseInt(request.query.offset) || 0, limit: parseInt(request.query.limit) || 20 })
       .then(function (result) {
         reply({
           total: result.count,

@@ -39,7 +39,7 @@ nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
 var options = {
   host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
-  db: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+  db: nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP'),
   user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
   password: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
   authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),

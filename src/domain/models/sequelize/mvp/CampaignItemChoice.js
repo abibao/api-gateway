@@ -4,25 +4,24 @@ const Sequelize = require('sequelize')
 const Cryptr = require('cryptr')
 
 module.exports = function (sequelize) {
-  const Campaign = sequelize.define('Campaign', {
+  const CampaignItemChoice = sequelize.define('CampaignItemChoice', {
     id: {
       type: Sequelize.STRING,
       primaryKey: true,
       unique: true,
       allowNull: false
     },
-    company: {
+    prefix: {
       type: Sequelize.STRING,
       allowNull: false
     },
-    name: {
+    suffix: {
       type: Sequelize.STRING,
-      unique: true,
       allowNull: false
     },
-    description: {
-      type: Sequelize.TEXT,
-      allowNull: true
+    text: {
+      type: Sequelize.STRING,
+      allowNull: false
     },
     position: {
       type: Sequelize.INTEGER,
@@ -32,31 +31,35 @@ module.exports = function (sequelize) {
         min: 0
       }
     },
-    screenWelcomeContent: {
-      type: Sequelize.TEXT,
-      allowNull: true
+    campaign: {
+      type: Sequelize.STRING,
+      allowNull: false
     },
-    screenThankYouContent: {
-      type: Sequelize.TEXT,
-      allowNull: true
+    item: {
+      type: Sequelize.STRING,
+      allowNull: false
     }
   }, {
     getterMethods: {
       urn: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-        return 'abibao:database:campaign:' + cryptr.encrypt(this.id)
+        return 'abibao:database:campaign_item_choice:' + cryptr.encrypt(this.id)
       },
-      urnCompany: function () {
+      urnCampaign: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-        return 'abibao:database:company:' + cryptr.encrypt(this.company)
+        return 'abibao:database:campaign:' + cryptr.encrypt(this.campaign)
+      },
+      urnCampaignItem: function () {
+        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        return 'abibao:database:campaign_item:' + cryptr.encrypt(this.item)
       }
     },
     timestamps: true,
     paranoid: true,
     underscored: false,
     freezeTableName: true,
-    tableName: 'campaigns'
+    tableName: 'campaigns_items_choices'
   })
-  Campaign.sync()
-  return Campaign
+  CampaignItemChoice.sync()
+  return CampaignItemChoice
 }

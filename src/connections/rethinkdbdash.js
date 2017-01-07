@@ -10,7 +10,7 @@ module.exports = function (database) {
     user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
     password: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
     authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
-    db: database || nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'),
+    db: database || nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP'),
     silent: true
   }
   if (database === 'EMPTY') {
