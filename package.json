@@ -1,6 +1,6 @@
 {
   "name": "api-gateway",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
     "setup:deve": "npm-scripts/setup-deve.sh",
@@ -10,9 +10,8 @@
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts .mocharc",
     "test:standard": "node_modules/.bin/standard --verbose --fix | snazzy",
     "test:security": "node_modules/.bin/snyk test",
-    "start": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan",
-    "start:deve": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node src-v3/ | bunyan",
-    "big-data:rece": "npm-scripts/big-data-rece.sh"
+    "start": "DEBUG=abibao:mysql,abibao:application ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan",
+    "start:deve": "DEBUG=abibao*,servicebus* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node src-v3/ | bunyan"
   },
   "standard": {
     "globals": [
@@ -58,7 +57,6 @@
     "crumb": "6.0.3",
     "cryptr": "2.0.0",
     "debug": "2.6.0",
-    "dotenv": "2.0.0",
     "download": "5.0.2",
     "eraro": "0.4.1",
     "faker": "3.1.0",
@@ -88,7 +86,7 @@
     "request-promise": "4.1.1",
     "rethinkdbdash": "2.3.27",
     "sendgrid": "4.7.1",
-    "sequelize": "3.28.0",
+    "sequelize": "3.29.0",
     "servicebus": "2.0.7",
     "servicebus-retry": "0.0.11",
     "thinky": "2.3.8",

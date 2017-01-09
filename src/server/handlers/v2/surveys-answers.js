@@ -3,16 +3,13 @@
 const Boom = require('boom')
 
 module.exports.create = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
+  auth: false,
   payload: {
     allow: ['application/x-www-form-urlencoded', 'application/json']
   },
   jsonp: 'callback',
   handler (request, reply) {
-    global.ABIBAO.services.domain.SurveyAnswer.upsert(request.payload)
+    global.ABIBAO.services.domain.databases.mvp.SurveyAnswer.upsert(request.payload)
       .then(function (result) {
         reply(result)
       })

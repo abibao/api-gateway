@@ -40,6 +40,22 @@ module.exports = function (sequelize) {
       allowNull: false
     }
   }, {
+    classMethods: {
+      associate: function (models) {
+        models.CampaignItemChoice.belongsTo(models.CampaignItem, {
+          onDelete: 'CASCADE',
+          foreignKey: {
+            allowNull: false
+          }
+        })
+        models.CampaignItemChoice.belongsTo(models.Campaign, {
+          onDelete: 'CASCADE',
+          foreignKey: {
+            allowNull: false
+          }
+        })
+      }
+    },
     getterMethods: {
       urn: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -47,11 +63,11 @@ module.exports = function (sequelize) {
       },
       urnCampaign: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-        return 'abibao:database:campaign:' + cryptr.encrypt(this.campaign)
+        return 'abibao:database:campaign:' + cryptr.encrypt(this.CampaignId)
       },
       urnCampaignItem: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-        return 'abibao:database:campaign_item:' + cryptr.encrypt(this.item)
+        return 'abibao:database:campaign_item:' + cryptr.encrypt(this.CampaignItemId)
       }
     },
     timestamps: true,
@@ -60,6 +76,5 @@ module.exports = function (sequelize) {
     freezeTableName: true,
     tableName: 'campaigns_items_choices'
   })
-  CampaignItemChoice.sync()
   return CampaignItemChoice
 }

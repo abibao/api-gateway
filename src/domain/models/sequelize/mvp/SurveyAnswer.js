@@ -11,10 +11,6 @@ module.exports = function (sequelize) {
       unique: true,
       defaultValue: Sequelize.UUIDV4
     },
-    survey: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
     question: {
       type: Sequelize.STRING,
       allowNull: false
@@ -24,12 +20,6 @@ module.exports = function (sequelize) {
       allowNull: false
     }
   }, {
-    indexes: [
-      {
-        unique: true,
-        fields: ['survey', 'question']
-      }
-    ],
     getterMethods: {
       urn: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -46,6 +36,5 @@ module.exports = function (sequelize) {
     freezeTableName: true,
     tableName: 'surveys_answers'
   })
-  SurveyAnswer.sync()
   return SurveyAnswer
 }

@@ -11,10 +11,6 @@ module.exports = function (sequelize) {
       unique: true,
       defaultValue: Sequelize.UUIDV4
     },
-    campaign: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
     charity: {
       type: Sequelize.STRING,
       allowNull: false
@@ -56,6 +52,5 @@ module.exports = function (sequelize) {
     freezeTableName: true,
     tableName: 'surveys'
   })
-  Survey.sync()
   return Survey
 }

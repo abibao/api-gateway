@@ -11,10 +11,6 @@ module.exports = function (sequelize) {
       unique: true,
       allowNull: false
     },
-    campaign: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
     type: {
       type: Sequelize.ENUM('ABIBAO_COMPONENT_YES_NO', 'ABIBAO_COMPONENT_STATEMENT', 'ABIBAO_COMPONENT_SHORT_TEXT', 'ABIBAO_COMPONENT_NUMBER', 'ABIBAO_COMPONENT_MULTIPLE_CHOICE', 'ABIBAO_COMPONENT_LONG_TEXT', 'ABIBAO_COMPONENT_DROPDOWN'),
       allowNull: false
@@ -94,6 +90,17 @@ module.exports = function (sequelize) {
       defaultValue: 0
     }
   }, {
+    classMethods: {
+      associate: function (models) {
+        models.CampaignItem.hasMany(models.CampaignItemChoice)
+        models.CampaignItem.belongsTo(models.Campaign, {
+          onDelete: 'CASCADE',
+          foreignKey: {
+            allowNull: false
+          }
+        })
+      }
+    },
     getterMethods: {
       urn: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -101,7 +108,7 @@ module.exports = function (sequelize) {
       },
       urnCampaign: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-        return 'abibao:database:campaign:' + cryptr.encrypt(this.campaign)
+        return 'abibao:database:campaign:' + cryptr.encrypt(this.CampaignId)
       }
     },
     timestamps: true,
@@ -110,6 +117,5 @@ module.exports = function (sequelize) {
     freezeTableName: true,
     tableName: 'campaigns_items'
   })
-  CampaignItem.sync()
   return CampaignItem
 }

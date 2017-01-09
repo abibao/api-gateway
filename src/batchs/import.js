@@ -17,6 +17,8 @@ console.log('')
 console.log('Veuillez saisir vos codes administrateur !')
 prompt.start()
 prompt.get(['email', 'password'], function (error, result) {
+  result.email = 'gilles@abibao.com'
+  result.password = 'azer1234'
   if (error) {
     console.log('\n', colors.bgRed.bold(' ERROR! '), '\n')
     console.log(error)
@@ -64,8 +66,19 @@ const batch = (tableName, token, callback) => {
   async.mapSeries(files, (filepath, next) => {
     const data = fse.readJsonSync(filepath)
     let promises = []
-    // push the tableName
-    promises.push(rp( {
+    // hooks before
+    if (tableName === 'campaigns') {
+      data.EntityId = data.company
+    }
+    if (tableName === 'campaigns-items') {
+      data.CampaignId = data.campaign
+    }
+    if (tableName === 'campaigns-items-choices') {
+      data.CampaignId = data.campaign
+      data.CampaignItemId = data.item
+    }
+    // insert into
+    promises.push(rp({
       method: 'POST',
       headers: {
         'Authorization': token
@@ -74,10 +87,8 @@ const batch = (tableName, token, callback) => {
       uri: 'http://localhost:8383/v2/' + tableName,
       json: true
     }))
-    ///////////////////////////////
-    // if tableName=surveys then
-    ///////////////////////////////
-    if (tableName === 'surveys' ) {
+    // hooks after
+    if (tableName === 'surveys') {
       _.map(Object.keys(data.answers), (question) => {
         if (_.isArray(data.answers[question])) {
           _.map(data.answers[question], (answer) => {
@@ -86,7 +97,7 @@ const batch = (tableName, token, callback) => {
               question,
               answer
             }
-            promises.push(rp( {
+            promises.push(rp({
               method: 'POST',
               headers: {
                 'Authorization': token
@@ -96,13 +107,13 @@ const batch = (tableName, token, callback) => {
               json: true
             }))
           })
-        } else {
+        } else {
           let _data = {
             survey: data.id,
             question,
             answer: data.answers[question]
           }
-          promises.push(rp( {
+          promises.push(rp({
             method: 'POST',
             headers: {
               'Authorization': token
@@ -120,9 +131,10 @@ const batch = (tableName, token, callback) => {
         next()
       })
       .catch((error) => {
-        console.log(error)
         bar.tick()
-        next()
+        console.log('\n', error.message)
+        console.log(error.options.body)
+        next(error)
       })
   }, (err, results) => {
     if (err) {
@@ -133,5 +145,4 @@ const batch = (tableName, token, callback) => {
       callback()
     }
   })
-
 }

@@ -67,6 +67,11 @@ module.exports = function (sequelize) {
       allowNull: false
     }
   }, {
+    classMethods: {
+      associate: function (models) {
+        models.Entity.hasMany(models.Campaign)
+      }
+    },
     getterMethods: {
       urn: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -79,6 +84,5 @@ module.exports = function (sequelize) {
     freezeTableName: true,
     tableName: 'entities'
   })
-  Entity.sync()
   return Entity
 }

@@ -2,33 +2,29 @@
 
 const Boom = require('boom')
 const Promise = require('bluebird')
-const _ = require('lodash')
 
 module.exports.getSurveyDetailsQuery = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
+  auth: false,
   jsonp: 'callback',
   handler (request, reply) {
     // query in abibao!
-    global.ABIBAO.services.domain.Survey.findById(request.params.urn)
+    global.ABIBAO.services.domain.databases.mvp.Survey.findById(request.params.urn)
       .then((survey) => {
         let queries = {
           survey,
-          campaign: global.ABIBAO.services.domain.Campaign.findById(survey.campaign),
-          items: global.ABIBAO.services.domain.CampaignItem.findAll({
+          campaign: global.ABIBAO.services.domain.databases.mvp.Campaign.findById(survey.campaign),
+          items: global.ABIBAO.services.domain.databases.mvp.CampaignItem.findAll({
             where: {
               campaign: survey.campaign
             },
             include: [{
-              model: global.ABIBAO.services.domain.CampaignItemChoice,
+              model: global.ABIBAO.services.domain.databases.mvp.CampaignItemChoice,
               as: 'choices',
               where: { campaign: survey.campaign }
             }],
             order: 'position ASC'
           }),
-          answers: global.ABIBAO.services.domain.SurveyAnswer.findAll({
+          answers: global.ABIBAO.services.domain.databases.mvp.SurveyAnswer.findAll({
             where: {
               survey: survey.id
             }
@@ -55,16 +51,13 @@ module.exports.getSurveyDetailsQuery = {
 }
 
 module.exports.create = {
-  auth: {
-    strategy: 'jwt',
-    scope: ['administrator']
-  },
+  auth: false,
   payload: {
     allow: ['application/x-www-form-urlencoded', 'application/json']
   },
   jsonp: 'callback',
   handler (request, reply) {
-    global.ABIBAO.services.domain.Survey.upsert(request.payload)
+    global.ABIBAO.services.domain.databases.mvp.Survey.upsert(request.payload)
       .then(function (result) {
         reply(result)
       })
@@ -82,7 +75,7 @@ module.exports.list = {
   },
   jsonp: 'callback',
   handler (request, reply) {
-    global.ABIBAO.services.domain.Survey.findAndCount({ offset: parseInt(request.query.offset) || 0, limit: parseInt(request.query.limit) || 20 })
+    global.ABIBAO.services.domain.databases.mvp.Survey.findAndCount({ offset: parseInt(request.query.offset) || 0, limit: parseInt(request.query.limit) || 20 })
       .then(function (result) {
         reply({
           total: result.count,

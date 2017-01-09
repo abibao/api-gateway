@@ -11,10 +11,6 @@ module.exports = function (sequelize) {
       unique: true,
       allowNull: false
     },
-    company: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
     name: {
       type: Sequelize.STRING,
       unique: true,
@@ -41,6 +37,17 @@ module.exports = function (sequelize) {
       allowNull: true
     }
   }, {
+    classMethods: {
+      associate: function (models) {
+        models.Campaign.hasMany(models.CampaignItem)
+        models.Campaign.belongsTo(models.Entity, {
+          onDelete: 'CASCADE',
+          foreignKey: {
+            allowNull: false
+          }
+        })
+      }
+    },
     getterMethods: {
       urn: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
@@ -48,7 +55,7 @@ module.exports = function (sequelize) {
       },
       urnCompany: function () {
         const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-        return 'abibao:database:company:' + cryptr.encrypt(this.company)
+        return 'abibao:database:company:' + cryptr.encrypt(this.EntityId)
       }
     },
     timestamps: true,
@@ -57,6 +64,5 @@ module.exports = function (sequelize) {
     freezeTableName: true,
     tableName: 'campaigns'
   })
-  Campaign.sync()
   return Campaign
 }
