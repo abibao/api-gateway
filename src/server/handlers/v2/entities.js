@@ -1,6 +1,6 @@
 'use strict'
 
-var Boom = require('boom')
+const Boom = require('boom')
 
 module.exports.create = {
   auth: {

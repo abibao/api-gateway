@@ -2,8 +2,10 @@
 
 const args = process.argv.slice(2)
 
+const Promise = require('bluebird')
 const glob = require('glob')
 const async = require('async')
+const _ = require('lodash')
 const path = require('path')
 const fse = require('fs-extra')
 const colors = require('colors/safe')
@@ -60,23 +62,65 @@ const batch = (tableName, token, callback) => {
   console.log(colors.yellow.bold('*****', tableName, files.length, '*****'))
 
   async.mapSeries(files, (filepath, next) => {
-    const campaign = fse.readJsonSync(filepath)
-    let options = {
+    const data = fse.readJsonSync(filepath)
+    let promises = []
+    // push the tableName
+    promises.push(rp( {
       method: 'POST',
       headers: {
         'Authorization': token
       },
-      body: campaign,
+      body: data,
       uri: 'http://localhost:8383/v2/' + tableName,
       json: true
+    }))
+    ///////////////////////////////
+    // if tableName=surveys then
+    ///////////////////////////////
+    if (tableName === 'surveys' ) {
+      _.map(Object.keys(data.answers), (question) => {
+        if (_.isArray(data.answers[question])) {
+          _.map(data.answers[question], (answer) => {
+            let _data = {
+              survey: data.id,
+              question,
+              answer
+            }
+            promises.push(rp( {
+              method: 'POST',
+              headers: {
+                'Authorization': token
+              },
+              body: _data,
+              uri: 'http://localhost:8383/v2/surveys-answers',
+              json: true
+            }))
+          })
+        } else {
+          let _data = {
+            survey: data.id,
+            question,
+            answer: data.answers[question]
+          }
+          promises.push(rp( {
+            method: 'POST',
+            headers: {
+              'Authorization': token
+            },
+            body: _data,
+            uri: 'http://localhost:8383/v2/surveys-answers',
+            json: true
+          }))
+        }
+      })
     }
-    rp(options)
+    Promise.all(promises)
       .then(() => {
         bar.tick()
         next()
       })
-      .catch(() => {
-        // TOTO : error in a file ?
+      .catch((error) => {
+        console.log(error)
         bar.tick()
         next()
       })

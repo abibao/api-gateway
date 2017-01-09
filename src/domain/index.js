@@ -63,7 +63,9 @@ internals.initialize = function () {
       internals.domain.VoteSMFModel(),
       internals.domain.SendgridBounceModel()
     ])
-    .then(resolve)
+    .then(() => {
+      resolve()
+    })
     .catch(reject)
   })
 }
