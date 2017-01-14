@@ -4,7 +4,10 @@ const Boom = require('boom')
 const Promise = require('bluebird')
 
 module.exports.getSurveyDetailsQuery = {
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
   jsonp: 'callback',
   handler (request, reply) {
     // query in abibao!

@@ -3,7 +3,10 @@
 const Boom = require('boom')
 
 module.exports.create = {
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+    scope: ['administrator']
+  },
   payload: {
     allow: ['application/x-www-form-urlencoded', 'application/json']
   },
