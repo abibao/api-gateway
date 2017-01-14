@@ -12,11 +12,10 @@ dependencies:
   pre:
     - sudo service mysql stop
     - sudo service postgresql stop
+    - docker-compose up -d
   cache_directories:
     - node_modules
 test:
-  pre:
-    - docker-compose up -d
   override:
     - npm install
     - npm prune

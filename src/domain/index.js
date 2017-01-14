@@ -57,7 +57,7 @@ internals.initialize = function () {
       internals.domain.injector('queries'),
       internals.domain.injector('models/mysql'),
       internals.domain.injector('models/rethinkdb'),
-      internals.domain.databases.mvp.sequelize.sync({force: true}),
+      internals.domain.databases.mvp.sequelize.sync(),
       internals.domain.AnswerModel(),
       internals.domain.UserModel(),
       internals.domain.VoteSMFModel(),
@@ -109,9 +109,6 @@ internals.injector = function (type) {
       switch (type) {
         case 'models/rethinkdb':
           self[name] = require(file)(self.thinky)
-          break
-        case 'models/sequelize/mvp':
-          self[name] = require(file)(self.databases.mvp)
           break
         default:
           self[name] = require(file)
