@@ -1,14 +1,12 @@
 'use strict'
 
 var Promise = require('bluebird')
-
-var Hoek = require('hoek')
 var Iron = require('iron')
 var Base64 = require('base64-url')
 var _ = require('lodash')
 
 module.exports = function (sealed) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     sealed = Base64.decode(sealed)
     Iron.unseal(sealed, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), Iron.defaults, function (err, unsealed) {

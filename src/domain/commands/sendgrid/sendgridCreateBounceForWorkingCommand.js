@@ -30,7 +30,7 @@ var payloadSchema = Joi.object().keys({
   status: Joi.string().required()
 })
 
-var knex = require('./../../../connections/knex')('sendgrid')
+var knex = require('./../../../connections/knex')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_SENDGRID'))
 var helper = require('./../../../helper')
 
 module.exports = function (payload = {}) {

@@ -36,6 +36,7 @@ global.ABIBAO = {
     error: require('debug')('abibao:error'),
     application: require('debug')('abibao:application'),
     bus: require('debug')('abibao:bus'),
+    mysql: require('debug')('abibao:mysql'),
     domain: require('debug')('abibao:domain'),
     server: require('debug')('abibao:server'),
     socket: require('debug')('abibao:socket')

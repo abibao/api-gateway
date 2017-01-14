@@ -48,17 +48,24 @@ internals.initialize = function () {
       return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
     }
     internals.domain.knex = require('./../connections/knex')()
+    internals.domain.databases = {
+      mvp: require('./models/sequelize/mvp')
+    }
     Promise.all([
+      internals.domain.databases.mvp.sequelize.authenticate(),
       internals.domain.injector('commands'),
       internals.domain.injector('queries'),
       internals.domain.injector('models/mysql'),
       internals.domain.injector('models/rethinkdb'),
+      internals.domain.databases.mvp.sequelize.sync(),
       internals.domain.AnswerModel(),
       internals.domain.UserModel(),
       internals.domain.VoteSMFModel(),
       internals.domain.SendgridBounceModel()
     ])
-    .then(resolve)
+    .then(() => {
+      resolve()
+    })
     .catch(reject)
   })
 }

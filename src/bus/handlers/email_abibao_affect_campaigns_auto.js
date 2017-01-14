@@ -1,11 +1,10 @@
 'use strict'
 
 var Promise = require('bluebird')
-var Hoek = require('hoek')
 
 module.exports = function (message) {
   return new Promise(function (resolve, reject) {
-    var self = Hoek.clone(global.ABIBAO.services.domain)
+    var self = global.ABIBAO.services.domain
     // check if campaign is in position (2)
     self.execute('query', 'campaignReadQuery', message.urnCampaign)
       .then(function (campaign) {

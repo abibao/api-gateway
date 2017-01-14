@@ -1,12 +1,10 @@
 'use strict'
 
 var Promise = require('bluebird')
-
-var Hoek = require('hoek')
 var JWT = require('jsonwebtoken')
 
 module.exports = function (urn) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     self.execute('query', 'individualReadQuery', urn).then(function (individual) {
       var credentials = {

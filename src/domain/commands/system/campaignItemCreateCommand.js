@@ -1,13 +1,11 @@
 'use strict'
 
 var Promise = require('bluebird')
-
-var Hoek = require('hoek')
 var bson = require('bson')
 var ObjectId = bson.ObjectId
 
 module.exports = function (payload) {
-  var self = Hoek.clone(global.ABIBAO.services.domain)
+  var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     payload.id = new ObjectId().toString()
     payload.createdAt = Date.now()
