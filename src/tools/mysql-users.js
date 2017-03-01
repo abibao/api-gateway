@@ -143,7 +143,8 @@ var execBatch = function (filepath, bar, callback) {
           callback()
         })
     })
-    .catch(() => {
+    .catch((error) => {
+      console.log('error.message', error)
       bar.tick()
       callback()
     })
@@ -157,9 +158,10 @@ var run = () => {
     width: 30,
     total
   })
-  async.mapSeries(files, (file, next) => {
+  async.mapLimit(files, 10, (file, next) => {
     execBatch(file, bar, next)
   }, (err, results) => {
+    knex.destroy()
     if (err) {
       console.log('\n', colors.bgRed.bold(' ERROR! '))
       console.log(err, '\n')

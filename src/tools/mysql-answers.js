@@ -49,7 +49,7 @@ var options = {
 var r = require('thinky')(options).r
 
 // mysql
-var optionsMysql = {
+/* var optionsMysql = {
   client: 'mysql',
   connection: {
     host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
@@ -60,7 +60,7 @@ var optionsMysql = {
   },
   debug: false
 }
-var knex = require('knex')(optionsMysql)
+var knex = require('knex')(optionsMysql) */
 
 // select files cache
 var cacheDir = path.resolve(__dirname, '.cache', envValue, 'rethinkdb')
@@ -99,42 +99,53 @@ var execBatch = function (filepath, bar, callback) {
       label: answer
     }
     if (_.isArray(survey.answers[answer])) {
+      // console.log(answer, 'is an array')
       _.map(survey.answers[answer], function (item) {
+        // console.log('...', item, 'is an item')
         var duplicate = Hoek.clone(message)
-        message.answer = item
-        message.isURN = isURN(item)
+        duplicate.answer = item
+        duplicate.isURN = isURN(item)
         messages.push(duplicate)
       })
     } else {
+      // console.log(answer, 'is unique')
       message.answer = survey.answers[answer]
       message.isURN = isURN(survey.answers[answer])
       messages.push(message)
     }
   })
+  // console.log(messages)
   async.mapLimit(messages, 50, (message, next) => {
+    if (_.isNull(message.answer)) {
+      console.log(survey)
+      console.log(message)
+      process.exit(-1)
+    }
     r.table('surveys')
       .get(message.survey)
       .merge(function (item) {
         return {
           data: {
-            email: r.table('individuals').get(item('individual'))('email'),
-            'charity_id': item('charity'),
-            'charity_name': r.table('entities').get(item('charity'))('name'),
-            'campaign_id': item('campaign'),
-            'campaign_name': r.table('campaigns').get(item('campaign'))('name'),
-            question: message.label,
-            answer: message.answer,
-            'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
+            'id': uuid.v4(),
+            'email': r.table('individuals').get(item('individual'))('email'),
+            'charity': item('charity'),
+            'charityName': r.table('entities').get(item('charity'))('name'),
+            'campaign': item('campaign'),
+            'campaignName': r.table('campaigns').get(item('campaign'))('name'),
+            'question': message.label,
+            'answer': message.answer,
+            'answerText': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
             'createdAt': item('modifiedAt')
           }
         }
       })
       .then(function (result) {
-        var targetpath = path.resolve(mysqlDir, result.data.campaign_id, result.data.question, uuid.v1() + '.json')
+        var targetpath = path.resolve(mysqlDir, result.data.campaign, result.data.question, result.data.id + '.json')
         fse.ensureFileSync(targetpath)
         fse.writeJsonSync(targetpath, result.data)
+        return false
         // write in mysql
-        result.data.createdAt = new Date(result.data.createdAt)
+        /* result.data.createdAt = new Date(result.data.createdAt)
         if (result.data.answer && result.data.question) {
           return knex('answers')
             .where('email', result.data.email)
@@ -146,13 +157,13 @@ var execBatch = function (filepath, bar, callback) {
             })
         } else {
           return false
-        }
+        } */
       })
       .then(() => {
         next()
       })
-      .catch(function () {
-        console.log('error.message', message)
+      .catch(function (error) {
+        console.log('error.message', error)
         next()
       })
   }, () => {
@@ -169,14 +180,16 @@ var run = () => {
     width: 30,
     total
   })
-  async.mapSeries(files, (file, next) => {
+  async.mapLimit(files, 10, (file, next) => {
     execBatch(file, bar, next)
   }, (err, results) => {
     if (err) {
+      // knex.destroy()
       console.log('\n', colors.bgRed.bold(' ERROR! '))
       console.log(err, '\n')
       process.exit(1)
     } else {
+      // knex.destroy()
       console.log('\n', colors.bgGreen.bold(' DONE! '), '\n')
       process.exit(0)
     }
