@@ -57,7 +57,7 @@ internals.initialize = function () {
       internals.domain.injector('queries'),
       internals.domain.injector('models/mysql'),
       internals.domain.injector('models/rethinkdb'),
-      internals.domain.databases.mvp.sequelize.sync(),
+      // internals.domain.databases.mvp.sequelize.sync(),
       internals.domain.AnswerModel(),
       internals.domain.UserModel(),
       internals.domain.VoteSMFModel(),
