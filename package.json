@@ -79,6 +79,7 @@
     "newrelic": "1.37.2",
     "node-uuid": "1.4.7",
     "pg": "6.1.2",
+    "pg-hstore": "2.3.2",
     "progress": "1.1.8",
     "progress-promise": "0.0.6",
     "prompt": "1.0.0",

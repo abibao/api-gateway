@@ -11,7 +11,7 @@ const sequelize = new Sequelize(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATA
   host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
   port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
   logging: global.ABIBAO.debuggers.mysql,
-  dialect: 'mysql'
+  dialect: 'postgres'
 })
 
 let db = {}
