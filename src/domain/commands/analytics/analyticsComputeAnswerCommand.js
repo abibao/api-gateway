@@ -7,7 +7,7 @@ var knex = require('./../../../connections/knex')()
 
 module.exports = function (message) {
   return new Promise(function (resolve, reject) {
-    var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
+    var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
     // construct data to insert
     r.table('surveys')
       .get(message.survey)

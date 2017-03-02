@@ -49,18 +49,18 @@ var options = {
 var r = require('thinky')(options).r
 
 // mysql
-/* var optionsMysql = {
-  client: 'mysql',
+var optionsMysql = {
+  client: 'pg',
   connection: {
     host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
     port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
     user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
     password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-    database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
+    database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
   },
   debug: false
 }
-var knex = require('knex')(optionsMysql) */
+var knex = require('knex')(optionsMysql)
 
 // select files cache
 var cacheDir = path.resolve(__dirname, '.cache', envValue, 'rethinkdb')
@@ -126,26 +126,24 @@ var execBatch = function (filepath, bar, callback) {
       .merge(function (item) {
         return {
           data: {
-            'id': uuid.v4(),
             'email': r.table('individuals').get(item('individual'))('email'),
-            'charity': item('charity'),
-            'charityName': r.table('entities').get(item('charity'))('name'),
-            'campaign': item('campaign'),
-            'campaignName': r.table('campaigns').get(item('campaign'))('name'),
+            'charity_id': item('charity'),
+            'charity_name': r.table('entities').get(item('charity'))('name'),
+            'campaign_id': item('campaign'),
+            'campaign_name': r.table('campaigns').get(item('campaign'))('name'),
             'question': message.label,
             'answer': message.answer,
-            'answerText': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
+            'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
             'createdAt': item('modifiedAt')
           }
         }
       })
       .then(function (result) {
-        var targetpath = path.resolve(mysqlDir, result.data.campaign, result.data.question, result.data.id + '.json')
+        var targetpath = path.resolve(mysqlDir, result.data.campaign_id, result.data.question, result.data.id + '.json')
         fse.ensureFileSync(targetpath)
         fse.writeJsonSync(targetpath, result.data)
-        return false
         // write in mysql
-        /* result.data.createdAt = new Date(result.data.createdAt)
+        result.data.createdAt = new Date(result.data.createdAt)
         if (result.data.answer && result.data.question) {
           return knex('answers')
             .where('email', result.data.email)
@@ -157,7 +155,7 @@ var execBatch = function (filepath, bar, callback) {
             })
         } else {
           return false
-        } */
+        }
       })
       .then(() => {
         next()

@@ -6,7 +6,7 @@ var Joi = require('joi')
 module.exports = function (payload) {
   return new Promise(function (resolve, reject) {
     var self = global.ABIBAO.services.domain
-    var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
+    var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
     // validate payload
     var schema = Joi.object().keys({
       email: Joi.string().email().required()

@@ -49,13 +49,13 @@ var r = require('thinky')(options).r
 
 // mysql
 var optionsMysql = {
-  client: 'mysql',
+  client: 'pg',
   connection: {
     host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
     port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
     user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
     password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-    database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
+    database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
   },
   debug: false
 }
