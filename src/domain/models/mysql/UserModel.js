@@ -1,7 +1,6 @@
 'use strict'
 
-module.exports = function () {
-  var knex = require('./../../../connections/knex')()
+module.exports = function (knex) {
   return knex.schema.createTableIfNotExists('users', function (table) {
     table.increments('id')
     table.string('email')
@@ -11,7 +10,7 @@ module.exports = function () {
     table.string('csp')
     table.string('department')
     table.string('gender')
-    table.timestamp('modifiedAt')
-    table.timestamp('createdAt').defaultTo(knex.fn.now())
+    table.timestamp('modified_at')
+    table.timestamp('created_at').defaultTo(knex.fn.now())
   })
 }

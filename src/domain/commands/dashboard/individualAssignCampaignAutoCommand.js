@@ -9,7 +9,7 @@ module.exports = function (sealed) {
   var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     sealed = Base64.decode(sealed)
-    Iron.unseal(sealed, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), Iron.defaults, function (err, unsealed) {
+    Iron.unseal(sealed, global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'), Iron.defaults, function (err, unsealed) {
       // control
       switch (true) {
         case _.isNull(err) === false:

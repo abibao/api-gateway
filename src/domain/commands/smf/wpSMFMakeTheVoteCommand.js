@@ -5,7 +5,7 @@ var Joi = require('joi')
 
 module.exports = function (payload) {
   var self = global.ABIBAO.services.domain
-  var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
+  var database = global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
   return new Promise(function (resolve, reject) {
     // validate payload
     var schema = Joi.object().keys({
@@ -41,7 +41,7 @@ module.exports = function (payload) {
         })
         .then(function (rows) {
           if (rows.length > 0) {
-            return reject('Email already exists in database.')
+            return reject(new Error('Email already exists in database.'))
           } else {
             // checks startup exists ?
             return self.execute('query', 'wpSMFStartupReadQuery', payload.startup)

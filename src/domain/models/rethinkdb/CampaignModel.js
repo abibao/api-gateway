@@ -4,7 +4,7 @@ var _ = require('lodash')
 var faker = require('faker')
 
 var Cryptr = require('cryptr')
-var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+var cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
 
 module.exports = function (thinky) {
   var type = thinky.type

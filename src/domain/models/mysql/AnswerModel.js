@@ -1,7 +1,6 @@
 'use strict'
 
-module.exports = function () {
-  var knex = require('./../../../connections/knex')()
+module.exports = function (knex) {
   return knex.schema.createTableIfNotExists('answers', function (table) {
     table.increments('id')
     table.string('email')
@@ -10,8 +9,8 @@ module.exports = function () {
     table.string('campaign_name')
     table.string('charity_name')
     table.string('question')
-    table.string('answer')
-    table.string('answer_text')
-    table.timestamp('createdAt').defaultTo(knex.fn.now())
+    table.text('answer')
+    table.text('answer_text')
+    table.timestamp('created_at').defaultTo(knex.fn.now())
   })
 }

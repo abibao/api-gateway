@@ -24,7 +24,7 @@ module.exports = function (data) {
         var message = {
           'username': 'individualCreateSurveyCommand',
           'text': '[' + new Date() + '] - [' + result.individual.email + '] can access a new survey (' + result.campaign.name + ')',
-          'webhook': global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+          'webhook': global.ABIBAO.config('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
         }
         return self.execute('query', 'surveyFilterQuery', {
           campaign: self.getIDfromURN(result.campaign.urn),

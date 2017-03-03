@@ -7,14 +7,14 @@ module.exports = function (urn) {
   var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     var waterfall = null
-    self.SurveyModel.get(self.getIDfromURN(urn)).run()
+    self.SurveyModel.get(self.getIDfromURN(urn))
       .then(function (survey) {
         waterfall = Hoek.clone(survey)
-        return self.EntityModel.get(self.getIDfromURN(waterfall.urnCompany)).run()
+        return self.EntityModel.get(self.getIDfromURN(waterfall.urnCompany))
       })
       .then(function (company) {
         waterfall.isAbibao = (company.type === global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO)
-        return self.CampaignModel.get(self.getIDfromURN(waterfall.urnCampaign)).run()
+        return self.CampaignModel.get(self.getIDfromURN(waterfall.urnCampaign))
       })
       .then(function (campaign) {
         delete waterfall.id

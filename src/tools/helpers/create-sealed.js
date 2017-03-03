@@ -15,7 +15,7 @@ const message = {
 }
 
 var sealed = ''
-Iron.seal(message, nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), Iron.defaults, function (error, result) {
+Iron.seal(message, global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'), Iron.defaults, function (error, result) {
   if (error) {
     console.log(error)
     return process.exit(1)

@@ -22,7 +22,7 @@ module.exports = function (urn) {
         }
       })
         .then(function (result) {
-          if (result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject('This entity has a bad type') }
+          if (result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject(new Error('This entity has a bad type')) }
           _.map(result.campaigns, function (campaign) {
             delete campaign.id
             campaign.urn = self.getURNfromID(campaign.urn, 'campaign')

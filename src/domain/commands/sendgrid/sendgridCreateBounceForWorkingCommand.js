@@ -1,8 +1,5 @@
 'use strict'
 
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
-
 var Promise = require('bluebird')
 var eraro = require('eraro')
 var Joi = require('joi')
@@ -30,7 +27,6 @@ var payloadSchema = Joi.object().keys({
   status: Joi.string().required()
 })
 
-var knex = require('./../../../connections/knex')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP'))
 var helper = require('./../../../helper')
 
 module.exports = function (payload = {}) {
@@ -41,13 +37,13 @@ module.exports = function (payload = {}) {
     // validate payload: succeed
     validate(payload, payloadSchema)
       .then(() => {
-        knex('bounces')
+        global.ABIBAO.services.domain.knex('bounces')
           .where({rethinkdb: payload.rethinkdb})
           .then((result) => {
             if (result.length === 0) {
-              return knex('bounces').insert(payload)
+              return global.ABIBAO.services.domain.knex('bounces').insert(payload)
             } else {
-              return knex('bounces').where({rethinkdb: payload.rethinkdb}).update(payload)
+              return global.ABIBAO.services.domain.knex('bounces').where({rethinkdb: payload.rethinkdb}).update(payload)
             }
           })
           .then(() => {

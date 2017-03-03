@@ -2,12 +2,11 @@
 
 var Promise = require('bluebird')
 
-var r = require('./../../../connections/thinky').r
-var knex = require('./../../../connections/knex')()
-
 module.exports = function (message) {
   return new Promise(function (resolve, reject) {
-    var database = global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
+    var r = global.ABIBAO.services.domain.thinky.r
+    var knex = global.ABIBAO.services.domain.knex
+    var database = global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
     // construct data to insert
     r.table('surveys')
       .get(message.survey)

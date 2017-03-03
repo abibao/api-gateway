@@ -1,7 +1,6 @@
 'use strict'
 
-module.exports = function () {
-  var knex = require('./../../../connections/knex')()
+module.exports = function (knex) {
   return knex.schema.createTableIfNotExists('smf_votes', function (table) {
     table.increments('id')
     table.string('email')
@@ -11,6 +10,6 @@ module.exports = function () {
     table.string('charity_name')
     table.integer('points').defaultTo(1)
     table.boolean('converted').defaultTo(false)
-    table.timestamp('createdAt').defaultTo(knex.fn.now())
+    table.timestamp('created_at').defaultTo(knex.fn.now())
   })
 }

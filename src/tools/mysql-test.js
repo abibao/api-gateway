@@ -32,11 +32,11 @@ nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
 var optionsMysql = {
   client: 'pg',
   connection: {
-    host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-    port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
-    user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-    password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-    database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
+    host: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
+    port: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
+    user: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_USER'),
+    password: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
+    database: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
   },
   debug: false
 }

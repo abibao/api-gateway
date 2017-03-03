@@ -1,8 +1,5 @@
 'use strict'
 
-var config = require('nconf')
-config.argv().env().file({ file: 'nconf-deve.json' })
-
 var Promise = require('bluebird')
 var eraro = require('eraro')
 var Joi = require('joi')
@@ -29,7 +26,6 @@ var resultSchema = Joi.object().keys({
   data: Joi.array().items(Joi.string().email()).required()
 })
 
-var r = require('./../../../connections/rethinkdbdash')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP'))
 var helper = require('./../../../helper')
 
 module.exports = function (payload = {}) {
@@ -40,18 +36,17 @@ module.exports = function (payload = {}) {
     validate(payload, payloadSchema)
       // validate payload: succeed
       .then(() => {
-        var apiKey = payload.apiKey || config.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY')
-        r.http('https://api.sendgrid.com/v3/suppression/bounces', {
+        var apiKey = payload.apiKey || global.ABIBAO.config('ABIBAO_API_GATEWAY_SENDGRID_API_KEY')
+        global.ABIBAO.services.domain.think.r.http('https://api.sendgrid.com/v3/suppression/bounces', {
           'header': {
             'Authorization': 'Bearer ' + apiKey
           }
         })
-          .orderBy(r.desc('created'))
+          .orderBy(global.ABIBAO.services.domain.think.r.desc('created'))
           .map(function (item) {
             return item('email')
           })
           .distinct()
-          .run()
           // call api: succeed
           .then((data) => {
             result.count = data.length

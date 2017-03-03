@@ -11,9 +11,9 @@ module.exports = function (wpid) {
   return new Promise(function (resolve, reject) {
     var finalResult = {}
     var wp = new WP({
-      endpoint: nconf.get('ABIBAO_API_GATEWAY_WPSMF_URL'),
-      username: nconf.get('ABIBAO_API_GATEWAY_WPSMF_AUTH_BASIC_USERNAME'),
-      password: nconf.get('ABIBAO_API_GATEWAY_WPSMF_AUTH_BASIC_PASSWORD'),
+      endpoint: global.ABIBAO.config('ABIBAO_API_GATEWAY_WPSMF_URL'),
+      username: global.ABIBAO.config('ABIBAO_API_GATEWAY_WPSMF_AUTH_BASIC_USERNAME'),
+      password: global.ABIBAO.config('ABIBAO_API_GATEWAY_WPSMF_AUTH_BASIC_PASSWORD'),
       auth: true
     })
     wp.posts().id(wpid).get()

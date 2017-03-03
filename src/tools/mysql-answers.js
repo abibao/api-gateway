@@ -9,7 +9,6 @@ var fse = require('fs-extra')
 var _ = require('lodash')
 var ProgressBar = require('progress')
 var colors = require('colors/safe')
-var uuid = require('node-uuid')
 
 var envValue = null
 
@@ -38,12 +37,11 @@ nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
 
 // rethinkdb
 var options = {
-  host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-  port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
-  db: nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP'),
-  user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
-  password: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
-  authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
+  host: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
+  port: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
+  db: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
+  user: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
+  password: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
   silent: true
 }
 var r = require('thinky')(options).r
@@ -52,11 +50,11 @@ var r = require('thinky')(options).r
 var optionsMysql = {
   client: 'pg',
   connection: {
-    host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-    port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
-    user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-    password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-    database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
+    host: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
+    port: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
+    user: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_USER'),
+    password: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
+    database: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
   },
   debug: false
 }

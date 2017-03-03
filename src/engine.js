@@ -12,20 +12,22 @@ ROLES
 */
 
 var Promise = require('bluebird')
-
 var uuid = require('node-uuid')
+var config = require('../config')
 
-// load environnement configuration
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+// streams of loggers
+var streams = []
+if (config('ABIBAO_API_GATEWAY_ENV') !== 'deve') {
+  streams.push(require('./streams/logstash'))
+}
 
 // initialize global.ABIBAO
 global.ABIBAO = {
   starttime: new Date(),
-  environnement: nconf.get('ABIBAO_API_GATEWAY_ENV'),
+  environnement: config('ABIBAO_API_GATEWAY_ENV'),
   running: false,
   name: 'API GATEWAY',
-  nconf,
+  config,
   services: { },
   events: { },
   constants: {
@@ -44,24 +46,11 @@ global.ABIBAO = {
   logger: require('bunyan').createLogger({
     name: 'api-gateway',
     level: 'info',
-    streams: [{
-      level: 'info',
-      type: 'raw',
-      stream: require('bunyan-logstash-tcp').createStream({
-        host: nconf.get('ABIBAO_API_GATEWAY_LOGSTASH_HOST'),
-        port: nconf.get('ABIBAO_API_GATEWAY_LOGSTASH_PORT')
-      })
-    }]
+    streams
   })
 }
 
-// use debuggers reference
-var abibao = {
-  debug: global.ABIBAO.debuggers.application,
-  error: global.ABIBAO.debuggers.error
-}
-
-abibao.debug('start processing')
+global.ABIBAO.debuggers.application('start processing', config('ABIBAO_API_GATEWAY_ENV'))
 
 var engine = function () {
   return new Promise(function (resolve, reject) {
@@ -70,24 +59,24 @@ var engine = function () {
     var services = require('./services')
     services.domain()
       .then(function () {
-        abibao.debug('domain initialized')
+        global.ABIBAO.debuggers.application('domain initialized')
         return services.server()
       })
       .then(function () {
-        abibao.debug('server initialized')
+        global.ABIBAO.debuggers.application('server initialized')
         return services.bus()
       })
       .then(function () {
-        abibao.debug('bus initialized')
-        abibao.debug('end processing')
+        global.ABIBAO.debuggers.application('bus initialized')
+        global.ABIBAO.debuggers.application('end processing')
         global.ABIBAO.uuid = require('node-uuid').v4()
         global.ABIBAO.services.server.start(function (error) {
-          if (error) { return abibao.error(error) }
-          abibao.debug('server has just started')
+          if (error) { return global.global.ABIBAO.debuggers.error(error) }
+          global.ABIBAO.debuggers.application('server has just started')
           global.ABIBAO.running = true
           var data = {
             uuid: uuid.v1(),
-            environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
+            environnement: global.ABIBAO.config('ABIBAO_API_GATEWAY_ENV'),
             version: process.env.npm_package_version,
             type: 'system',
             promise: 'engineInitializedSuccess'

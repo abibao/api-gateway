@@ -1,23 +1,18 @@
 'use strict'
 
-// load environnement configuration
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+var config = require('../../config')
 
-module.exports = function (database) {
+module.exports = function () {
   var options = {
     client: 'pg',
     connection: {
-      host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-      port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
-      user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-      password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-      database: database || nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
+      host: config('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
+      port: config('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
+      user: config('ABIBAO_API_GATEWAY_POSTGRES_USER'),
+      password: config('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
+      database: config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
     },
     debug: false
-  }
-  if (database === 'EMPTY') {
-    delete options.connection.database
   }
   var knex = require('knex')(options)
   return knex

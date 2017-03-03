@@ -2,8 +2,6 @@
 
 var Promise = require('bluebird')
 
-var nconf = global.ABIBAO.nconf
-
 module.exports = function (payload) {
   var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
@@ -67,7 +65,7 @@ module.exports = function (payload) {
         global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
           'username': 'IndividualRegisterCommand',
           'text': '[' + new Date() + '] - [' + individual.email + '] has just registered into abibao',
-          'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+          'webhook': global.ABIBAO.config('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
         })
         // ... update smf vote
         global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_SMF_UPDATE_VOTE, individual)

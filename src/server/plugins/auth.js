@@ -19,7 +19,7 @@ var AuthProvision = function (server, callback) {
       abibao.error(error)
     }
     server.auth.strategy('jwt', 'jwt', {
-      key: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'),
+      key: global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'),
       validateFunc: require('./libs/auth_jwt_validate.js'),
       verifyOptions: { algorithms: ['HS256'] }
     })

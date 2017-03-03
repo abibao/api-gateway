@@ -26,7 +26,7 @@ module.exports = function (message) {
       })
       .catch(function (error) {
         global.ABIBAO.debuggers.error('BUS_EVENT_EMAIL_ABIBAO_AFFECT_CAMPAIGNS_AUTO has not been sended to "%s" error is %o', message.email, error)
-        reject()
+        reject(error)
       })
   })
 }

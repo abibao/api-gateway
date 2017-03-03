@@ -3,9 +3,6 @@
 var Promise = require('bluebird')
 var _ = require('lodash')
 
-var r = require('./../../../connections/thinky').r
-var knex = require('./../../../connections/knex')()
-
 var validate = function (individual) {
   return new Promise(function (resolve, reject) {
     if (!individual.email) { reject(new Error('email is mandatory')) }
@@ -17,6 +14,8 @@ var validate = function (individual) {
 
 module.exports = function (individual) {
   return new Promise(function (resolve, reject) {
+    var r = global.ABIBAO.services.domain.thuinky.r
+    var knex = global.ABIBAO.services.domain.knex
     Promise.props({
       validate: validate(individual)
     })
