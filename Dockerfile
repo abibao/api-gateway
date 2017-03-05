@@ -5,12 +5,13 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
-COPY process.yml /usr/app/
-COPY newrelic.js /usr/app/
-COPY package.json /usr/app/
-ADD src /usr/app
-COPY robot.txt /usr/app/
-COPY robot.txt /usr/app/www
+COPY process.yml /usr/app/process.yml
+COPY newrelic.js /usr/app/newrelic.js
+COPY package.json /usr/app/package.json
+COPY src /usr/app
+COPY config /usr/config
+COPY robot.txt /usr/app/robot.txt
+COPY robot.txt /usr/app/www/robot.txt
 
 RUN npm install pm2 -g && \
     pm2 install pm2-slack && \
