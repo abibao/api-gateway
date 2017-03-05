@@ -28,4 +28,4 @@ RUN apk add --update make gcc g++ python && \
     rm -rf /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp
 
 EXPOSE 80
-CMD ["pm2", "start", "process.yml", "--only", "api.rece.abibao.com"]
+CMD ["pm2-docker", "start", "process.yml", "--only", "api.rece.abibao.com"]
