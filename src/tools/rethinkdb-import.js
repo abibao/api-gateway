@@ -47,11 +47,11 @@ nconf.argv().env().file({ file: 'nconf-' + toEnvValue + '.json' })
 
 // rethinkdb
 var options = {
-  host: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
-  port: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
-  db: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
-  user: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
-  password: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
+  host: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
+  port: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
+  db: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
+  user: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
+  password: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
   silent: true
 }
 var r = require('thinky')(options).r

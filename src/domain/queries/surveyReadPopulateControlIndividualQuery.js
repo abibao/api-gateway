@@ -8,16 +8,16 @@ module.exports = function (payload) {
   return new Promise(function (resolve, reject) {
     try {
       var idSurvey = self.getIDfromURN(payload.urn)
-      self.r.table('surveys').get(idSurvey).merge(function (survey) {
+      self.thinky.r.table('surveys').get(idSurvey).merge(function (survey) {
         return {
-          company: self.r.table('entities').get(survey('company'))('type'),
-          campaign: self.r.table('campaigns').get(survey('campaign')).merge(function (campaign) {
+          company: self.thinky.r.table('entities').get(survey('company'))('type'),
+          campaign: self.thinky.r.table('campaigns').get(survey('campaign')).merge(function (campaign) {
             return {
               urn: survey('campaign'),
-              items: self.r.table('campaigns_items').filter({campaign: campaign('id')}).orderBy('createdAt').coerceTo('array').merge(function (item) {
+              items: self.thinky.r.table('campaigns_items').filter({campaign: campaign('id')}).orderBy('createdAt').coerceTo('array').merge(function (item) {
                 return {
                   urn: item('id'),
-                  choices: self.r.table('campaigns_items_choices').filter({item: item('id')}).orderBy('position').coerceTo('array').merge(function (choice) {
+                  choices: self.thinky.r.table('campaigns_items_choices').filter({item: item('id')}).orderBy('position').coerceTo('array').merge(function (choice) {
                     return {
                       meta: choice('prefix').add('__').add(choice('suffix')),
                       urn: choice('id')

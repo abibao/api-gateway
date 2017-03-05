@@ -37,11 +37,11 @@ nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
 
 // rethinkdb
 var options = {
-  host: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
-  port: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
-  db: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
-  user: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
-  password: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
+  host: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
+  port: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
+  db: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
+  user: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
+  password: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
   silent: true
 }
 var r = require('thinky')(options).r
@@ -50,11 +50,11 @@ var r = require('thinky')(options).r
 var optionsMysql = {
   client: 'pg',
   connection: {
-    host: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
-    port: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
-    user: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_USER'),
-    password: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
-    database: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
+    host: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
+    port: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
+    user: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_USER'),
+    password: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
+    database: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
   },
   debug: false
 }
@@ -132,7 +132,7 @@ var execBatch = function (filepath, bar, callback) {
             'question': message.label,
             'answer': message.answer,
             'answer_text': (message.isURN === true) ? r.table('campaigns_items_choices').get(message.answer)('text') : message.answer,
-            'createdAt': item('modifiedAt')
+            'created_at': item('modifiedAt')
           }
         }
       })
@@ -141,7 +141,6 @@ var execBatch = function (filepath, bar, callback) {
         fse.ensureFileSync(targetpath)
         fse.writeJsonSync(targetpath, result.data)
         // write in mysql
-        result.data.createdAt = new Date(result.data.createdAt)
         if (result.data.answer && result.data.question) {
           return knex('answers')
             .where('email', result.data.email)

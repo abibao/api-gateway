@@ -2,17 +2,19 @@
 
 var chai = require('chai')
 var expect = chai.expect
+var engine = require('../src/engine')
 
 describe('engine structure', function () {
   it('should initialize global.ABIBAO', function (done) {
-    require('../src/engine')()
+    engine()
       .then(function () {
         expect(global.ABIBAO.uuid).to.be.a('string')
-        setTimeout(() => {
-          done()
-        }, 1000)
+        done()
       })
-      .catch(done)
+      .catch(function (error) {
+        console.log(error)
+        done(error)
+      })
   })
   it('should test the creation of an urn and the reversing', function (done) {
     var urn = global.ABIBAO.services.domain.getURNfromID('1234567890', 'npmtest')

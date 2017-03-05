@@ -37,11 +37,11 @@ nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
 
 // rethinkdb
 var options = {
-  host: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
-  port: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
-  db: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
-  user: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
-  password: global.ABIBAO.config('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
+  host: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
+  port: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
+  db: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
+  user: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
+  password: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
   silent: true
 }
 var r = require('thinky')(options).r
@@ -50,11 +50,11 @@ var r = require('thinky')(options).r
 var optionsMysql = {
   client: 'pg',
   connection: {
-    host: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
-    port: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
-    user: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_USER'),
-    password: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
-    database: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
+    host: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
+    port: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
+    user: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_USER'),
+    password: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
+    database: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
   },
   debug: false
 }
@@ -118,12 +118,12 @@ var execBatch = function (filepath, bar, callback) {
           data = {
             email: individual.email || null,
             charity: result.CHARITY || null,
-            registeredCharity: result.HAS_REGISTERED_ENTITY || null,
+            registered_charity: result.HAS_REGISTERED_ENTITY || null,
             age: result.ABIBAO_ANSWER_FONDAMENTAL_AGE || null,
             csp: result.ABIBAO_ANSWER_FONDAMENTAL_CSP || null,
             department: result.ABIBAO_ANSWER_FONDAMENTAL_DEPARTEMENT || null,
             gender: result.ABIBAO_ANSWER_FONDAMENTAL_GENDER || null,
-            createdAt: new Date(individual.createdAt)
+            created_at: new Date(individual.createdAt)
           }
           var target = path.resolve(mysqlDir, individual.id + '.json')
           fse.writeJsonSync(target, data)

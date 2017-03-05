@@ -1,104 +1,30 @@
 'use strict'
 
-// load environnement configuration
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+var knex = require('../src/connections/knex')()
 
 describe('mysql structure', function () {
-  it('should create database analytics.answers', function (done) {
-    var options = {
-      client: 'mysql',
-      connection: {
-        host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-        port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
-        user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-        password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-        database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
-      },
-      debug: false
-    }
-    var knex = require('knex')(options)
-    knex.schema.createTableIfNotExists('answers', function (table) {
-      table.increments('id')
-      table.string('email')
-      table.string('campaign_id')
-      table.string('charity_id')
-      table.string('campaign_name')
-      table.string('charity_name')
-      table.string('question')
-      table.string('answer')
-      table.string('answer_text')
-      table.timestamp('createdAt').defaultTo(knex.fn.now())
-    }).then(() => {
-      knex.destroy()
+  it('should create database test.answers', function (done) {
+    var AnswerModel = require('../src/domain/models/mysql/AnswerModel')(knex)
+    AnswerModel.then(() => {
       done()
-    }).catch((error) => {
-      knex.destroy()
-      done(error)
-    })
+    }).catch(done)
   })
-  it('should create database analytics.users', function (done) {
-    var options = {
-      client: 'mysql',
-      connection: {
-        host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-        port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
-        user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-        password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-        database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
-      },
-      debug: false
-    }
-    var knex = require('knex')(options)
-    knex.schema.createTableIfNotExists('users', function (table) {
-      table.increments('id')
-      table.string('email')
-      table.string('charity')
-      table.string('registeredCharity')
-      table.integer('age')
-      table.string('csp')
-      table.string('department')
-      table.string('gender')
-      table.timestamp('modifiedAt')
-      table.timestamp('createdAt').defaultTo(knex.fn.now())
-    }).then(() => {
-      knex.destroy()
+  it('should create database test.bounces', function (done) {
+    var SendgridBounceModel = require('../src/domain/models/mysql/SendgridBounceModel')(knex)
+    SendgridBounceModel.then(() => {
       done()
-    }).catch((error) => {
-      knex.destroy()
-      done(error)
-    })
+    }).catch(done)
   })
-  it('should create database analytics.smf_votes', function (done) {
-    var options = {
-      client: 'mysql',
-      connection: {
-        host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-        port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
-        user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-        password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-        database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_ANALYTICS')
-      },
-      debug: false
-    }
-    var knex = require('knex')(options)
-    knex.schema.createTableIfNotExists('smf_votes', function (table) {
-      table.increments('id')
-      table.string('email')
-      table.string('charity')
-      table.string('registeredCharity')
-      table.integer('age')
-      table.string('csp')
-      table.string('department')
-      table.string('gender')
-      table.timestamp('modifiedAt')
-      table.timestamp('createdAt').defaultTo(knex.fn.now())
-    }).then(() => {
-      knex.destroy()
+  it('should create database test.users', function (done) {
+    var UserModel = require('../src/domain/models/mysql/UserModel')(knex)
+    UserModel.then(() => {
       done()
-    }).catch((error) => {
-      knex.destroy()
-      done(error)
-    })
+    }).catch(done)
+  })
+  it('should create database test.smf_votes', function (done) {
+    var VoteSMFModel = require('../src/domain/models/mysql/VoteSMFModel')(knex)
+    VoteSMFModel.then(() => {
+      done()
+    }).catch(done)
   })
 })

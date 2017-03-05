@@ -34,7 +34,7 @@ describe('[integration] servicebus story', function () {
   it('should send BUS_EVENT_WEBHOOK_SLACK', function (done) {
     webhookSlack({
       text: '[' + new Date() + '] - mocha has just send message to slack',
-      webhook: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+      webhook: global.ABIBAO.config('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
     })
     .then(() => {
       done()

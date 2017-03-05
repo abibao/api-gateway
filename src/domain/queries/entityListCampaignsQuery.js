@@ -7,12 +7,12 @@ module.exports = function (urn) {
   return new Promise(function (resolve, reject) {
     try {
       var id = self.getIDfromURN(urn)
-      self.r.table('entities').get(id).merge(function (entity) {
+      self.thinky.r.table('entities').get(id).merge(function (entity) {
         return {
-          campaigns: self.r.table('campaigns').filter({company: entity('id')}).without('company').coerceTo('array').merge(function (campaign) {
+          campaigns: self.thinky.r.table('campaigns').filter({company: entity('id')}).without('company').coerceTo('array').merge(function (campaign) {
             return {
               urn: campaign('id'),
-              items: self.r.table('campaigns_items').filter({campaign: campaign('id')}).without('campaign').coerceTo('array').merge(function (item) {
+              items: self.thinky.r.table('campaigns_items').filter({campaign: campaign('id')}).without('campaign').coerceTo('array').merge(function (item) {
                 return {
                   urn: item('id')
                 }

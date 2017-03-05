@@ -5,21 +5,6 @@ exports.endpoints = [
   // server is alive
   { method: 'GET', path: '/v1/alive', config: require('./handlers/alive') },
 
-  // api -- v2
-  { method: 'GET', path: '/v2/entities', config: require('./handlers/v2/entities').list },
-  { method: 'POST', path: '/v2/entities', config: require('./handlers/v2/entities').create },
-  { method: 'GET', path: '/v2/campaigns', config: require('./handlers/v2/campaigns').list },
-  { method: 'POST', path: '/v2/campaigns', config: require('./handlers/v2/campaigns').create },
-  { method: 'GET', path: '/v2/campaigns-items', config: require('./handlers/v2/campaigns-items').list },
-  { method: 'POST', path: '/v2/campaigns-items', config: require('./handlers/v2/campaigns-items').create },
-  { method: 'GET', path: '/v2/campaigns-items-choices', config: require('./handlers/v2/campaigns-items-choices').list },
-  { method: 'POST', path: '/v2/campaigns-items-choices', config: require('./handlers/v2/campaigns-items-choices').create },
-  { method: 'GET', path: '/v2/surveys', config: require('./handlers/v2/surveys').list },
-  { method: 'POST', path: '/v2/surveys', config: require('./handlers/v2/surveys').create },
-  { method: 'POST', path: '/v2/surveys-answers', config: require('./handlers/v2/surveys-answers').create },
-  // cqrs .. v2
-  { method: 'GET', path: '/v2/auth/surveys/{urn}', config: require('./handlers/v2/surveys').getSurveyDetailsQuery },
-
   // stats
   { method: 'GET', path: '/v1/stats/charities/individuals', config: require('./handlers/stats/charities/individuals') },
   { method: 'GET', path: '/v1/stats/charities/none', config: require('./handlers/stats/charities/none') },

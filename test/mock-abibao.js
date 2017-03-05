@@ -9,6 +9,7 @@ global.ABIBAO = {
   config: require('../config'),
   services: {},
   debuggers: {
+    domain: console.log,
     server: console.log,
     error: console.log
   }
@@ -17,7 +18,6 @@ global.ABIBAO = {
 module.exports.domain = function () {
   return new Promise(function (resolve) {
     global.ABIBAO.services.domain = {
-      knex: require('../src/connections/knex'),
       execute: function (type, promise, params) {
         return new Promise(function (resolve) {
           resolve({
@@ -36,7 +36,7 @@ module.exports.server = function () {
   return new Promise(function (resolve) {
     var _server = {
       options: {
-        host: global.ABIBAO.config('ABIBAO_API_GATEWAY_EXPOSE_IP'),
+        host: global.ABIBAO.config('ABIBAO_API_GATEWAY_EXPOSE_HOST'),
         port: global.ABIBAO.config('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
         labels: ['api', 'administrator']
       }

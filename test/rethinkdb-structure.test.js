@@ -1,21 +1,18 @@
 'use strict'
 
 var Promise = require('bluebird')
+var config = require('../config')
+var r = require('../src/connections/thinky').r
 
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
-
-var createRethinkdbDatabase = function (database) {
+var createRethinkdbDatabase = function () {
   return new Promise((resolve, reject) => {
-    var r = require('../src/connections/thinky')().r
     r.dbList()
-      .contains(database)
-      .run()
+      .contains(config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'))
       .then((exists) => {
         if (exists === true) {
           resolve()
         } else {
-          r.dbCreate(database)
+          r.dbCreate(config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'))
             .then(() => {
               resolve()
             })
@@ -25,68 +22,63 @@ var createRethinkdbDatabase = function (database) {
   })
 }
 
-var createRethinkdbTable = function (database, name) {
-  return new Promise((resolve, reject) => {
-    var r = require('../src/connections/thinky')().r
-    r.db(database)
-      .tableList()
-      .contains(name)
-      .run()
-      .then((exists) => {
-        if (exists === true) {
-          r.db(database).table(name)
-            .delete()
-            .run()
-            .then(() => {
-              resolve()
-            }).catch(reject)
-        } else {
-          r.db(database).tableCreate(name)
-            .run()
-            .then(() => {
-              resolve()
-            }).catch(reject)
-        }
-      })
-      .catch(reject)
-  })
-}
-
 describe('rethinkdb structure', function () {
-  it('should create database mvp', function (done) {
-    createRethinkdbDatabase(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB')).then(done).catch(done)
+  it('should initialize database ' + config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'), function (done) {
+    createRethinkdbDatabase().then(done).catch(done)
   })
-  it('should create table mvp.surveys', function (done) {
-    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'surveys').then(done).catch(done)
+  it('should delete individuals table', function (done) {
+    r.table('individuals').delete().then(() => {
+      done()
+    }).catch(() => {
+      done()
+    })
   })
-  it('should create table mvp.administrators', function (done) {
-    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'administrators').then(done).catch(done)
+  it('should delete administrators table', function (done) {
+    r.table('administrators').delete().then(() => {
+      done()
+    }).catch(() => {
+      done()
+    })
   })
-  it('should create table mvp.individuals', function (done) {
-    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'individuals').then(done).catch(done)
+  it('should delete surveys table', function (done) {
+    r.table('surveys').delete().then(() => {
+      done()
+    }).catch(() => {
+      done()
+    })
   })
-  it('should create table mvp.entities', function (done) {
-    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'entities').then(done).catch(done)
+  it('should delete entities table', function (done) {
+    r.table('entities').delete().then(() => {
+      done()
+    }).catch(() => {
+      done()
+    })
   })
-  it('should create table mvp.campaigns', function (done) {
-    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'campaigns').then(done).catch(done)
+  it('should delete campaigns table', function (done) {
+    r.table('campaigns').delete().then(() => {
+      done()
+    }).catch(() => {
+      done()
+    })
   })
-  it('should create table mvp.campaigns_items', function (done) {
-    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'campaigns_items').then(done).catch(done)
+  it('should delete campaigns_items table', function (done) {
+    r.table('campaigns_items').delete().then(() => {
+      done()
+    }).catch(() => {
+      done()
+    })
   })
-  it('should create table mvp.campaigns_items_choices', function (done) {
-    createRethinkdbTable(nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_DB'), 'campaigns_items_choices').then(done).catch(done)
-  })
-  it('should create database sendgrid', function (done) {
-    createRethinkdbDatabase('sendgrid').then(done).catch(done)
-  })
-  it('should create table sendgrid.bounces', function (done) {
-    createRethinkdbTable('sendgrid', 'bounces').then(done).catch(done)
+  it('should delete campaigns_items_choices table', function (done) {
+    r.table('campaigns_items_choices').delete().then(() => {
+      done()
+    }).catch(() => {
+      done()
+    })
   })
 })
+
 describe('rethinkdb data', function () {
   it('should create one administrator', function (done) {
-    var r = require('../src/connections/thinky')().r
     r.table('administrators')
       .insert({
         'createdAt': r.now(),
@@ -103,7 +95,6 @@ describe('rethinkdb data', function () {
       .catch(done)
   })
   it('should create "none" entity', function (done) {
-    var r = require('../src/connections/thinky')().r
     r.table('entities')
       .insert({
         'avatar': 'images/avatars/default.png',
@@ -127,7 +118,6 @@ describe('rethinkdb data', function () {
       .catch(done)
   })
   it('should create "abibao" entity', function (done) {
-    var r = require('../src/connections/thinky')().r
     r.table('entities')
       .insert({
         'avatar': 'images/avatars/default.png',
@@ -151,7 +141,6 @@ describe('rethinkdb data', function () {
       .catch(done)
   })
   it('should create "association" entity', function (done) {
-    var r = require('../src/connections/thinky')().r
     r.table('entities')
       .insert({
         'avatar': 'images/avatars/default.png',
@@ -175,7 +164,6 @@ describe('rethinkdb data', function () {
       .catch(done)
   })
   it('should create four campaigns for abibao', function (done) {
-    var r = require('../src/connections/thinky')().r
     var campaignsList = [{
       'company': '56aa131ca533a2a04be325ae',
       'createdAt': r.now(),
@@ -227,7 +215,6 @@ describe('rethinkdb data', function () {
       .catch(done)
   })
   it('should create one campaign_item', function (done) {
-    var r = require('../src/connections/thinky')().r
     r.table('campaigns_items')
       .insert({
         'addCustomOption': true,
@@ -253,7 +240,6 @@ describe('rethinkdb data', function () {
       .catch(done)
   })
   it('should create one campaign_item_choice', function (done) {
-    var r = require('../src/connections/thinky')().r
     r.table('campaigns_items_choices')
       .insert({
         'campaign': '56eb2757e9b0fbf30250f8cb',

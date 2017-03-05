@@ -19,21 +19,22 @@ services:
       PG_PASSWORD: "root"
       DB_USER: "infra"
       DB_PASS: "infra"
-      DB_NAME: "devemvp"
+      DB_NAME: "devemvp,test"
     volumes:
       - ./volumes/postgres/var/lib/postgresql/data:/var/lib/postgresql/data
     ports:
        - "5432:5432"
 
   rethinkdb:
-    image: jlhawn/rethinkdb:2.3.5
+    image: greyarch/rethinkdb
     privileged: true
     volumes:
       - ./volumes/rethinkdb/data:/data
     ports:
-      - "28080:8080"
+      - "8080:8080"
       - "28015:28015"
       - "29015:29015"
+    command: '--bind all --initial-password admin'
 
   rabbitmq:
     image: library/rabbitmq:3.6-management-alpine
@@ -45,4 +46,4 @@ services:
       - ./volumes/rabbitmq/var/lib/rabbitmq:/var/lib/rabbitmq
     ports:
       - "5672:5672"
-      - "25080:15672"
+      - "15672:15672"

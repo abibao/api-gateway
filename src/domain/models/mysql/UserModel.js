@@ -5,7 +5,7 @@ module.exports = function (knex) {
     table.increments('id')
     table.string('email')
     table.string('charity')
-    table.string('registeredCharity')
+    table.string('registered_charity')
     table.integer('age')
     table.string('csp')
     table.string('department')

@@ -5,7 +5,7 @@ var campaignItemFake = {}
 
 describe('[integration] handlers/campaigns-items', function () {
   it('should success get campaign (prepare)', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'campaignFilterQuery', {})
+    global.ABIBAO.services.domain.execute('query', 'campaignFilterQuery', {id: '56eb24cfe9b0fbf30250f8c7'})
       .then(function (campaigns) {
         campaignFake = campaigns[0]
         done()
@@ -18,7 +18,7 @@ describe('[integration] handlers/campaigns-items', function () {
     global.ABIBAO.services.domain.execute('query', 'campaignReadPopulateQuery', campaignFake.urn)
       .then(function (campaign) {
         campaignFake = campaign
-        campaignItemFake = campaignFake.items[0]
+        campaignItemFake = campaign.items[0]
         done()
       })
       .catch(function (error) {

@@ -6,7 +6,6 @@ module.exports = function (message) {
   return new Promise(function (resolve, reject) {
     var r = global.ABIBAO.services.domain.thinky.r
     var knex = global.ABIBAO.services.domain.knex
-    var database = global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
     // construct data to insert
     r.table('surveys')
       .get(message.survey)
@@ -26,14 +25,14 @@ module.exports = function (message) {
       })
       .then(function (result) {
         // now insert data in MySQL
-        return knex(database + '.answers')
+        return knex('answers')
           .where('email', result.data.email)
           .where('campaign_id', result.data['campaign_id'])
           .where('question', result.data.question)
           .delete()
           .then(function () {
             global.ABIBAO.debuggers.bus('BUS_EVENT_ANALYTICS_COMPUTE_ANSWER', result.data)
-            return knex(database + '.answers').insert(result.data)
+            return knex('answers').insert(result.data)
           })
           .then(function () {
             // update user

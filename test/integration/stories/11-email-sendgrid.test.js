@@ -6,7 +6,7 @@ var expect = chai.expect
 
 describe('[integration] sendgrid story', function () {
   it('should send a simple email with our api key', function (done) {
-    var sendgrid = require('sendgrid')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
+    var sendgrid = require('sendgrid')(global.ABIBAO.config('ABIBAO_API_GATEWAY_SENDGRID_API_KEY'))
     var request = sendgrid.emptyRequest()
     request.method = 'POST'
     request.path = '/v3/mail/send'

@@ -6,7 +6,7 @@ var campaignItemChoiceFake = {}
 
 describe('[integration] handlers/campaigns-items-choices', function () {
   it('should success get campaign (prepare)', function (done) {
-    global.ABIBAO.services.domain.execute('query', 'campaignFilterQuery', {})
+    global.ABIBAO.services.domain.execute('query', 'campaignFilterQuery', {id: '56eb24cfe9b0fbf30250f8c7'})
       .then(function (campaigns) {
         campaignFake = campaigns[0]
         done()
