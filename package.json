@@ -1,17 +1,14 @@
 {
   "name": "api-gateway",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "L'api c'est la vie ! Tout converge vers le gateway.",
   "scripts": {
-    "setup:deve": "npm-scripts/setup-deve.sh",
-    "setup:clean": "npm-scripts/setup-clean.sh",
-    "batch:import": "./src/batchs/import.sh",
+    "clean": "npm-scripts/setup-clean.sh",
     "test": "npm-scripts/test.sh",
-    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts .mocharc",
     "test:standard": "node_modules/.bin/standard --verbose --fix | snazzy",
     "test:security": "node_modules/.bin/snyk test",
-    "start": "DEBUG=abibao:* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node . | bunyan",
-    "start:deve": "DEBUG=abibao:* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node src-v3/ | bunyan"
+    "start": "DEBUG=abibao:* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node src/ | bunyan",
+    "start:v3": "DEBUG=abibao:* ABIBAO_API_GATEWAY_NEWRELIC_APPNAME=api.deve.abibao.com node src-v3/ | bunyan"
   },
   "standard": {
     "globals": [
@@ -46,10 +43,10 @@
   "dependencies": {
     "async": "2.1.5",
     "base64-url": "1.3.3",
-    "bluebird": "3.4.7",
+    "bluebird": "3.5.0",
     "boom": "4.2.0",
     "bson": "1.0.4",
-    "bunyan": "1.8.5",
+    "bunyan": "1.8.8",
     "bunyan-logstash-tcp": "0.3.5",
     "colors": "1.1.2",
     "commander": "2.9.0",
@@ -60,7 +57,7 @@
     "download": "5.0.3",
     "eraro": "0.4.1",
     "faker": "4.1.0",
-    "fast-csv": "2.3.1",
+    "fast-csv": "2.4.0",
     "fs-extra": "2.0.0",
     "glob": "7.1.1",
     "hapi": "16.1.0",
@@ -83,12 +80,11 @@
     "progress": "1.1.8",
     "progress-promise": "0.0.6",
     "prompt": "1.0.0",
-    "request": "2.79.0",
+    "request": "2.80.0",
     "request-promise": "4.1.1",
-    "rethinkdbdash": "2.3.28",
     "sendgrid": "4.7.1",
     "sequelize": "3.30.2",
-    "servicebus": "2.0.8",
+    "servicebus": "2.0.9",
     "servicebus-retry": "0.0.11",
     "thinky": "2.3.8",
     "vision": "4.1.1",

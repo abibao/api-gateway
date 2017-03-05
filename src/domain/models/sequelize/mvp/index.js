@@ -7,9 +7,9 @@ const Sequelize = require('sequelize')
 const nconf = require('nconf')
 nconf.argv().env().file({ file: 'nconf-deve.json' })
 
-const sequelize = new Sequelize(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP'), nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'), nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'), {
-  host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-  port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
+const sequelize = new Sequelize(global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_DATABASE'), global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_USER'), global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PASS'), {
+  host: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
+  port: global.ABIBAO.config('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
   logging: global.ABIBAO.debuggers.mysql,
   dialect: 'postgres'
 })

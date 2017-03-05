@@ -5,51 +5,45 @@ services:
   node:
     image: mhart/alpine-node:6
     depends_on:
-      - mysql
+      - postgres
       - rethinkdb
       - rabbitmq
-      - logstash
-      - elasticsearch
     command: node --version
 
-  mysql:
-    image: library/mysql:5
+  postgres:
+    image: "sameersbn/postgresql:9.6-2"
+    privileged: true
     environment:
-      MYSQL_ROOT_PASSWORD: none
+      USERMAP_UID: "1000"
+      USERMAP_GID: "1000"
+      PG_PASSWORD: "root"
+      DB_USER: "infra"
+      DB_PASS: "infra"
+      DB_NAME: "devemvp,test"
     volumes:
-      - ./volumes/databases/mysql:/var/lib/mysql
+      - ./volumes/postgres/var/lib/postgresql/data:/var/lib/postgresql/data
     ports:
-      - "3306:3306"
+       - "5432:5432"
 
   rethinkdb:
-    image: library/rethinkdb
+    image: greyarch/rethinkdb
+    privileged: true
     volumes:
-      - ./volumes/databases/rethinkdb:/data
+      - ./volumes/rethinkdb/data:/data
     ports:
-      - "28080:8080"
+      - "8080:8080"
       - "28015:28015"
       - "29015:29015"
+    command: '--bind all --initial-password admin'
 
   rabbitmq:
-    image: tutum/rabbitmq:latest
+    image: library/rabbitmq:3.6-management-alpine
+    privileged: true
     environment:
-      RABBITMQ_PASS: none
+      RABBITMQ_DEFAULT_USER: "infra"
+      RABBITMQ_DEFAULT_PASS: "infra"
+    volumes:
+      - ./volumes/rabbitmq/var/lib/rabbitmq:/var/lib/rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
-
-  logstash:
-    build: docker/logstash/
-    command: -f /etc/logstash/conf.d/
-    volumes:
-      - ./docker/logstash/config:/etc/logstash/conf.d
-    ports:
-      - "5000:5000"
-
-  elasticsearch:
-    build: docker/elasticsearch/
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xms1g -Xmx1g"

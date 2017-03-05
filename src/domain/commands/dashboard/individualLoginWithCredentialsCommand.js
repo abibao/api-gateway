@@ -38,7 +38,7 @@ module.exports = function (payload) {
             reject(error)
           })
       } else {
-        reject('ERROR_BAD_AUTHENTIFICATION')
+        throw new Error('ERROR_BAD_AUTHENTIFICATION')
       }
     }).catch(function (error) {
       reject(error)

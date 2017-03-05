@@ -38,24 +38,23 @@ var resultSchema = Joi.object().keys({
   data: Joi.array().items(resultItemSchema).required()
 })
 
-var r = require('./../../../connections/rethinkdbdash')(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP'))
 var helper = require('./../../../helper')
 
 module.exports = function (payload = {}) {
   var type = helper.getTypeFromFilename(path.basename(__filename))
   var name = helper.getNameFromFilename(path.basename(__filename))
   return new Promise(function (resolve, reject) {
+    var r = global.ABIBAO.services.domain.thinky.r
     var result = {}
     // validate payload: succeed
     validate(payload, payloadSchema)
       .then(() => {
-        var apiKey = payload.apiKey || nconf.get('ABIBAO_API_GATEWAY_SENDGRID_API_KEY')
+        var apiKey = payload.apiKey || global.ABIBAO.config('ABIBAO_API_GATEWAY_SENDGRID_API_KEY')
         r.http('https://api.sendgrid.com/v3/suppression/bounces/' + payload.email, {
           'header': {
             'Authorization': 'Bearer ' + apiKey
           }
         })
-          .run()
           // call api: succeed
           .then((bounces) => {
             result.data = _.map(bounces, (bounce) => {
@@ -73,7 +72,7 @@ module.exports = function (payload = {}) {
                 Promise.all(promises)
                   .then((resPromises) => {
                     _.map(result.data, (item) => {
-                      r.table('bounces').get(item.id).run()
+                      r.table('bounces').get(item.id)
                         .then((bounce) => {
                           bounce.rethinkdb = bounce.id
                           delete bounce.id

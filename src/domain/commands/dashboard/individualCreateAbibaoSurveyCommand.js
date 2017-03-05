@@ -7,7 +7,6 @@ module.exports = function (data) {
   var position = data.position
   var email = data.email
   var self = global.ABIBAO.services.domain
-  var nconf = global.ABIBAO.nconf
   return new Promise(function (resolve, reject) {
     // get abibao entity
     self.execute('query', 'entityFilterQuery', {type: 'abibao'})
@@ -37,7 +36,7 @@ module.exports = function (data) {
                   global.ABIBAO.services.bus.send(global.ABIBAO.events.BusEvent.BUS_EVENT_WEBHOOK_SLACK, {
                     'username': 'IndividualCreateAbibaoSurveyCommand',
                     'text': '[' + new Date() + '] - [' + email + '] can access abibao surveys (' + position + ')',
-                    'webhook': nconf.get('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
+                    'webhook': global.ABIBAO.config('ABIBAO_API_GATEWAY_SLACK_WEBHOOK')
                   })
                 })
             })

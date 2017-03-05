@@ -23,22 +23,14 @@ var internals = {
 
 var _ = require('lodash')
 var Cryptr = require('cryptr')
-var cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
-
-// use debuggers reference
-var abibao = {
-  debug: global.ABIBAO.debuggers.domain,
-  error: global.ABIBAO.debuggers.error
-}
+var cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
 
 internals.initialize = function () {
-  abibao.debug('start initializing')
+  global.ABIBAO.debuggers.domain('start initializing')
   return new Promise(function (resolve, reject) {
     internals.domain.dictionnary = []
     internals.domain.thinky = require('./../connections/thinky')
-    internals.domain.ThinkyErrors = internals.domain.thinky.Errors
-    internals.domain.Query = internals.domain.thinky.Query
-    internals.domain.r = internals.domain.thinky.r
+    internals.domain.knex = require('./../connections/knex')()
     internals.domain.injector = internals.injector
     internals.domain.execute = internals.execute
     internals.domain.getIDfromURN = function (urn) {
@@ -47,21 +39,20 @@ internals.initialize = function () {
     internals.domain.getURNfromID = function (id, model) {
       return 'urn:abibao:database:' + model + ':' + cryptr.encrypt(id)
     }
-    internals.domain.knex = require('./../connections/knex')()
-    internals.domain.databases = {
+    /* internals.domain.databases = {
       mvp: require('./models/sequelize/mvp')
-    }
+    } */
     Promise.all([
-      internals.domain.databases.mvp.sequelize.authenticate(),
+      // internals.domain.databases.mvp.sequelize.authenticate(),
       internals.domain.injector('commands'),
       internals.domain.injector('queries'),
       internals.domain.injector('models/mysql'),
       internals.domain.injector('models/rethinkdb'),
       // internals.domain.databases.mvp.sequelize.sync(),
-      internals.domain.AnswerModel(),
-      internals.domain.UserModel(),
-      internals.domain.VoteSMFModel(),
-      internals.domain.SendgridBounceModel()
+      internals.domain.AnswerModel(internals.domain.knex),
+      internals.domain.UserModel(internals.domain.knex),
+      internals.domain.VoteSMFModel(internals.domain.knex),
+      internals.domain.SendgridBounceModel(internals.domain.knex)
     ])
     .then(() => {
       resolve()
@@ -83,7 +74,7 @@ module.exports.singleton = function () {
       })
       .catch(function (error) {
         internals.domain = false
-        abibao.error(error)
+        global.ABIBAO.debuggers.error(error)
         reject(error)
       })
   })
@@ -96,7 +87,7 @@ var uuid = require('node-uuid')
 internals.injector = function (type) {
   var self = internals.domain
   return new Promise(function (resolve) {
-    abibao.debug('[' + _.upperFirst(_.camelCase(type)) + ']')
+    global.ABIBAO.debuggers.domain('[' + _.upperFirst(_.camelCase(type)) + ']')
     var patternPath = path.resolve(__dirname, type) + '/**/*.js'
     var patternFiles = glob.sync(patternPath, {
       nodir: true,
@@ -105,7 +96,7 @@ internals.injector = function (type) {
     })
     async.mapSeries(patternFiles, function (file, next) {
       var name = path.basename(file, '.js')
-      abibao.debug('>>> [' + _.upperFirst(_.camelCase(name)) + '] has just being injected')
+      global.ABIBAO.debuggers.domain('>>> [' + _.upperFirst(_.camelCase(name)) + '] has just being injected')
       switch (type) {
         case 'models/rethinkdb':
           self[name] = require(file)(self.thinky)
@@ -125,18 +116,18 @@ internals.execute = function (type, promise, params) {
     var starttime = new Date()
     var data = {
       uuid: uuid.v1(),
-      environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
+      environnement: global.ABIBAO.config('ABIBAO_API_GATEWAY_ENV'),
       type: type,
       promise: promise
     }
-    abibao.debug('[%s] start %s %s %o', data.uuid, type, promise, params)
+    global.ABIBAO.debuggers.domain('[%s] start %s %s %o', data.uuid, type, promise, params)
     global.ABIBAO.services.domain[promise](params)
       .then(function (result) {
         data.exectime = new Date() - starttime
         // loggers: info
         global.ABIBAO.logger.info(data)
         // debuggers
-        abibao.debug('[%s] finish %s %s', data.uuid, type, promise)
+        global.ABIBAO.debuggers.domain('[%s] finish %s %s', data.uuid, type, promise)
         // return
         resolve(result)
       })
@@ -146,7 +137,7 @@ internals.execute = function (type, promise, params) {
         // loggers:: error
         global.ABIBAO.logger.error(data)
         // debuggers
-        abibao.error('[%s] finish %s %s %o', data.uuid, type, promise, error)
+        global.ABIBAO.debuggers.error('[%s] finish %s %s %o', data.uuid, type, promise, error)
         // return
         reject(error)
       })

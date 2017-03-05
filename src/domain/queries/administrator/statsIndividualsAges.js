@@ -7,7 +7,7 @@ module.exports = function (value) {
   return new Promise(function (resolve, reject) {
     try {
       var gender = (value === 'MALE') ? '56ee9a414726e973079d96d0' : '56ee9a414726e973079d96d1'
-      self.r.table('surveys')
+      self.thinky.r.table('surveys')
         .map(function (item1) {
           return item1('answers')
         })
@@ -21,7 +21,7 @@ module.exports = function (value) {
         })
         .map(function (item2) {
           return {
-            age: self.r.expr(new Date()).year().sub(item2('group').coerceTo('number')),
+            age: self.thinky.r.expr(new Date()).year().sub(item2('group').coerceTo('number')),
             birthdate: item2('group').coerceTo('number'),
             count: item2('reduction')
           }

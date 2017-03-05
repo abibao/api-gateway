@@ -14,7 +14,7 @@ module.exports = {
   handler (request, reply) {
     global.ABIBAO.services.domain.execute('command', 'individualAssignCampaignAbibaoAutoCommand', request.params.sealed)
       .then(function () {
-        reply.redirect(global.ABIBAO.nconf.get('ABIBAO_WEB_DASHBOARD_URI'))
+        reply.redirect(global.ABIBAO.config('ABIBAO_WEB_DASHBOARD_URI'))
       })
       .catch(function (error) {
         reply(Boom.badRequest(error))

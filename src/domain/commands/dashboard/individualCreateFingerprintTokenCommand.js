@@ -6,7 +6,6 @@ var Base64 = require('base64-url')
 
 module.exports = function (payload) {
   var self = global.ABIBAO.services.domain
-  var nconf = global.ABIBAO.nconf
   return new Promise(function (resolve, reject) {
     self.execute('query', 'individualReadQuery', payload.urn)
       .then(function (individual) {
@@ -17,7 +16,7 @@ module.exports = function (payload) {
           email: individual.email
         }
         var sealed = ''
-        Iron.seal(fingerprint, nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), Iron.defaults, function (error, result) {
+        Iron.seal(fingerprint, global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'), Iron.defaults, function (error, result) {
           if (error) { throw new Error(error) }
           sealed = Base64.encode(result)
           global.ABIBAO.debuggers.domain('sealed=%s', sealed)

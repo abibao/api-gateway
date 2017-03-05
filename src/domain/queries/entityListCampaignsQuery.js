@@ -7,12 +7,12 @@ module.exports = function (urn) {
   return new Promise(function (resolve, reject) {
     try {
       var id = self.getIDfromURN(urn)
-      self.r.table('entities').get(id).merge(function (entity) {
+      self.thinky.r.table('entities').get(id).merge(function (entity) {
         return {
-          campaigns: self.r.table('campaigns').filter({company: entity('id')}).without('company').coerceTo('array').merge(function (campaign) {
+          campaigns: self.thinky.r.table('campaigns').filter({company: entity('id')}).without('company').coerceTo('array').merge(function (campaign) {
             return {
               urn: campaign('id'),
-              items: self.r.table('campaigns_items').filter({campaign: campaign('id')}).without('campaign').coerceTo('array').merge(function (item) {
+              items: self.thinky.r.table('campaigns_items').filter({campaign: campaign('id')}).without('campaign').coerceTo('array').merge(function (item) {
                 return {
                   urn: item('id')
                 }
@@ -22,7 +22,7 @@ module.exports = function (urn) {
         }
       })
         .then(function (result) {
-          if (result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject('This entity has a bad type') }
+          if (result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_COMPANY && result.type !== global.ABIBAO.constants.DomainConstant.ABIBAO_CONST_ENTITY_TYPE_ABIBAO) { return reject(new Error('This entity has a bad type')) }
           _.map(result.campaigns, function (campaign) {
             delete campaign.id
             campaign.urn = self.getURNfromID(campaign.urn, 'campaign')

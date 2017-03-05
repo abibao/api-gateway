@@ -4,8 +4,8 @@ var Promise = require('bluebird')
 
 var internals = {
   options: {
-    host: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_IP'),
-    port: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
+    host: global.ABIBAO.config('ABIBAO_API_GATEWAY_EXPOSE_HOST'),
+    port: global.ABIBAO.config('ABIBAO_API_GATEWAY_EXPOSE_PORT'),
     labels: ['api', 'administrator']
   },
   constants: { },
@@ -40,7 +40,7 @@ internals.initialize = function () {
     internals.server.on('response', function (request) {
       var data = {
         uuid: uuid.v1(),
-        environnement: global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_ENV'),
+        environnement: global.ABIBAO.config('ABIBAO_API_GATEWAY_ENV'),
         type: 'hapi-request',
         request: request.id,
         info: request.info,

@@ -37,12 +37,11 @@ nconf.argv().env().file({ file: 'nconf-' + envValue + '.json' })
 
 // rethinkdb
 var options = {
-  host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-  port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
-  db: nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP'),
-  user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
-  password: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
-  authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
+  host: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
+  port: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
+  db: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
+  user: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
+  password: nconf.get('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
   silent: true
 }
 var r = require('thinky')(options).r
@@ -51,11 +50,11 @@ var r = require('thinky')(options).r
 var optionsMysql = {
   client: 'pg',
   connection: {
-    host: nconf.get('MYSQL_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-    port: nconf.get('MYSQL_PORT_3306_TCP_PORT'),
-    user: nconf.get('ABIBAO_API_GATEWAY_SERVER_MYSQL_USER'),
-    password: nconf.get('MYSQL_ENV_MYSQL_ROOT_PASSWORD'),
-    database: nconf.get('ABIBAO_API_GATEWAY_DATABASES_MYSQSL_MVP')
+    host: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_HOST'),
+    port: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_PORT'),
+    user: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_USER'),
+    password: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_PASS'),
+    database: nconf.get('ABIBAO_API_GATEWAY_POSTGRES_DATABASE')
   },
   debug: false
 }
@@ -119,12 +118,12 @@ var execBatch = function (filepath, bar, callback) {
           data = {
             email: individual.email || null,
             charity: result.CHARITY || null,
-            registeredCharity: result.HAS_REGISTERED_ENTITY || null,
+            registered_charity: result.HAS_REGISTERED_ENTITY || null,
             age: result.ABIBAO_ANSWER_FONDAMENTAL_AGE || null,
             csp: result.ABIBAO_ANSWER_FONDAMENTAL_CSP || null,
             department: result.ABIBAO_ANSWER_FONDAMENTAL_DEPARTEMENT || null,
             gender: result.ABIBAO_ANSWER_FONDAMENTAL_GENDER || null,
-            createdAt: new Date(individual.createdAt)
+            created_at: new Date(individual.createdAt)
           }
           var target = path.resolve(mysqlDir, individual.id + '.json')
           fse.writeJsonSync(target, data)

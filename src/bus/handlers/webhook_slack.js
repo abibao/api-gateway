@@ -19,9 +19,9 @@ module.exports = function (message) {
         global.ABIBAO.debuggers.bus('BUS_EVENT_WEBHOOK_SLACK "%s" has been posted', message.text)
         resolve()
       })
-      .catch(function () {
+      .catch(function (error) {
         global.ABIBAO.debuggers.error('BUS_EVENT_WEBHOOK_SLACK "%s" has not been posted', message.text)
-        reject()
+        reject(error)
       })
   })
 }

@@ -6,7 +6,7 @@ module.exports = function () {
   var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
     try {
-      self.r.table('surveys')
+      self.thinky.r.table('surveys')
         .map(function (item1) {
           return item1('answers')
         })
@@ -18,7 +18,7 @@ module.exports = function () {
         })
         .map(function (item2) {
           return {
-            answer: self.r.table('campaigns_items_choices').get(item2('group')).merge(function (item4) {
+            answer: self.thinky.r.table('campaigns_items_choices').get(item2('group')).merge(function (item4) {
               return item4('prefix').add('__').add(item4('suffix'))
             }),
             count: item2('reduction')

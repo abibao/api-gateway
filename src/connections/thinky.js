@@ -1,16 +1,13 @@
 'use strict'
 
-// load environnement configuration
-var nconf = require('nconf')
-nconf.argv().env().file({ file: 'nconf-deve.json' })
+var config = require('../../config')
 
 var options = {
-  host: nconf.get('RETHINKDB_ENV_DOCKERCLOUD_SERVICE_FQDN'),
-  port: nconf.get('RETHINKDB_PORT_28015_TCP_PORT'),
-  db: nconf.get('ABIBAO_API_GATEWAY_DATABASES_RETHINKDB_MVP'),
-  user: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_USER'),
-  password: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_PASSWORD'),
-  authKey: nconf.get('ABIBAO_API_GATEWAY_SERVER_RETHINK_AUTH_KEY'),
+  host: config('ABIBAO_API_GATEWAY_RETHINKDB_HOST'),
+  port: config('ABIBAO_API_GATEWAY_RETHINKDB_PORT'),
+  db: config('ABIBAO_API_GATEWAY_RETHINKDB_DATABASE'),
+  user: config('ABIBAO_API_GATEWAY_RETHINKDB_USER'),
+  password: config('ABIBAO_API_GATEWAY_RETHINKDB_PASS'),
   silent: true
 }
 var thinky = require('thinky')(options)

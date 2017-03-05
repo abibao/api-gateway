@@ -6,7 +6,7 @@ var _ = require('lodash')
 module.exports = function (filters) {
   var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
-    self.EntityModel.filter(filters).run()
+    self.EntityModel.filter(filters)
       .then(function (models) {
         _.map(models, function (model) {
           delete model.id

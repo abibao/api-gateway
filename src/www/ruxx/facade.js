@@ -3,18 +3,7 @@ function Facade () {
   riot.observable(self)
 
   self.version = '2.6.8'
-
-  switch (true) {
-    case /local/.test(window.location.hostname):
-      self.baseapi = 'http://localhost:8383'
-      break
-    case /pprod/.test(window.location.hostname):
-      self.baseapi = 'https://api.pprod.abibao.com'
-      break
-    default:
-      self.baseapi = 'https://api.abibao.com'
-      break
-  }
+  self.baseapi = window.location.origin
 
   self.debug = debug('abibao:facade')
   self.debugCall = debug('abibao:facade:call')

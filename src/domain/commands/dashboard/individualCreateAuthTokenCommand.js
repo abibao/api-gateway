@@ -12,7 +12,7 @@ module.exports = function (urn) {
         urn: individual.urn,
         scope: individual.scope
       }
-      var token = JWT.sign(credentials, global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'), { expiresIn: 60 * 60 * 24 })
+      var token = JWT.sign(credentials, global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'), { expiresIn: 60 * 60 * 24 })
       resolve(token)
     }).catch(function (error) {
       reject(error)

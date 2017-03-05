@@ -22,11 +22,11 @@ module.exports = function (sequelize) {
   }, {
     getterMethods: {
       urn: function () {
-        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        const cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
         return 'abibao:database:survey:' + cryptr.encrypt(this.id)
       },
       urnSurvey: function () {
-        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        const cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
         return 'abibao:database:survey:' + cryptr.encrypt(this.survey)
       }
     },

@@ -5,7 +5,7 @@ var Promise = require('bluebird')
 module.exports = function (urn) {
   var self = global.ABIBAO.services.domain
   return new Promise(function (resolve, reject) {
-    self.IndividualModel.get(self.getIDfromURN(urn)).run()
+    self.IndividualModel.get(self.getIDfromURN(urn))
       .then(function (model) {
         delete model.id
         delete model.company

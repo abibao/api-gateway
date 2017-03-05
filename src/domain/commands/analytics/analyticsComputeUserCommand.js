@@ -3,9 +3,6 @@
 var Promise = require('bluebird')
 var _ = require('lodash')
 
-var r = require('./../../../connections/thinky').r
-var knex = require('./../../../connections/knex')()
-
 var validate = function (individual) {
   return new Promise(function (resolve, reject) {
     if (!individual.email) { reject(new Error('email is mandatory')) }
@@ -17,6 +14,8 @@ var validate = function (individual) {
 
 module.exports = function (individual) {
   return new Promise(function (resolve, reject) {
+    var r = global.ABIBAO.services.domain.thinky.r
+    var knex = global.ABIBAO.services.domain.knex
     Promise.props({
       validate: validate(individual)
     })
@@ -68,12 +67,12 @@ module.exports = function (individual) {
               var data = {
                 email: individual.email || null,
                 charity: result.CHARITY || null,
-                registeredCharity: result.HAS_REGISTERED_ENTITY || null,
+                'registered_charity': result.HAS_REGISTERED_ENTITY || null,
                 age: result.ABIBAO_ANSWER_FONDAMENTAL_AGE || null,
                 csp: result.ABIBAO_ANSWER_FONDAMENTAL_CSP || null,
                 department: result.ABIBAO_ANSWER_FONDAMENTAL_DEPARTEMENT || null,
                 gender: result.ABIBAO_ANSWER_FONDAMENTAL_GENDER || null,
-                createdAt: new Date(individual.createdAt)
+                'created_at': new Date(individual.createdAt)
               }
               global.ABIBAO.debuggers.domain('[%s] step 3: replace/insert those data in mysql analytics, data=%o', individual.email, data)
               return knex('users').where('email', data.email)

@@ -26,23 +26,23 @@ module.exports = function (sequelize) {
   }, {
     getterMethods: {
       urn: function () {
-        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        const cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
         return 'abibao:database:survey:' + cryptr.encrypt(this.id)
       },
       urnCampaign: function () {
-        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        const cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
         return 'abibao:database:campaign:' + cryptr.encrypt(this.campaign)
       },
       urnCharity: function () {
-        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        const cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
         return 'abibao:database:charity:' + cryptr.encrypt(this.charity)
       },
       urnCompany: function () {
-        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        const cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
         return 'abibao:database:company:' + cryptr.encrypt(this.company)
       },
       urnIndividual: function () {
-        const cryptr = new Cryptr(global.ABIBAO.nconf.get('ABIBAO_API_GATEWAY_SERVER_AUTH_JWT_KEY'))
+        const cryptr = new Cryptr(global.ABIBAO.config('ABIBAO_API_GATEWAY_CRYPTO_CREDENTIALS'))
         return 'abibao:database:individual:' + cryptr.encrypt(this.individual)
       }
     },

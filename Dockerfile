@@ -5,12 +5,13 @@ MAINTAINER Gilles Perreymond <gperreymond@gmail.com>
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
-COPY process.yml /usr/app/
-COPY newrelic.js /usr/app/
-COPY package.json /usr/app/
-ADD src /usr/app
-COPY robot.txt /usr/app/
-COPY robot.txt /usr/app/www
+COPY process.yml /usr/app/process.yml
+COPY newrelic.js /usr/app/newrelic.js
+COPY package.json /usr/app/package.json
+COPY src /usr/app/src
+COPY config /usr/app/config
+COPY robot.txt /usr/app/robot.txt
+COPY robot.txt /usr/app/www/robot.txt
 
 RUN npm install pm2 -g && \
     pm2 install pm2-slack && \
@@ -27,4 +28,4 @@ RUN apk add --update make gcc g++ python && \
     rm -rf /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp
 
 EXPOSE 80
-CMD ["pm2", "start", "process.yml", "--only", "api.rece.abibao.com"]
+CMD ["pm2-docker", "start", "process.yml", "--only", "api.rece.abibao.com"]
