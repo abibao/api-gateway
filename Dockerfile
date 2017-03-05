@@ -8,8 +8,8 @@ WORKDIR /usr/app
 COPY process.yml /usr/app/process.yml
 COPY newrelic.js /usr/app/newrelic.js
 COPY package.json /usr/app/package.json
-COPY src /usr/app
-COPY config /usr/config
+COPY src /usr/app/src
+COPY config /usr/app/config
 COPY robot.txt /usr/app/robot.txt
 COPY robot.txt /usr/app/www/robot.txt
 
